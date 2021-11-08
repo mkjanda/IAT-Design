@@ -1,0 +1,111 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+
+  <xs:simpleType name="TResponseType">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="None" />
+      <xs:enumeration value="Boolean" />
+      <xs:enumeration value="Likert" />
+      <xs:enumeration value="Date" />
+      <xs:enumeration value="Multiple" />
+      <xs:enumeration value="WeightedMultiple" />
+      <xs:enumeration value="RegEx" />
+      <xs:enumeration value="MultiBoolean" />
+      <xs:enumeration value="FixedDig" />
+      <xs:enumeration value="BoundedNum" />
+      <xs:enumeration value="BoundedLength" />
+    </xs:restriction>
+  </xs:simpleType> 
+  
+  <xs:complexType name="TSurveyResponse">
+    <xs:sequence>
+      <xs:element name="TestElement" form="unqualified" type="xs:unsignedInt" minOccurs="1" maxOccurs="1" />
+      <xs:element name="Answer" form="unqualified" type="xs:string" minOccurs="1" maxOccurs="unbounded" />
+    </xs:sequence>
+  </xs:complexType>
+  
+  <xs:complexType name="TIATResponse">
+    <xs:sequence>
+      <xs:element name="ItemNum" form="unqualified" type="xs:unsignedInt" minOccurs="1" maxOccurs="1" />
+      <xs:element name="Latency" form="unqualified" type="xs:unsignedInt" minOccurs="1" maxOccurs="1" />
+      <xs:element name="Error" form="unqualified" type="xs:boolean" minOccurs="1" maxOccurs="1" />
+    </xs:sequence>
+  </xs:complexType>
+    
+  <xs:complexType name="TChoiceFormat">
+    <xs:sequence>
+      <xs:element name="Value" form="unqualified" type="xs:string" minOccurs="1" maxOccurs="1" />
+      <xs:element name="Text" form="unqualified" type="xs:string" minOccurs="1" maxOccurs="1" />
+    </xs:sequence>
+  </xs:complexType>
+  
+  <xs:complexType name="TChoices">
+    <xs:sequence>
+      <xs:element name="Choice" form="unqualified" type="TChoiceFormat" minOccurs="1" maxOccurs="unbounded" />
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:attributeGroup name="AQuestionAttrs">
+    <xs:attribute name="ResponseType" type="TResponseType" use="required" />
+  </xs:attributeGroup>
+  
+  <xs:complexType name="TSurveyQuestionFormat">
+    <xs:sequence>
+      <xs:element name="QuestionText" form="unqualified" type="xs:string" minOccurs="1" maxOccurs="1" />
+      <xs:element name="ResponseSummary" form="unqualified" type="xs:string" minOccurs="1" maxOccurs="1" />
+      <xs:element name="Choices" form="unqualified" type="TChoices" minOccurs="0" maxOccurs="1" />
+    </xs:sequence>
+    <xs:attributeGroup ref="AQuestionAttrs" />
+  </xs:complexType>
+
+  <xs:attributeGroup name="SurveyFormatAttributes">
+    <xs:attribute name="ElementNum" form="unqualified" type="xs:unsignedInt" use="required" />
+  </xs:attributeGroup>
+
+  <xs:complexType name="TSurveyFormat">
+    <xs:sequence>
+      <xs:element name="CaptionText" form="unqualified" type="xs:string" minOccurs="0" maxOccurs="1" />
+      <xs:element name="Questions" form="unqualified" type="TSurveyQuestionFormat" minOccurs="0" maxOccurs="unbounded" />
+    </xs:sequence>
+    <xs:attributeGroup ref="SurveyFormatAttributes" />
+  </xs:complexType>
+
+  <xs:complexType name="SurveyFormats">
+    <xs:sequence>
+      <xs:element name="SurveyFormat" form="unqualified" type="TSurveyFormat" minOccurs="0" maxOccurs="unbounded" />
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:attributeGroup name="DocumentAttributes">
+    <xs:attribute name="NumResults" form="unqualified" type="xs:unsignedInt" use="required" />
+    <xs:attribute name="NumScoredResults" form="unqualified" type="xs:unsignedInt" use="required" />
+    <xs:attribute name="NumIATItems" form="unqualified" type="xs:unsignedInt" use="required" />
+    <xs:attribute name="NumPresentations" form="unqualified" type="xs:unsignedInt" use="required" />
+  </xs:attributeGroup>
+
+  <xs:complexType name="TIATResult">
+    <xs:sequence>
+      <xs:element name="IATScore" form="unqualified" type="xs:double" minOccurs="1" maxOccurs="1" />
+      <xs:element name="IATResponse" form="unqualified" type="TIATResponse" minOccurs="1" maxOccurs="unbounded" />
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="TTestResult">
+    <xs:sequence>
+      <xs:element name="SurveyResults" form="unqualified" type="TSurveyResponse" minOccurs="0" maxOccurs="unbounded" />
+      <xs:element name="IATResult" form="unqualified" type="TIATResult" minOccurs="1" maxOccurs="1" />
+    </xs:sequence>
+  </xs:complexType>
+  
+  <xs:element name="ResultDocument">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="TestAuthor" form="unqualified" type="xs:string" minOccurs="1" maxOccurs="1" />
+        <xs:element name="RetrievalTime" form="unqualified" type="xs:string" minOccurs="1" maxOccurs="1" />
+        <xs:element name="SurveyDesign" form="unqualified" type="SurveyFormats" minOccurs="1" maxOccurs="1" />
+        <xs:element name="TestResult" form="unqualified" type="TTestResult" minOccurs="0" maxOccurs="unbounded" />
+      </xs:sequence>
+      <xs:attributeGroup ref="DocumentAttributes" />
+    </xs:complexType>
+  </xs:element>
+</xs:schema>

@@ -1,0 +1,2382 @@
+﻿<ConfigFile NumBeforeSurveys="0" NumAfterSurveys="0">
+  <IATName>nikki</IATName>
+  <ServerURL>http://127.0.0.1/IATServer</ServerURL>
+  <ServerPort>8080</ServerPort>
+  <ClientID>1</ClientID>
+  <NumIATItems>154</NumIATItems>
+  <Is7Block>True</Is7Block>
+  <RedirectOnComplete>http://xgdsdgdgd</RedirectOnComplete>
+  <LeftResponseASCIIKeyCodeUpper>69</LeftResponseASCIIKeyCodeUpper>
+  <RightResponseASCIIKeyCodeUpper>73</RightResponseASCIIKeyCodeUpper>
+  <LeftResponseASCIIKeyCodeLower>101</LeftResponseASCIIKeyCodeLower>
+  <RightResponseASCIIKeyCodeLower>105</RightResponseASCIIKeyCodeLower>
+  <RandomizationType>SetNumberOfPresentations</RandomizationType>
+  <ErrorMarkID>76</ErrorMarkID>
+  <LeftKeyOutlineID>77</LeftKeyOutlineID>
+  <RightKeyOutlineID>78</RightKeyOutlineID>
+  <PrefixSelfAlternatingSurveys>False</PrefixSelfAlternatingSurveys>
+  <DataRetrievalPassword>xxx</DataRetrievalPassword>
+  <UniqueResponseItem Additive="False">
+    <SurveyName />
+    <ItemNum>-1</ItemNum>
+    <UniqueResponses />
+  </UniqueResponseItem>
+  <Layout>
+    <InteriorWidth>725</InteriorWidth>
+    <InteriorHeight>500</InteriorHeight>
+    <BorderWidth>10</BorderWidth>
+    <ResponseWidth>150</ResponseWidth>
+    <ResponseHeight>230</ResponseHeight>
+    <BorderColorR>FF</BorderColorR>
+    <BorderColorG>FF</BorderColorG>
+    <BorderColorB>E0</BorderColorB>
+    <BackColorR>00</BackColorR>
+    <BackColorG>00</BackColorG>
+    <BackColorB>00</BackColorB>
+    <OutlineColorR>32</OutlineColorR>
+    <OutlineColorG>CD</OutlineColorG>
+    <OutlineColorB>32</OutlineColorB>
+    <PageBackColorR>00</PageBackColorR>
+    <PageBackColorG>00</PageBackColorG>
+    <PageBackColorB>00</PageBackColorB>
+  </Layout>
+  <IATEventList NumEvents="180">
+    <IATEvent EventType="BeginInstructionBlock">
+      <NumInstructionScreens>3</NumInstructionScreens>
+      <AlternatedWith>-1</AlternatedWith>
+    </IATEvent>
+    <IATEvent EventType="TextInstructionScreen">
+      <ContinueASCIIKeyCode>32</ContinueASCIIKeyCode>
+      <ContinueInstructionsDisplayID>1</ContinueInstructionsDisplayID>
+      <InstructionsDisplayID>0</InstructionsDisplayID>
+    </IATEvent>
+    <IATEvent EventType="MockItemInstructionScreen">
+      <ContinueASCIIKeyCode>32</ContinueASCIIKeyCode>
+      <ContinueInstructionsDisplayID>6</ContinueInstructionsDisplayID>
+      <LeftResponseDisplayID>2</LeftResponseDisplayID>
+      <RightResponseDisplayID>3</RightResponseDisplayID>
+      <StimulusDisplayID>4</StimulusDisplayID>
+      <InstructionsDisplayID>5</InstructionsDisplayID>
+      <ErrorMarkIsDisplayed>True</ErrorMarkIsDisplayed>
+      <OutlineLeftResponse>False</OutlineLeftResponse>
+      <OutlineRightResponse>False</OutlineRightResponse>
+    </IATEvent>
+    <IATEvent EventType="KeyedInstructionScreen">
+      <ContinueASCIIKeyCode>32</ContinueASCIIKeyCode>
+      <ContinueInstructionsDisplayID>10</ContinueInstructionsDisplayID>
+      <LeftResponseDisplayID>8</LeftResponseDisplayID>
+      <RightResponseDisplayID>9</RightResponseDisplayID>
+      <InstructionsDisplayID>7</InstructionsDisplayID>
+    </IATEvent>
+    <IATEvent EventType="BeginIATBlock">
+      <NumPresentations>10</NumPresentations>
+      <AlternatedWith>-1</AlternatedWith>
+      <BlockNum>1</BlockNum>
+      <NumItems>14</NumItems>
+      <PracticeBlock>False</PracticeBlock>
+      <InstructionsDisplayID>13</InstructionsDisplayID>
+      <LeftResponseDisplayID>11</LeftResponseDisplayID>
+      <RightResponseDisplayID>12</RightResponseDisplayID>
+    </IATEvent>
+    <IATEvent EventType="IATItem">
+      <ItemNum>1</ItemNum>
+      <BlockNum>0</BlockNum>
+      <IsPracticeItem>False</IsPracticeItem>
+      <StimulusDisplayID>14</StimulusDisplayID>
+      <OriginatingBlock>1</OriginatingBlock>
+      <KeyedDir>Right</KeyedDir>
+      <SpecifierID>-1</SpecifierID>
+      <SpecifierArg />
+    </IATEvent>
+    <IATEvent EventType="IATItem">
+      <ItemNum>2</ItemNum>
+      <BlockNum>0</BlockNum>
+      <IsPracticeItem>False</IsPracticeItem>
+      <StimulusDisplayID>15</StimulusDisplayID>
+      <OriginatingBlock>1</OriginatingBlock>
+      <KeyedDir>Right</KeyedDir>
+      <SpecifierID>-1</SpecifierID>
+      <SpecifierArg />
+    </IATEvent>
+    <IATEvent EventType="IATItem">
+      <ItemNum>3</ItemNum>
+      <BlockNum>0</BlockNum>
+      <IsPracticeItem>False</IsPracticeItem>
+      <StimulusDisplayID>16</StimulusDisplayID>
+      <OriginatingBlock>1</OriginatingBlock>
+      <KeyedDir>Right</KeyedDir>
+      <SpecifierID>-1</SpecifierID>
+      <SpecifierArg />
+    </IATEvent>
+    <IATEvent EventType="IATItem">
+      <ItemNum>4</ItemNum>
+      <BlockNum>0</BlockNum>
+      <IsPracticeItem>False</IsPracticeItem>
+      <StimulusDisplayID>17</StimulusDisplayID>
+      <OriginatingBlock>1</OriginatingBlock>
+      <KeyedDir>Right</KeyedDir>
+      <SpecifierID>-1</SpecifierID>
+      <SpecifierArg />
+    </IATEvent>
+    <IATEvent EventType="IATItem">
+      <ItemNum>5</ItemNum>
+      <BlockNum>0</BlockNum>
+      <IsPracticeItem>False</IsPracticeItem>
+      <StimulusDisplayID>18</StimulusDisplayID>
+      <OriginatingBlock>1</OriginatingBlock>
+      <KeyedDir>Right</KeyedDir>
+      <SpecifierID>-1</SpecifierID>
+      <SpecifierArg />
+    </IATEvent>
+    <IATEvent EventType="IATItem">
+      <ItemNum>6</ItemNum>
+      <BlockNum>0</BlockNum>
+      <IsPracticeItem>False</IsPracticeItem>
+      <StimulusDisplayID>19</StimulusDisplayID>
+      <OriginatingBlock>1</OriginatingBlock>
+      <KeyedDir>Right</KeyedDir>
+      <SpecifierID>-1</SpecifierID>
+      <SpecifierArg />
+    </IATEvent>
+    <IATEvent EventType="IATItem">
+      <ItemNum>7</ItemNum>
+      <BlockNum>0</BlockNum>
+      <IsPracticeItem>False</IsPracticeItem>
+      <StimulusDisplayID>20</StimulusDisplayID>
+      <OriginatingBlock>1</OriginatingBlock>
+      <KeyedDir>Right</KeyedDir>
+      <SpecifierID>-1</SpecifierID>
+      <SpecifierArg />
+    </IATEvent>
+    <IATEvent EventType="IATItem">
+      <ItemNum>8</ItemNum>
+      <BlockNum>0</BlockNum>
+      <IsPracticeItem>False</IsPracticeItem>
+      <StimulusDisplayID>21</StimulusDisplayID>
+      <OriginatingBlock>1</OriginatingBlock>
+      <KeyedDir>Left</KeyedDir>
+      <SpecifierID>-1</SpecifierID>
+      <SpecifierArg />
+    </IATEvent>
+    <IATEvent EventType="IATItem">
+      <ItemNum>9</ItemNum>
+      <BlockNum>0</BlockNum>
+      <IsPracticeItem>False</IsPracticeItem>
+      <StimulusDisplayID>22</StimulusDisplayID>
+      <OriginatingBlock>1</OriginatingBlock>
+      <KeyedDir>Left</KeyedDir>
+      <SpecifierID>-1</SpecifierID>
+      <SpecifierArg />
+    </IATEvent>
+    <IATEvent EventType="IATItem">
+      <ItemNum>10</ItemNum>
+      <BlockNum>0</BlockNum>
+      <IsPracticeItem>False</IsPracticeItem>
+      <StimulusDisplayID>23</StimulusDisplayID>
+      <OriginatingBlock>1</OriginatingBlock>
+      <KeyedDir>Left</KeyedDir>
+      <SpecifierID>-1</SpecifierID>
+      <SpecifierArg />
+    </IATEvent>
+    <IATEvent EventType="IATItem">
+      <ItemNum>11</ItemNum>
+      <BlockNum>0</BlockNum>
+      <IsPracticeItem>False</IsPracticeItem>
+      <StimulusDisplayID>24</StimulusDisplayID>
+      <OriginatingBlock>1</OriginatingBlock>
+      <KeyedDir>Left</KeyedDir>
+      <SpecifierID>-1</SpecifierID>
+      <SpecifierArg />
+    </IATEvent>
+    <IATEvent EventType="IATItem">
+      <ItemNum>12</ItemNum>
+      <BlockNum>0</BlockNum>
+      <IsPracticeItem>False</IsPracticeItem>
+      <StimulusDisplayID>25</StimulusDisplayID>
+      <OriginatingBlock>1</OriginatingBlock>
+      <KeyedDir>Left</KeyedDir>
+      <SpecifierID>-1</SpecifierID>
+      <SpecifierArg />
+    </IATEvent>
+    <IATEvent EventType="IATItem">
+      <ItemNum>13</ItemNum>
+      <BlockNum>0</BlockNum>
+      <IsPracticeItem>False</IsPracticeItem>
+      <StimulusDisplayID>26</StimulusDisplayID>
+      <OriginatingBlock>1</OriginatingBlock>
+      <KeyedDir>Left</KeyedDir>
+      <SpecifierID>-1</SpecifierID>
+      <SpecifierArg />
+    </IATEvent>
+    <IATEvent EventType="IATItem">
+      <ItemNum>14</ItemNum>
+      <BlockNum>0</BlockNum>
+      <IsPracticeItem>False</IsPracticeItem>
+      <StimulusDisplayID>27</StimulusDisplayID>
+      <OriginatingBlock>1</OriginatingBlock>
+      <KeyedDir>Left</KeyedDir>
+      <SpecifierID>-1</SpecifierID>
+      <SpecifierArg />
+    </IATEvent>
+    <IATEvent EventType="EndIATBlock">
+      <DummyValue>abcdefg</DummyValue>
+    </IATEvent>
+    <IATEvent EventType="BeginInstructionBlock">
+      <NumInstructionScreens>1</NumInstructionScreens>
+      <AlternatedWith>-1</AlternatedWith>
+    </IATEvent>
+    <IATEvent EventType="KeyedInstructionScreen">
+      <ContinueASCIIKeyCode>32</ContinueASCIIKeyCode>
+      <ContinueInstructionsDisplayID>31</ContinueInstructionsDisplayID>
+      <LeftResponseDisplayID>29</LeftResponseDisplayID>
+      <RightResponseDisplayID>30</RightResponseDisplayID>
+      <InstructionsDisplayID>28</InstructionsDisplayID>
+    </IATEvent>
+    <IATEvent EventType="BeginIATBlock">
+      <NumPresentations>10</NumPresentations>
+      <AlternatedWith>-1</AlternatedWith>
+      <BlockNum>2</BlockNum>
+      <NumItems>14</NumItems>
+      <PracticeBlock>False</PracticeBlock>
+      <InstructionsDisplayID>34</InstructionsDisplayID>
+      <LeftResponseDisplayID>32</LeftResponseDisplayID>
+      <RightResponseDisplayID>33</RightResponseDisplayID>
+    </IATEvent>
+    <IATEvent EventType="IATItem">
+      <ItemNum>15</ItemNum>
+      <BlockNum>1</BlockNum>
+      <IsPracticeItem>False</IsPracticeItem>
+      <StimulusDisplayID>35</StimulusDisplayID>
+      <OriginatingBlock>2</OriginatingBlock>
+      <KeyedDir>Left</KeyedDir>
+      <SpecifierID>-1</SpecifierID>
+      <SpecifierArg />
+    </IATEvent>
+    <IATEvent EventType="IATItem">
+      <ItemNum>16</ItemNum>
+      <BlockNum>1</BlockNum>
+      <IsPracticeItem>False</IsPracticeItem>
+      <StimulusDisplayID>36</StimulusDisplayID>
+      <OriginatingBlock>2</OriginatingBlock>
+      <KeyedDir>Left</KeyedDir>
+      <SpecifierID>-1</SpecifierID>
+      <SpecifierArg />
+    </IATEvent>
+    <IATEvent EventType="IATItem">
+      <ItemNum>17</ItemNum>
+      <BlockNum>1</BlockNum>
+      <IsPracticeItem>False</IsPracticeItem>
+      <StimulusDisplayID>37</StimulusDisplayID>
+      <OriginatingBlock>2</OriginatingBlock>
+      <KeyedDir>Left</KeyedDir>
+      <SpecifierID>-1</SpecifierID>
+      <SpecifierArg />
+    </IATEvent>
+    <IATEvent EventType="IATItem">
+      <ItemNum>18</ItemNum>
+      <BlockNum>1</BlockNum>
+      <IsPracticeItem>False</IsPracticeItem>
+      <StimulusDisplayID>38</StimulusDisplayID>
+      <OriginatingBlock>2</OriginatingBlock>
+      <KeyedDir>Left</KeyedDir>
+      <SpecifierID>-1</SpecifierID>
+      <SpecifierArg />
+    </IATEvent>
+    <IATEvent EventType="IATItem">
+      <ItemNum>19</ItemNum>
+      <BlockNum>1</BlockNum>
+      <IsPracticeItem>False</IsPracticeItem>
+      <StimulusDisplayID>39</StimulusDisplayID>
+      <OriginatingBlock>2</OriginatingBlock>
+      <KeyedDir>Left</KeyedDir>
+      <SpecifierID>-1</SpecifierID>
+      <SpecifierArg />
+    </IATEvent>
+    <IATEvent EventType="IATItem">
+      <ItemNum>20</ItemNum>
+      <BlockNum>1</BlockNum>
+      <IsPracticeItem>False</IsPracticeItem>
+      <StimulusDisplayID>40</StimulusDisplayID>
+      <OriginatingBlock>2</OriginatingBlock>
+      <KeyedDir>Left</KeyedDir>
+      <SpecifierID>-1</SpecifierID>
+      <SpecifierArg />
+    </IATEvent>
+    <IATEvent EventType="IATItem">
+      <ItemNum>21</ItemNum>
+      <BlockNum>1</BlockNum>
+      <IsPracticeItem>False</IsPracticeItem>
+      <StimulusDisplayID>41</StimulusDisplayID>
+      <OriginatingBlock>2</OriginatingBlock>
+      <KeyedDir>Left</KeyedDir>
+      <SpecifierID>-1</SpecifierID>
+      <SpecifierArg />
+    </IATEvent>
+    <IATEvent EventType="IATItem">
+      <ItemNum>22</ItemNum>
+      <BlockNum>1</BlockNum>
+      <IsPracticeItem>False</IsPracticeItem>
+      <StimulusDisplayID>42</StimulusDisplayID>
+      <OriginatingBlock>2</OriginatingBlock>
+      <KeyedDir>Right</KeyedDir>
+      <SpecifierID>-1</SpecifierID>
+      <SpecifierArg />
+    </IATEvent>
+    <IATEvent EventType="IATItem">
+      <ItemNum>23</ItemNum>
+      <BlockNum>1</BlockNum>
+      <IsPracticeItem>False</IsPracticeItem>
+      <StimulusDisplayID>43</StimulusDisplayID>
+      <OriginatingBlock>2</OriginatingBlock>
+      <KeyedDir>Right</KeyedDir>
+      <SpecifierID>-1</SpecifierID>
+      <SpecifierArg />
+    </IATEvent>
+    <IATEvent EventType="IATItem">
+      <ItemNum>24</ItemNum>
+      <BlockNum>1</BlockNum>
+      <IsPracticeItem>False</IsPracticeItem>
+      <StimulusDisplayID>44</StimulusDisplayID>
+      <OriginatingBlock>2</OriginatingBlock>
+      <KeyedDir>Right</KeyedDir>
+      <SpecifierID>-1</SpecifierID>
+      <SpecifierArg />
+    </IATEvent>
+    <IATEvent EventType="IATItem">
+      <ItemNum>25</ItemNum>
+      <BlockNum>1</BlockNum>
+      <IsPracticeItem>False</IsPracticeItem>
+      <StimulusDisplayID>45</StimulusDisplayID>
+      <OriginatingBlock>2</OriginatingBlock>
+      <KeyedDir>Right</KeyedDir>
+      <SpecifierID>-1</SpecifierID>
+      <SpecifierArg />
+    </IATEvent>
+    <IATEvent EventType="IATItem">
+      <ItemNum>26</ItemNum>
+      <BlockNum>1</BlockNum>
+      <IsPracticeItem>False</IsPracticeItem>
+      <StimulusDisplayID>46</StimulusDisplayID>
+      <OriginatingBlock>2</OriginatingBlock>
+      <KeyedDir>Right</KeyedDir>
+      <SpecifierID>-1</SpecifierID>
+      <SpecifierArg />
+    </IATEvent>
+    <IATEvent EventType="IATItem">
+      <ItemNum>27</ItemNum>
+      <BlockNum>1</BlockNum>
+      <IsPracticeItem>False</IsPracticeItem>
+      <StimulusDisplayID>47</StimulusDisplayID>
+      <OriginatingBlock>2</OriginatingBlock>
+      <KeyedDir>Right</KeyedDir>
+      <SpecifierID>-1</SpecifierID>
+      <SpecifierArg />
+    </IATEvent>
+    <IATEvent EventType="IATItem">
+      <ItemNum>28</ItemNum>
+      <BlockNum>1</BlockNum>
+      <IsPracticeItem>False</IsPracticeItem>
+      <StimulusDisplayID>48</StimulusDisplayID>
+      <OriginatingBlock>2</OriginatingBlock>
+      <KeyedDir>Right</KeyedDir>
+      <SpecifierID>-1</SpecifierID>
+      <SpecifierArg />
+    </IATEvent>
+    <IATEvent EventType="EndIATBlock">
+      <DummyValue>abcdefg</DummyValue>
+    </IATEvent>
+    <IATEvent EventType="BeginInstructionBlock">
+      <NumInstructionScreens>1</NumInstructionScreens>
+      <AlternatedWith>5</AlternatedWith>
+    </IATEvent>
+    <IATEvent EventType="KeyedInstructionScreen">
+      <ContinueASCIIKeyCode>32</ContinueASCIIKeyCode>
+      <ContinueInstructionsDisplayID>52</ContinueInstructionsDisplayID>
+      <LeftResponseDisplayID>50</LeftResponseDisplayID>
+      <RightResponseDisplayID>51</RightResponseDisplayID>
+      <InstructionsDisplayID>49</InstructionsDisplayID>
+    </IATEvent>
+    <IATEvent EventType="BeginIATBlock">
+      <NumPresentations>10</NumPresentations>
+      <AlternatedWith>6</AlternatedWith>
+      <BlockNum>3</BlockNum>
+      <NumItems>28</NumItems>
+      <PracticeBlock>False</PracticeBlock>
+      <InstructionsDisplayID>55</InstructionsDisplayID>
+      <LeftResponseDisplayID>53</LeftResponseDisplayID>
+      <RightResponseDisplayID>54</RightResponseDisplayID>
+    </IATEvent>
+    <IATEvent EventType="IATItem">
+      <ItemNum>29</ItemNum>
+      <BlockNum>2</BlockNum>
+      <IsPracticeItem>False</IsPracticeItem>
+      <StimulusDisplayID>26</StimulusDisplayID>
+      <OriginatingBlock>1</OriginatingBlock>
+      <KeyedDir>Left</KeyedDir>
+      <SpecifierID>-1</SpecifierID>
+      <SpecifierArg />
+    </IATEvent>
+    <IATEvent EventType="IATItem">
+      <ItemNum>30</ItemNum>
+      <BlockNum>2</BlockNum>
+      <IsPracticeItem>False</IsPracticeItem>
+      <StimulusDisplayID>23</StimulusDisplayID>
+      <OriginatingBlock>1</OriginatingBlock>
+      <KeyedDir>Left</KeyedDir>
+      <SpecifierID>-1</SpecifierID>
+      <SpecifierArg />
+    </IATEvent>
+    <IATEvent EventType="IATItem">
+      <ItemNum>31</ItemNum>
+      <BlockNum>2</BlockNum>
+      <IsPracticeItem>False</IsPracticeItem>
+      <StimulusDisplayID>20</StimulusDisplayID>
+      <OriginatingBlock>1</OriginatingBlock>
+      <KeyedDir>Right</KeyedDir>
+      <SpecifierID>-1</SpecifierID>
+      <SpecifierArg />
+    </IATEvent>
+    <IATEvent EventType="IATItem">
+      <ItemNum>32</ItemNum>
+      <BlockNum>2</BlockNum>
+      <IsPracticeItem>False</IsPracticeItem>
+      <StimulusDisplayID>42</StimulusDisplayID>
+      <OriginatingBlock>2</OriginatingBlock>
+      <KeyedDir>Right</KeyedDir>
+      <SpecifierID>-1</SpecifierID>
+      <SpecifierArg />
+    </IATEvent>
+    <IATEvent EventType="IATItem">
+      <ItemNum>33</ItemNum>
+      <BlockNum>2</BlockNum>
+      <IsPracticeItem>False</IsPracticeItem>
+      <StimulusDisplayID>47</StimulusDisplayID>
+      <OriginatingBlock>2</OriginatingBlock>
+      <KeyedDir>Right</KeyedDir>
+      <SpecifierID>-1</SpecifierID>
+      <SpecifierArg />
+    </IATEvent>
+    <IATEvent EventType="IATItem">
+      <ItemNum>34</ItemNum>
+      <BlockNum>2</BlockNum>
+      <IsPracticeItem>False</IsPracticeItem>
+      <StimulusDisplayID>44</StimulusDisplayID>
+      <OriginatingBlock>2</OriginatingBlock>
+      <KeyedDir>Right</KeyedDir>
+      <SpecifierID>-1</SpecifierID>
+      <SpecifierArg />
+    </IATEvent>
+    <IATEvent EventType="IATItem">
+      <ItemNum>35</ItemNum>
+      <BlockNum>2</BlockNum>
+      <IsPracticeItem>False</IsPracticeItem>
+      <StimulusDisplayID>46</StimulusDisplayID>
+      <OriginatingBlock>2</OriginatingBlock>
+      <KeyedDir>Right</KeyedDir>
+      <SpecifierID>-1</SpecifierID>
+      <SpecifierArg />
+    </IATEvent>
+    <IATEvent EventType="IATItem">
+      <ItemNum>36</ItemNum>
+      <BlockNum>2</BlockNum>
+      <IsPracticeItem>False</IsPracticeItem>
+      <StimulusDisplayID>41</StimulusDisplayID>
+      <OriginatingBlock>2</OriginatingBlock>
+      <KeyedDir>Left</KeyedDir>
+      <SpecifierID>-1</SpecifierID>
+      <SpecifierArg />
+    </IATEvent>
+    <IATEvent EventType="IATItem">
+      <ItemNum>37</ItemNum>
+      <BlockNum>2</BlockNum>
+      <IsPracticeItem>False</IsPracticeItem>
+      <StimulusDisplayID>21</StimulusDisplayID>
+      <OriginatingBlock>1</OriginatingBlock>
+      <KeyedDir>Left</KeyedDir>
+      <SpecifierID>-1</SpecifierID>
+      <SpecifierArg />
+    </IATEvent>
+    <IATEvent EventType="IATItem">
+      <ItemNum>38</ItemNum>
+      <BlockNum>2</BlockNum>
+      <IsPracticeItem>False</IsPracticeItem>
+      <StimulusDisplayID>17</StimulusDisplayID>
+      <OriginatingBlock>1</OriginatingBlock>
+      <KeyedDir>Right</KeyedDir>
+      <SpecifierID>-1</SpecifierID>
+      <SpecifierArg />
+    </IATEvent>
+    <IATEvent EventType="IATItem">
+      <ItemNum>39</ItemNum>
+      <BlockNum>2</BlockNum>
+      <IsPracticeItem>False</IsPracticeItem>
+      <StimulusDisplayID>37</StimulusDisplayID>
+      <OriginatingBlock>2</OriginatingBlock>
+      <KeyedDir>Left</KeyedDir>
+      <SpecifierID>-1</SpecifierID>
+      <SpecifierArg />
+    </IATEvent>
+    <IATEvent EventType="IATItem">
+      <ItemNum>40</ItemNum>
+      <BlockNum>2</BlockNum>
+      <IsPracticeItem>False</IsPracticeItem>
+      <StimulusDisplayID>25</StimulusDisplayID>
+      <OriginatingBlock>1</OriginatingBlock>
+      <KeyedDir>Left</KeyedDir>
+      <SpecifierID>-1</SpecifierID>
+      <SpecifierArg />
+    </IATEvent>
+    <IATEvent EventType="IATItem">
+      <ItemNum>41</ItemNum>
+      <BlockNum>2</BlockNum>
+      <IsPracticeItem>False</IsPracticeItem>
+      <StimulusDisplayID>38</StimulusDisplayID>
+      <OriginatingBlock>2</OriginatingBlock>
+      <KeyedDir>Left</KeyedDir>
+      <SpecifierID>-1</SpecifierID>
+      <SpecifierArg />
+    </IATEvent>
+    <IATEvent EventType="IATItem">
+      <ItemNum>42</ItemNum>
+      <BlockNum>2</BlockNum>
+      <IsPracticeItem>False</IsPracticeItem>
+      <StimulusDisplayID>48</StimulusDisplayID>
+      <OriginatingBlock>2</OriginatingBlock>
+      <KeyedDir>Right</KeyedDir>
+      <SpecifierID>-1</SpecifierID>
+      <SpecifierArg />
+    </IATEvent>
+    <IATEvent EventType="IATItem">
+      <ItemNum>43</ItemNum>
+      <BlockNum>2</BlockNum>
+      <IsPracticeItem>False</IsPracticeItem>
+      <StimulusDisplayID>27</StimulusDisplayID>
+      <OriginatingBlock>1</OriginatingBlock>
+      <KeyedDir>Left</KeyedDir>
+      <SpecifierID>-1</SpecifierID>
+      <SpecifierArg />
+    </IATEvent>
+    <IATEvent EventType="IATItem">
+      <ItemNum>44</ItemNum>
+      <BlockNum>2</BlockNum>
+      <IsPracticeItem>False</IsPracticeItem>
+      <StimulusDisplayID>15</StimulusDisplayID>
+      <OriginatingBlock>1</OriginatingBlock>
+      <KeyedDir>Right</KeyedDir>
+      <SpecifierID>-1</SpecifierID>
+      <SpecifierArg />
+    </IATEvent>
+    <IATEvent EventType="IATItem">
+      <ItemNum>45</ItemNum>
+      <BlockNum>2</BlockNum>
+      <IsPracticeItem>False</IsPracticeItem>
+      <StimulusDisplayID>45</StimulusDisplayID>
+      <OriginatingBlock>2</OriginatingBlock>
+      <KeyedDir>Right</KeyedDir>
+      <SpecifierID>-1</SpecifierID>
+      <SpecifierArg />
+    </IATEvent>
+    <IATEvent EventType="IATItem">
+      <ItemNum>46</ItemNum>
+      <BlockNum>2</BlockNum>
+      <IsPracticeItem>False</IsPracticeItem>
+      <StimulusDisplayID>36</StimulusDisplayID>
+      <OriginatingBlock>2</OriginatingBlock>
+      <KeyedDir>Left</KeyedDir>
+      <SpecifierID>-1</SpecifierID>
+      <SpecifierArg />
+    </IATEvent>
+    <IATEvent EventType="IATItem">
+      <ItemNum>47</ItemNum>
+      <BlockNum>2</BlockNum>
+      <IsPracticeItem>False</IsPracticeItem>
+      <StimulusDisplayID>14</StimulusDisplayID>
+      <OriginatingBlock>1</OriginatingBlock>
+      <KeyedDir>Right</KeyedDir>
+      <SpecifierID>-1</SpecifierID>
+      <SpecifierArg />
+    </IATEvent>
+    <IATEvent EventType="IATItem">
+      <ItemNum>48</ItemNum>
+      <BlockNum>2</BlockNum>
+      <IsPracticeItem>False</IsPracticeItem>
+      <StimulusDisplayID>39</StimulusDisplayID>
+      <OriginatingBlock>2</OriginatingBlock>
+      <KeyedDir>Left</KeyedDir>
+      <SpecifierID>-1</SpecifierID>
+      <SpecifierArg />
+    </IATEvent>
+    <IATEvent EventType="IATItem">
+      <ItemNum>49</ItemNum>
+      <BlockNum>2</BlockNum>
+      <IsPracticeItem>False</IsPracticeItem>
+      <StimulusDisplayID>16</StimulusDisplayID>
+      <OriginatingBlock>1</OriginatingBlock>
+      <KeyedDir>Right</KeyedDir>
+      <SpecifierID>-1</SpecifierID>
+      <SpecifierArg />
+    </IATEvent>
+    <IATEvent EventType="IATItem">
+      <ItemNum>50</ItemNum>
+      <BlockNum>2</BlockNum>
+      <IsPracticeItem>False</IsPracticeItem>
+      <StimulusDisplayID>24</StimulusDisplayID>
+      <OriginatingBlock>1</OriginatingBlock>
+      <KeyedDir>Left</KeyedDir>
+      <SpecifierID>-1</SpecifierID>
+      <SpecifierArg />
+    </IATEvent>
+    <IATEvent EventType="IATItem">
+      <ItemNum>51</ItemNum>
+      <BlockNum>2</BlockNum>
+      <IsPracticeItem>False</IsPracticeItem>
+      <StimulusDisplayID>22</StimulusDisplayID>
+      <OriginatingBlock>1</OriginatingBlock>
+      <KeyedDir>Left</KeyedDir>
+      <SpecifierID>-1</SpecifierID>
+      <SpecifierArg />
+    </IATEvent>
+    <IATEvent EventType="IATItem">
+      <ItemNum>52</ItemNum>
+      <BlockNum>2</BlockNum>
+      <IsPracticeItem>False</IsPracticeItem>
+      <StimulusDisplayID>40</StimulusDisplayID>
+      <OriginatingBlock>2</OriginatingBlock>
+      <KeyedDir>Left</KeyedDir>
+      <SpecifierID>-1</SpecifierID>
+      <SpecifierArg />
+    </IATEvent>
+    <IATEvent EventType="IATItem">
+      <ItemNum>53</ItemNum>
+      <BlockNum>2</BlockNum>
+      <IsPracticeItem>False</IsPracticeItem>
+      <StimulusDisplayID>18</StimulusDisplayID>
+      <OriginatingBlock>1</OriginatingBlock>
+      <KeyedDir>Right</KeyedDir>
+      <SpecifierID>-1</SpecifierID>
+      <SpecifierArg />
+    </IATEvent>
+    <IATEvent EventType="IATItem">
+      <ItemNum>54</ItemNum>
+      <BlockNum>2</BlockNum>
+      <IsPracticeItem>False</IsPracticeItem>
+      <StimulusDisplayID>35</StimulusDisplayID>
+      <OriginatingBlock>2</OriginatingBlock>
+      <KeyedDir>Left</KeyedDir>
+      <SpecifierID>-1</SpecifierID>
+      <SpecifierArg />
+    </IATEvent>
+    <IATEvent EventType="IATItem">
+      <ItemNum>55</ItemNum>
+      <BlockNum>2</BlockNum>
+      <IsPracticeItem>False</IsPracticeItem>
+      <StimulusDisplayID>43</StimulusDisplayID>
+      <OriginatingBlock>2</OriginatingBlock>
+      <KeyedDir>Right</KeyedDir>
+      <SpecifierID>-1</SpecifierID>
+      <SpecifierArg />
+    </IATEvent>
+    <IATEvent EventType="IATItem">
+      <ItemNum>56</ItemNum>
+      <BlockNum>2</BlockNum>
+      <IsPracticeItem>False</IsPracticeItem>
+      <StimulusDisplayID>19</StimulusDisplayID>
+      <OriginatingBlock>1</OriginatingBlock>
+      <KeyedDir>Right</KeyedDir>
+      <SpecifierID>-1</SpecifierID>
+      <SpecifierArg />
+    </IATEvent>
+    <IATEvent EventType="EndIATBlock">
+      <DummyValue>abcdefg</DummyValue>
+    </IATEvent>
+    <IATEvent EventType="BeginIATBlock">
+      <NumPresentations>20</NumPresentations>
+      <AlternatedWith>7</AlternatedWith>
+      <BlockNum>4</BlockNum>
+      <NumItems>28</NumItems>
+      <PracticeBlock>False</PracticeBlock>
+      <InstructionsDisplayID>58</InstructionsDisplayID>
+      <LeftResponseDisplayID>56</LeftResponseDisplayID>
+      <RightResponseDisplayID>57</RightResponseDisplayID>
+    </IATEvent>
+    <IATEvent EventType="IATItem">
+      <ItemNum>57</ItemNum>
+      <BlockNum>3</BlockNum>
+      <IsPracticeItem>False</IsPracticeItem>
+      <StimulusDisplayID>40</StimulusDisplayID>
+      <OriginatingBlock>2</OriginatingBlock>
+      <KeyedDir>Left</KeyedDir>
+      <SpecifierID>-1</SpecifierID>
+      <SpecifierArg />
+    </IATEvent>
+    <IATEvent EventType="IATItem">
+      <ItemNum>58</ItemNum>
+      <BlockNum>3</BlockNum>
+      <IsPracticeItem>False</IsPracticeItem>
+      <StimulusDisplayID>14</StimulusDisplayID>
+      <OriginatingBlock>1</OriginatingBlock>
+      <KeyedDir>Right</KeyedDir>
+      <SpecifierID>-1</SpecifierID>
+      <SpecifierArg />
+    </IATEvent>
+    <IATEvent EventType="IATItem">
+      <ItemNum>59</ItemNum>
+      <BlockNum>3</BlockNum>
+      <IsPracticeItem>False</IsPracticeItem>
+      <StimulusDisplayID>44</StimulusDisplayID>
+      <OriginatingBlock>2</OriginatingBlock>
+      <KeyedDir>Right</KeyedDir>
+      <SpecifierID>-1</SpecifierID>
+      <SpecifierArg />
+    </IATEvent>
+    <IATEvent EventType="IATItem">
+      <ItemNum>60</ItemNum>
+      <BlockNum>3</BlockNum>
+      <IsPracticeItem>False</IsPracticeItem>
+      <StimulusDisplayID>38</StimulusDisplayID>
+      <OriginatingBlock>2</OriginatingBlock>
+      <KeyedDir>Left</KeyedDir>
+      <SpecifierID>-1</SpecifierID>
+      <SpecifierArg />
+    </IATEvent>
+    <IATEvent EventType="IATItem">
+      <ItemNum>61</ItemNum>
+      <BlockNum>3</BlockNum>
+      <IsPracticeItem>False</IsPracticeItem>
+      <StimulusDisplayID>36</StimulusDisplayID>
+      <OriginatingBlock>2</OriginatingBlock>
+      <KeyedDir>Left</KeyedDir>
+      <SpecifierID>-1</SpecifierID>
+      <SpecifierArg />
+    </IATEvent>
+    <IATEvent EventType="IATItem">
+      <ItemNum>62</ItemNum>
+      <BlockNum>3</BlockNum>
+      <IsPracticeItem>False</IsPracticeItem>
+      <StimulusDisplayID>22</StimulusDisplayID>
+      <OriginatingBlock>1</OriginatingBlock>
+      <KeyedDir>Left</KeyedDir>
+      <SpecifierID>-1</SpecifierID>
+      <SpecifierArg />
+    </IATEvent>
+    <IATEvent EventType="IATItem">
+      <ItemNum>63</ItemNum>
+      <BlockNum>3</BlockNum>
+      <IsPracticeItem>False</IsPracticeItem>
+      <StimulusDisplayID>43</StimulusDisplayID>
+      <OriginatingBlock>2</OriginatingBlock>
+      <KeyedDir>Right</KeyedDir>
+      <SpecifierID>-1</SpecifierID>
+      <SpecifierArg />
+    </IATEvent>
+    <IATEvent EventType="IATItem">
+      <ItemNum>64</ItemNum>
+      <BlockNum>3</BlockNum>
+      <IsPracticeItem>False</IsPracticeItem>
+      <StimulusDisplayID>19</StimulusDisplayID>
+      <OriginatingBlock>1</OriginatingBlock>
+      <KeyedDir>Right</KeyedDir>
+      <SpecifierID>-1</SpecifierID>
+      <SpecifierArg />
+    </IATEvent>
+    <IATEvent EventType="IATItem">
+      <ItemNum>65</ItemNum>
+      <BlockNum>3</BlockNum>
+      <IsPracticeItem>False</IsPracticeItem>
+      <StimulusDisplayID>21</StimulusDisplayID>
+      <OriginatingBlock>1</OriginatingBlock>
+      <KeyedDir>Left</KeyedDir>
+      <SpecifierID>-1</SpecifierID>
+      <SpecifierArg />
+    </IATEvent>
+    <IATEvent EventType="IATItem">
+      <ItemNum>66</ItemNum>
+      <BlockNum>3</BlockNum>
+      <IsPracticeItem>False</IsPracticeItem>
+      <StimulusDisplayID>27</StimulusDisplayID>
+      <OriginatingBlock>1</OriginatingBlock>
+      <KeyedDir>Left</KeyedDir>
+      <SpecifierID>-1</SpecifierID>
+      <SpecifierArg />
+    </IATEvent>
+    <IATEvent EventType="IATItem">
+      <ItemNum>67</ItemNum>
+      <BlockNum>3</BlockNum>
+      <IsPracticeItem>False</IsPracticeItem>
+      <StimulusDisplayID>15</StimulusDisplayID>
+      <OriginatingBlock>1</OriginatingBlock>
+      <KeyedDir>Right</KeyedDir>
+      <SpecifierID>-1</SpecifierID>
+      <SpecifierArg />
+    </IATEvent>
+    <IATEvent EventType="IATItem">
+      <ItemNum>68</ItemNum>
+      <BlockNum>3</BlockNum>
+      <IsPracticeItem>False</IsPracticeItem>
+      <StimulusDisplayID>18</StimulusDisplayID>
+      <OriginatingBlock>1</OriginatingBlock>
+      <KeyedDir>Right</KeyedDir>
+      <SpecifierID>-1</SpecifierID>
+      <SpecifierArg />
+    </IATEvent>
+    <IATEvent EventType="IATItem">
+      <ItemNum>69</ItemNum>
+      <BlockNum>3</BlockNum>
+      <IsPracticeItem>False</IsPracticeItem>
+      <StimulusDisplayID>37</StimulusDisplayID>
+      <OriginatingBlock>2</OriginatingBlock>
+      <KeyedDir>Left</KeyedDir>
+      <SpecifierID>-1</SpecifierID>
+      <SpecifierArg />
+    </IATEvent>
+    <IATEvent EventType="IATItem">
+      <ItemNum>70</ItemNum>
+      <BlockNum>3</BlockNum>
+      <IsPracticeItem>False</IsPracticeItem>
+      <StimulusDisplayID>42</StimulusDisplayID>
+      <OriginatingBlock>2</OriginatingBlock>
+      <KeyedDir>Right</KeyedDir>
+      <SpecifierID>-1</SpecifierID>
+      <SpecifierArg />
+    </IATEvent>
+    <IATEvent EventType="IATItem">
+      <ItemNum>71</ItemNum>
+      <BlockNum>3</BlockNum>
+      <IsPracticeItem>False</IsPracticeItem>
+      <StimulusDisplayID>24</StimulusDisplayID>
+      <OriginatingBlock>1</OriginatingBlock>
+      <KeyedDir>Left</KeyedDir>
+      <SpecifierID>-1</SpecifierID>
+      <SpecifierArg />
+    </IATEvent>
+    <IATEvent EventType="IATItem">
+      <ItemNum>72</ItemNum>
+      <BlockNum>3</BlockNum>
+      <IsPracticeItem>False</IsPracticeItem>
+      <StimulusDisplayID>20</StimulusDisplayID>
+      <OriginatingBlock>1</OriginatingBlock>
+      <KeyedDir>Right</KeyedDir>
+      <SpecifierID>-1</SpecifierID>
+      <SpecifierArg />
+    </IATEvent>
+    <IATEvent EventType="IATItem">
+      <ItemNum>73</ItemNum>
+      <BlockNum>3</BlockNum>
+      <IsPracticeItem>False</IsPracticeItem>
+      <StimulusDisplayID>25</StimulusDisplayID>
+      <OriginatingBlock>1</OriginatingBlock>
+      <KeyedDir>Left</KeyedDir>
+      <SpecifierID>-1</SpecifierID>
+      <SpecifierArg />
+    </IATEvent>
+    <IATEvent EventType="IATItem">
+      <ItemNum>74</ItemNum>
+      <BlockNum>3</BlockNum>
+      <IsPracticeItem>False</IsPracticeItem>
+      <StimulusDisplayID>46</StimulusDisplayID>
+      <OriginatingBlock>2</OriginatingBlock>
+      <KeyedDir>Right</KeyedDir>
+      <SpecifierID>-1</SpecifierID>
+      <SpecifierArg />
+    </IATEvent>
+    <IATEvent EventType="IATItem">
+      <ItemNum>75</ItemNum>
+      <BlockNum>3</BlockNum>
+      <IsPracticeItem>False</IsPracticeItem>
+      <StimulusDisplayID>26</StimulusDisplayID>
+      <OriginatingBlock>1</OriginatingBlock>
+      <KeyedDir>Left</KeyedDir>
+      <SpecifierID>-1</SpecifierID>
+      <SpecifierArg />
+    </IATEvent>
+    <IATEvent EventType="IATItem">
+      <ItemNum>76</ItemNum>
+      <BlockNum>3</BlockNum>
+      <IsPracticeItem>False</IsPracticeItem>
+      <StimulusDisplayID>35</StimulusDisplayID>
+      <OriginatingBlock>2</OriginatingBlock>
+      <KeyedDir>Left</KeyedDir>
+      <SpecifierID>-1</SpecifierID>
+      <SpecifierArg />
+    </IATEvent>
+    <IATEvent EventType="IATItem">
+      <ItemNum>77</ItemNum>
+      <BlockNum>3</BlockNum>
+      <IsPracticeItem>False</IsPracticeItem>
+      <StimulusDisplayID>17</StimulusDisplayID>
+      <OriginatingBlock>1</OriginatingBlock>
+      <KeyedDir>Right</KeyedDir>
+      <SpecifierID>-1</SpecifierID>
+      <SpecifierArg />
+    </IATEvent>
+    <IATEvent EventType="IATItem">
+      <ItemNum>78</ItemNum>
+      <BlockNum>3</BlockNum>
+      <IsPracticeItem>False</IsPracticeItem>
+      <StimulusDisplayID>48</StimulusDisplayID>
+      <OriginatingBlock>2</OriginatingBlock>
+      <KeyedDir>Right</KeyedDir>
+      <SpecifierID>-1</SpecifierID>
+      <SpecifierArg />
+    </IATEvent>
+    <IATEvent EventType="IATItem">
+      <ItemNum>79</ItemNum>
+      <BlockNum>3</BlockNum>
+      <IsPracticeItem>False</IsPracticeItem>
+      <StimulusDisplayID>47</StimulusDisplayID>
+      <OriginatingBlock>2</OriginatingBlock>
+      <KeyedDir>Right</KeyedDir>
+      <SpecifierID>-1</SpecifierID>
+      <SpecifierArg />
+    </IATEvent>
+    <IATEvent EventType="IATItem">
+      <ItemNum>80</ItemNum>
+      <BlockNum>3</BlockNum>
+      <IsPracticeItem>False</IsPracticeItem>
+      <StimulusDisplayID>39</StimulusDisplayID>
+      <OriginatingBlock>2</OriginatingBlock>
+      <KeyedDir>Left</KeyedDir>
+      <SpecifierID>-1</SpecifierID>
+      <SpecifierArg />
+    </IATEvent>
+    <IATEvent EventType="IATItem">
+      <ItemNum>81</ItemNum>
+      <BlockNum>3</BlockNum>
+      <IsPracticeItem>False</IsPracticeItem>
+      <StimulusDisplayID>16</StimulusDisplayID>
+      <OriginatingBlock>1</OriginatingBlock>
+      <KeyedDir>Right</KeyedDir>
+      <SpecifierID>-1</SpecifierID>
+      <SpecifierArg />
+    </IATEvent>
+    <IATEvent EventType="IATItem">
+      <ItemNum>82</ItemNum>
+      <BlockNum>3</BlockNum>
+      <IsPracticeItem>False</IsPracticeItem>
+      <StimulusDisplayID>45</StimulusDisplayID>
+      <OriginatingBlock>2</OriginatingBlock>
+      <KeyedDir>Right</KeyedDir>
+      <SpecifierID>-1</SpecifierID>
+      <SpecifierArg />
+    </IATEvent>
+    <IATEvent EventType="IATItem">
+      <ItemNum>83</ItemNum>
+      <BlockNum>3</BlockNum>
+      <IsPracticeItem>False</IsPracticeItem>
+      <StimulusDisplayID>41</StimulusDisplayID>
+      <OriginatingBlock>2</OriginatingBlock>
+      <KeyedDir>Left</KeyedDir>
+      <SpecifierID>-1</SpecifierID>
+      <SpecifierArg />
+    </IATEvent>
+    <IATEvent EventType="IATItem">
+      <ItemNum>84</ItemNum>
+      <BlockNum>3</BlockNum>
+      <IsPracticeItem>False</IsPracticeItem>
+      <StimulusDisplayID>23</StimulusDisplayID>
+      <OriginatingBlock>1</OriginatingBlock>
+      <KeyedDir>Left</KeyedDir>
+      <SpecifierID>-1</SpecifierID>
+      <SpecifierArg />
+    </IATEvent>
+    <IATEvent EventType="EndIATBlock">
+      <DummyValue>abcdefg</DummyValue>
+    </IATEvent>
+    <IATEvent EventType="BeginInstructionBlock">
+      <NumInstructionScreens>1</NumInstructionScreens>
+      <AlternatedWith>-1</AlternatedWith>
+    </IATEvent>
+    <IATEvent EventType="KeyedInstructionScreen">
+      <ContinueASCIIKeyCode>32</ContinueASCIIKeyCode>
+      <ContinueInstructionsDisplayID>62</ContinueInstructionsDisplayID>
+      <LeftResponseDisplayID>60</LeftResponseDisplayID>
+      <RightResponseDisplayID>61</RightResponseDisplayID>
+      <InstructionsDisplayID>59</InstructionsDisplayID>
+    </IATEvent>
+    <IATEvent EventType="BeginIATBlock">
+      <NumPresentations>10</NumPresentations>
+      <AlternatedWith>-1</AlternatedWith>
+      <BlockNum>5</BlockNum>
+      <NumItems>14</NumItems>
+      <PracticeBlock>False</PracticeBlock>
+      <InstructionsDisplayID>65</InstructionsDisplayID>
+      <LeftResponseDisplayID>63</LeftResponseDisplayID>
+      <RightResponseDisplayID>64</RightResponseDisplayID>
+    </IATEvent>
+    <IATEvent EventType="IATItem">
+      <ItemNum>85</ItemNum>
+      <BlockNum>4</BlockNum>
+      <IsPracticeItem>False</IsPracticeItem>
+      <StimulusDisplayID>41</StimulusDisplayID>
+      <OriginatingBlock>2</OriginatingBlock>
+      <KeyedDir>Right</KeyedDir>
+      <SpecifierID>-1</SpecifierID>
+      <SpecifierArg />
+    </IATEvent>
+    <IATEvent EventType="IATItem">
+      <ItemNum>86</ItemNum>
+      <BlockNum>4</BlockNum>
+      <IsPracticeItem>False</IsPracticeItem>
+      <StimulusDisplayID>47</StimulusDisplayID>
+      <OriginatingBlock>2</OriginatingBlock>
+      <KeyedDir>Left</KeyedDir>
+      <SpecifierID>-1</SpecifierID>
+      <SpecifierArg />
+    </IATEvent>
+    <IATEvent EventType="IATItem">
+      <ItemNum>87</ItemNum>
+      <BlockNum>4</BlockNum>
+      <IsPracticeItem>False</IsPracticeItem>
+      <StimulusDisplayID>39</StimulusDisplayID>
+      <OriginatingBlock>2</OriginatingBlock>
+      <KeyedDir>Right</KeyedDir>
+      <SpecifierID>-1</SpecifierID>
+      <SpecifierArg />
+    </IATEvent>
+    <IATEvent EventType="IATItem">
+      <ItemNum>88</ItemNum>
+      <BlockNum>4</BlockNum>
+      <IsPracticeItem>False</IsPracticeItem>
+      <StimulusDisplayID>38</StimulusDisplayID>
+      <OriginatingBlock>2</OriginatingBlock>
+      <KeyedDir>Right</KeyedDir>
+      <SpecifierID>-1</SpecifierID>
+      <SpecifierArg />
+    </IATEvent>
+    <IATEvent EventType="IATItem">
+      <ItemNum>89</ItemNum>
+      <BlockNum>4</BlockNum>
+      <IsPracticeItem>False</IsPracticeItem>
+      <StimulusDisplayID>46</StimulusDisplayID>
+      <OriginatingBlock>2</OriginatingBlock>
+      <KeyedDir>Left</KeyedDir>
+      <SpecifierID>-1</SpecifierID>
+      <SpecifierArg />
+    </IATEvent>
+    <IATEvent EventType="IATItem">
+      <ItemNum>90</ItemNum>
+      <BlockNum>4</BlockNum>
+      <IsPracticeItem>False</IsPracticeItem>
+      <StimulusDisplayID>42</StimulusDisplayID>
+      <OriginatingBlock>2</OriginatingBlock>
+      <KeyedDir>Left</KeyedDir>
+      <SpecifierID>-1</SpecifierID>
+      <SpecifierArg />
+    </IATEvent>
+    <IATEvent EventType="IATItem">
+      <ItemNum>91</ItemNum>
+      <BlockNum>4</BlockNum>
+      <IsPracticeItem>False</IsPracticeItem>
+      <StimulusDisplayID>44</StimulusDisplayID>
+      <OriginatingBlock>2</OriginatingBlock>
+      <KeyedDir>Left</KeyedDir>
+      <SpecifierID>-1</SpecifierID>
+      <SpecifierArg />
+    </IATEvent>
+    <IATEvent EventType="IATItem">
+      <ItemNum>92</ItemNum>
+      <BlockNum>4</BlockNum>
+      <IsPracticeItem>False</IsPracticeItem>
+      <StimulusDisplayID>37</StimulusDisplayID>
+      <OriginatingBlock>2</OriginatingBlock>
+      <KeyedDir>Right</KeyedDir>
+      <SpecifierID>-1</SpecifierID>
+      <SpecifierArg />
+    </IATEvent>
+    <IATEvent EventType="IATItem">
+      <ItemNum>93</ItemNum>
+      <BlockNum>4</BlockNum>
+      <IsPracticeItem>False</IsPracticeItem>
+      <StimulusDisplayID>48</StimulusDisplayID>
+      <OriginatingBlock>2</OriginatingBlock>
+      <KeyedDir>Left</KeyedDir>
+      <SpecifierID>-1</SpecifierID>
+      <SpecifierArg />
+    </IATEvent>
+    <IATEvent EventType="IATItem">
+      <ItemNum>94</ItemNum>
+      <BlockNum>4</BlockNum>
+      <IsPracticeItem>False</IsPracticeItem>
+      <StimulusDisplayID>36</StimulusDisplayID>
+      <OriginatingBlock>2</OriginatingBlock>
+      <KeyedDir>Right</KeyedDir>
+      <SpecifierID>-1</SpecifierID>
+      <SpecifierArg />
+    </IATEvent>
+    <IATEvent EventType="IATItem">
+      <ItemNum>95</ItemNum>
+      <BlockNum>4</BlockNum>
+      <IsPracticeItem>False</IsPracticeItem>
+      <StimulusDisplayID>40</StimulusDisplayID>
+      <OriginatingBlock>2</OriginatingBlock>
+      <KeyedDir>Right</KeyedDir>
+      <SpecifierID>-1</SpecifierID>
+      <SpecifierArg />
+    </IATEvent>
+    <IATEvent EventType="IATItem">
+      <ItemNum>96</ItemNum>
+      <BlockNum>4</BlockNum>
+      <IsPracticeItem>False</IsPracticeItem>
+      <StimulusDisplayID>35</StimulusDisplayID>
+      <OriginatingBlock>2</OriginatingBlock>
+      <KeyedDir>Right</KeyedDir>
+      <SpecifierID>-1</SpecifierID>
+      <SpecifierArg />
+    </IATEvent>
+    <IATEvent EventType="IATItem">
+      <ItemNum>97</ItemNum>
+      <BlockNum>4</BlockNum>
+      <IsPracticeItem>False</IsPracticeItem>
+      <StimulusDisplayID>43</StimulusDisplayID>
+      <OriginatingBlock>2</OriginatingBlock>
+      <KeyedDir>Left</KeyedDir>
+      <SpecifierID>-1</SpecifierID>
+      <SpecifierArg />
+    </IATEvent>
+    <IATEvent EventType="IATItem">
+      <ItemNum>98</ItemNum>
+      <BlockNum>4</BlockNum>
+      <IsPracticeItem>False</IsPracticeItem>
+      <StimulusDisplayID>45</StimulusDisplayID>
+      <OriginatingBlock>2</OriginatingBlock>
+      <KeyedDir>Left</KeyedDir>
+      <SpecifierID>-1</SpecifierID>
+      <SpecifierArg />
+    </IATEvent>
+    <IATEvent EventType="EndIATBlock">
+      <DummyValue>abcdefg</DummyValue>
+    </IATEvent>
+    <IATEvent EventType="BeginInstructionBlock">
+      <NumInstructionScreens>1</NumInstructionScreens>
+      <AlternatedWith>3</AlternatedWith>
+    </IATEvent>
+    <IATEvent EventType="KeyedInstructionScreen">
+      <ContinueASCIIKeyCode>32</ContinueASCIIKeyCode>
+      <ContinueInstructionsDisplayID>69</ContinueInstructionsDisplayID>
+      <LeftResponseDisplayID>67</LeftResponseDisplayID>
+      <RightResponseDisplayID>68</RightResponseDisplayID>
+      <InstructionsDisplayID>66</InstructionsDisplayID>
+    </IATEvent>
+    <IATEvent EventType="BeginIATBlock">
+      <NumPresentations>10</NumPresentations>
+      <AlternatedWith>3</AlternatedWith>
+      <BlockNum>6</BlockNum>
+      <NumItems>28</NumItems>
+      <PracticeBlock>False</PracticeBlock>
+      <InstructionsDisplayID>72</InstructionsDisplayID>
+      <LeftResponseDisplayID>70</LeftResponseDisplayID>
+      <RightResponseDisplayID>71</RightResponseDisplayID>
+    </IATEvent>
+    <IATEvent EventType="IATItem">
+      <ItemNum>99</ItemNum>
+      <BlockNum>5</BlockNum>
+      <IsPracticeItem>False</IsPracticeItem>
+      <StimulusDisplayID>35</StimulusDisplayID>
+      <OriginatingBlock>2</OriginatingBlock>
+      <KeyedDir>Right</KeyedDir>
+      <SpecifierID>-1</SpecifierID>
+      <SpecifierArg />
+    </IATEvent>
+    <IATEvent EventType="IATItem">
+      <ItemNum>100</ItemNum>
+      <BlockNum>5</BlockNum>
+      <IsPracticeItem>False</IsPracticeItem>
+      <StimulusDisplayID>26</StimulusDisplayID>
+      <OriginatingBlock>1</OriginatingBlock>
+      <KeyedDir>Left</KeyedDir>
+      <SpecifierID>-1</SpecifierID>
+      <SpecifierArg />
+    </IATEvent>
+    <IATEvent EventType="IATItem">
+      <ItemNum>101</ItemNum>
+      <BlockNum>5</BlockNum>
+      <IsPracticeItem>False</IsPracticeItem>
+      <StimulusDisplayID>20</StimulusDisplayID>
+      <OriginatingBlock>1</OriginatingBlock>
+      <KeyedDir>Right</KeyedDir>
+      <SpecifierID>-1</SpecifierID>
+      <SpecifierArg />
+    </IATEvent>
+    <IATEvent EventType="IATItem">
+      <ItemNum>102</ItemNum>
+      <BlockNum>5</BlockNum>
+      <IsPracticeItem>False</IsPracticeItem>
+      <StimulusDisplayID>40</StimulusDisplayID>
+      <OriginatingBlock>2</OriginatingBlock>
+      <KeyedDir>Right</KeyedDir>
+      <SpecifierID>-1</SpecifierID>
+      <SpecifierArg />
+    </IATEvent>
+    <IATEvent EventType="IATItem">
+      <ItemNum>103</ItemNum>
+      <BlockNum>5</BlockNum>
+      <IsPracticeItem>False</IsPracticeItem>
+      <StimulusDisplayID>27</StimulusDisplayID>
+      <OriginatingBlock>1</OriginatingBlock>
+      <KeyedDir>Left</KeyedDir>
+      <SpecifierID>-1</SpecifierID>
+      <SpecifierArg />
+    </IATEvent>
+    <IATEvent EventType="IATItem">
+      <ItemNum>104</ItemNum>
+      <BlockNum>5</BlockNum>
+      <IsPracticeItem>False</IsPracticeItem>
+      <StimulusDisplayID>46</StimulusDisplayID>
+      <OriginatingBlock>2</OriginatingBlock>
+      <KeyedDir>Left</KeyedDir>
+      <SpecifierID>-1</SpecifierID>
+      <SpecifierArg />
+    </IATEvent>
+    <IATEvent EventType="IATItem">
+      <ItemNum>105</ItemNum>
+      <BlockNum>5</BlockNum>
+      <IsPracticeItem>False</IsPracticeItem>
+      <StimulusDisplayID>41</StimulusDisplayID>
+      <OriginatingBlock>2</OriginatingBlock>
+      <KeyedDir>Right</KeyedDir>
+      <SpecifierID>-1</SpecifierID>
+      <SpecifierArg />
+    </IATEvent>
+    <IATEvent EventType="IATItem">
+      <ItemNum>106</ItemNum>
+      <BlockNum>5</BlockNum>
+      <IsPracticeItem>False</IsPracticeItem>
+      <StimulusDisplayID>18</StimulusDisplayID>
+      <OriginatingBlock>1</OriginatingBlock>
+      <KeyedDir>Right</KeyedDir>
+      <SpecifierID>-1</SpecifierID>
+      <SpecifierArg />
+    </IATEvent>
+    <IATEvent EventType="IATItem">
+      <ItemNum>107</ItemNum>
+      <BlockNum>5</BlockNum>
+      <IsPracticeItem>False</IsPracticeItem>
+      <StimulusDisplayID>14</StimulusDisplayID>
+      <OriginatingBlock>1</OriginatingBlock>
+      <KeyedDir>Right</KeyedDir>
+      <SpecifierID>-1</SpecifierID>
+      <SpecifierArg />
+    </IATEvent>
+    <IATEvent EventType="IATItem">
+      <ItemNum>108</ItemNum>
+      <BlockNum>5</BlockNum>
+      <IsPracticeItem>False</IsPracticeItem>
+      <StimulusDisplayID>16</StimulusDisplayID>
+      <OriginatingBlock>1</OriginatingBlock>
+      <KeyedDir>Right</KeyedDir>
+      <SpecifierID>-1</SpecifierID>
+      <SpecifierArg />
+    </IATEvent>
+    <IATEvent EventType="IATItem">
+      <ItemNum>109</ItemNum>
+      <BlockNum>5</BlockNum>
+      <IsPracticeItem>False</IsPracticeItem>
+      <StimulusDisplayID>15</StimulusDisplayID>
+      <OriginatingBlock>1</OriginatingBlock>
+      <KeyedDir>Right</KeyedDir>
+      <SpecifierID>-1</SpecifierID>
+      <SpecifierArg />
+    </IATEvent>
+    <IATEvent EventType="IATItem">
+      <ItemNum>110</ItemNum>
+      <BlockNum>5</BlockNum>
+      <IsPracticeItem>False</IsPracticeItem>
+      <StimulusDisplayID>37</StimulusDisplayID>
+      <OriginatingBlock>2</OriginatingBlock>
+      <KeyedDir>Right</KeyedDir>
+      <SpecifierID>-1</SpecifierID>
+      <SpecifierArg />
+    </IATEvent>
+    <IATEvent EventType="IATItem">
+      <ItemNum>111</ItemNum>
+      <BlockNum>5</BlockNum>
+      <IsPracticeItem>False</IsPracticeItem>
+      <StimulusDisplayID>42</StimulusDisplayID>
+      <OriginatingBlock>2</OriginatingBlock>
+      <KeyedDir>Left</KeyedDir>
+      <SpecifierID>-1</SpecifierID>
+      <SpecifierArg />
+    </IATEvent>
+    <IATEvent EventType="IATItem">
+      <ItemNum>112</ItemNum>
+      <BlockNum>5</BlockNum>
+      <IsPracticeItem>False</IsPracticeItem>
+      <StimulusDisplayID>47</StimulusDisplayID>
+      <OriginatingBlock>2</OriginatingBlock>
+      <KeyedDir>Left</KeyedDir>
+      <SpecifierID>-1</SpecifierID>
+      <SpecifierArg />
+    </IATEvent>
+    <IATEvent EventType="IATItem">
+      <ItemNum>113</ItemNum>
+      <BlockNum>5</BlockNum>
+      <IsPracticeItem>False</IsPracticeItem>
+      <StimulusDisplayID>17</StimulusDisplayID>
+      <OriginatingBlock>1</OriginatingBlock>
+      <KeyedDir>Right</KeyedDir>
+      <SpecifierID>-1</SpecifierID>
+      <SpecifierArg />
+    </IATEvent>
+    <IATEvent EventType="IATItem">
+      <ItemNum>114</ItemNum>
+      <BlockNum>5</BlockNum>
+      <IsPracticeItem>False</IsPracticeItem>
+      <StimulusDisplayID>43</StimulusDisplayID>
+      <OriginatingBlock>2</OriginatingBlock>
+      <KeyedDir>Left</KeyedDir>
+      <SpecifierID>-1</SpecifierID>
+      <SpecifierArg />
+    </IATEvent>
+    <IATEvent EventType="IATItem">
+      <ItemNum>115</ItemNum>
+      <BlockNum>5</BlockNum>
+      <IsPracticeItem>False</IsPracticeItem>
+      <StimulusDisplayID>25</StimulusDisplayID>
+      <OriginatingBlock>1</OriginatingBlock>
+      <KeyedDir>Left</KeyedDir>
+      <SpecifierID>-1</SpecifierID>
+      <SpecifierArg />
+    </IATEvent>
+    <IATEvent EventType="IATItem">
+      <ItemNum>116</ItemNum>
+      <BlockNum>5</BlockNum>
+      <IsPracticeItem>False</IsPracticeItem>
+      <StimulusDisplayID>48</StimulusDisplayID>
+      <OriginatingBlock>2</OriginatingBlock>
+      <KeyedDir>Left</KeyedDir>
+      <SpecifierID>-1</SpecifierID>
+      <SpecifierArg />
+    </IATEvent>
+    <IATEvent EventType="IATItem">
+      <ItemNum>117</ItemNum>
+      <BlockNum>5</BlockNum>
+      <IsPracticeItem>False</IsPracticeItem>
+      <StimulusDisplayID>45</StimulusDisplayID>
+      <OriginatingBlock>2</OriginatingBlock>
+      <KeyedDir>Left</KeyedDir>
+      <SpecifierID>-1</SpecifierID>
+      <SpecifierArg />
+    </IATEvent>
+    <IATEvent EventType="IATItem">
+      <ItemNum>118</ItemNum>
+      <BlockNum>5</BlockNum>
+      <IsPracticeItem>False</IsPracticeItem>
+      <StimulusDisplayID>21</StimulusDisplayID>
+      <OriginatingBlock>1</OriginatingBlock>
+      <KeyedDir>Left</KeyedDir>
+      <SpecifierID>-1</SpecifierID>
+      <SpecifierArg />
+    </IATEvent>
+    <IATEvent EventType="IATItem">
+      <ItemNum>119</ItemNum>
+      <BlockNum>5</BlockNum>
+      <IsPracticeItem>False</IsPracticeItem>
+      <StimulusDisplayID>24</StimulusDisplayID>
+      <OriginatingBlock>1</OriginatingBlock>
+      <KeyedDir>Left</KeyedDir>
+      <SpecifierID>-1</SpecifierID>
+      <SpecifierArg />
+    </IATEvent>
+    <IATEvent EventType="IATItem">
+      <ItemNum>120</ItemNum>
+      <BlockNum>5</BlockNum>
+      <IsPracticeItem>False</IsPracticeItem>
+      <StimulusDisplayID>39</StimulusDisplayID>
+      <OriginatingBlock>2</OriginatingBlock>
+      <KeyedDir>Right</KeyedDir>
+      <SpecifierID>-1</SpecifierID>
+      <SpecifierArg />
+    </IATEvent>
+    <IATEvent EventType="IATItem">
+      <ItemNum>121</ItemNum>
+      <BlockNum>5</BlockNum>
+      <IsPracticeItem>False</IsPracticeItem>
+      <StimulusDisplayID>23</StimulusDisplayID>
+      <OriginatingBlock>1</OriginatingBlock>
+      <KeyedDir>Left</KeyedDir>
+      <SpecifierID>-1</SpecifierID>
+      <SpecifierArg />
+    </IATEvent>
+    <IATEvent EventType="IATItem">
+      <ItemNum>122</ItemNum>
+      <BlockNum>5</BlockNum>
+      <IsPracticeItem>False</IsPracticeItem>
+      <StimulusDisplayID>38</StimulusDisplayID>
+      <OriginatingBlock>2</OriginatingBlock>
+      <KeyedDir>Right</KeyedDir>
+      <SpecifierID>-1</SpecifierID>
+      <SpecifierArg />
+    </IATEvent>
+    <IATEvent EventType="IATItem">
+      <ItemNum>123</ItemNum>
+      <BlockNum>5</BlockNum>
+      <IsPracticeItem>False</IsPracticeItem>
+      <StimulusDisplayID>36</StimulusDisplayID>
+      <OriginatingBlock>2</OriginatingBlock>
+      <KeyedDir>Right</KeyedDir>
+      <SpecifierID>-1</SpecifierID>
+      <SpecifierArg />
+    </IATEvent>
+    <IATEvent EventType="IATItem">
+      <ItemNum>124</ItemNum>
+      <BlockNum>5</BlockNum>
+      <IsPracticeItem>False</IsPracticeItem>
+      <StimulusDisplayID>44</StimulusDisplayID>
+      <OriginatingBlock>2</OriginatingBlock>
+      <KeyedDir>Left</KeyedDir>
+      <SpecifierID>-1</SpecifierID>
+      <SpecifierArg />
+    </IATEvent>
+    <IATEvent EventType="IATItem">
+      <ItemNum>125</ItemNum>
+      <BlockNum>5</BlockNum>
+      <IsPracticeItem>False</IsPracticeItem>
+      <StimulusDisplayID>19</StimulusDisplayID>
+      <OriginatingBlock>1</OriginatingBlock>
+      <KeyedDir>Right</KeyedDir>
+      <SpecifierID>-1</SpecifierID>
+      <SpecifierArg />
+    </IATEvent>
+    <IATEvent EventType="IATItem">
+      <ItemNum>126</ItemNum>
+      <BlockNum>5</BlockNum>
+      <IsPracticeItem>False</IsPracticeItem>
+      <StimulusDisplayID>22</StimulusDisplayID>
+      <OriginatingBlock>1</OriginatingBlock>
+      <KeyedDir>Left</KeyedDir>
+      <SpecifierID>-1</SpecifierID>
+      <SpecifierArg />
+    </IATEvent>
+    <IATEvent EventType="EndIATBlock">
+      <DummyValue>abcdefg</DummyValue>
+    </IATEvent>
+    <IATEvent EventType="BeginIATBlock">
+      <NumPresentations>20</NumPresentations>
+      <AlternatedWith>4</AlternatedWith>
+      <BlockNum>7</BlockNum>
+      <NumItems>28</NumItems>
+      <PracticeBlock>False</PracticeBlock>
+      <InstructionsDisplayID>75</InstructionsDisplayID>
+      <LeftResponseDisplayID>73</LeftResponseDisplayID>
+      <RightResponseDisplayID>74</RightResponseDisplayID>
+    </IATEvent>
+    <IATEvent EventType="IATItem">
+      <ItemNum>127</ItemNum>
+      <BlockNum>6</BlockNum>
+      <IsPracticeItem>False</IsPracticeItem>
+      <StimulusDisplayID>35</StimulusDisplayID>
+      <OriginatingBlock>2</OriginatingBlock>
+      <KeyedDir>Right</KeyedDir>
+      <SpecifierID>-1</SpecifierID>
+      <SpecifierArg />
+    </IATEvent>
+    <IATEvent EventType="IATItem">
+      <ItemNum>128</ItemNum>
+      <BlockNum>6</BlockNum>
+      <IsPracticeItem>False</IsPracticeItem>
+      <StimulusDisplayID>14</StimulusDisplayID>
+      <OriginatingBlock>1</OriginatingBlock>
+      <KeyedDir>Right</KeyedDir>
+      <SpecifierID>-1</SpecifierID>
+      <SpecifierArg />
+    </IATEvent>
+    <IATEvent EventType="IATItem">
+      <ItemNum>129</ItemNum>
+      <BlockNum>6</BlockNum>
+      <IsPracticeItem>False</IsPracticeItem>
+      <StimulusDisplayID>23</StimulusDisplayID>
+      <OriginatingBlock>1</OriginatingBlock>
+      <KeyedDir>Left</KeyedDir>
+      <SpecifierID>-1</SpecifierID>
+      <SpecifierArg />
+    </IATEvent>
+    <IATEvent EventType="IATItem">
+      <ItemNum>130</ItemNum>
+      <BlockNum>6</BlockNum>
+      <IsPracticeItem>False</IsPracticeItem>
+      <StimulusDisplayID>20</StimulusDisplayID>
+      <OriginatingBlock>1</OriginatingBlock>
+      <KeyedDir>Right</KeyedDir>
+      <SpecifierID>-1</SpecifierID>
+      <SpecifierArg />
+    </IATEvent>
+    <IATEvent EventType="IATItem">
+      <ItemNum>131</ItemNum>
+      <BlockNum>6</BlockNum>
+      <IsPracticeItem>False</IsPracticeItem>
+      <StimulusDisplayID>24</StimulusDisplayID>
+      <OriginatingBlock>1</OriginatingBlock>
+      <KeyedDir>Left</KeyedDir>
+      <SpecifierID>-1</SpecifierID>
+      <SpecifierArg />
+    </IATEvent>
+    <IATEvent EventType="IATItem">
+      <ItemNum>132</ItemNum>
+      <BlockNum>6</BlockNum>
+      <IsPracticeItem>False</IsPracticeItem>
+      <StimulusDisplayID>38</StimulusDisplayID>
+      <OriginatingBlock>2</OriginatingBlock>
+      <KeyedDir>Right</KeyedDir>
+      <SpecifierID>-1</SpecifierID>
+      <SpecifierArg />
+    </IATEvent>
+    <IATEvent EventType="IATItem">
+      <ItemNum>133</ItemNum>
+      <BlockNum>6</BlockNum>
+      <IsPracticeItem>False</IsPracticeItem>
+      <StimulusDisplayID>36</StimulusDisplayID>
+      <OriginatingBlock>2</OriginatingBlock>
+      <KeyedDir>Right</KeyedDir>
+      <SpecifierID>-1</SpecifierID>
+      <SpecifierArg />
+    </IATEvent>
+    <IATEvent EventType="IATItem">
+      <ItemNum>134</ItemNum>
+      <BlockNum>6</BlockNum>
+      <IsPracticeItem>False</IsPracticeItem>
+      <StimulusDisplayID>43</StimulusDisplayID>
+      <OriginatingBlock>2</OriginatingBlock>
+      <KeyedDir>Left</KeyedDir>
+      <SpecifierID>-1</SpecifierID>
+      <SpecifierArg />
+    </IATEvent>
+    <IATEvent EventType="IATItem">
+      <ItemNum>135</ItemNum>
+      <BlockNum>6</BlockNum>
+      <IsPracticeItem>False</IsPracticeItem>
+      <StimulusDisplayID>40</StimulusDisplayID>
+      <OriginatingBlock>2</OriginatingBlock>
+      <KeyedDir>Right</KeyedDir>
+      <SpecifierID>-1</SpecifierID>
+      <SpecifierArg />
+    </IATEvent>
+    <IATEvent EventType="IATItem">
+      <ItemNum>136</ItemNum>
+      <BlockNum>6</BlockNum>
+      <IsPracticeItem>False</IsPracticeItem>
+      <StimulusDisplayID>17</StimulusDisplayID>
+      <OriginatingBlock>1</OriginatingBlock>
+      <KeyedDir>Right</KeyedDir>
+      <SpecifierID>-1</SpecifierID>
+      <SpecifierArg />
+    </IATEvent>
+    <IATEvent EventType="IATItem">
+      <ItemNum>137</ItemNum>
+      <BlockNum>6</BlockNum>
+      <IsPracticeItem>False</IsPracticeItem>
+      <StimulusDisplayID>47</StimulusDisplayID>
+      <OriginatingBlock>2</OriginatingBlock>
+      <KeyedDir>Left</KeyedDir>
+      <SpecifierID>-1</SpecifierID>
+      <SpecifierArg />
+    </IATEvent>
+    <IATEvent EventType="IATItem">
+      <ItemNum>138</ItemNum>
+      <BlockNum>6</BlockNum>
+      <IsPracticeItem>False</IsPracticeItem>
+      <StimulusDisplayID>16</StimulusDisplayID>
+      <OriginatingBlock>1</OriginatingBlock>
+      <KeyedDir>Right</KeyedDir>
+      <SpecifierID>-1</SpecifierID>
+      <SpecifierArg />
+    </IATEvent>
+    <IATEvent EventType="IATItem">
+      <ItemNum>139</ItemNum>
+      <BlockNum>6</BlockNum>
+      <IsPracticeItem>False</IsPracticeItem>
+      <StimulusDisplayID>19</StimulusDisplayID>
+      <OriginatingBlock>1</OriginatingBlock>
+      <KeyedDir>Right</KeyedDir>
+      <SpecifierID>-1</SpecifierID>
+      <SpecifierArg />
+    </IATEvent>
+    <IATEvent EventType="IATItem">
+      <ItemNum>140</ItemNum>
+      <BlockNum>6</BlockNum>
+      <IsPracticeItem>False</IsPracticeItem>
+      <StimulusDisplayID>22</StimulusDisplayID>
+      <OriginatingBlock>1</OriginatingBlock>
+      <KeyedDir>Left</KeyedDir>
+      <SpecifierID>-1</SpecifierID>
+      <SpecifierArg />
+    </IATEvent>
+    <IATEvent EventType="IATItem">
+      <ItemNum>141</ItemNum>
+      <BlockNum>6</BlockNum>
+      <IsPracticeItem>False</IsPracticeItem>
+      <StimulusDisplayID>27</StimulusDisplayID>
+      <OriginatingBlock>1</OriginatingBlock>
+      <KeyedDir>Left</KeyedDir>
+      <SpecifierID>-1</SpecifierID>
+      <SpecifierArg />
+    </IATEvent>
+    <IATEvent EventType="IATItem">
+      <ItemNum>142</ItemNum>
+      <BlockNum>6</BlockNum>
+      <IsPracticeItem>False</IsPracticeItem>
+      <StimulusDisplayID>41</StimulusDisplayID>
+      <OriginatingBlock>2</OriginatingBlock>
+      <KeyedDir>Right</KeyedDir>
+      <SpecifierID>-1</SpecifierID>
+      <SpecifierArg />
+    </IATEvent>
+    <IATEvent EventType="IATItem">
+      <ItemNum>143</ItemNum>
+      <BlockNum>6</BlockNum>
+      <IsPracticeItem>False</IsPracticeItem>
+      <StimulusDisplayID>39</StimulusDisplayID>
+      <OriginatingBlock>2</OriginatingBlock>
+      <KeyedDir>Right</KeyedDir>
+      <SpecifierID>-1</SpecifierID>
+      <SpecifierArg />
+    </IATEvent>
+    <IATEvent EventType="IATItem">
+      <ItemNum>144</ItemNum>
+      <BlockNum>6</BlockNum>
+      <IsPracticeItem>False</IsPracticeItem>
+      <StimulusDisplayID>26</StimulusDisplayID>
+      <OriginatingBlock>1</OriginatingBlock>
+      <KeyedDir>Left</KeyedDir>
+      <SpecifierID>-1</SpecifierID>
+      <SpecifierArg />
+    </IATEvent>
+    <IATEvent EventType="IATItem">
+      <ItemNum>145</ItemNum>
+      <BlockNum>6</BlockNum>
+      <IsPracticeItem>False</IsPracticeItem>
+      <StimulusDisplayID>37</StimulusDisplayID>
+      <OriginatingBlock>2</OriginatingBlock>
+      <KeyedDir>Right</KeyedDir>
+      <SpecifierID>-1</SpecifierID>
+      <SpecifierArg />
+    </IATEvent>
+    <IATEvent EventType="IATItem">
+      <ItemNum>146</ItemNum>
+      <BlockNum>6</BlockNum>
+      <IsPracticeItem>False</IsPracticeItem>
+      <StimulusDisplayID>48</StimulusDisplayID>
+      <OriginatingBlock>2</OriginatingBlock>
+      <KeyedDir>Left</KeyedDir>
+      <SpecifierID>-1</SpecifierID>
+      <SpecifierArg />
+    </IATEvent>
+    <IATEvent EventType="IATItem">
+      <ItemNum>147</ItemNum>
+      <BlockNum>6</BlockNum>
+      <IsPracticeItem>False</IsPracticeItem>
+      <StimulusDisplayID>46</StimulusDisplayID>
+      <OriginatingBlock>2</OriginatingBlock>
+      <KeyedDir>Left</KeyedDir>
+      <SpecifierID>-1</SpecifierID>
+      <SpecifierArg />
+    </IATEvent>
+    <IATEvent EventType="IATItem">
+      <ItemNum>148</ItemNum>
+      <BlockNum>6</BlockNum>
+      <IsPracticeItem>False</IsPracticeItem>
+      <StimulusDisplayID>21</StimulusDisplayID>
+      <OriginatingBlock>1</OriginatingBlock>
+      <KeyedDir>Left</KeyedDir>
+      <SpecifierID>-1</SpecifierID>
+      <SpecifierArg />
+    </IATEvent>
+    <IATEvent EventType="IATItem">
+      <ItemNum>149</ItemNum>
+      <BlockNum>6</BlockNum>
+      <IsPracticeItem>False</IsPracticeItem>
+      <StimulusDisplayID>15</StimulusDisplayID>
+      <OriginatingBlock>1</OriginatingBlock>
+      <KeyedDir>Right</KeyedDir>
+      <SpecifierID>-1</SpecifierID>
+      <SpecifierArg />
+    </IATEvent>
+    <IATEvent EventType="IATItem">
+      <ItemNum>150</ItemNum>
+      <BlockNum>6</BlockNum>
+      <IsPracticeItem>False</IsPracticeItem>
+      <StimulusDisplayID>44</StimulusDisplayID>
+      <OriginatingBlock>2</OriginatingBlock>
+      <KeyedDir>Left</KeyedDir>
+      <SpecifierID>-1</SpecifierID>
+      <SpecifierArg />
+    </IATEvent>
+    <IATEvent EventType="IATItem">
+      <ItemNum>151</ItemNum>
+      <BlockNum>6</BlockNum>
+      <IsPracticeItem>False</IsPracticeItem>
+      <StimulusDisplayID>18</StimulusDisplayID>
+      <OriginatingBlock>1</OriginatingBlock>
+      <KeyedDir>Right</KeyedDir>
+      <SpecifierID>-1</SpecifierID>
+      <SpecifierArg />
+    </IATEvent>
+    <IATEvent EventType="IATItem">
+      <ItemNum>152</ItemNum>
+      <BlockNum>6</BlockNum>
+      <IsPracticeItem>False</IsPracticeItem>
+      <StimulusDisplayID>42</StimulusDisplayID>
+      <OriginatingBlock>2</OriginatingBlock>
+      <KeyedDir>Left</KeyedDir>
+      <SpecifierID>-1</SpecifierID>
+      <SpecifierArg />
+    </IATEvent>
+    <IATEvent EventType="IATItem">
+      <ItemNum>153</ItemNum>
+      <BlockNum>6</BlockNum>
+      <IsPracticeItem>False</IsPracticeItem>
+      <StimulusDisplayID>45</StimulusDisplayID>
+      <OriginatingBlock>2</OriginatingBlock>
+      <KeyedDir>Left</KeyedDir>
+      <SpecifierID>-1</SpecifierID>
+      <SpecifierArg />
+    </IATEvent>
+    <IATEvent EventType="IATItem">
+      <ItemNum>154</ItemNum>
+      <BlockNum>6</BlockNum>
+      <IsPracticeItem>False</IsPracticeItem>
+      <StimulusDisplayID>25</StimulusDisplayID>
+      <OriginatingBlock>1</OriginatingBlock>
+      <KeyedDir>Left</KeyedDir>
+      <SpecifierID>-1</SpecifierID>
+      <SpecifierArg />
+    </IATEvent>
+    <IATEvent EventType="EndIATBlock">
+      <DummyValue>abcdefg</DummyValue>
+    </IATEvent>
+  </IATEventList>
+  <DisplayItemList NumDisplayItems="79">
+    <IATDisplayItem>
+      <ID>0</ID>
+      <Filename>image1.png</Filename>
+      <X>25</X>
+      <Y>25</Y>
+      <Width>675</Width>
+      <Height>420</Height>
+    </IATDisplayItem>
+    <IATDisplayItem>
+      <ID>1</ID>
+      <Filename>image2.png</Filename>
+      <X>244</X>
+      <Y>481</Y>
+      <Width>229</Width>
+      <Height>16</Height>
+    </IATDisplayItem>
+    <IATDisplayItem>
+      <ID>2</ID>
+      <Filename>image3.png</Filename>
+      <X>32</X>
+      <Y>97</Y>
+      <Width>75</Width>
+      <Height>30</Height>
+    </IATDisplayItem>
+    <IATDisplayItem>
+      <ID>3</ID>
+      <Filename>image4.png</Filename>
+      <X>563</X>
+      <Y>97</Y>
+      <Width>133</Width>
+      <Height>31</Height>
+    </IATDisplayItem>
+    <IATDisplayItem>
+      <ID>4</ID>
+      <Filename>image5.jpeg</Filename>
+      <X>259</X>
+      <Y>65</Y>
+      <Width>205</Width>
+      <Height>240</Height>
+    </IATDisplayItem>
+    <IATDisplayItem>
+      <ID>5</ID>
+      <Filename>image6.png</Filename>
+      <X>127</X>
+      <Y>420</Y>
+      <Width>470</Width>
+      <Height>50</Height>
+    </IATDisplayItem>
+    <IATDisplayItem>
+      <ID>6</ID>
+      <Filename>image2.png</Filename>
+      <X>244</X>
+      <Y>481</Y>
+      <Width>229</Width>
+      <Height>16</Height>
+    </IATDisplayItem>
+    <IATDisplayItem>
+      <ID>7</ID>
+      <Filename>image7.png</Filename>
+      <X>25</X>
+      <Y>255</Y>
+      <Width>675</Width>
+      <Height>190</Height>
+    </IATDisplayItem>
+    <IATDisplayItem>
+      <ID>8</ID>
+      <Filename>image8.png</Filename>
+      <X>50</X>
+      <Y>43</Y>
+      <Width>62</Width>
+      <Height>157</Height>
+    </IATDisplayItem>
+    <IATDisplayItem>
+      <ID>9</ID>
+      <Filename>image9.png</Filename>
+      <X>611</X>
+      <Y>43</Y>
+      <Width>60</Width>
+      <Height>158</Height>
+    </IATDisplayItem>
+    <IATDisplayItem>
+      <ID>10</ID>
+      <Filename>image2.png</Filename>
+      <X>244</X>
+      <Y>481</Y>
+      <Width>229</Width>
+      <Height>16</Height>
+    </IATDisplayItem>
+    <IATDisplayItem>
+      <ID>11</ID>
+      <Filename>image8.png</Filename>
+      <X>50</X>
+      <Y>43</Y>
+      <Width>62</Width>
+      <Height>157</Height>
+    </IATDisplayItem>
+    <IATDisplayItem>
+      <ID>12</ID>
+      <Filename>image9.png</Filename>
+      <X>611</X>
+      <Y>43</Y>
+      <Width>60</Width>
+      <Height>158</Height>
+    </IATDisplayItem>
+    <IATDisplayItem>
+      <ID>13</ID>
+      <Filename>image10.png</Filename>
+      <X>127</X>
+      <Y>420</Y>
+      <Width>470</Width>
+      <Height>80</Height>
+    </IATDisplayItem>
+    <IATDisplayItem>
+      <ID>14</ID>
+      <Filename>image11.png</Filename>
+      <X>258</X>
+      <Y>115</Y>
+      <Width>176</Width>
+      <Height>50</Height>
+    </IATDisplayItem>
+    <IATDisplayItem>
+      <ID>15</ID>
+      <Filename>image12.png</Filename>
+      <X>242</X>
+      <Y>115</Y>
+      <Width>212</Width>
+      <Height>54</Height>
+    </IATDisplayItem>
+    <IATDisplayItem>
+      <ID>16</ID>
+      <Filename>image13.png</Filename>
+      <X>192</X>
+      <Y>115</Y>
+      <Width>310</Width>
+      <Height>54</Height>
+    </IATDisplayItem>
+    <IATDisplayItem>
+      <ID>17</ID>
+      <Filename>image14.png</Filename>
+      <X>253</X>
+      <Y>115</Y>
+      <Width>192</Width>
+      <Height>54</Height>
+    </IATDisplayItem>
+    <IATDisplayItem>
+      <ID>18</ID>
+      <Filename>image15.png</Filename>
+      <X>194</X>
+      <Y>115</Y>
+      <Width>310</Width>
+      <Height>70</Height>
+    </IATDisplayItem>
+    <IATDisplayItem>
+      <ID>19</ID>
+      <Filename>image16.png</Filename>
+      <X>241</X>
+      <Y>115</Y>
+      <Width>216</Width>
+      <Height>73</Height>
+    </IATDisplayItem>
+    <IATDisplayItem>
+      <ID>20</ID>
+      <Filename>image17.png</Filename>
+      <X>261</X>
+      <Y>115</Y>
+      <Width>172</Width>
+      <Height>55</Height>
+    </IATDisplayItem>
+    <IATDisplayItem>
+      <ID>21</ID>
+      <Filename>image18.png</Filename>
+      <X>300</X>
+      <Y>115</Y>
+      <Width>89</Width>
+      <Height>59</Height>
+    </IATDisplayItem>
+    <IATDisplayItem>
+      <ID>22</ID>
+      <Filename>image19.png</Filename>
+      <X>231</X>
+      <Y>115</Y>
+      <Width>237</Width>
+      <Height>51</Height>
+    </IATDisplayItem>
+    <IATDisplayItem>
+      <ID>23</ID>
+      <Filename>image20.png</Filename>
+      <X>209</X>
+      <Y>115</Y>
+      <Width>277</Width>
+      <Height>66</Height>
+    </IATDisplayItem>
+    <IATDisplayItem>
+      <ID>24</ID>
+      <Filename>image21.png</Filename>
+      <X>170</X>
+      <Y>115</Y>
+      <Width>371</Width>
+      <Height>37</Height>
+    </IATDisplayItem>
+    <IATDisplayItem>
+      <ID>25</ID>
+      <Filename>image22.png</Filename>
+      <X>184</X>
+      <Y>115</Y>
+      <Width>326</Width>
+      <Height>54</Height>
+    </IATDisplayItem>
+    <IATDisplayItem>
+      <ID>26</ID>
+      <Filename>image23.png</Filename>
+      <X>229</X>
+      <Y>115</Y>
+      <Width>237</Width>
+      <Height>58</Height>
+    </IATDisplayItem>
+    <IATDisplayItem>
+      <ID>27</ID>
+      <Filename>image24.png</Filename>
+      <X>216</X>
+      <Y>115</Y>
+      <Width>267</Width>
+      <Height>51</Height>
+    </IATDisplayItem>
+    <IATDisplayItem>
+      <ID>28</ID>
+      <Filename>image25.png</Filename>
+      <X>25</X>
+      <Y>255</Y>
+      <Width>675</Width>
+      <Height>190</Height>
+    </IATDisplayItem>
+    <IATDisplayItem>
+      <ID>29</ID>
+      <Filename>image26.png</Filename>
+      <X>26</X>
+      <Y>101</Y>
+      <Width>93</Width>
+      <Height>26</Height>
+    </IATDisplayItem>
+    <IATDisplayItem>
+      <ID>30</ID>
+      <Filename>image27.png</Filename>
+      <X>573</X>
+      <Y>101</Y>
+      <Width>119</Width>
+      <Height>26</Height>
+    </IATDisplayItem>
+    <IATDisplayItem>
+      <ID>31</ID>
+      <Filename>image2.png</Filename>
+      <X>244</X>
+      <Y>481</Y>
+      <Width>229</Width>
+      <Height>16</Height>
+    </IATDisplayItem>
+    <IATDisplayItem>
+      <ID>32</ID>
+      <Filename>image26.png</Filename>
+      <X>26</X>
+      <Y>101</Y>
+      <Width>93</Width>
+      <Height>26</Height>
+    </IATDisplayItem>
+    <IATDisplayItem>
+      <ID>33</ID>
+      <Filename>image27.png</Filename>
+      <X>573</X>
+      <Y>101</Y>
+      <Width>119</Width>
+      <Height>26</Height>
+    </IATDisplayItem>
+    <IATDisplayItem>
+      <ID>34</ID>
+      <Filename>image28.png</Filename>
+      <X>127</X>
+      <Y>420</Y>
+      <Width>470</Width>
+      <Height>80</Height>
+    </IATDisplayItem>
+    <IATDisplayItem>
+      <ID>35</ID>
+      <Filename>image29.png</Filename>
+      <X>283</X>
+      <Y>115</Y>
+      <Width>117</Width>
+      <Height>36</Height>
+    </IATDisplayItem>
+    <IATDisplayItem>
+      <ID>36</ID>
+      <Filename>image30.png</Filename>
+      <X>213</X>
+      <Y>115</Y>
+      <Width>258</Width>
+      <Height>44</Height>
+    </IATDisplayItem>
+    <IATDisplayItem>
+      <ID>37</ID>
+      <Filename>image31.png</Filename>
+      <X>281</X>
+      <Y>115</Y>
+      <Width>115</Width>
+      <Height>44</Height>
+    </IATDisplayItem>
+    <IATDisplayItem>
+      <ID>38</ID>
+      <Filename>image32.png</Filename>
+      <X>284</X>
+      <Y>115</Y>
+      <Width>115</Width>
+      <Height>54</Height>
+    </IATDisplayItem>
+    <IATDisplayItem>
+      <ID>39</ID>
+      <Filename>image33.png</Filename>
+      <X>207</X>
+      <Y>115</Y>
+      <Width>273</Width>
+      <Height>66</Height>
+    </IATDisplayItem>
+    <IATDisplayItem>
+      <ID>40</ID>
+      <Filename>image34.png</Filename>
+      <X>228</X>
+      <Y>115</Y>
+      <Width>222</Width>
+      <Height>58</Height>
+    </IATDisplayItem>
+    <IATDisplayItem>
+      <ID>41</ID>
+      <Filename>image35.png</Filename>
+      <X>284</X>
+      <Y>115</Y>
+      <Width>117</Width>
+      <Height>51</Height>
+    </IATDisplayItem>
+    <IATDisplayItem>
+      <ID>42</ID>
+      <Filename>image36.png</Filename>
+      <X>195</X>
+      <Y>115</Y>
+      <Width>294</Width>
+      <Height>58</Height>
+    </IATDisplayItem>
+    <IATDisplayItem>
+      <ID>43</ID>
+      <Filename>image37.png</Filename>
+      <X>189</X>
+      <Y>115</Y>
+      <Width>298</Width>
+      <Height>58</Height>
+    </IATDisplayItem>
+    <IATDisplayItem>
+      <ID>44</ID>
+      <Filename>image38.png</Filename>
+      <X>258</X>
+      <Y>115</Y>
+      <Width>167</Width>
+      <Height>37</Height>
+    </IATDisplayItem>
+    <IATDisplayItem>
+      <ID>45</ID>
+      <Filename>image39.png</Filename>
+      <X>211</X>
+      <Y>115</Y>
+      <Width>258</Width>
+      <Height>67</Height>
+    </IATDisplayItem>
+    <IATDisplayItem>
+      <ID>46</ID>
+      <Filename>image40.png</Filename>
+      <X>298</X>
+      <Y>115</Y>
+      <Width>92</Width>
+      <Height>38</Height>
+    </IATDisplayItem>
+    <IATDisplayItem>
+      <ID>47</ID>
+      <Filename>image41.png</Filename>
+      <X>236</X>
+      <Y>115</Y>
+      <Width>217</Width>
+      <Height>58</Height>
+    </IATDisplayItem>
+    <IATDisplayItem>
+      <ID>48</ID>
+      <Filename>image42.png</Filename>
+      <X>251</X>
+      <Y>115</Y>
+      <Width>186</Width>
+      <Height>44</Height>
+    </IATDisplayItem>
+    <IATDisplayItem>
+      <ID>49</ID>
+      <Filename>image43.png</Filename>
+      <X>25</X>
+      <Y>255</Y>
+      <Width>675</Width>
+      <Height>190</Height>
+    </IATDisplayItem>
+    <IATDisplayItem>
+      <ID>50</ID>
+      <Filename>image44.png</Filename>
+      <X>7</X>
+      <Y>7</Y>
+      <Width>150</Width>
+      <Height>230</Height>
+    </IATDisplayItem>
+    <IATDisplayItem>
+      <ID>51</ID>
+      <Filename>image45.png</Filename>
+      <X>567</X>
+      <Y>7</Y>
+      <Width>150</Width>
+      <Height>230</Height>
+    </IATDisplayItem>
+    <IATDisplayItem>
+      <ID>52</ID>
+      <Filename>image2.png</Filename>
+      <X>244</X>
+      <Y>481</Y>
+      <Width>229</Width>
+      <Height>16</Height>
+    </IATDisplayItem>
+    <IATDisplayItem>
+      <ID>53</ID>
+      <Filename>image44.png</Filename>
+      <X>7</X>
+      <Y>7</Y>
+      <Width>150</Width>
+      <Height>230</Height>
+    </IATDisplayItem>
+    <IATDisplayItem>
+      <ID>54</ID>
+      <Filename>image45.png</Filename>
+      <X>567</X>
+      <Y>7</Y>
+      <Width>150</Width>
+      <Height>230</Height>
+    </IATDisplayItem>
+    <IATDisplayItem>
+      <ID>55</ID>
+      <Filename>image46.png</Filename>
+      <X>127</X>
+      <Y>420</Y>
+      <Width>470</Width>
+      <Height>80</Height>
+    </IATDisplayItem>
+    <IATDisplayItem>
+      <ID>56</ID>
+      <Filename>image44.png</Filename>
+      <X>7</X>
+      <Y>7</Y>
+      <Width>150</Width>
+      <Height>230</Height>
+    </IATDisplayItem>
+    <IATDisplayItem>
+      <ID>57</ID>
+      <Filename>image45.png</Filename>
+      <X>567</X>
+      <Y>7</Y>
+      <Width>150</Width>
+      <Height>230</Height>
+    </IATDisplayItem>
+    <IATDisplayItem>
+      <ID>58</ID>
+      <Filename>image28.png</Filename>
+      <X>127</X>
+      <Y>420</Y>
+      <Width>470</Width>
+      <Height>80</Height>
+    </IATDisplayItem>
+    <IATDisplayItem>
+      <ID>59</ID>
+      <Filename>image47.png</Filename>
+      <X>25</X>
+      <Y>255</Y>
+      <Width>675</Width>
+      <Height>190</Height>
+    </IATDisplayItem>
+    <IATDisplayItem>
+      <ID>60</ID>
+      <Filename>image27.png</Filename>
+      <X>13</X>
+      <Y>101</Y>
+      <Width>119</Width>
+      <Height>26</Height>
+    </IATDisplayItem>
+    <IATDisplayItem>
+      <ID>61</ID>
+      <Filename>image26.png</Filename>
+      <X>586</X>
+      <Y>101</Y>
+      <Width>93</Width>
+      <Height>26</Height>
+    </IATDisplayItem>
+    <IATDisplayItem>
+      <ID>62</ID>
+      <Filename>image2.png</Filename>
+      <X>244</X>
+      <Y>481</Y>
+      <Width>229</Width>
+      <Height>16</Height>
+    </IATDisplayItem>
+    <IATDisplayItem>
+      <ID>63</ID>
+      <Filename>image27.png</Filename>
+      <X>13</X>
+      <Y>101</Y>
+      <Width>119</Width>
+      <Height>26</Height>
+    </IATDisplayItem>
+    <IATDisplayItem>
+      <ID>64</ID>
+      <Filename>image26.png</Filename>
+      <X>586</X>
+      <Y>101</Y>
+      <Width>93</Width>
+      <Height>26</Height>
+    </IATDisplayItem>
+    <IATDisplayItem>
+      <ID>65</ID>
+      <Filename>image28.png</Filename>
+      <X>127</X>
+      <Y>420</Y>
+      <Width>470</Width>
+      <Height>80</Height>
+    </IATDisplayItem>
+    <IATDisplayItem>
+      <ID>66</ID>
+      <Filename>image48.png</Filename>
+      <X>25</X>
+      <Y>255</Y>
+      <Width>675</Width>
+      <Height>190</Height>
+    </IATDisplayItem>
+    <IATDisplayItem>
+      <ID>67</ID>
+      <Filename>image49.png</Filename>
+      <X>7</X>
+      <Y>7</Y>
+      <Width>150</Width>
+      <Height>230</Height>
+    </IATDisplayItem>
+    <IATDisplayItem>
+      <ID>68</ID>
+      <Filename>image50.png</Filename>
+      <X>567</X>
+      <Y>7</Y>
+      <Width>150</Width>
+      <Height>230</Height>
+    </IATDisplayItem>
+    <IATDisplayItem>
+      <ID>69</ID>
+      <Filename>image2.png</Filename>
+      <X>244</X>
+      <Y>481</Y>
+      <Width>229</Width>
+      <Height>16</Height>
+    </IATDisplayItem>
+    <IATDisplayItem>
+      <ID>70</ID>
+      <Filename>image49.png</Filename>
+      <X>7</X>
+      <Y>7</Y>
+      <Width>150</Width>
+      <Height>230</Height>
+    </IATDisplayItem>
+    <IATDisplayItem>
+      <ID>71</ID>
+      <Filename>image50.png</Filename>
+      <X>567</X>
+      <Y>7</Y>
+      <Width>150</Width>
+      <Height>230</Height>
+    </IATDisplayItem>
+    <IATDisplayItem>
+      <ID>72</ID>
+      <Filename>image28.png</Filename>
+      <X>127</X>
+      <Y>420</Y>
+      <Width>470</Width>
+      <Height>80</Height>
+    </IATDisplayItem>
+    <IATDisplayItem>
+      <ID>73</ID>
+      <Filename>image49.png</Filename>
+      <X>7</X>
+      <Y>7</Y>
+      <Width>150</Width>
+      <Height>230</Height>
+    </IATDisplayItem>
+    <IATDisplayItem>
+      <ID>74</ID>
+      <Filename>image50.png</Filename>
+      <X>567</X>
+      <Y>7</Y>
+      <Width>150</Width>
+      <Height>230</Height>
+    </IATDisplayItem>
+    <IATDisplayItem>
+      <ID>75</ID>
+      <Filename>image28.png</Filename>
+      <X>127</X>
+      <Y>420</Y>
+      <Width>470</Width>
+      <Height>80</Height>
+    </IATDisplayItem>
+    <IATDisplayItem>
+      <ID>76</ID>
+      <Filename>image51.png</Filename>
+      <X>337</X>
+      <Y>337</Y>
+      <Width>50</Width>
+      <Height>50</Height>
+    </IATDisplayItem>
+    <IATDisplayItem>
+      <ID>77</ID>
+      <Filename>image52.png</Filename>
+      <X>7</X>
+      <Y>7</Y>
+      <Width>300</Width>
+      <Height>460</Height>
+    </IATDisplayItem>
+    <IATDisplayItem>
+      <ID>78</ID>
+      <Filename>image53.png</Filename>
+      <X>567</X>
+      <Y>7</Y>
+      <Width>157</Width>
+      <Height>237</Height>
+    </IATDisplayItem>
+  </DisplayItemList>
+  <DynamicSpecifiers NumSpecifiers="0" />
+</ConfigFile>

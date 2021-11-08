@@ -1,0 +1,99 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
+<HTML>
+<HEAD>
+<meta name="GENERATOR" content="Microsoft&reg; HTML Help Workshop 4.1">
+<!-- Sitemap 1.0 -->
+</HEAD><BODY>
+<OBJECT type="text/site properties">
+	<param name="ImageType" value="Folder">
+</OBJECT>
+<UL>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="Your First IAT">
+		<param name="Local" value="Walkthrough.html">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="IAT Design">
+		</OBJECT>
+	<UL>
+		<LI> <OBJECT type="text/sitemap">
+			<param name="Name" value="IAT Block Design">
+			<param name="Local" value="IATBlockDesignHelp.html">
+			</OBJECT>
+		<LI> <OBJECT type="text/sitemap">
+			<param name="Name" value="Response Key Design">
+			<param name="Local" value="ResponseKeyHelp.html">
+			</OBJECT>
+		<LI> <OBJECT type="text/sitemap">
+			<param name="Name" value="Instruction Screen Design">
+			<param name="Local" value="InstructionsHelp.html">
+			</OBJECT>
+		<LI> <OBJECT type="text/sitemap">
+			<param name="Name" value="IAT Layout">
+			<param name="Local" value="LayoutHelp.html">
+			</OBJECT>
+		<LI> <OBJECT type="text/sitemap">
+			<param name="Name" value="Packaging">
+			<param name="Local" value="PackagingHelp.html">
+			</OBJECT>
+		<LI> <OBJECT type="text/sitemap">
+			<param name="Name" value="Uploading IAT / Downloading Results">
+			<param name="Local" value="ServerInterfaceHelp.html">
+			</OBJECT>
+	</UL>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="Survey Design">
+		</OBJECT>
+	<UL>
+		<LI> <OBJECT type="text/sitemap">
+			<param name="Name" value="Survey Design">
+			<param name="Local" value="SurveyDesignHelp.html">
+			</OBJECT>
+		<LI> <OBJECT type="text/sitemap">
+			<param name="Name" value="Response Types">
+			</OBJECT>
+		<UL>
+			<LI> <OBJECT type="text/sitemap">
+				<param name="Name" value="Bounded Length">
+				<param name="Local" value="BoundedLengthHelp.html">
+				</OBJECT>
+			<LI> <OBJECT type="text/sitemap">
+				<param name="Name" value="Bounded Number">
+				<param name="Local" value="BoundedNumberHelp.html">
+				</OBJECT>
+			<LI> <OBJECT type="text/sitemap">
+				<param name="Name" value="Date">
+				<param name="Local" value="DateHelp.html">
+				</OBJECT>
+			<LI> <OBJECT type="text/sitemap">
+				<param name="Name" value="Fixed # of Digits">
+				<param name="Local" value="FixedDigitHelp.html">
+				</OBJECT>
+			<LI> <OBJECT type="text/sitemap">
+				<param name="Name" value="Likert">
+				<param name="Local" value="LikertHelp.html">
+				</OBJECT>
+			<LI> <OBJECT type="text/sitemap">
+				<param name="Name" value="Multiple Choice">
+				<param name="Local" value="MultipleChoiceHelp.html">
+				</OBJECT>
+			<LI> <OBJECT type="text/sitemap">
+				<param name="Name" value="Multiple Selection">
+				<param name="Local" value="MultipleSelectionHelp.html">
+				</OBJECT>
+			<LI> <OBJECT type="text/sitemap">
+				<param name="Name" value="Regular Expression">
+				<param name="Local" value="RegExHelp.html">
+				</OBJECT>
+			<LI> <OBJECT type="text/sitemap">
+				<param name="Name" value="True / False">
+				<param name="Local" value="TrueFalseHelp.html">
+				</OBJECT>
+			<LI> <OBJECT type="text/sitemap">
+				<param name="Name" value="Weighted Multiple Choice">
+				<param name="Local" value="WeightedMultiChoiceHelp.html">
+				</OBJECT>
+		</UL>
+	</UL>
+</UL>
+</BODY></HTML>

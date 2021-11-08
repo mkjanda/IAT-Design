@@ -1,0 +1,55 @@
+﻿using System;
+using System.Xml;
+using System.Xml.Schema;
+using System.Xml.Serialization;
+using System.Security.Cryptography;
+namespace IATClient
+{
+    class HandShake : INamedXmlSerializable
+    {
+        private static readonly RSACryptoServiceProvider rsaCrypt;
+
+        private String Value { get; set; }
+
+        static HandShake()
+        {
+            rsaCrypt = new RSACryptoServiceProvider();
+            rsaCrypt.ImportCspBlob(Convert.FromBase64String(Properties.Resources.HandshakeCSP));
+        }
+
+        public HandShake()
+        {
+        }
+
+        public static HandShake CreateResponse(HandShake hand)
+        {
+            HandShake resp = new HandShake();
+            resp.Value = Convert.ToBase64String(rsaCrypt.Decrypt(Convert.FromBase64String(hand.Value), false));
+            return resp;
+        }
+
+        public void WriteXml(XmlWriter writer)
+        {
+            writer.WriteStartElement("Handshake");
+            writer.WriteElementString("Value", Value);
+            writer.WriteEndElement();
+        }
+
+        public void ReadXml(XmlReader reader)
+        {
+            reader.ReadStartElement("Handshake");
+            Value = reader.ReadElementString("Value");
+            reader.ReadEndElement();
+        }
+
+        public String GetName()
+        {
+            return "Handshake";
+        }
+
+        public XmlSchema GetSchema()
+        {
+            return null;
+        }
+    }
+}

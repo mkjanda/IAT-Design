@@ -1,0 +1,1591 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+  <data name="AddItem" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\AddItem.bmp;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="DeleteItem" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\DeleteItem.bmp;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="go" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\go.bmp;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="IAT" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\IAT.bmp;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="minus" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\minus.bmp;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="plus" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\plus.bmp;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="stop" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\stop.bmp;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="CutBrushTexture" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\CutBrushTexture.bmp;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="sFileOpenError" xml:space="preserve">
+    <value>An error was encounted while processing {0}.</value>
+  </data>
+  <data name="sFileOpenErrorCaption" xml:space="preserve">
+    <value>Open File Error</value>
+  </data>
+  <data name="sFileExt" xml:space="preserve">
+    <value>iat</value>
+  </data>
+  <data name="sMainWindowTitle" xml:space="preserve">
+    <value>IAT Configurator -- {0}</value>
+  </data>
+  <data name="sMainWindowTitleNoFilename" xml:space="preserve">
+    <value>IAT Configurator -- (New Test)</value>
+  </data>
+  <data name="sOpenFileDialogTitle" xml:space="preserve">
+    <value>Open IAT Configuration File</value>
+  </data>
+  <data name="sSaveAsFileDialogTitle" xml:space="preserve">
+    <value>Save IAT Configuration File As . . .</value>
+  </data>
+  <data name="sSaveFileDialogTitle" xml:space="preserve">
+    <value>Save IAT Configuration File</value>
+  </data>
+  <data name="sFileDialogFilter" xml:space="preserve">
+    <value>IAT Configuration Files|*.iat|All Files|*.*</value>
+  </data>
+  <data name="MoveItemToBottom" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\MoveItemToBottom.bmp;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="MoveItemToTop" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\MoveItemToTop.bmp;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="sSaveBeforeCloseCaption" xml:space="preserve">
+    <value>Changes Will Be Lost.  Save Now?</value>
+  </data>
+  <data name="sSaveBeforeCloseQuery" xml:space="preserve">
+    <value>Changes have been made to your test.  These changes will be lost if you proceed without saving.  Would you like to save now?</value>
+  </data>
+  <data name="MoveItemDown" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\MoveItemDown.bmp;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="MoveItemUp" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\MoveItemUp.bmp;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="SelectedBrushTexture" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\SelectedBrushTexture.bmp;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="sBoundingValuesInvertedException" xml:space="preserve">
+    <value>Error: The value entered for Minimum Value is greater than the value entered for Maximum Value</value>
+  </data>
+  <data name="sLengthValuesInvertedException" xml:space="preserve">
+    <value>Error: The value for Minimum Length is greater than the value for Maximum Length</value>
+  </data>
+  <data name="sMaxLengthFormatException" xml:space="preserve">
+    <value>Error: Please enter a positive numerical value for Maximum Length</value>
+  </data>
+  <data name="sMaxLengthOverflowException" xml:space="preserve">
+    <value>Error: The value entered for Maximum Length is out of range</value>
+  </data>
+  <data name="sMaxValueFormatException" xml:space="preserve">
+    <value>Error: Please enter an integer for Maximum Value</value>
+  </data>
+  <data name="sMaxValueOverflowException" xml:space="preserve">
+    <value>Error: The value entered for Maximum Value is out of range</value>
+  </data>
+  <data name="sMinLengthFormatException" xml:space="preserve">
+    <value>Error: Please enter a positive numerical value for Minimum Length</value>
+  </data>
+  <data name="sMinLengthOverflowException" xml:space="preserve">
+    <value>Error: The value entered for Minimum Length is out of range</value>
+  </data>
+  <data name="sMinValueFormatException" xml:space="preserve">
+    <value>Error: Please enter an integer value for Minimum Value</value>
+  </data>
+  <data name="sMinValueOverflowException" xml:space="preserve">
+    <value>Error: The value entered for Minimum Value is out of range</value>
+  </data>
+  <data name="sInvertedDateOrderException" xml:space="preserve">
+    <value>Error: The Latest Acceptable date occurs prior to the Earliest Acceptable Date</value>
+  </data>
+  <data name="sNumDigitsExceeds4000Exception" xml:space="preserve">
+    <value>Error: Please enter a value of 4000 or less for Number of Digits</value>
+  </data>
+  <data name="sNumDigitsFormatException" xml:space="preserve">
+    <value>Error: Please enter a positive integer value for Number of Digits</value>
+  </data>
+  <data name="sNumDigitsOverflowException" xml:space="preserve">
+    <value>Error: The value entered for Number of Digits is out fo range</value>
+  </data>
+  <data name="sTextLengthExceeds4000Exception" xml:space="preserve">
+    <value>Error: Please enter a value of 4000 or less for Text Length</value>
+  </data>
+  <data name="sTextLengthFormatException" xml:space="preserve">
+    <value>Error: Please enter a positive numerical value for Text Length</value>
+  </data>
+  <data name="sTextLengthOverflowException" xml:space="preserve">
+    <value>Error: The value entered for Text Length is out of range</value>
+  </data>
+  <data name="sLikertEmptyCellException" xml:space="preserve">
+    <value>Error: Please enter a statement for the value '{0}'</value>
+  </data>
+  <data name="sLikertMinStatementCountException" xml:space="preserve">
+    <value>Error: Please enter at least two statements</value>
+  </data>
+  <data name="sMaxLengthExceeds4000Exception" xml:space="preserve">
+    <value>Error: Please enter a value of 4000 or less for Maximum Length</value>
+  </data>
+  <data name="sMinLengthExceeds4000Exception" xml:space="preserve">
+    <value>Error: Please enter a value of 4000 or less for Minimum Length</value>
+  </data>
+  <data name="sMultiChoiceEmptyCellException" xml:space="preserve">
+    <value>Error: Please enter a statement for choice #{0}</value>
+  </data>
+  <data name="sMultiChoiceNoChoicesException" xml:space="preserve">
+    <value>Error: Please enter at least one choice</value>
+  </data>
+  <data name="sMultiSelectionEmptyCellException" xml:space="preserve">
+    <value>Error: Please enter a statement in row #{0}</value>
+  </data>
+  <data name="sMultiSelectionNoChoicesException" xml:space="preserve">
+    <value>Error: Please enter at least one statement</value>
+  </data>
+  <data name="sQuestionBlankException" xml:space="preserve">
+    <value>Error: Please enter text for the selected question</value>
+  </data>
+  <data name="sRegExEmptyException" xml:space="preserve">
+    <value>Error: Please enter a Regular Expression</value>
+  </data>
+  <data name="sRegExInvalidException" xml:space="preserve">
+    <value>Error: Invalid Regular Expression</value>
+  </data>
+  <data name="sResponseTypeError" xml:space="preserve">
+    <value>Response contains an error</value>
+  </data>
+  <data name="sFalseStatementEmptyException" xml:space="preserve">
+    <value>Error: Please enter a value for False Statement</value>
+  </data>
+  <data name="sTrueFalseDuplicateValueException" xml:space="preserve">
+    <value>Error: Please enter unique values for True Statement and False Statement</value>
+  </data>
+  <data name="sTrueStatementEmptyException" xml:space="preserve">
+    <value>Error: Please enter a value for True Statement</value>
+  </data>
+  <data name="sWeightedMultiChoiceEmptyException" xml:space="preserve">
+    <value>Error: Please enter a choice in row #{0}</value>
+  </data>
+  <data name="sWeightedMultiNoChoicesException" xml:space="preserve">
+    <value>Error: Please enter at least one choice</value>
+  </data>
+  <data name="sWeightedMultiWeightEmptyException" xml:space="preserve">
+    <value>Error: Please enter a weight for the choice in row #{0}</value>
+  </data>
+  <data name="sWeightedMultiWeightFormatException" xml:space="preserve">
+    <value>Error: Please enter an integer for the weight of the choice in row #{0}.</value>
+  </data>
+  <data name="sWeightedMultiWeightOverflowException" xml:space="preserve">
+    <value>Error: The weight entered for the weight of the choice in row #{0} is out of range</value>
+  </data>
+  <data name="sLikertDefaultResponse1" xml:space="preserve">
+    <value>I strongly disagree</value>
+  </data>
+  <data name="sLikertDefaultResponse2" xml:space="preserve">
+    <value>I disagree</value>
+  </data>
+  <data name="sLikertDefaultResponse3" xml:space="preserve">
+    <value>I somewhat disagree</value>
+  </data>
+  <data name="sLikertDefaultResponse4" xml:space="preserve">
+    <value>I neither agree nor disagree</value>
+  </data>
+  <data name="sLikertDefaultResponse5" xml:space="preserve">
+    <value>I somewhat agree</value>
+  </data>
+  <data name="sLikertDefaultResponse6" xml:space="preserve">
+    <value>I agree</value>
+  </data>
+  <data name="sLikertDefaultResponse7" xml:space="preserve">
+    <value>I strongly agree</value>
+  </data>
+  <data name="sFalseStatementDefault" xml:space="preserve">
+    <value>False</value>
+  </data>
+  <data name="sTrueStatementDefault" xml:space="preserve">
+    <value>True</value>
+  </data>
+  <data name="sAttachValidResponseFileDialogTitle" xml:space="preserve">
+    <value>Select a text file that contains the list of valid responses</value>
+  </data>
+  <data name="sExistsInFileNoDelimitationException" xml:space="preserve">
+    <value>Error: Please specify a value delimiter</value>
+  </data>
+  <data name="sExistsInFileNoFileSpecifiedException" xml:space="preserve">
+    <value>Error: Please specify the file that contains the valid responses by clicking the "Browse" button</value>
+  </data>
+  <data name="sAttachedFileException" xml:space="preserve">
+    <value>Error: Could not process attached file "{0}"</value>
+  </data>
+  <data name="sIATBlockInstructionsDefaultFontFamily" xml:space="preserve">
+    <value>Microsoft Sans Serif</value>
+  </data>
+  <data name="sFontFileName" xml:space="preserve">
+    <value>Fonts.xml</value>
+  </data>
+  <data name="sDefaultStimulusFontColor" xml:space="preserve">
+    <value>White</value>
+  </data>
+  <data name="sDefaultStimulusFontSize" xml:space="preserve">
+    <value>22</value>
+  </data>
+  <data name="sDefaultTextFontColor" xml:space="preserve">
+    <value>White</value>
+  </data>
+  <data name="sDefaultTextFontSize" xml:space="preserve">
+    <value>12</value>
+  </data>
+  <data name="sImageFileFilter" xml:space="preserve">
+    <value>Image Files|*.jpg;*.bmp;*.png;*.tiff;*.gif;*.jpeg</value>
+  </data>
+  <data name="sInvalidImageFileFormat" xml:space="preserve">
+    <value>Invalid Image File Format</value>
+  </data>
+  <data name="sOpenImageFileDialogTitle" xml:space="preserve">
+    <value>Open Image File</value>
+  </data>
+  <data name="sTempImageFileName" xml:space="preserve">
+    <value>images-{0}.tmp</value>
+  </data>
+  <data name="sReorderInstructions" xml:space="preserve">
+    <value>Drag the items below into the order you wish them to appear in to the test taker the click the OK button.  Click the Cancel button to abandon your new list order.  Click the reset button to reset the list of items to their original order.</value>
+  </data>
+  <data name="sDefaultCombinedStimulusVerticalPadding" xml:space="preserve">
+    <value>5</value>
+  </data>
+  <data name="sDuplicateResponseKeyNameException" xml:space="preserve">
+    <value>Error: The response key name provided is in use.  Please provide a unique name.</value>
+  </data>
+  <data name="sUnnamedResponseKeyException" xml:space="preserve">
+    <value>Error: Please provide a name for your response key or select a key to modify from the drop-list</value>
+  </data>
+  <data name="sUndefinedLeftImageResponseException" xml:space="preserve">
+    <value>Error: Please browse for an image file to use as the left response</value>
+  </data>
+  <data name="sUndefinedLeftTextResponseException" xml:space="preserve">
+    <value>Error: Please enter a text value for the left response</value>
+  </data>
+  <data name="sUndefinedReversedKeyException" xml:space="preserve">
+    <value>Error: Please select a response key to reverse from the drop list</value>
+  </data>
+  <data name="sUndefinedRightImageResponseException" xml:space="preserve">
+    <value>Error: Please browse for an image file to use as the right response</value>
+  </data>
+  <data name="sUndefinedRightTextResponseException" xml:space="preserve">
+    <value>Error: Please enter a text value for the right response</value>
+  </data>
+  <data name="sUntypedLeftResponseValueException" xml:space="preserve">
+    <value>Error: Please select either Text or Image for the type of the left response </value>
+  </data>
+  <data name="sUntypedResponseKeyException" xml:space="preserve">
+    <value>Error: Please select either Simple, Reversed, or Combined as a type for this response key</value>
+  </data>
+  <data name="sUntypedRightResponseValueException" xml:space="preserve">
+    <value>Error: Please select either Text or Image for the type of the right response</value>
+  </data>
+  <data name="sCombinedResponseDuplicateKeysException" xml:space="preserve">
+    <value>Error: Please select two unique keys that are to form the combined response key</value>
+  </data>
+  <data name="sCombinedResponseIncompleteException" xml:space="preserve">
+    <value>Error: Please select the two unique keys that are to form the combined response key</value>
+  </data>
+  <data name="sCombinedResponseNoConjunctionException" xml:space="preserve">
+    <value>Error: Please enter a conjunction to appear on either side of the stimulus window between the two response key values</value>
+  </data>
+  <data name="sCombinedResponsePaddingFormatException" xml:space="preserve">
+    <value>Error: Please enter a non-negative integer value for "Vertical space between stimuli"</value>
+  </data>
+  <data name="sCombinedResponsePaddingOverflowException" xml:space="preserve">
+    <value>Error: Please enter a reasonable value for "Vertical space between stimuli," say something between zero and {0}</value>
+  </data>
+  <data name="sLeftResponseKeyPanelTitle" xml:space="preserve">
+    <value>Left Response Key Value</value>
+  </data>
+  <data name="sRightResponseKeyPanelTitle" xml:space="preserve">
+    <value>Right Response Key Value</value>
+  </data>
+  <data name="sResponseKeyPanelInstructions" xml:space="preserve">
+    <value>     Use the form below to define your response key(s).  Response keys can be of three types, simple keys which consist of two responses which are to appear in the upper-left and upper-right corner of the test window, above the stimulus.  Simple response keys may be comprised of text, images, or one of each.  Combined response keys consist of two simple or reversed keys paired with a conjunction such as "or" or "and."  Reversed response keys are the reverse of a simple response key.</value>
+  </data>
+  <data name="sSelectCreateOrModifyResponseKeyMessage" xml:space="preserve">
+    <value>Please either create a new response key by clicking the "Create New Response Key" button or select a response key to modify.</value>
+  </data>
+  <data name="sNoKeyedDirAssignedToStimulusException" xml:space="preserve">
+    <value>No keyed direction has been assigned to item #{0}</value>
+  </data>
+  <data name="sNoResponseKeyForBlockException" xml:space="preserve">
+    <value>Error: Please select a response key for the block from the drop-down list.</value>
+  </data>
+  <data name="sNullStimulusInRowException" xml:space="preserve">
+    <value>Error: Please select a type for the stimulus in row #{0}</value>
+  </data>
+  <data name="sBlankTextStimulusForMockItemException" xml:space="preserve">
+    <value>Error: Please enter a word or phrase to serve as the stimulus for the mock item</value>
+  </data>
+  <data name="sContinueInstructionsBlankException" xml:space="preserve">
+    <value>Error: Please enter a phrase to inform the user which key to press to proceed in "Continue Instructions"</value>
+  </data>
+  <data name="sDefaultContinueInstructions" xml:space="preserve">
+    <value>Press the {0} key to continue.</value>
+  </data>
+  <data name="sNoImageAssignedToMockItemStimulusException" xml:space="preserve">
+    <value>Error: Please click "Browse" to select an image to serve as the stimulus for the mock item</value>
+  </data>
+  <data name="sNoInstructionScreenTypeSelectedException" xml:space="preserve">
+    <value>Error: Please select either "Text" or "Mock Item" as the type of instruction screen</value>
+  </data>
+  <data name="sNoKeyedDirSelectedForMockItemException" xml:space="preserve">
+    <value>No keyed direction has been assigned for the mock in instruction screen #{0}</value>
+  </data>
+  <data name="sNoResponseKeySelectedForMockItemException" xml:space="preserve">
+    <value>Error: Please select a response key for the mock item</value>
+  </data>
+  <data name="sNoStimulusTypeSelectedForMockItemException" xml:space="preserve">
+    <value>Error: Please select either "Text" or "Image" as the mock item stimulus type</value>
+  </data>
+  <data name="sTextInstructionsBlankException" xml:space="preserve">
+    <value>Error: Please enter textual instructions for the screen or select the "Mock Item" screen type</value>
+  </data>
+  <data name="sTempImageFileCompactedCopyName" xml:space="preserve">
+    <value>images.$$$</value>
+  </data>
+  <data name="LayoutOverlapPen" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\LayoutOverlapPen.bmp;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="LayoutPen" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\LayoutPen.bmp;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="sErrorMarkRectangleOverlapException" xml:space="preserve">
+    <value>Error: The Error Mark overlaps with other elemtents of the layout</value>
+  </data>
+  <data name="sInstructionsRectangleOverlapException" xml:space="preserve">
+    <value>Error: The Instructions rectangle overlaps with other elements of the layout</value>
+  </data>
+  <data name="sResponseKeyRectangleOverlapException" xml:space="preserve">
+    <value>Error: The Response Key rectangles overlap with other elements of the layout</value>
+  </data>
+  <data name="sStimulusRectangleOverlapException" xml:space="preserve">
+    <value>Error: The Stimulus rectangle overlaps with other elements of the layout</value>
+  </data>
+  <data name="sErrorRectangleName" xml:space="preserve">
+    <value>Error</value>
+  </data>
+  <data name="sInstructionsRectangleName" xml:space="preserve">
+    <value>Instructions</value>
+  </data>
+  <data name="sLeftResponseKeyRectangleName" xml:space="preserve">
+    <value>Left Response Key</value>
+  </data>
+  <data name="sRightResponseKeyRectangleName" xml:space="preserve">
+    <value>Right Response Key</value>
+  </data>
+  <data name="sStimulusRectangleName" xml:space="preserve">
+    <value>Stimulus</value>
+  </data>
+  <data name="sLayoutPanelInstructions" xml:space="preserve">
+    <value>    Use the drop down lists below to select the size of the various layout elements.  Your changes will appear in the outline to the right.  All units are in pixels.</value>
+  </data>
+  <data name="sIATPackagedCaption" xml:space="preserve">
+    <value>IAT Successfully Packaged</value>
+  </data>
+  <data name="sIATPackagedMessage" xml:space="preserve">
+    <value>Your IAT has been successfully packed in the directory '{0}'.  A subdirectory named 'ItemSlides' is located within that contains numbered .jpg images of each item.  These images will be uploaded to the server and available for retreival later.</value>
+  </data>
+  <data name="sItemSlideDirectory" xml:space="preserve">
+    <value>ItemSlides</value>
+  </data>
+  <data name="sInvalidDataRetrievalPasswordException" xml:space="preserve">
+    <value>Error: Please enter a data retrieval password that is between 6 and 15 characters in length</value>
+  </data>
+  <data name="sPackageDirectoryExistsCaption" xml:space="preserve">
+    <value>Target Directory Exists</value>
+  </data>
+  <data name="sPackageDirectoryExistsMsg" xml:space="preserve">
+    <value>The directory you chose to save the packaged IAT in, {0}, already exists.  Continuing will overwrite the contents of this directory. Do you wish to proceed?</value>
+  </data>
+  <data name="sIATExistsCaption" xml:space="preserve">
+    <value>IAT Exists On Server</value>
+  </data>
+  <data name="sIATExistsMsg" xml:space="preserve">
+    <value>An IAT with the same name as the one you are attempting to upload already exists on this server.  You can deploy over this IAT and keep your data if your new IAT has an identical result set format.  Do you wish to do this?</value>
+  </data>
+  <data name="sDataRetrievalHostExceptionMsg" xml:space="preserve">
+    <value>Could not connect to the host {0}.</value>
+  </data>
+  <data name="sDataRetrievalIATNameExceptionMsg" xml:space="preserve">
+    <value>No IAT with the name {0} was found on the host.</value>
+  </data>
+  <data name="sDataRetrievalPasswordExceptionMsg" xml:space="preserve">
+    <value>The password {0} does not match the password registered for this IAT on the server.</value>
+  </data>
+  <data name="sDataRetrievalTransferExceptionMsg" xml:space="preserve">
+    <value>An error occurred while communicating with the server.  This could be due to internet connectivity issues or a corrupt result data file on the server.</value>
+  </data>
+  <data name="sExportDataFileFilter" xml:space="preserve">
+    <value>Text File|*.txt|Comma Separated Value File|*.csv|All Files|*.*</value>
+  </data>
+  <data name="CollapseArrow" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\CollapseArrow.bmp;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="ExpandArrow" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\ExpandArrow.bmp;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="sBoundedLengthLabel" xml:space="preserve">
+    <value>The user will provide a text response that is bounded by the lengths below.</value>
+  </data>
+  <data name="sBoundedLengthMaxLabel" xml:space="preserve">
+    <value>Maximum length of user response:</value>
+  </data>
+  <data name="sBoundedLengthMinLabel" xml:space="preserve">
+    <value>Minimum length of user response:</value>
+  </data>
+  <data name="sBoundedNumLabel" xml:space="preserve">
+    <value>The user will provide a numeric response that is bounded inclusively by the values below.</value>
+  </data>
+  <data name="sBoundedNumMaxLabel" xml:space="preserve">
+    <value>Maximum response value:</value>
+  </data>
+  <data name="sBoundedNumMinLabel" xml:space="preserve">
+    <value>Minimum response value:</value>
+  </data>
+  <data name="sFixedDigitLabel" xml:space="preserve">
+    <value>The user will provide a numeric respone that consists of the number of digits given below.</value>
+  </data>
+  <data name="sFixedDigitValueLabel" xml:space="preserve">
+    <value>Number of digits:</value>
+  </data>
+  <data name="sDateResponseBothSpecified" xml:space="preserve">
+    <value>The user will enter any date that falls inclusively between the two dates shown below.</value>
+  </data>
+  <data name="sDateResponseEndSpecified" xml:space="preserve">
+    <value>The user will enter any date that falls on or before the date shown below.</value>
+  </data>
+  <data name="sDateResponseNeitherSpecified" xml:space="preserve">
+    <value>The user will enter any valid date.</value>
+  </data>
+  <data name="sDateResponseStartSpecified" xml:space="preserve">
+    <value>The user will enter any date that falls on or after the date shown below.</value>
+  </data>
+  <data name="sEnableEndDateLabel" xml:space="preserve">
+    <value>Enable end date</value>
+  </data>
+  <data name="sEnableStartDateLabel" xml:space="preserve">
+    <value>Enable start date</value>
+  </data>
+  <data name="sRegExEditDefaullt" xml:space="preserve">
+    <value>Enter your regular expression here.</value>
+  </data>
+  <data name="sRegExInvalidLabel" xml:space="preserve">
+    <value>Invalid Regular Expression</value>
+  </data>
+  <data name="sRegExMatchLabel" xml:space="preserve">
+    <value>Match</value>
+  </data>
+  <data name="sRegExNoMatchLabel" xml:space="preserve">
+    <value>No Match</value>
+  </data>
+  <data name="sRegExResponseLabel" xml:space="preserve">
+    <value>The user will enter a value that must match the regular expression given below.</value>
+  </data>
+  <data name="sTestRegExDefault" xml:space="preserve">
+    <value>Enter test value here.</value>
+  </data>
+  <data name="sTestRegExLabel" xml:space="preserve">
+    <value>Test value:</value>
+  </data>
+  <data name="sDefaultQuestionText" xml:space="preserve">
+    <value>Please enter the text of your question here.</value>
+  </data>
+  <data name="sLikertDefaultChoiceText" xml:space="preserve">
+    <value>Enter the text of your statement here.</value>
+  </data>
+  <data name="sMultiChoiceDefaultChoiceText" xml:space="preserve">
+    <value>Enter the text of your choice here.</value>
+  </data>
+  <data name="sMultiSelectDefaultChoiceText" xml:space="preserve">
+    <value>Enter the text of your selectable statement here.</value>
+  </data>
+  <data name="sCaptionBackColorLabel" xml:space="preserve">
+    <value>Background:</value>
+  </data>
+  <data name="sCaptionBorderColorLabel" xml:space="preserve">
+    <value>Border:</value>
+  </data>
+  <data name="sCaptionBorderWidthLabel" xml:space="preserve">
+    <value>Border Width:</value>
+  </data>
+  <data name="sCaptionFontColorLabel" xml:space="preserve">
+    <value>Font:</value>
+  </data>
+  <data name="sCaptionFontSizeLabel" xml:space="preserve">
+    <value>Font Size:</value>
+  </data>
+  <data name="sDefaultInstructionText" xml:space="preserve">
+    <value>Enter the text of your instruction block here.</value>
+  </data>
+  <data name="sSurveyCaptionDefaultText" xml:space="preserve">
+    <value>Enter the Survey Caption Here</value>
+  </data>
+  <data name="AlternateImage0" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\AlternateImage0.bmp;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="AlternateImage1" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\AlternateImage1.bmp;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="AlternateImage10" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\AlternateImage10.bmp;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="AlternateImage2" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\AlternateImage2.bmp;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="AlternateImage3" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\AlternateImage3.bmp;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="AlternateImage4" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\AlternateImage4.bmp;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="AlternateImage5" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\AlternateImage5.bmp;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="AlternateImage6" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\AlternateImage6.bmp;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="AlternateImage7" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\AlternateImage7.bmp;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="AlternateImage8" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\AlternateImage8.bmp;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="AlternateImage9" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\AlternateImage9.bmp;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="sMaxNumSelectionsLabel" xml:space="preserve">
+    <value>Maximum # of Selections:</value>
+  </data>
+  <data name="sMinNumSelectionsLabel" xml:space="preserve">
+    <value>Minimum # of Selections:</value>
+  </data>
+  <data name="sProcessingIATFile" xml:space="preserve">
+    <value>Processing IAT File . . .</value>
+  </data>
+  <data name="sSavingPackageFile" xml:space="preserve">
+    <value>Saving Package File . . .</value>
+  </data>
+  <data name="sPackageFileExtension" xml:space="preserve">
+    <value>iatpak</value>
+  </data>
+  <data name="sPackageFileFilter" xml:space="preserve">
+    <value>IAT Package Files|*.iatpak|All Files|*.*</value>
+  </data>
+  <data name="sSavePackageFileDialogTitle" xml:space="preserve">
+    <value>Save IAT Package File</value>
+  </data>
+  <data name="sTempItemSlideFileName" xml:space="preserve">
+    <value>itemslides.$$$</value>
+  </data>
+  <data name="sConnectingToServerMsg" xml:space="preserve">
+    <value>Connecting to server</value>
+  </data>
+  <data name="sOpenPackageFileDlgTitle" xml:space="preserve">
+    <value>Select Packaged IAT to Upload</value>
+  </data>
+  <data name="sSendingFileManifestMsg" xml:space="preserve">
+    <value>Sending file manifest</value>
+  </data>
+  <data name="sUnpackingPackageFileMsg" xml:space="preserve">
+    <value>Unpacking IAT package file</value>
+  </data>
+  <data name="sUploadingIATMsg" xml:space="preserve">
+    <value>Uploading files</value>
+  </data>
+  <data name="sImageLoadedFromSaveFile" xml:space="preserve">
+    <value>Included from save file</value>
+  </data>
+  <data name="sImageDictionaryTempBackupFileName" xml:space="preserve">
+    <value>savepreprocess.tmp</value>
+  </data>
+  <data name="sLargeImageFile" xml:space="preserve">
+    <value> Using images of this size will result in an excessively large save file.  It is recommended that you resize the image in another program and utilize the smaller image in your IAT.  Do you wish to use this image anyway?</value>
+  </data>
+  <data name="sImageStimulusEditInstructions" xml:space="preserve">
+    <value>Click the Browse button to browse for an image on your computer or the Select button to select an image already included in the IAT.</value>
+  </data>
+  <data name="sDataRetrievalPanelFieldsIncomplete" xml:space="preserve">
+    <value>Please supply a Server URL, an IAT password, and an IAT name in the form.</value>
+  </data>
+  <data name="sDataRetrievalPanelFieldsIncompleteCaption" xml:space="preserve">
+    <value>Data Retrieval Information Incomplete</value>
+  </data>
+  <data name="sTextFileFilter" xml:space="preserve">
+    <value>Text File|*.txt|All Files|*.*</value>
+  </data>
+  <data name="sIATSOAPNamespace" xml:space="preserve">
+    <value>http://www.IATSoftware.net</value>
+  </data>
+  <data name="LeftButtonArrow" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\LeftButtonArrow.bmp;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="RightButtonArrow" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\RightButtonArrow.bmp;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="sDefaultIATServerDomain" xml:space="preserve">
+    <value>www.iatsoftware.net</value>
+  </data>
+  <data name="sIATServletURLPart" xml:space="preserve">
+    <value>?IATName={0}&amp;ClientID={1}</value>
+  </data>
+  <data name="sInvalidServerURL" xml:space="preserve">
+    <value>The URL specified for the server is not valid.  Server URLs should take the form "http://www.hostname.com/IATServer/"</value>
+  </data>
+  <data name="sInvalidServerURLCaption" xml:space="preserve">
+    <value>Invalid Server URL</value>
+  </data>
+  <data name="sUploadDenied" xml:space="preserve">
+    <value>The upload of your IAT was denied by the server.  Possible reasons include that your disk space quota has been reached or that an IAT with that name has already been uploaded to the server by you or a fellow user with your product key.</value>
+  </data>
+  <data name="sUploadDeniedCaption" xml:space="preserve">
+    <value>Upload Denied</value>
+  </data>
+  <data name="sActivationComplete" xml:space="preserve">
+    <value>Your product was successfully acitvated.  You will receive an email shortly with a link you must click on the complete your product activation.  You must complete this final stage of product activation before you can upload IATs to the server.</value>
+  </data>
+  <data name="sActivationCompleteCaption" xml:space="preserve">
+    <value>Activation Successful</value>
+  </data>
+  <data name="sAwaitingIATUploadConfirmation" xml:space="preserve">
+    <value>Waiting for IAT deployment confirmation.</value>
+  </data>
+  <data name="sDeleteIATConfirmation" xml:space="preserve">
+    <value>This will delete the specified IAT from the server as well as deleting all data collected via this IAT. Are you sure you wish to proceed?</value>
+  </data>
+  <data name="sDeleteIATConfirmationCaption" xml:space="preserve">
+    <value>Confirm Deletion</value>
+  </data>
+  <data name="sDeleteIATDataConfirmation" xml:space="preserve">
+    <value>This will delete all data stored on the server that has been collected via your IAT.  Are you sure you wish to proceed?</value>
+  </data>
+  <data name="sDeleteIATFail" xml:space="preserve">
+    <value>The deletion of your IAT failed either because the IAT you specified does not exist, the IAT password you provided was incorrect, or the IAT you specified is not registered to the orginazation your product is affiliated with.</value>
+  </data>
+  <data name="sDeleteIATFailCaption" xml:space="preserve">
+    <value>IAT Deletion Failed</value>
+  </data>
+  <data name="sDeleteIATFormIncomplete" xml:space="preserve">
+    <value>Please provide both an IAT name and an IAT password.</value>
+  </data>
+  <data name="sDeleteIATFormIncompleteCaption" xml:space="preserve">
+    <value>Insufficient Information</value>
+  </data>
+  <data name="sDeleteIATSuccess" xml:space="preserve">
+    <value>Your IAT was successfully deleted.</value>
+  </data>
+  <data name="sDeleteIATSuccessCaption" xml:space="preserve">
+    <value>IAT Deleted</value>
+  </data>
+  <data name="DownButtonArrow" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\DownButtonArrow.bmp;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="UpButtonArrow" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\UpButtonArrow.bmp;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="sRetrievingItemSlides" xml:space="preserve">
+    <value>Retrieving item slides</value>
+  </data>
+  <data name="sMaxImageSizeExceeded" xml:space="preserve">
+    <value>It is recommended that you not incorporate images of more than 4MB in the IAT because this can lead to excessively large save files.  You may resize the image in another program if you wish.  Do you wish to include this image at its current size?</value>
+  </data>
+  <data name="sMaxImageSizeExceededCaption" xml:space="preserve">
+    <value>Large Image File</value>
+  </data>
+  <data name="sAbandonChangesConfirmation" xml:space="preserve">
+    <value>If you close this form, you will lose all of your changes.  Do you wish to proceed?</value>
+  </data>
+  <data name="sErrorsExistCaption" xml:space="preserve">
+    <value>Errors in form</value>
+  </data>
+  <data name="sInstructionScreenDefinitionIncompleteException" xml:space="preserve">
+    <value>Instruction screen #{0} has not been fully initialized.</value>
+  </data>
+  <data name="sNoKeyAssignedToBlockException" xml:space="preserve">
+    <value>Error: No response key has been assigned to this IAT block.</value>
+  </data>
+  <data name="sNoStimulusForItemException" xml:space="preserve">
+    <value>No stimulus has been defined for item #{0}</value>
+  </data>
+  <data name="sNoStimulusForMockItemException" xml:space="preserve">
+    <value>No stimulus has been defined for the mock item in instruction screen #{0}</value>
+  </data>
+  <data name="sInstructionScreenEmpty" xml:space="preserve">
+    <value>Instruction screen #{0} is blank.</value>
+  </data>
+  <data name="sNoKeyAssignedToInstructionScreen" xml:space="preserve">
+    <value>No response key has been assigned to instruction screen #{0}.</value>
+  </data>
+  <data name="sStimulusAlreadyDynamicallyKeyed" xml:space="preserve">
+    <value>This stimulus is already being dynamically keyed based on another survey item response.  Do you wish to remove the current key specifier for this stimulus and associate it with this survey item?</value>
+  </data>
+  <data name="sMaskSpecifierSelectStatement" xml:space="preserve">
+    <value>Select a statement from the left to associate stimuli with it</value>
+  </data>
+  <data name="sSelectionSpecifierSelectStatement" xml:space="preserve">
+    <value>Select a statement from the left to associate stimuli with it</value>
+  </data>
+  <data name="sFontGenerationMessage" xml:space="preserve">
+    <value>Generating font data file. </value>
+  </data>
+  <data name="sResponseKeyAlreadyExists" xml:space="preserve">
+    <value>Error:  The response key you are attempting to create has the same name as another response key.  If you wish to create a new key, choose a new name.  If you wish to modify an existing key, select that key from the drop-down list.</value>
+  </data>
+  <data name="sResponseKeyAlreadyExistsCaption" xml:space="preserve">
+    <value>Response Key Exists</value>
+  </data>
+  <data name="sPreparingToGenerateFontFile" xml:space="preserve">
+    <value>Collecting list of installed fonts.</value>
+  </data>
+  <data name="sBlockLacksResponseKey" xml:space="preserve">
+    <value>Block #{0} has not been assigned a response key.</value>
+  </data>
+  <data name="sImageStimulusImproperlyDefined" xml:space="preserve">
+    <value>The image stimulus for item #{1} in IAT block #{0} has not been properly defined.</value>
+  </data>
+  <data name="sItemLacksKeyedDir" xml:space="preserve">
+    <value>Item #{1} in IAT block #{0} has not been assigned a keyed direction.</value>
+  </data>
+  <data name="sItemLacksStimulus" xml:space="preserve">
+    <value>Item #{1} in IAT block #{0} has not been assigned a stimulus.</value>
+  </data>
+  <data name="sTextStimulusImproperlyDefined" xml:space="preserve">
+    <value>The text stimulus for item #{1} in IAT block #{0} has not been properly defined.</value>
+  </data>
+  <data name="sErrorFormHeader" xml:space="preserve">
+    <value>Errors were found in your IAT design.  Click on one of the errors listed below to resolve it.</value>
+  </data>
+  <data name="sInstructionScreenTypeNotSet" xml:space="preserve">
+    <value>Instruction screen #{1} in instruction block #{0} was not assigned a type.</value>
+  </data>
+  <data name="sKeyInstructionScreenLacksResponseKey" xml:space="preserve">
+    <value>Instruction screen #{1} in instruction block #{0} is set to dispaly text and a response key, but no response key was specified.</value>
+  </data>
+  <data name="sMockItemImageStimulusImproperlyDefined" xml:space="preserve">
+    <value>Instruction screen #{1} in instruction block #{0} is set to display a mock item with an image stimulus, but no image has been assigned.</value>
+  </data>
+  <data name="sMockItemLacksResponseKey" xml:space="preserve">
+    <value>Instruction screen #{1} in instruction block #{0} is set to display a mock item, but no response key has been set for that mock item.</value>
+  </data>
+  <data name="sMockItemLacksStimulus" xml:space="preserve">
+    <value>Instruction screen #{1} in instruction block #{0} is set to display a mock item, but no stimulus has been specified for that mock item.</value>
+  </data>
+  <data name="sMockItemTextStimulusImproperlyDefined" xml:space="preserve">
+    <value>Instruction screen #{1} in instruction block #{0} is set to display a mock item with a text stimulus, but no text has been entered.</value>
+  </data>
+  <data name="sErrorsExistProceed" xml:space="preserve">
+    <value>Do you wish to proceed despite these errors?</value>
+  </data>
+  <data name="sClickToPreview" xml:space="preserve">
+    <value>Click an item on the left to see a preview of it here</value>
+  </data>
+  <data name="sContentsEmptyMessage" xml:space="preserve">
+    <value>Click a button on the left to begin adding elements to your IAT.</value>
+  </data>
+  <data name="sNothingToPreview" xml:space="preserve">
+    <value>Nothing to Preview</value>
+  </data>
+  <data name="sCannotConvertToDualKey" xml:space="preserve">
+    <value>This response key cannot be converted to a combined key because it is already incorporated into another combined key.</value>
+  </data>
+  <data name="sCannotConvertToDualKeyCaption" xml:space="preserve">
+    <value>Cannot convert to combined key.</value>
+  </data>
+  <data name="sDefaultConjunctionFontColor" xml:space="preserve">
+    <value>Gray</value>
+  </data>
+  <data name="sDefaultConjunctionFontSize" xml:space="preserve">
+    <value>10</value>
+  </data>
+  <data name="sErrorRetrievingItemSlides" xml:space="preserve">
+    <value>An error occured on the server while retrieving your item slides.</value>
+  </data>
+  <data name="sRSADataCipher" xml:space="preserve">
+    <value>UQnLhcy5nc8ve87ArxiQ4g==</value>
+  </data>
+  <data name="sRSADataIV" xml:space="preserve">
+    <value>hJ4EGatiogI=</value>
+  </data>
+  <data name="sEncryptionKeyFile" xml:space="preserve">
+    <value>Activation.dat</value>
+  </data>
+  <data name="sInvalidIATPassword" xml:space="preserve">
+    <value>Your IAT password must be between 7 and 20 characters in length and may only contain alphanumeric characters, hyphens, and underscores.</value>
+  </data>
+  <data name="sInvalidIATPasswordCaption" xml:space="preserve">
+    <value>Invalid IAT Password</value>
+  </data>
+  <data name="sTempIATSaveFile" xml:space="preserve">
+    <value>CurrIAT.$$$</value>
+  </data>
+  <data name="sMainFormName" xml:space="preserve">
+    <value>IAT Client Main Form</value>
+  </data>
+  <data name="sBoundedLengthBeginsWithError" xml:space="preserve">
+    <value>The value you specified the text must begin with exceeds the maximum allowed input length. Please enter a value  less than or equal to {0} characters in length.</value>
+  </data>
+  <data name="sBoundedLengthContainsError" xml:space="preserve">
+    <value>The value you specified the text must contain exceeds the maximum allowed input length. Please enter a value less than or equal to {0} characters in length.</value>
+  </data>
+  <data name="sBoundedLengthDoesNotContainError" xml:space="preserve">
+    <value>The value you specified the text must not contain exceeds the maximum allowed input length. Please enter a value less than or equal to {0} characters in length.</value>
+  </data>
+  <data name="sBoundedLengthEqualsError" xml:space="preserve">
+    <value>The value you specified the text must equal does not fall between the minimum and maximum allowed input lengths.  Please enter a value between {0} and {1} characters in length.</value>
+  </data>
+  <data name="sBoundedLengthNotEqualsError" xml:space="preserve">
+    <value>The value you specified the text must not equal does not fall between the minimum and maximum allowed input length. Please enter a value between {0} and {1} characters in length.</value>
+  </data>
+  <data name="sBoundedNumCorrectRangeError" xml:space="preserve">
+    <value>The range "{0} - {1}" you entered as a member of the collection of values that constitute the set of correct answers for this survey item falls outside the allowable range of response values the test taker may make.  Please enter a value between a range with a minimum value no less than {2} and a maximum value no less than {3}.</value>
+  </data>
+  <data name="sBoundedNumCorrectSingletonOutOfRangeError" xml:space="preserve">
+    <value>The value {0} you entered as a member of the collection of values that constitute the set of correct answers for this survey item falls outside the allowable range of response values the test taker may make.  Please enter a value between {1} and {2}.</value>
+  </data>
+  <data name="sBoundedNumRangeError" xml:space="preserve">
+    <value>The range "{0} - {1}" contains a low value that is greater than its high value or the two values are equal.</value>
+  </data>
+  <data name="sBoundedNumSearchRangeError" xml:space="preserve">
+    <value>The range "{0} - {1}" you entered as a member of the collection of values for the a search criterion based on the response to this survey item falls outside the allowable range of response values the test taker may make.  Please enter a value between a range with a minimum value no less than {2} and a maximum value no less than {3}.</value>
+  </data>
+  <data name="sBoundedNumSearchSingletonOutOfRangeError" xml:space="preserve">
+    <value>The value {0} you entered as a member of the collection of values for the a search criterion based on the response to this survey item falls outside the allowable range of response values the test taker may make.  Please enter a value between {1} and {2}.</value>
+  </data>
+  <data name="sInvalidInput" xml:space="preserve">
+    <value>Invalid Input</value>
+  </data>
+  <data name="sDateRangeCorrectInvalid" xml:space="preserve">
+    <value>The date range "{0} - {1}" that you entered to serve as a member for the set of valid date responses to this survey item falls outside the range of dates, {2} - {3}, that the test taker may choose to supply in his or her answer.  Please supply a range within that range of dates, {2} - {3}.</value>
+  </data>
+  <data name="sDateRangeSearchInvalid" xml:space="preserve">
+    <value>The date range "{0} - {1}" that you entered to serve as a search criterion for this survey item falls outside the range of dates, {2} - {3}, that the test taker may choose to supply in his or her answer.  Please supply a range within that range of dates, {2} - {3}.</value>
+  </data>
+  <data name="sInvalidDayRangeValue" xml:space="preserve">
+    <value>The range of days you supplied, "{0} - {1}" is invalid because it contains values other than the integers 1 through 31.</value>
+  </data>
+  <data name="sInvalidMonthRangeValue" xml:space="preserve">
+    <value>The range of months you supplied, "{0} - {1}" is invalid because it contains values other than the integers 1 through  12.</value>
+  </data>
+  <data name="sInvalidSpecifierString" xml:space="preserve">
+    <value>Please supply a series of ranges and single values seperated by commas for this entry field.  For example, "8-11, 16, 22-30" is a valid entry.</value>
+  </data>
+  <data name="sInvalidYearRangeMaxValue" xml:space="preserve">
+    <value>The range of years you supplied, "{0} - {1}" is invalid because it contains a year greater than {2}, which is the greastest year value supported by a Date variable in your operating system.</value>
+  </data>
+  <data name="sInvalidYearRangeMinValue" xml:space="preserve">
+    <value>The range of years you supplied, "{0} - {1}" is invalid because it contains a year less than {2}, which is the least year value supported by a Date variable in your operating system.</value>
+  </data>
+  <data name="sInvalidDateRange" xml:space="preserve">
+    <value>{0} is not a valid date or date range. Please enter dates in the format MM/DD/YYYY and date ranges in the format MM/DD/YYYY - MM/DD/YYYY, and please separate all dates and date ranges with commas.</value>
+  </data>
+  <data name="sInvalidDaysInMonth" xml:space="preserve">
+    <value>The date value {0} contains a day value that exceeds the number of days in that month.</value>
+  </data>
+  <data name="sDateRangeReversedException" xml:space="preserve">
+    <value>The first date entered in the range falls after the second date entered in the range.</value>
+  </data>
+  <data name="sDateEncapsulates" xml:space="preserve">
+    <value>{0} encapsulates the date {1}, which is already part of the list of dates and date ranges for the specification you are defining.  Do you wish to merge {1} into this new range?</value>
+  </data>
+  <data name="sDateFallsBetween" xml:space="preserve">
+    <value>{0} falls between the date range {1}, which is already part of the list of dates and date ranges for the specification you are defining.  Do you wish to merge {0} into this range?</value>
+  </data>
+  <data name="sDateRangeOverlap" xml:space="preserve">
+    <value>{0} overlaps with the date range {1}, which is already part of the list of dates and date ranges for the specification you are defining.  Do you wish to merge these two ranges?</value>
+  </data>
+  <data name="sDatesEqual" xml:space="preserve">
+    <value>{0} is already present in the list of dates and date ranges for the specification you are defining.  Do you wish to ignore this conflict?</value>
+  </data>
+  <data name="sCreatingBackup" xml:space="preserve">
+    <value>Creating Backup of Existing IAT</value>
+  </data>
+  <data name="sEncryptingCode" xml:space="preserve">
+    <value>Encrypting Administration Code for {0}</value>
+  </data>
+  <data name="sFinalizingDeployment" xml:space="preserve">
+    <value>Finalizing Deployment</value>
+  </data>
+  <data name="sGeneratingIATDescriptor" xml:space="preserve">
+    <value>Generating IAT Descriptor</value>
+  </data>
+  <data name="sGeneratingIATHeaderScript" xml:space="preserve">
+    <value>Generating IAT Header Javascript</value>
+  </data>
+  <data name="sGeneratingIATHTML" xml:space="preserve">
+    <value>Generating HTML for the IAT</value>
+  </data>
+  <data name="sGeneratingIATScript" xml:space="preserve">
+    <value>Generating IAT Javascript</value>
+  </data>
+  <data name="sGeneratingSurveyDescriptor" xml:space="preserve">
+    <value>Generating Descriptor for {0}</value>
+  </data>
+  <data name="sGeneratingSurveyHeaderScript" xml:space="preserve">
+    <value>Generating Header Javascript for {0}</value>
+  </data>
+  <data name="sGeneratingSurveyHTML" xml:space="preserve">
+    <value>Generating HTML for {0}</value>
+  </data>
+  <data name="sGeneratingSurveyScript" xml:space="preserve">
+    <value>Generating Javascript for {0}</value>
+  </data>
+  <data name="sInitializingDeployment" xml:space="preserve">
+    <value>Inializing Deployment</value>
+  </data>
+  <data name="sMungingCode" xml:space="preserve">
+    <value>Munging Administration Code for {0}</value>
+  </data>
+  <data name="sPreparingDeploymentResources" xml:space="preserve">
+    <value>Preparing Deployment Resources</value>
+  </data>
+  <data name="sProcessingFileManifest" xml:space="preserve">
+    <value>Processing Files</value>
+  </data>
+  <data name="sProcessingUniqueSurveyResponses" xml:space="preserve">
+    <value>Processing Unique Survey Responses</value>
+  </data>
+  <data name="sRecordingProcessedJS" xml:space="preserve">
+    <value>Recording Processed Javascript</value>
+  </data>
+  <data name="sRestoringBackup" xml:space="preserve">
+    <value>Restoring Backup of Existing IAT</value>
+  </data>
+  <data name="sDeleteIATDataFormInstructions" xml:space="preserve">
+    <value>You are about to delete all data associated with an IAT from the server.  This deletion is permanent.  If you wish to continue, enter the name of the IAT and the password associated with it in the blanks below.</value>
+  </data>
+  <data name="sDeleteIATDataFormTitle" xml:space="preserve">
+    <value>Delete IAT Data</value>
+  </data>
+  <data name="sDeleteIATFormInstructions" xml:space="preserve">
+    <value>You are about to delete an IAT from the server.  When you delete it, you will lose all data associated with it as well.  Both are permanently deleted.  If you wish to continue, enter the name of the IAT and the password associated with it in the blanks below.</value>
+  </data>
+  <data name="sDeleteIATFormTitle" xml:space="preserve">
+    <value>Delete IAT</value>
+  </data>
+  <data name="sDeleteIATDataConfirmationCaption" xml:space="preserve">
+    <value>Deletion Confirm</value>
+  </data>
+  <data name="sDeleteIATDataFail" xml:space="preserve">
+    <value>The deletion of your IAT data failed.</value>
+  </data>
+  <data name="sDeleteIATDataFailCaption" xml:space="preserve">
+    <value>Deletion Failed</value>
+  </data>
+  <data name="sNoSuchIAT" xml:space="preserve">
+    <value>There is no IAT with the name you provided associated with your client ID on the server.  Please check your spelling and try again.</value>
+  </data>
+  <data name="sNoSuchIATCaption" xml:space="preserve">
+    <value>No Such IAT</value>
+  </data>
+  <data name="sCorruptedTransmission" xml:space="preserve">
+    <value>The server is receiving corrupted data packets from your client program.  It has already retried the transmission multiple times.  You might wish to restart your copy of IAT Design and try uploading again.  If this fails, please contact us at michael@iatsoftware.net, attaching your .iat save file as well as the present date and time.</value>
+  </data>
+  <data name="sServerError" xml:space="preserve">
+    <value>An error on the server occurred while attempting to fulfill your request.  If this problem persists, please send your .iat save file along with the current date and time and any information you might feel is pertinent, such as what you were doing prior to upload, download, or synchronization, to michael@iatsoftware.net.  It is strongly recommended that you save your project to a new destination and restart the program before proceeding.</value>
+  </data>
+  <data name="sErrorReportInstructions" xml:space="preserve">
+    <value>If this problem persists, please copy the above error report into an email message and email it to michael@iatsoftware.net.  You may simply click the "Copy to Clipboard" button and right click inside your email message and click paste to transfer the error report to your email or webmail program.</value>
+  </data>
+  <data name="sProcessingJavaScript" xml:space="preserve">
+    <value>Processing java script for {0}.</value>
+  </data>
+  <data name="sProcessingAES" xml:space="preserve">
+    <value>Generating Encryption Information</value>
+  </data>
+  <data name="sDeploymentFailed" xml:space="preserve">
+    <value>The deployment of your IAT on the server failed.</value>
+  </data>
+  <data name="sDeploymentSuccessful" xml:space="preserve">
+    <value>The deployment of your IAT on the server was successful.</value>
+  </data>
+  <data name="sDeploymentTimerExpired" xml:space="preserve">
+    <value>The deployment of your IAT on the server was presumed to have failed because of how long your IAT was taking to be processed.</value>
+  </data>
+  <data name="sDeploymentAborted" xml:space="preserve">
+    <value>The deployment of your IAT was aborted at the request the client program.</value>
+  </data>
+  <data name="sDeploymentBackupDestroyed" xml:space="preserve">
+    <value>The server is destroying the backup it made of the previous version of your IAT prior to deploying the new one.</value>
+  </data>
+  <data name="sDeploymentBackupFailure" xml:space="preserve">
+    <value>The server was unable to backup a previous deployment of your IAT so that it might be replaced with the new one.</value>
+  </data>
+  <data name="sDeploymentBackupRestored" xml:space="preserve">
+    <value>The deployment of your IAT failed and the server restored the backup of the previous version of the IAT it made prior to attepting to deploy your upload.</value>
+  </data>
+  <data name="sDeploymentCleanup" xml:space="preserve">
+    <value>The server is attempting to clean up after the partial deployment of your IAT.</value>
+  </data>
+  <data name="sDeploymentCleanupComplete" xml:space="preserve">
+    <value>The server has finished cleaning up after the partial deployment of your IAT.</value>
+  </data>
+  <data name="sDeploymentCleanupFailed" xml:space="preserve">
+    <value>The server was unable to clean  up after the partial deployment of your IAT.</value>
+  </data>
+  <data name="sDeploymentComparingDescriptors" xml:space="preserve">
+    <value>The server is comparing the descriptor for the previous version of your IAT with the descriptor generated for the new deployment.</value>
+  </data>
+  <data name="sDeploymentRestoreBackupFailed" xml:space="preserve">
+    <value>The deployment of your IAT failed and the server was unable restore the backup of the previous version of your IAT.</value>
+  </data>
+  <data name="sDeploymentTerminated" xml:space="preserve">
+    <value>The deployment of your IAT was terminated.</value>
+  </data>
+  <data name="sDeploymentXsltFailure" xml:space="preserve">
+    <value>The server encountered problems while transforming your IAT configuration into web pages and the programs necessary to execute it.</value>
+  </data>
+  <data name="sResultDataFileHeaderYesNo" xml:space="preserve">
+    <value>Do you want a header in your comma delimited result data file that describes what each column of data represents?</value>
+  </data>
+  <data name="sResultDataFileHeaderYesNoCaption" xml:space="preserve">
+    <value>Result Data File</value>
+  </data>
+  <data name="sResultsGroupedByItemYesNo" xml:space="preserve">
+    <value>Do you want to output a file that contains detailed IAT response data grouped by item?</value>
+  </data>
+  <data name="sResultsGroupedByItemYesNoCaption" xml:space="preserve">
+    <value>Results Grouped By Item</value>
+  </data>
+  <data name="sResultsGroupedByTesteeYesNo" xml:space="preserve">
+    <value>Do you want to ouput a file that contains detailed IAT response data grouped by test taker?</value>
+  </data>
+  <data name="sResultsGroupedByTesteeYesNoCaption" xml:space="preserve">
+    <value>Results Grouped By Testee</value>
+  </data>
+  <data name="sDefaultIATServerPort" xml:space="preserve">
+    <value>80</value>
+  </data>
+  <data name="sInstructionManualLink" xml:space="preserve">
+    <value>https://www.iatsoftware.net/IATDesignManual.pdf</value>
+  </data>
+  <data name="progress_rotate1" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\progress-rotate1.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="progress_rotate10" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\progress-rotate10.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="progress_rotate11" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\progress-rotate11.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="progress_rotate12" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\progress-rotate12.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="progress_rotate13" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\progress-rotate13.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="progress_rotate14" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\progress-rotate14.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="progress_rotate15" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\progress-rotate15.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="progress_rotate16" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\progress-rotate16.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="progress_rotate17" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\progress-rotate17.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="progress_rotate18" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\progress-rotate18.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="progress_rotate19" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\progress-rotate19.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="progress_rotate2" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\progress-rotate2.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="progress_rotate20" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\progress-rotate20.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="progress_rotate21" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\progress-rotate21.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="progress_rotate22" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\progress-rotate22.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="progress_rotate23" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\progress-rotate23.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="progress_rotate24" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\progress-rotate24.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="progress_rotate25" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\progress-rotate25.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="progress_rotate26" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\progress-rotate26.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="progress_rotate27" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\progress-rotate27.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="progress_rotate28" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\progress-rotate28.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="progress_rotate29" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\progress-rotate29.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="progress_rotate3" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\progress-rotate3.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="progress_rotate30" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\progress-rotate30.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="progress_rotate31" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\progress-rotate31.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="progress_rotate32" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\progress-rotate32.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="progress_rotate33" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\progress-rotate33.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="progress_rotate34" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\progress-rotate34.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="progress_rotate35" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\progress-rotate35.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="progress_rotate36" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\progress-rotate36.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="progress_rotate4" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\progress-rotate4.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="progress_rotate5" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\progress-rotate5.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="progress_rotate6" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\progress-rotate6.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="progress_rotate7" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\progress-rotate7.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="progress_rotate8" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\progress-rotate8.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="progress_rotate9" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\progress-rotate9.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="sEmptyUniqueResponseBoxCaption" xml:space="preserve">
+    <value>Proceed without specifying valid responses?</value>
+  </data>
+  <data name="sEmptyUniqueResponseBoxMsg" xml:space="preserve">
+    <value>You have not entered any valid response values. This means that each test taker is free to supply any response to this item provided it does not match the response provided by a previous test-taker. Do you wish to proceed?</value>
+  </data>
+  <data name="sUniqueResponseBoxCaption" xml:space="preserve">
+    <value>Proceed?</value>
+  </data>
+  <data name="sUniqueResponseBoxMsg" xml:space="preserve">
+    <value>You have supplied {0} different valid responses to this item. Each will be accepted only once. Do you wish to proceed?</value>
+  </data>
+  <data name="ExcelTrans" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\ExcelTrans.xml;System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
+  </data>
+  <data name="logo" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\logo.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="sOutputTitlePageHeading" xml:space="preserve">
+    <value>The following spreadsheets contain the result data for your IAT. The summary spreadsheet, which follows this one, shows a data grid with the answers to any questionnaire items you might have included in your test. The format of that grid is shown below. The next spreadsheet contains the response latency for each stimulus presentation for each test-taker. Each set of data is grouped into two columns, the item number in the first and the response latency in the second. The following spreadsheets contain the response latencies grouped by item. These are intended for use in item analysis. In each of these, you will see a slide of the item and, to the right, the response latencies for each presentation of this item, grouped by test taker.</value>
+  </data>
+  <data name="sDeploymentRollbackFailure" xml:space="preserve">
+    <value>Further, the server was unable to correctly rollback the deployment of your IAT. Before you attempt to upload it again, you must delete it via the server interface panel.</value>
+  </data>
+  <data name="sDataTransactionWebsocketURI" xml:space="preserve">
+    <value>ws://127.0.0.1/IAT/DataTransaction</value>
+  </data>
+  <data name="sClientDeleted" xml:space="preserve">
+    <value>You no longer have an account with IAT Software.</value>
+  </data>
+  <data name="sClientFrozen" xml:space="preserve">
+    <value>Your account appears to have been frozen.  Please contact us at michael@iatsoftware.net for details.</value>
+  </data>
+  <data name="sServerPassword" xml:space="preserve">
+    <value>jESUScHRISTsUCKScOCKiNhELLfORcIGARETTEmONEY</value>
+  </data>
+  <data name="sDeploymentGeneratingIAT" xml:space="preserve">
+    <value>Generating Files for IAT</value>
+  </data>
+  <data name="sDeploymentGeneratingSurvey" xml:space="preserve">
+    <value>Generating Files for {0}</value>
+  </data>
+  <data name="sCollectingInstalledFonts" xml:space="preserve">
+    <value>Collecting installed fonts . . . this will take a moment</value>
+  </data>
+  <data name="sBackingUpIAT" xml:space="preserve">
+    <value>Backing up IAT prior to redeploy</value>
+  </data>
+  <data name="sDefaultIATServerPath" xml:space="preserve">
+    <value>/IAT</value>
+  </data>
+  <data name="sUploadURI" xml:space="preserve">
+    <value>http://127.0.0.1/IAT/DeploymentUpload?DeploymentID={0}&amp;Key={1}&amp;Size={2}</value>
+  </data>
+  <data name="sItemSlideURL" xml:space="preserve">
+    <value>http://127.0.0.1/IAT/ItemSlideDownload</value>
+  </data>
+  <data name="sPurchaseResourcesURI" xml:space="preserve">
+    <value>https://www.iatsoftware.net/IAT/PurchaseTransaction/InitiatePurchase</value>
+  </data>
+  <data name="sRetrieveResourcePricesURI" xml:space="preserve">
+    <value>http://127.0.0.1/IAT/PurchaseTransaction/Pricing</value>
+  </data>
+  <data name="sSubmitPurchaseOrderURI" xml:space="preserve">
+    <value>https://www.iatsoftware.net/IAT/PurchaseTransaction/SubmitOrder</value>
+  </data>
+  <data name="sMissingFontFormClosing" xml:space="preserve">
+    <value>You must select replacement fonts to continue. The test design program will close if you choose to proceed. Click the Cancel button to choose replacement fonts or OK to exit the program.</value>
+  </data>
+  <data name="sMissingFontFormContainsDefaultFont" xml:space="preserve">
+    <value>You have not selected replacement fonts for one or more items. The system default font will be substituted if you proceed. Please understand that this substitution will become permanent when you save your test. In other words, copying the save file back to the last machine it was open on will not restore your font selections. Do you wish to proceed?</value>
+  </data>
+  <data name="sConnectionTimeoutCaption" xml:space="preserve">
+    <value>Communication Error</value>
+  </data>
+  <data name="sConnectionTimeoutMessage" xml:space="preserve">
+    <value>The connection process with the server timed out. Please check your internet connectivity. If this problem persists, email us at michael@iatsoftware.net</value>
+  </data>
+  <data name="sConnectionFailedCaption" xml:space="preserve">
+    <value>Connection Failed</value>
+  </data>
+  <data name="sConnectionFailedMessage" xml:space="preserve">
+    <value>The program failed to open a connection to the server. Please check your internet connectivity and try again. If this problem persists, please email me at michael@iatsoftware.net</value>
+  </data>
+  <data name="sErrorReportedCaption" xml:space="preserve">
+    <value>Error Reported</value>
+  </data>
+  <data name="sErrorReportedMessage" xml:space="preserve">
+    <value>The IAT test design program encountered an error that was sucessfully reported. I apologize for the inconvience. I'll contact you in the next handful of days to inform you of the status of the error. If you don't hear from me, please email me at michael@iatsoftware.net, including your product key, {0}. Your product key is also accessible from the Help drop-down menu.\nA recovery save file will be attempted after you close this window and then the program will terminate.\n{1}</value>
+  </data>
+  <data name="sErrorReportURL" xml:space="preserve">
+    <value>http://127.0.0.1/IAT/ClientErrorReport</value>
+  </data>
+  <data name="sPurchaseServiceUnavailableURL" xml:space="preserve">
+    <value>https://www.iatsoftware.net/IAT/PurchaseTransaction/ServiceUnavailable</value>
+  </data>
+  <data name="sUnansweredSurveyItem" xml:space="preserve">
+    <value>__Unanswered__</value>
+  </data>
+  <data name="sForceSubmittedUnansweredSurveyItem" xml:space="preserve">
+    <value>__NULL__</value>
+  </data>
+  <data name="sTokenExplanation" xml:space="preserve">
+    <value>Tokens can be used to uniquely identify test takers across sites. You can employ them to uniquely identify a test  taker who is redirected to or from an IAT. If you are unsure whether you need a token, leave this box unchecked. Consult the manual for further information.</value>
+  </data>
+  <data name="sTokenTypesExplanation" xml:space="preserve">
+    <value>If your IAT uses a token, that token must be passed to your IAT in the query string with the token name you provide below. You will be provided with an example upon the upload of your test. That token will be recorded with the IAT data and visible in result data file. The same token will be passed in the query string to the URL the test taker is redirected to upon completion of your test. Tokens have a much more powerful application detailed in the manual.</value>
+  </data>
+  <data name="sActivationDialogName" xml:space="preserve">
+    <value>ActivationDialog</value>
+  </data>
+  <data name="sForceSubmitted" xml:space="preserve">
+    <value>__ForceSubmitted__</value>
+  </data>
+  <data name="sUnanswered" xml:space="preserve">
+    <value>__Unanswered__</value>
+  </data>
+  <data name="sDeactivateConfirmation" xml:space="preserve">
+    <value>This operation will remove the activation information from your machine. You will not be able to use the application again until you reactivate it. You may retrieve your product key from www.iatsoftware.net in order to do so. Proceed?</value>
+  </data>
+  <data name="sDeactivationCaption" xml:space="preserve">
+    <value>Confirm Deactivation</value>
+  </data>
+  <data name="sDeactivationCompleteCaption" xml:space="preserve">
+    <value>Success</value>
+  </data>
+  <data name="sDeactivationCompleteMessage" xml:space="preserve">
+    <value>Deactivation was successful. The program will now close.</value>
+  </data>
+  <data name="sQueryPublicityIAT" xml:space="preserve">
+    <value>If you wish to opt into the free-use program, you must upload an IAT to be shared on social media. Would you like this test to be that IAT?</value>
+  </data>
+  <data name="sQueryPublicityIATCaption" xml:space="preserve">
+    <value>Free Use Opt-In</value>
+  </data>
+  <data name="sWorkingSaveFileName" xml:space="preserve">
+    <value>iat-{0}.$$$</value>
+  </data>
+  <data name="sRelationshipTemplate" xml:space="preserve">
+    <value>http://www.iatsoftware.net/package/relationships/meta-data/{0}/{1}</value>
+  </data>
+  <data name="sConversionPackageFileName" xml:space="preserve">
+    <value>conversion.$$$</value>
+  </data>
+  <data name="sTextInstructionsBlank" xml:space="preserve">
+    <value>Instruction screen #{1} in block {0} contains an instruction screen without any text.</value>
+  </data>
+  <data name="sContinueInstructionsBlank" xml:space="preserve">
+    <value>Instruction screen #{1} in block {0} does not instruct the user how to proceed.</value>
+  </data>
+  <data name="sRecoveryFileCreated" xml:space="preserve">
+    <value>An unexpected error has caused the program to terminate. A recovery file has been created and can be loaded when you next start the program.</value>
+  </data>
+  <data name="sRecoveryFileCreatedCaption" xml:space="preserve">
+    <value>Unexpected Program Termination</value>
+  </data>
+  <data name="sConnectionError" xml:space="preserve">
+    <value>A connection with the server cannot be established. Here come the dreaded words: Please check your internet connection and try again.</value>
+  </data>
+  <data name="sConnectionErrorCaption" xml:space="preserve">
+    <value>The problem might honestly be on your end.</value>
+  </data>
+  <data name="sServerDown" xml:space="preserve">
+    <value>The server is down at the moment. If this is a maintanence issue, it will likely be resolved within an hour. If this problem persists, please contact me at michael@iatsoftware.net.</value>
+  </data>
+  <data name="sServerDownCaption" xml:space="preserve">
+    <value>Server Down</value>
+  </data>
+  <data name="sRetrieveResultsURL" xml:space="preserve">
+    <value>http://127.0.0.1/IAT/RetrieveResults</value>
+  </data>
+  <data name="sTemporarilySavedTestFilename" xml:space="preserve">
+    <value>iat-temp.iat</value>
+  </data>
+  <data name="sRecoveryFileDetected" xml:space="preserve">
+    <value>A recovery file was created because of non-user initiated program termination. Would you like to attempt to load it? Otherwise, it will be deleted.</value>
+  </data>
+  <data name="sRecoveryFileDetectedCaption" xml:space="preserve">
+    <value>Recovery File Found</value>
+  </data>
+  <data name="sRecoveryFileLoaded" xml:space="preserve">
+    <value>Your recovery file has loaded succesfully. Click OK to delete it. You must now save your work in order to keep it.</value>
+  </data>
+  <data name="sRecoveryFileLoadedCaption" xml:space="preserve">
+    <value>Recovery Successful</value>
+  </data>
+  <data name="sRecoveryFileLoadFailure" xml:space="preserve">
+    <value>It was not possible to recover your work. You must load from your most recent save.</value>
+  </data>
+  <data name="sRecoveryFileLoadFailureCaption" xml:space="preserve">
+    <value>Recovery Failed</value>
+  </data>
+  <data name="sCreatingPreUploadBackup" xml:space="preserve">
+    <value>Creating Backup</value>
+  </data>
+  <data name="sig" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\sig.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
+  <data name="sInvalidSaveFileReportURL" xml:space="preserve">
+    <value>http://127.0.0.1/ClientErrorReport/InvalidSaveFile</value>
+  </data>
+  <data name="sBlockHasNoItems" xml:space="preserve">
+    <value>IAT Block #{0} has no stimuli</value>
+  </data>
+  <data name="sInstructionBlockHasNoItems" xml:space="preserve">
+    <value>Instruction Block #{0} has no screens</value>
+  </data>
+  <data name="SurveyPage" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\SurveyPage.xslt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
+  <data name="ErrorReportCspBlob" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\ErrorReportCspBlob.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;iso-8859-1</value>
+  </data>
+  <data name="sEmailConfirmationFailed" xml:space="preserve">
+    <value>We have yet to receive your email verification.  If you have not received an email from IAT Software instructing you on how to complete activation of your product, first check your Spam folder and, if no such email is present there, click "Resend Verification EMail"</value>
+  </data>
+  <data name="sEmailConfirmationFailedCaption" xml:space="preserve">
+    <value>EMail Verification Failed</value>
+  </data>
+  <data name="sEmailConfirmationFailedEmailMismatch" xml:space="preserve">
+    <value>The email address that was submitted for verification was not associated with any product key in the database. This is most likely a software failure. Please contact me at michael@iatsoftware.net to notify me of it.</value>
+  </data>
+  <data name="sEmailConfirmationFailedNoSuchClient" xml:space="preserve">
+    <value>The product key associated with this app upon activation was not found in the server database. This is a software failure. Please contact me at michael@iatsoftware.net to notify me of it.</value>
+  </data>
+  <data name="HandshakeCSP" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\HandshakeCSP.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
+  <data name="sErrorReportHandshakeFailedCaption" xml:space="preserve">
+    <value>Error Report Mechanism Failure</value>
+  </data>
+  <data name="sErrorReportHandshakeFailedMessage" xml:space="preserve">
+    <value>An error occurred while attempting to report a software failure to the server. This error surfaced while negotiating the transfer of information prior to the transfer itself, during the "handshake" as it is usually known. Handshake keys are rotated every so often and it is likely that you are using an outdated copy of the software. Please reboot while an internet connection is active to update.</value>
+  </data>
+  <data name="sErrorReportRequestEmail" xml:space="preserve">
+    <value>This is embarrassing but an error occurred in the automated error report mechanism. The report error has been logged on the server. Information pertinant to the software failure is shown below. If you'd like, enter your email address below and I will contact you for more information so the error can be resolved or, at least, let you know when the automated error report mechanism is up and running.</value>
+  </data>
+  <data name="sErrorReportDataSubmissionURL" xml:space="preserve">
+    <value>http://127.0.0.1/IAT/ClientErrorReport/ExtraData</value>
+  </data>
+  <data name="sErrorReportException" xml:space="preserve">
+    <value>A non-internet related issue surfaced while submitting your error report. Contact me at michael@iatsoftware.net</value>
+  </data>
+  <data name="sErrorReportExceptionCaption" xml:space="preserve">
+    <value>Submission Error</value>
+  </data>
+  <data name="sErrorReportWebException" xml:space="preserve">
+    <value>A connection problem was encountered while submitting your error report. This is likely a server issue though perhaps a connectivity issue on your end. Contact me at michael@iatsoftware.net.</value>
+  </data>
+  <data name="sErrorReportWebExceptionCaption" xml:space="preserve">
+    <value>Submission Error</value>
+  </data>
+  <data name="sActivationErrorReportURLTesting" xml:space="preserve">
+    <value>http://127.0.0.1/IAT/ClientErrorReport/Activation</value>
+  </data>
+  <data name="GenerateCaption" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\GenerateCaption.xslt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
+  </data>
+  <data name="font1" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\font1.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
+  <data name="font10" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\font10.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
+  <data name="font2" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\font2.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
+  <data name="font3" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\font3.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
+  <data name="font4" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\font4.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
+  <data name="font5" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\font5.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
+  <data name="font6" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\font6.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
+  <data name="font7" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\font7.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
+  <data name="font8" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\font8.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
+  <data name="font9" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\font9.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
+  <data name="sActivationErrorReportURL" xml:space="preserve">
+    <value>http://127.0.0.1/IAT/ClientErrorReport</value>
+  </data>
+  <data name="savesplash" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\savesplash.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+</root>
