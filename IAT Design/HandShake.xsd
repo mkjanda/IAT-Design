@@ -1,0 +1,17 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema id="HandShake.xsd"
+    targetNamespace="HandShake"
+    elementFormDefault="qualified"
+    xmlns="HandShake"
+    xmlns:xs="http://www.w3.org/2001/XMLSchema"
+>
+
+  <xs:element name="HandShake">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="Value1" type="xs:long" />
+        <xs:element name="Value2" type="xs:long" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+</xs:schema>

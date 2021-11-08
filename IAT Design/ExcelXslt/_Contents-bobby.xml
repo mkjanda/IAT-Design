@@ -1,0 +1,18 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ExcelComponents>
+  <ExcelComponent InputFileName="\[Content Types].xslt" Action="Transform" OutputDirectory="/" OutputFileName="[Content Types].xml" />
+  <ExcelComponent InputFileName="\_rels\a.rels" Action="Copy" OutputDirectory="/_rels/" OutputFileName=".rels" />
+  <ExcelComponent InputFileName="\xl\printerSettings\printerSettings1.bin" Action="Copy" OutputDirectory="/xl/printerSettings/" OutputFileName="printerSettings1.bin" />
+  <ExcelComponent InputFileName="\xl\theme\theme1.xml" Action="Copy" OutputDirectory="/xl/theme/" OutputFileName="theme1.xml" />
+  <ExcelComponent InputFileName="\xl\sharedStrings.xml" Action="Copy" OutputDirectory="/xl/" OutputFileName="sharedStrings.xml" />
+  <ExcelComponent InputFileName="\xl\styles.xml" Action="Copy" OutputDirectory="/xl/" OutputFileName="styles.xml" />
+  <ExcelComponent InputFileName="\xl\workbook.xml.xslt" Action="Transform" OutputDirectory="/xl/" OutputFileName="workbook.xml" />
+  <ExcelComponent InputFileName="\xl\_rels\workbook.xml.rels.xslt" Action="Transform" OutputDirectory="/xl/_rels/" OutputFileName="workbook.xml.rels" />
+  <ExcelComponent InputFileName="\xl\drawings\wrapped_drawings.xslt" Action="UnwrapTransform" OutputDirectory="/xl/drawings/" />
+  <ExcelComponent InputFileName="\xl\drawings\_rels\drawing_rels.xslt" Action="Transform" OutputDirectory="/xl/drawings/_rels/" OutputFileName="drawing1.xml.rels" />
+  <ExcelComponent InputFileName="\xl\worksheets\SummaryWorksheet.xslt" Action="Transform" OutputDirectory="/xl/worksheets/" OutputFileName="summary.xml" />
+  <ExcelComponent InputFileName="\xl\worksheets\wrapped_ItemAnalysisWorksheets.xslt" Action="UnwrapTransform" OutputDirectory="/xl/worksheets/" />
+  <ExcelComponent InputFileName="\xl\worksheets\rels\WorksheetRels.xslt" Action="Transform" OutputDirectory="/xl/worksheets/_rels/" OutputFileName="worksheets.xml.rels" />
+  <ExcelComponent InputFileName="\docProps\app.xml.xslt" Action="Transform" OutputDirectory="/docProps/" OutputFileName="app.xml" />
+  <ExcelComponent InputFileName="\docProps\core.xml.xslt" Action="Transform" OutputDirectory="/docProps/" OutputFileName="core.xml" />
+</ExcelComponents>
