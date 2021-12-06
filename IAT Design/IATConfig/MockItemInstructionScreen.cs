@@ -23,6 +23,7 @@ namespace IATClient.IATConfig
                 if (_StimulusDisplayID != -1)
                     return _StimulusDisplayID;
                 _StimulusDisplayID = ConfigFile.GetIATImage(MockItemScreen.StimulusUri).Id;
+                return _StimulusDisplayID;
             }
             set
             {
