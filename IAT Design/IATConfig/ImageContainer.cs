@@ -6,6 +6,8 @@ using System.Security.Cryptography;
 using System.Threading;
 using System.Xml;
 using System.Collections.Concurrent;
+using IATClient.Messages;
+using System.Drawing;
 
 namespace IATClient.IATConfig
 {
@@ -14,6 +16,7 @@ namespace IATClient.IATConfig
         private static readonly int NUM_WORKER_THREADS = 4;
         private static readonly int WORKER_INTERVAL = 500;
         private int idCtr = 0;
+        private int numImagesProcessed = 0;
         private ConcurrentQueue<DIBase> ImageBases = new ConcurrentQueue<DIBase>();
         private readonly List<System.Timers.Timer> Timers = new List<System.Timers.Timer>();
         private readonly List<object> TimerLocks = new List<object>();
@@ -44,15 +47,20 @@ namespace IATClient.IATConfig
                         var iImg = generateImage(result);
                         lock (ImageListLock)
                         {
+                            int nImg = Interlocked.Increment(ref numImagesProcessed);
                             IATImage duplicate = ImageList.FirstOrDefault<IATImage>(i => i.SHA == iImg.SHA);
                             if (duplicate == null)
                             {
                                 iImg.Id = ++idCtr;
                                 iImg.SourceUris.Add(result.URI);
+                                iImg.Indexes.Add(nImg);
                                 ImageList.Add(iImg);
                             }
                             else
+                            {
                                 duplicate.SourceUris.Add(result.URI);
+                                duplicate.Indexes.Add(nImg);
+                            }
                         }
                     };
                     Monitor.Exit(TimerLocks[ctr]);
@@ -74,6 +82,21 @@ namespace IATClient.IATConfig
         public void AddDI(DIBase di)
         {
             ImageBases.Enqueue(di);
+        }
+
+        public List<ResourceReference> ResourceReferences
+        {
+            get
+            {
+                List<ResourceReference> refs = new List<ResourceReference>();
+                foreach (var i in ImageList)
+                    refs.Add(new ResourceReference()
+                    {
+                        ImageUri = i.SourceUris.FirstOrDefault(),
+                        ReferenceIndex = i.Indexes
+                    });
+                return refs;
+            }
         }
 
         public IATImage GetImage(Uri u)
@@ -121,8 +144,5 @@ namespace IATClient.IATConfig
                 data[ctr] = ImageList[ctr].ImageData;
             return data;
         }
-
-
-
     }
 }

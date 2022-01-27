@@ -11,7 +11,7 @@ using System.Xml.Serialization;
 using System.Security.Cryptography;
 using System.Windows.Forms;
 
-namespace IATClient
+namespace IATClient.ResultData
 {
     namespace IATResultSetNamespaceV1
     {

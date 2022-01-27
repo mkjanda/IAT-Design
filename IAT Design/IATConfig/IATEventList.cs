@@ -5,13 +5,18 @@ using System.Xml;
 
 namespace IATClient.IATConfig
 {
-    public class IATEventList : INamedXmlSerializable, IEnumerable
+    public class IATEventList : INamedXmlSerializable, IEnumerable<IATEvent>
     {
         private List<IATEvent> _IATEvents;
 
-        public IEnumerator GetEnumerator()
+        public IEnumerator<IATEvent> GetEnumerator()
         {
             return ((IEnumerable<IATEvent>)_IATEvents).GetEnumerator();
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return GetEnumerator();
         }
 
         public int IndexOf(Object val)

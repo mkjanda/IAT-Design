@@ -1921,11 +1921,11 @@ namespace IATClient
             }
             else
             {
-                byte[] des = CPartiallyEncryptedRSAKey.stringToDESCipherKey(IATPasswordBox.Text);
+                byte[] des = PartiallyEncryptedRSAData.stringToDESCipherKey(IATPasswordBox.Text);
                 try
                 {
                     var crypt = new DESCryptoServiceProvider();
-                    crypt.CreateEncryptor(des, CPartiallyEncryptedRSAKey.IV);
+                    crypt.CreateEncryptor(des, PartiallyEncryptedRSAData.IV);
                 }
                 catch (CryptographicException ex)
                 {

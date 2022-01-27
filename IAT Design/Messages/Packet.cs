@@ -1,18 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Windows.Forms;
-using System.Security.Cryptography;
+using System.Linq;
 using System.Text;
-using System.Xml.Schema;
-using System.Xml.Serialization;
-using System.Xml;
 using System.IO;
-using System.Threading;
-using System.Net.WebSockets;
+using System.Threading.Tasks;
+using System.Xml;
+using System.Xml.Schema;
+using System.Security.Cryptography;
 
-namespace IATClient
+namespace IATClient.Messages
 {
-    class CPacket : INamedXmlSerializable
+    class Packet : INamedXmlSerializable
     {
         private String _StrData = null;
         protected byte[] _ByteData = null;
@@ -75,9 +73,9 @@ namespace IATClient
             }
         }
 
-        public CPacket() { }
+        public Packet() { }
 
-        public CPacket(byte[] byteData, EType packetType)
+        public Packet(byte[] byteData, EType packetType)
         {
             _ByteData = byteData;
             if (byteData == null)
@@ -163,7 +161,7 @@ namespace IATClient
 
     class CPacketReceiver
     {
-        private List<CPacket> PacketQueue = new List<CPacket>();
+        private List<Packet> PacketQueue = new List<Packet>();
         private Manifest FileManifest;
         private long BytesReceived = 0;
         private object lockObject = new object();
@@ -177,7 +175,7 @@ namespace IATClient
             OnFileReceived = h;
         }
 
-        public void QueuePacket(CPacket p)
+        public void QueuePacket(Packet p)
         {
             lock (lockObject)
             {
@@ -211,9 +209,9 @@ namespace IATClient
             }
         }
 
-        public CPacket GetPacket()
+        public Packet GetPacket()
         {
-            CPacket p = null;
+            Packet p = null;
             while (p == null)
             {
                 lock (lockObject)
@@ -227,7 +225,7 @@ namespace IATClient
                 if (Halted)
                     return null;
                 if (p == null)
-                    Thread.Sleep(100);
+                    Task.Run(() => Task.Delay(100));
             }
             return p;
         }
@@ -255,7 +253,7 @@ namespace IATClient
             }
             while (bytesRead < fileSize)
             {
-                CPacket p = GetPacket();
+                Packet p = GetPacket();
                 if (p == null)
                     return;
                 byte[] packetBytes = p.ByteData;
@@ -282,10 +280,12 @@ namespace IATClient
             {
                 if (Halted)
                     return;
-                if (fileManifest[ctr].FileEntityType == FileEntity.EFileEntityType.Directory) {
+                if (fileManifest[ctr].FileEntityType == FileEntity.EFileEntityType.Directory)
+                {
                     Processor((ManifestDirectory)fileManifest[ctr], fileManifest[ctr].Name);
                 }
-                else {
+                else
+                {
                     ReceiveFile(fileManifest[ctr].Name, (int)FileManifest[ctr].Size);
                 }
             }
@@ -303,180 +303,6 @@ namespace IATClient
                     ReceiveFile(dir[ctr].Name, (int)dir[ctr].Size);
             }
         }
-
-        private void run()
-        {
-            Processor(FileManifest);
-        }
-
-        public void Start()
-        {
-            ThreadStart proc = new ThreadStart(run);
-            Thread th = new Thread(proc);
-            th.Start();
-        }
     }
-
-
-    interface ITransmissionOwner
-    {
-        bool TryLock(int millis);
-        bool Aborted { get; }
-        void Unlock();
-    }
-/*
-    class CPacketTransmission
-    {
-        public enum ETransmissionResult { Success, Fail, Cancel };
-        private WebSocket webSocket;
-        private List<MemoryStream> FileList = new List<MemoryStream>();
-        private List<CPacket> PacketList = new List<CPacket>();
-        private int currFilePos, currFileLength, byteCount;
-        private int _QueueLength = 0;
-        private object lockObject = new object();
-        private CPacket.EType PacketType;
-        private bool _Halted;
-
-        bool HasNextPacket
-        {
-            get
-            {
-                if (FileList.Count == 0)
-                    return false;
-                return true;
-            }
-        }
-
-        public CPacketTransmission(WebSocket sock, CPacket.EType packetType)
-        {
-            currFilePos = 0;
-            byteCount = 0;
-            webSocket = sock;
-            PacketType = packetType;
-        }
-
-        public void QueueFile(MemoryStream fileName)
-        {
-            FileList.Add(fileName);
-            _QueueLength += (int)fileName.Length;
-        }
-
-        public void QueueFile(byte[] data)
-        {
-            FileList.Add(new MemoryStream(data));
-            _QueueLength += data.Length;
-        }
-
-        public long QueueLength
-        {
-            get
-            {
-                return _QueueLength;
-            }
-        }
-
-        private CPacket GetPacket()
-        {
-            if (FileList.Count == 0)
-                return null;
-            int nBytesRead = 0;
-            MemoryStream fStream = FileList[0];
-            fStream.Seek(currFilePos, SeekOrigin.Begin);
-            byte[] finalBAry = new byte[CPacket.PacketLength];
-            currFileLength = (int)fStream.Length;
-            while (nBytesRead < CPacket.PacketLength)
-            {
-                if (currFileLength - currFilePos >= CPacket.PacketLength - nBytesRead)
-                {
-                    fStream.Read(finalBAry, nBytesRead, CPacket.PacketLength - nBytesRead);
-                    currFilePos += CPacket.PacketLength - nBytesRead;
-                    if (currFilePos == currFileLength)
-                    {
-                        FileList.RemoveAt(0);
-                        currFilePos = 0;
-                    }
-                    nBytesRead += CPacket.PacketLength - nBytesRead;
-                    byteCount += CPacket.PacketLength;
-                    return new CPacket(finalBAry, PacketType);
-                }
-                else
-                {
-                    fStream.Read(finalBAry, nBytesRead, currFileLength - currFilePos);
-                    nBytesRead += currFileLength - currFilePos;
-                    currFilePos = 0;
-                    FileList.RemoveAt(0);
-                    if (FileList.Count == 0)
-                    {
-                        byteCount += nBytesRead;
-                        byte[] bAry = new byte[nBytesRead];
-                        for (int ctr = 0; ctr < nBytesRead; ctr++)
-                            bAry[ctr] = finalBAry[ctr];
-                        return new CPacket(bAry, PacketType);
-                    }
-                    fStream = FileList[0];
-                    fStream.Seek(0, SeekOrigin.Begin);
-                    currFileLength = (int)fStream.Length;
-                    currFilePos = 0;
-                }
-            }
-            return null;
-        }
-
-        public void BuildPacketList()
-        {
-            PacketList.Clear();
-            foreach (MemoryStream memStream in FileList)
-                memStream.Seek(0, SeekOrigin.Begin);
-            CPacket p;
-            while ((p = GetPacket()) != null)
-                PacketList.Add(p);
-        }
-
-        public int NumPackets
-        {
-            get
-            {
-                return PacketList.Count;
-            }
-        }
-
-        public ETransmissionResult Transmit(Form win, Delegate ProgressIncrement, String serverURL, ClientWebSocket webSocket, CancellationToken AbortToken)
-        {
-            try
-            {
-                _Halted = false;
-                ManualResetEvent timeoutEvent = new ManualResetEvent(false);
-                if (PacketList.Count == 0)
-                    BuildPacketList();
-                CDeploymentProgressUpdate dpu = new CDeploymentProgressUpdate();
-                PacketList[PacketList.Count - 1].IsLastPacket = true;
-                for (int ctr = 0; ctr < PacketList.Count; ctr++)
-                {
-                    if (_Halted)
-                        return ETransmissionResult.Cancel;
-                    CEnvelope env = new CEnvelope(PacketList[ctr]);
-                    env.SendMessage(webSocket, AbortToken);
-                    win.BeginInvoke(ProgressIncrement, 1);
-                }
-                return ETransmissionResult.Success;
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
-        }
-
-        public void Halt()
-        {
-            _Halted = true;
-        }
-
-        private void InvokeTimeout(Object timeoutEvent, bool timeout)
-        {
-            if (timeout)
-                ((ManualResetEvent)timeoutEvent).Set();
-        }
-    }
- */
 }
 

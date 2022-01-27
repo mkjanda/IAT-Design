@@ -9,8 +9,9 @@ using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Net.WebSockets;
+using IATClient.ResultData;
 
-namespace IATClient
+namespace IATClient.Messages
 {
     class CUnexpectedServerMessage : Exception
     {
@@ -38,7 +39,7 @@ namespace IATClient
         }
     }
 
-    class CEnvelope : INamedXmlSerializable
+    class Envelope : INamedXmlSerializable
     {
         private static object syncObj = new object();
         private static bool IsShutdown;
@@ -48,7 +49,7 @@ namespace IATClient
         private INamedXmlSerializable _Message;
         public enum EMessageType
         {
-            ResultSetDescriptor, ConfigFile, ActivationRequest, ActivationResponse, DeploymentProgress, Handshake, IATList, Manifest,
+            ResultSetDescriptor, ConfigFile, ActivationRequest, ActivationResponse, DeploymentProgress, Handshake, IATList, Manifest, ItemSlideManifest,
             Packet, RSAKeyPair, QueryIATExists, TransactionRequest, ServerReport, ServerException, ResultPacket, UploadRequest, UploadProgress, GenericException, ClientException
         };
         private EMessageType _MessageType;
@@ -110,7 +111,7 @@ namespace IATClient
             }
         }
 
-        public CEnvelope()
+        public Envelope()
         {
             _Message = null;
         }
@@ -152,7 +153,7 @@ namespace IATClient
             }
         }
 
-        public CEnvelope(INamedXmlSerializable msg)
+        public Envelope(INamedXmlSerializable msg)
         {
             _Message = msg;
         }
@@ -173,11 +174,11 @@ namespace IATClient
                     break;
 
                 case EMessageType.ConfigFile:
-                    _Message = IATConfigFileNamespace.ConfigFile.GetConfigFile();
+                    _Message = IATConfig.ConfigFile.GetConfigFile();
                     break;
 
                 case EMessageType.DeploymentProgress:
-                    _Message = new CDeploymentProgressUpdate();
+                    _Message = new DeploymentProgressUpdate();
                     break;
 
                 case EMessageType.Handshake:
@@ -185,15 +186,19 @@ namespace IATClient
                     break;
 
                 case EMessageType.IATList:
-                    _Message = new CIATList();
+                    _Message = new IATList();
                     break;
 
                 case EMessageType.Manifest:
                     _Message = new Manifest();
                     break;
 
+                case EMessageType.ItemSlideManifest:
+                    _Message = new ItemSlideManifest();
+                    break;
+
                 case EMessageType.Packet:
-                    _Message = new CPacket();
+                    _Message = new Packet();
                     break;
 
                 case EMessageType.ResultSetDescriptor:
@@ -222,7 +227,7 @@ namespace IATClient
             }
             _Message.ReadXml(reader);
             if (_MessageType == EMessageType.Packet)
-                ((CPacket)_Message).PacketNum = ++packetNum;
+                ((Packet)_Message).PacketNum = ++packetNum;
             else
                 packetNum = 0;
             try

@@ -187,12 +187,13 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
+    <!--
     <None Include="IAT Design.pfx" />
     <None Include="sectigo-at-signature.pfx" />
     <None Include="sectigo-open.pfx" />
     <None Include="sectigo-unchained-open.pfx" />
     <None Include="sectigo-unchained-secure.pfx" />
-    <None Include="sectigo-unchained.pfx" />
+    <None Include="sectigo-unchained.pfx" />-->
   </ItemGroup>
   <ItemGroup>
     <Resource Include="icon_ef8_icon.ico" />

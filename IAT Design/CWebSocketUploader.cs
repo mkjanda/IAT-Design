@@ -13,6 +13,8 @@ using System.Xml;
 using System.Xml.Serialization;
 using System.Net;
 using System.Net.WebSockets;
+using IATClient.Messages;
+using IATClient.ResultData;
 
 namespace IATClient
 {
@@ -42,7 +44,8 @@ namespace IATClient
         private ClientWebSocket UploadTestWebSocket;
         private enum EDeploymentStage { requestingConnection = 0, shakingHands = 1, queryingDuplicateIAT = 2, requestingDeployment = 3, performingDeployment = 4 };
         private EDeploymentStage deploymentStage;
-        private Manifest DeploymentFileManifest, ItemSlideManifest;
+        private Manifest DeploymentFileManifest;
+        public ItemSlideManifest ItemSlideManifest;
         private int ClientID;
         private IATConfig.ConfigFile CF;
         private ManualResetEvent UploadSuccess = new ManualResetEvent(false), UploadFailed = new ManualResetEvent(false), UploadCancelled = new ManualResetEvent(false);
@@ -52,7 +55,7 @@ namespace IATClient
         private String multipartBoundry = "===" + DateTime.Now.ToBinary().ToString() + "===";
         private CancellationToken AbortToken = new CancellationToken();
         private ArraySegment<byte> ReceiveBuffer = new ArraySegment<byte>(new byte[8192]);
-        private CEnvelope IncomingMessage;
+        private Envelope IncomingMessage;
         private bool ConnectCancel = false;
         private long UploadTimeMillis = -1, DeploymentSessionID = -1;
         private List<Tuple<String, MemoryStream>> SurveyImages = new List<Tuple<String, MemoryStream>>();
@@ -79,7 +82,7 @@ namespace IATClient
                 }
                 else
                     trans.Transaction = TransactionRequest.ETransaction.AbortTransaction;
-                CEnvelope env = new CEnvelope(trans);
+                Envelope env = new Envelope(trans);
                 env.SendMessage(UploadTestWebSocket, AbortToken);
             }
             catch (Exception) { }
@@ -163,7 +166,7 @@ namespace IATClient
                 // store the schema-ed XML used for result file processing
                 beforeSurveyStream = new MemoryStream();
                 xmlWriter = new XmlTextWriter(beforeSurveyStream, Encoding.Unicode);
-                IATSurveyFile.Survey s = new IATSurveyFile.Survey(IAT.BeforeSurvey[ctr1].Name);
+                Survey s = new Survey(IAT.BeforeSurvey[ctr1].Name);
                 s.Timeout = (int)(IAT.BeforeSurvey[ctr1].Timeout * 60000);
                 s.HasCaption = IAT.BeforeSurvey[ctr1].Items[0].IsCaption;
                 if (s.HasCaption)
@@ -171,7 +174,7 @@ namespace IATClient
                 s.SetItems(IAT.BeforeSurvey[ctr1].Items.Where(si => si.ItemType == SurveyItemType.Item).ToArray());
                 s.NumItems = IAT.BeforeSurvey[ctr1].Items.Where(si => (si.ItemType == SurveyItemType.Item) &&
                     (si.Response.ResponseType != CResponse.EResponseType.Instruction)).Count();
-                XmlSerializer ser = new XmlSerializer(typeof(IATSurveyFile.Survey));
+                XmlSerializer ser = new XmlSerializer(typeof(Survey));
                 ser.Serialize(xmlWriter, s);
                 xmlWriter.Flush();
                 SASurveys.Add(beforeSurveyStream);
@@ -223,7 +226,7 @@ namespace IATClient
                 // store the schema-ed XML used for result file processing
                 afterSurveyStream = new MemoryStream();
                 xmlWriter = new XmlTextWriter(afterSurveyStream, Encoding.Unicode);
-                IATSurveyFile.Survey s = new IATSurveyFile.Survey(IAT.AfterSurvey[ctr1].Name);
+                Survey s = new Survey(IAT.AfterSurvey[ctr1].Name);
                 s.Timeout = (int)(IAT.AfterSurvey[ctr1].Timeout * 60000);
                 s.HasCaption = IAT.AfterSurvey[ctr1].Items[0].IsCaption;
                 if (s.HasCaption)
@@ -231,7 +234,7 @@ namespace IATClient
                 s.SetItems(IAT.AfterSurvey[ctr1].Items.Where(si => si.ItemType == SurveyItemType.Item).ToArray());
                 s.NumItems = IAT.AfterSurvey[ctr1].Items.Where(si => (si.ItemType == SurveyItemType.Item) &&
                     (si.Response.ResponseType != CResponse.EResponseType.Instruction)).Count();
-                XmlSerializer ser = new XmlSerializer(typeof(IATSurveyFile.Survey));
+                XmlSerializer ser = new XmlSerializer(typeof(Survey));
                 ser.Serialize(xmlWriter, s);
                 xmlWriter.Flush();
                 SASurveys.Add(afterSurveyStream);
@@ -276,7 +279,7 @@ namespace IATClient
                 DeploymentFileManifest.AddFile(new ManifestFile(tup.Item1, tup.Item2.Length));
         }
 
-        private bool SendDeploymentFiles(CUploadRequest upReq)
+        private bool SendDeploymentFiles(long deploymentId, String sessionId)
         {
             MemoryStream memStream = new MemoryStream();
             memStream.Write(ConfigFileXML.ToArray(), 0, (int)ConfigFileXML.Length);
@@ -297,15 +300,10 @@ namespace IATClient
             }
             try
             {
-                HttpWebRequest req = WebRequest.CreateHttp(String.Format(Properties.Resources.sUploadURI, upReq.DeploymentID, upReq.DataUploadKey, DeploymentFileManifest.TotalSize));
-                req.Method = "POST";
-                req.Timeout = 600000;
-                req.ReadWriteTimeout = 600000;
-                Stream upStream = req.GetRequestStream();
-                upStream.Write(memStream.ToArray(), 0, (int)memStream.Length);
-                HttpStatusCode code = (req.GetResponse() as HttpWebResponse).StatusCode; ;
-                if (code != HttpStatusCode.OK)
-                    throw new Exception("Failed to upload IAT with status code " + code.ToString());
+                WebClient c = new WebClient();
+                c.Headers["deploymentId"] = deploymentId.ToString();
+                c.Headers["sessionId"] = sessionId;
+                c.UploadData(Properties.Resources.sDeploymentUploadURL, memStream.ToArray());
                 return true;
             }
             catch (WebException ex)
@@ -338,7 +336,7 @@ namespace IATClient
                 memStream.Write(itemSlideData[ctr], 0, itemSlideData[ctr].Length);
             try
             {
-                HttpWebRequest req = WebRequest.CreateHttp(String.Format(Properties.Resources.sUploadURI, upReq.DeploymentID, upReq.ItemSlideUploadKey, ItemSlideManifest.TotalSize));
+                HttpWebRequest req = WebRequest.CreateHttp(String.Format(Properties.Resources.sUploadURI, upReq.DeploymentID, upReq.ItemSlideUploadKey, ItemSlideManifest.Manifest.TotalSize));
                 req.Method = "POST";
                 req.Timeout = 600000;
                 req.ReadWriteTimeout = 600000;
@@ -376,28 +374,28 @@ namespace IATClient
             TransactionRequest trans = new TransactionRequest();
             trans.IATName = IATName;
             trans.Transaction = TransactionRequest.ETransaction.RequestDataPasswordVerification;
-            CEnvelope transmission = new CEnvelope(trans);
+            Envelope transmission = new Envelope(trans);
             transmission.SendMessage(UploadTestWebSocket, AbortToken);
         }
 
         private void ShakeHands(INamedXmlSerializable handshake)
         {
             HandShake hs = (HandShake)handshake;
-            CEnvelope transmission = new CEnvelope(HandShake.CreateResponse(hs));
+            Envelope transmission = new Envelope(HandShake.CreateResponse(hs));
             transmission.SendMessage(UploadTestWebSocket, AbortToken);
             deploymentStage++;
         }
 
         private void OnDeploymentProgressUpdate(INamedXmlSerializable dpu)
         {
-            CDeploymentProgressUpdate update = (CDeploymentProgressUpdate)dpu;
+            DeploymentProgressUpdate update = (DeploymentProgressUpdate)dpu;
             if (update.DeploymentException != null)
             {
                 ErrorReporter.ReportError(update.DeploymentException);
                 UploadFailed.Set();
                 return;
             }
-            if (update.Stage == CDeploymentProgressUpdate.EStage.mismatchedDeploymentDescriptors)
+            if (update.Stage == DeploymentProgressUpdate.EStage.mismatchedDeploymentDescriptors)
             {
                 OperationFailed("The test you are attempting to upload differs from the test already on the server in ways that would cause discrepencies in the result set format. It cannot be deployed atop the existing test.", "Incompatible Result Sets");
                 return;
@@ -416,8 +414,6 @@ namespace IATClient
         {
             CUploadRequest uploadRequest = (CUploadRequest)upReq;
             SetStatusMessage("Uploading test");
-            if (!SendDeploymentFiles(uploadRequest))
-                return;
             if (!SendItemSlides(uploadRequest))
                 return;
         }
@@ -428,7 +424,7 @@ namespace IATClient
             TransactionRequest outTrans = null;
             EDeploymentStage dStage = deploymentStage;
             DialogResult dResult;
-            CEnvelope transmission = null;
+            Envelope transmission = null;
             try
             {
                 switch (trans.Transaction)
@@ -443,7 +439,7 @@ namespace IATClient
                         outTrans = new TransactionRequest();
                         outTrans.IATName = IAT.Name;
                         outTrans.Transaction = TransactionRequest.ETransaction.IATExists;
-                        transmission = new CEnvelope(outTrans);
+                        transmission = new Envelope(outTrans);
                         transmission.SendMessage(UploadTestWebSocket, AbortToken);
                         break;
 
@@ -465,7 +461,7 @@ namespace IATClient
                             }
                             else
                                 trans.Transaction = TransactionRequest.ETransaction.AbortTransaction;
-                            CEnvelope env = new CEnvelope(trans);
+                            Envelope env = new Envelope(trans);
                             env.SendMessage(UploadTestWebSocket, AbortToken);
                             UploadCancelled.Set();
                             return;
@@ -473,7 +469,7 @@ namespace IATClient
                         outTrans = new TransactionRequest();
                         outTrans.IATName = IAT.Name;
                         outTrans.Transaction = TransactionRequest.ETransaction.RequestEncryptionKey;
-                        transmission = new CEnvelope(outTrans);
+                        transmission = new Envelope(outTrans);
                         transmission.SendMessage(UploadTestWebSocket, AbortToken);
                         break;
 
@@ -486,7 +482,7 @@ namespace IATClient
                             outTrans = new TransactionRequest();
                             outTrans.Transaction = TransactionRequest.ETransaction.AbortDeployment;
                             outTrans.LongValues["DeploymentId"] = trans.LongValues["DeploymentId"];
-                            CEnvelope env = new CEnvelope(outTrans);
+                            Envelope env = new Envelope(outTrans);
                             env.SendMessage(UploadTestWebSocket, AbortToken);
                             UploadCancelled.Set();
                             return;
@@ -495,7 +491,7 @@ namespace IATClient
                         outTrans.IATName = IAT.Name;
                         outTrans.Transaction = TransactionRequest.ETransaction.HaltTestDeployment;
                         outTrans.LongValues["DeploymentId"] = trans.LongValues["DeploymentId"];
-                        transmission = new CEnvelope(outTrans);
+                        transmission = new Envelope(outTrans);
                         transmission.SendMessage(UploadTestWebSocket, AbortToken);
                         break;
 
@@ -504,7 +500,7 @@ namespace IATClient
                         outTrans.IATName = IAT.Name;
                         outTrans.Transaction = TransactionRequest.ETransaction.QueryRemainingIATS;
                         deploymentStage++;
-                        transmission = new CEnvelope(outTrans);
+                        transmission = new Envelope(outTrans);
                         transmission.SendMessage(UploadTestWebSocket, AbortToken);
                         break;
 
@@ -527,7 +523,7 @@ namespace IATClient
                         outTrans.IATName = IATName;
                         outTrans.Transaction = TransactionRequest.ETransaction.VerifyPassword;
                         outTrans.StringValues["DecryptedTestString"] = value;
-                        transmission = new CEnvelope(outTrans);
+                        transmission = new Envelope(outTrans);
                         transmission.SendMessage(UploadTestWebSocket, AbortToken);
                         break;
 
@@ -539,7 +535,7 @@ namespace IATClient
                         outTrans = new TransactionRequest();
                         outTrans.IATName = IATName;
                         outTrans.Transaction = TransactionRequest.ETransaction.RequestIATRedeploy;
-                        transmission = new CEnvelope(outTrans);
+                        transmission = new Envelope(outTrans);
                         transmission.SendMessage(UploadTestWebSocket, AbortToken);
                         break;
 
@@ -553,7 +549,7 @@ namespace IATClient
                         outTrans.IATName = IAT.Name;
                         outTrans.Transaction = TransactionRequest.ETransaction.QueryRemainingIATS;
                         deploymentStage++;
-                        transmission = new CEnvelope(outTrans);
+                        transmission = new Envelope(outTrans);
                         transmission.SendMessage(UploadTestWebSocket, AbortToken);
                         break;
 
@@ -568,7 +564,7 @@ namespace IATClient
                             outTrans.Transaction = TransactionRequest.ETransaction.RequestIATUpload;
                             outTrans.IATName = IAT.Name;
                         }
-                        transmission = new CEnvelope(outTrans);
+                        transmission = new Envelope(outTrans);
                         transmission.SendMessage(UploadTestWebSocket, AbortToken);
                         break;
 
@@ -576,7 +572,7 @@ namespace IATClient
                         outTrans = new TransactionRequest();
                         outTrans.IATName = IAT.Name;
                         outTrans.Transaction = TransactionRequest.ETransaction.RequestIATUpload;
-                        transmission = new CEnvelope(outTrans);
+                        transmission = new Envelope(outTrans);
                         transmission.SendMessage(UploadTestWebSocket, AbortToken);
                         break;
 
@@ -585,7 +581,7 @@ namespace IATClient
                         break;
 
                     case TransactionRequest.ETransaction.TokenDefinitionReceived:
-                        transmission = new CEnvelope(DeploymentFileManifest);
+                        transmission = new Envelope(DeploymentFileManifest);
                         SetStatusMessage("Uploading file manifest");
                         transmission.SendMessage(UploadTestWebSocket, AbortToken);
                         break;
@@ -595,13 +591,13 @@ namespace IATClient
                             BuildFileManifest();
                             if (IAT.TokenType != ETokenType.NONE)
                             {
-                                transmission = new CEnvelope(new TokenDefinition(IAT.TokenType, IAT.TokenName));
+                                transmission = new Envelope(new TokenDefinition(IAT.TokenType, IAT.TokenName));
                                 transmission.SendMessage(UploadTestWebSocket, AbortToken);
                             }
                             else
                             {
                                 SetStatusMessage("Uploading file manifest");
-                                transmission = new CEnvelope(DeploymentFileManifest);
+                                transmission = new Envelope(DeploymentFileManifest);
                                 transmission.SendMessage(UploadTestWebSocket, AbortToken);
                             }
                         }
@@ -612,20 +608,21 @@ namespace IATClient
                         break;
 
                     case TransactionRequest.ETransaction.DeploymentFileManifestReceived:
-                        ItemSlideManifest = new Manifest();
-                        ItemSlideManifest.AddFiles(CF.SlideImages.ConstructFileManifest());
-                        ItemSlideManifest.Type = Manifest.EType.ItemSlides;
-                        transmission = new CEnvelope(ItemSlideManifest);
+                        SendDeploymentFiles(trans.LongValues["deploymentId"], trans.StringValues["sessionId"]);
+                        ItemSlideManifest = new ItemSlideManifest();
+                        ItemSlideManifest.Manifest.AddFiles(CF.SlideImages.ConstructFileManifest());
+                        ItemSlideManifest.Manifest.Type = Manifest.EType.ItemSlides;
+                        ItemSlideManifest.FileReferences.AddRange(CF.SlideImages.ResourceReferences);
+                        transmission = new Envelope(ItemSlideManifest);
                         transmission.SendMessage(UploadTestWebSocket, AbortToken);
                         break;
 
                     case TransactionRequest.ETransaction.ItemSlideManifestReceived:
-                        outTrans = new TransactionRequest();
-                        outTrans.Transaction = TransactionRequest.ETransaction.RequestDataUpload;
-                        outTrans.LongValues["DeploymentId"] = DeploymentSessionID;
-                        SetStatusMessage("Waiting for test upload signal");
-                        transmission = new CEnvelope(outTrans);
-                        transmission.SendMessage(UploadTestWebSocket, AbortToken);
+                        byte[] fileData = CF.SlideImages.GetImageData().Aggregate((b1, b2) => b1.Concat(b2).ToArray());
+                        var web = new WebClient();
+                        web.Headers["sessionId"] = trans.StringValues["sessionId"];
+                        web.Headers["deploymentId"] = trans.LongValues["deploymentId"].ToString();
+                        web.UploadData(Properties.Resources.sItemSlideUploadURL, fileData);
                         break;
 
                     case TransactionRequest.ETransaction.RequestIATUpload:
@@ -634,13 +631,13 @@ namespace IATClient
                         DeploymentSessionID = trans.LongValues["DeploymentId"];
                         if (this.keyPair == null)
                         {
-                            CPartiallyEncryptedRSAKey dataKey = new CPartiallyEncryptedRSAKey(CPartiallyEncryptedRSAKey.EKeyType.Data);
+                            PartiallyEncryptedRSAData dataKey = new PartiallyEncryptedRSAData(PartiallyEncryptedRSAData.EKeyType.Data);
                             dataKey.Generate(DataPassword);
-                            CPartiallyEncryptedRSAKey adminKey = new CPartiallyEncryptedRSAKey(CPartiallyEncryptedRSAKey.EKeyType.Admin);
+                            PartiallyEncryptedRSAData adminKey = new PartiallyEncryptedRSAData(PartiallyEncryptedRSAData.EKeyType.Admin);
                             adminKey.Generate(AdminPassword);
                             this.keyPair = new CRSAKeyPair(dataKey, adminKey);
                         }
-                        transmission = new CEnvelope(this.keyPair);
+                        transmission = new Envelope(this.keyPair);
                         transmission.SendMessage(UploadTestWebSocket, AbortToken);
                         break;
 
@@ -717,7 +714,7 @@ namespace IATClient
                 }
                 else
                     trans.Transaction = TransactionRequest.ETransaction.AbortTransaction;
-                CEnvelope env = new CEnvelope(trans);
+                Envelope env = new Envelope(trans);
                 env.SendMessage(UploadTestWebSocket, AbortToken);
                 UploadFailed.Set();
             }
@@ -742,13 +739,13 @@ namespace IATClient
             DataPassword = password;
             AdminPassword = password;
             _IATName = iatName;
-            CEnvelope.ClearMessageMap();
-            CEnvelope.OnReceipt[CEnvelope.EMessageType.Handshake] = new Action<INamedXmlSerializable>(ShakeHands);
-            CEnvelope.OnReceipt[CEnvelope.EMessageType.TransactionRequest] = new Action<INamedXmlSerializable>(TransactionReceived);
-            CEnvelope.OnReceipt[CEnvelope.EMessageType.ServerException] = new Action<INamedXmlSerializable>(OnDeploymentException);
-            CEnvelope.OnReceipt[CEnvelope.EMessageType.DeploymentProgress] = new Action<INamedXmlSerializable>(OnDeploymentProgressUpdate);
-            CEnvelope.OnReceipt[CEnvelope.EMessageType.RSAKeyPair] = new Action<INamedXmlSerializable>(OnRSAKeyPairReceipt);
-            CEnvelope.OnReceipt[CEnvelope.EMessageType.UploadRequest] = new Action<INamedXmlSerializable>(UploadData);
+            Envelope.ClearMessageMap();
+            Envelope.OnReceipt[Envelope.EMessageType.Handshake] = new Action<INamedXmlSerializable>(ShakeHands);
+            Envelope.OnReceipt[Envelope.EMessageType.TransactionRequest] = new Action<INamedXmlSerializable>(TransactionReceived);
+            Envelope.OnReceipt[Envelope.EMessageType.ServerException] = new Action<INamedXmlSerializable>(OnDeploymentException);
+            Envelope.OnReceipt[Envelope.EMessageType.DeploymentProgress] = new Action<INamedXmlSerializable>(OnDeploymentProgressUpdate);
+            Envelope.OnReceipt[Envelope.EMessageType.RSAKeyPair] = new Action<INamedXmlSerializable>(OnRSAKeyPairReceipt);
+            Envelope.OnReceipt[Envelope.EMessageType.UploadRequest] = new Action<INamedXmlSerializable>(UploadData);
             MainForm.Invoke(new Action<EventHandler, IATConfigMainForm.EProgressBarUses>(MainForm.BeginProgressBarUse), new EventHandler(OnCancel), IATConfigMainForm.EProgressBarUses.Upload);
             UploadTestWebSocket = new ClientWebSocket();
             SetStatusMessage("Preparing Upload");
@@ -782,7 +779,7 @@ namespace IATClient
             TransactionRequest trans = new TransactionRequest();
             trans.Transaction = TransactionRequest.ETransaction.RequestConnection;
             trans.IATName = IATName;
-            CEnvelope env = new CEnvelope(trans);
+            Envelope env = new Envelope(trans);
             env.SendMessage(UploadTestWebSocket, AbortToken);
             int nTrigger = Task.Run<int>(new Func<int>(() =>
             {
@@ -792,7 +789,7 @@ namespace IATClient
                 }
                 catch (TaskCanceledException) { return 1; }
             }), CIAT.GetCancellationToken()).Result;
-            CEnvelope.Shutdown();
+            Envelope.Shutdown();
             MainForm.Invoke(new Action(MainForm.EndProgressBarUse));
             String closeReason = String.Empty;
             switch (nTrigger)
@@ -835,14 +832,14 @@ namespace IATClient
                         if (receipt.EndOfMessage)
                         {
                             if (IncomingMessage == null)
-                                IncomingMessage = new CEnvelope();
+                                IncomingMessage = new Envelope();
                             if (IncomingMessage.QueueByteData(ReceiveBuffer.Array.Take(receipt.Count).ToArray(), true))
                                 IncomingMessage = null;
                         }
                         else
                         {
                             if (IncomingMessage == null)
-                                IncomingMessage = new CEnvelope();
+                                IncomingMessage = new Envelope();
                             IncomingMessage.QueueByteData(ReceiveBuffer.Array.Take(receipt.Count).ToArray(), false);
                         }
                     }
@@ -879,7 +876,7 @@ namespace IATClient
                     }
                     else
                         trans.Transaction = TransactionRequest.ETransaction.AbortTransaction;
-                    CEnvelope env = new CEnvelope(trans);
+                    Envelope env = new Envelope(trans);
                     env.SendMessage(UploadTestWebSocket, AbortToken);
                 }
                 finally

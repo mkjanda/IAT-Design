@@ -6,7 +6,7 @@ using System.Xml;
 using System.Xml.Schema;
 using System.Xml.Serialization;
 using System.Security.Cryptography;
-using IATClient.IATResultSetNamespaceV2;
+using IATClient.ResultData;
 
 namespace IATClient
 {
@@ -18,12 +18,12 @@ namespace IATClient
         public static DataPasswordForm.SetStatusMessageHandler SetStatusMessage = null;
         public static DataPasswordForm ProgressWin = null;
 
-        private List<IATSurveyFile.Survey> _BeforeSurveys;
-        private List<IATSurveyFile.Survey> _AfterSurveys;
+        private List<Survey> _BeforeSurveys;
+        private List<Survey> _AfterSurveys;
         private IATConfig.ConfigFile _ConfigFile;
         private IResultData _Results;
 
-        public List<IATSurveyFile.Survey> BeforeSurveys
+        public List<Survey> BeforeSurveys
         {
             get
             {
@@ -31,7 +31,7 @@ namespace IATClient
             }
         }
 
-        public List<IATSurveyFile.Survey> AfterSurveys
+        public List<Survey> AfterSurveys
         {
             get
             {
@@ -57,8 +57,8 @@ namespace IATClient
 
         public ResultPackage(ResultSetDescriptor rsd)
         {
-            _BeforeSurveys = new List<IATSurveyFile.Survey>();
-            _AfterSurveys = new List<IATSurveyFile.Survey>();
+            _BeforeSurveys = new List<Survey>();
+            _AfterSurveys = new List<Survey>();
             _ConfigFile = IATConfig.ConfigFile.GetConfigFile();
             _Results = rsd.CreateResultData();
         }
@@ -77,8 +77,8 @@ namespace IATClient
                 String str = reader.ReadElementString("BeforeSurvey");
                 MemoryStream memStream = new MemoryStream(Convert.FromBase64String(str));
                 memStream.Seek(0, SeekOrigin.Begin);
-                XmlSerializer ser = new XmlSerializer(typeof(IATSurveyFile.Survey));
-                IATSurveyFile.Survey s = (IATSurveyFile.Survey)ser.Deserialize(memStream);
+                XmlSerializer ser = new XmlSerializer(typeof(Survey));
+                Survey s = (Survey)ser.Deserialize(memStream);
                 BeforeSurveys.Add(s);
             }
             AfterSurveys.Clear();
@@ -87,8 +87,8 @@ namespace IATClient
                 String str = reader.ReadElementString("AfterSurvey");
                 MemoryStream memStream = new MemoryStream(Convert.FromBase64String(str));
                 memStream.Seek(0, SeekOrigin.Begin);
-                XmlSerializer ser = new XmlSerializer(typeof(IATSurveyFile.Survey));
-                IATSurveyFile.Survey s = (IATSurveyFile.Survey)ser.Deserialize(memStream);
+                XmlSerializer ser = new XmlSerializer(typeof(Survey));
+                Survey s = (Survey)ser.Deserialize(memStream);
                 AfterSurveys.Add(s);
             }
             if (ProgressWin != null)
@@ -108,7 +108,7 @@ namespace IATClient
             writer.WriteAttributeString("NumBeforeSurveys", BeforeSurveys.Count.ToString());
             writer.WriteAttributeString("NumAfterSurveys", AfterSurveys.Count.ToString());
             ConfigFile.WriteXml(writer);
-            XmlSerializer ser = new XmlSerializer(typeof(IATSurveyFile.Survey));
+            XmlSerializer ser = new XmlSerializer(typeof(Survey));
             ser.Serialize(
             for (int ctr = 0; ctr < BeforeSurveys.Count; ctr++)
                 BeforeSurveys[ctr].WriteXml(writer);

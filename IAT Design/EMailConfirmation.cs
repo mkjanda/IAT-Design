@@ -20,7 +20,7 @@ namespace IATClient
         private ManualResetEvent OpComplete = new ManualResetEvent(false), OpFailed = new ManualResetEvent(false);
         private object transmissionLock = new object();
         private ArraySegment<byte> ReceiveBuffer = new ArraySegment<byte>(new byte[8192]);
-        private CEnvelope IncomingMessage = null;
+        private Envelope IncomingMessage = null;
         public enum EConfirmResult { failed, emailMismatch, noSuchClient, success };
         private EConfirmResult Result = EConfirmResult.failed;
         public TransactionRequest FinalTransaction { get; private set; }
@@ -50,9 +50,9 @@ namespace IATClient
             OpComplete.Reset();
             OpFailed.Reset();
             EMailUtilityWebSocket = new ClientWebSocket();
-            CEnvelope.ClearMessageMap();
-            CEnvelope.OnReceipt[CEnvelope.EMessageType.TransactionRequest] = new Action<INamedXmlSerializable>(Confirmation_OnTransaction);
-            CEnvelope.OnReceipt[CEnvelope.EMessageType.Handshake] = new Action<INamedXmlSerializable>(OnHandshake);
+            Envelope.ClearMessageMap();
+            Envelope.OnReceipt[Envelope.EMessageType.TransactionRequest] = new Action<INamedXmlSerializable>(Confirmation_OnTransaction);
+            Envelope.OnReceipt[Envelope.EMessageType.Handshake] = new Action<INamedXmlSerializable>(OnHandshake);
             Task connectTask = EMailUtilityWebSocket.ConnectAsync(new Uri(Properties.Resources.sDataTransactionWebsocketURI), AbortToken);
             int nSecsWaited = 0;
             while ((nSecsWaited++ < 30) && !connectTask.IsCompleted)
@@ -66,7 +66,7 @@ namespace IATClient
             StartMessageReceiver();
             TransactionRequest trans = new TransactionRequest();
             trans.Transaction = TransactionRequest.ETransaction.RequestConnection;
-            CEnvelope env = new CEnvelope(trans);
+            Envelope env = new Envelope(trans);
             env.SendMessage(EMailUtilityWebSocket, AbortToken);
             int nTrigger = WaitHandle.WaitAny(new WaitHandle[] { OpComplete, OpFailed} );
             return Result;
@@ -102,14 +102,14 @@ namespace IATClient
                             if (receipt.EndOfMessage)
                             {
                                 if (IncomingMessage == null)
-                                    IncomingMessage = new CEnvelope();
+                                    IncomingMessage = new Envelope();
                                 if (IncomingMessage.QueueByteData(ReceiveBuffer.Array.Take(receipt.Count).ToArray(), true))
                                     IncomingMessage = null;
                             }
                             else
                             {
                                 if (IncomingMessage == null)
-                                    IncomingMessage = new CEnvelope();
+                                    IncomingMessage = new Envelope();
                                 IncomingMessage.QueueByteData(ReceiveBuffer.Array.Take(receipt.Count).ToArray(), false);
 
                             }
@@ -137,9 +137,9 @@ namespace IATClient
         {
             OpComplete.Reset();
             OpFailed.Reset();
-            CEnvelope.ClearMessageMap();
-            CEnvelope.OnReceipt[CEnvelope.EMessageType.TransactionRequest] = new Action<INamedXmlSerializable>(ResendConfirmationEMail_OnTransaction);
-            CEnvelope.OnReceipt[CEnvelope.EMessageType.Handshake] = new Action<INamedXmlSerializable>(OnHandshake);
+            Envelope.ClearMessageMap();
+            Envelope.OnReceipt[Envelope.EMessageType.TransactionRequest] = new Action<INamedXmlSerializable>(ResendConfirmationEMail_OnTransaction);
+            Envelope.OnReceipt[Envelope.EMessageType.Handshake] = new Action<INamedXmlSerializable>(OnHandshake);
             EMailUtilityWebSocket = new ClientWebSocket();
             Task connectTask = EMailUtilityWebSocket.ConnectAsync(new Uri(Properties.Resources.sDataTransactionWebsocketURI), AbortToken);
             int nSecsWaited = 0;
@@ -154,7 +154,7 @@ namespace IATClient
             StartMessageReceiver();
             TransactionRequest trans = new TransactionRequest();
             trans.Transaction = TransactionRequest.ETransaction.RequestConnection;
-            CEnvelope env = new CEnvelope(trans);
+            Envelope env = new Envelope(trans);
             env.SendMessage(EMailUtilityWebSocket, AbortToken);
             WaitHandle.WaitAny(new WaitHandle[] { OpComplete, OpFailed });
         }
@@ -169,7 +169,7 @@ namespace IATClient
                     TransactionRequest outTrans = new TransactionRequest();
                     outTrans.Transaction = TransactionRequest.ETransaction.RequestEMailVerification;
                     outTrans.StringValues["email"] = LocalStorage.Activation[LocalStorage.Field.UserEmail];
-                    CEnvelope env = new CEnvelope(outTrans);
+                    Envelope env = new Envelope(outTrans);
                     env.SendMessage(EMailUtilityWebSocket, AbortToken);
                     break;
 
@@ -210,7 +210,7 @@ namespace IATClient
                     TransactionRequest outTrans = new TransactionRequest();
                     outTrans.Transaction = TransactionRequest.ETransaction.RequestNewVerificationEMail;
                     outTrans.StringValues["email"] = LocalStorage.Activation[LocalStorage.Field.UserEmail];
-                    CEnvelope env = new CEnvelope(outTrans);
+                    Envelope env = new Envelope(outTrans);
                     env.SendMessage(EMailUtilityWebSocket, AbortToken);
                     break;
 
@@ -234,7 +234,7 @@ namespace IATClient
         private void OnHandshake(INamedXmlSerializable inHand)
         {
             HandShake outHand = HandShake.CreateResponse((HandShake)inHand);
-            CEnvelope env = new CEnvelope(outHand);
+            Envelope env = new Envelope(outHand);
             env.SendMessage(EMailUtilityWebSocket, AbortToken);
         }
 

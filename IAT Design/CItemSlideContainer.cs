@@ -8,7 +8,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.IO;
-using IATClient.IATConfig;
 
 namespace IATClient
 {
@@ -18,7 +17,7 @@ namespace IATClient
         private Size _ThumbSize, _DisplaySize;
         private Dictionary<int, CItemSlide> SlideDictionary = new Dictionary<int, CItemSlide>();
         private CItemSlideRetriever SlideRetriever;
-        private ItemSlideManifest _SlideManifest;
+        public Messages.ItemSlideManifest SlideManifest { get; private set; }
         private String _IATName, _Password;
         private enum EThreadState { unstarted, restarting, running, paused, disposing, disposed };
         private EThreadState _UpdateProcState = EThreadState.unstarted, _ResizeProcState = EThreadState.unstarted;
@@ -74,29 +73,8 @@ namespace IATClient
             }
         }
 
-        private String IATName
-        {
-            get
-            {
-                return _IATName;
-            }
-        }
-
-        private String Password
-        {
-            get
-            {
-                return _Password;
-            }
-        }
-
-        public ItemSlideManifest SlideManifest
-        {
-            get
-            {
-                return _SlideManifest;
-            }
-        }
+        private String IATName { get; set; }
+        private String Password { get; set; }
 
         public void SaveItemSlides(String path, String iatName)
         {
@@ -113,15 +91,10 @@ namespace IATClient
             UpdateHalt = new ManualResetEvent(false);
             _IATName = iatName;
             _Password = dataPassword;
-                
-            foreach (var item in CF.EventList.OfType<IATConfig.IATItem>().Distinct())
-            {
-
-            }
             var pairings = from item in CF.EventList.OfType<IATConfig.IATItem>() select new { key = CIAT.SaveFile.IAT.Blocks[item.BlockNum - 1].Key, item.BlockNum, stimID = item.StimulusDisplayID };
             var blocks = (from pairing in pairings select pairing.key).Distinct()
-            _SlideManifest = new ItemSlideManifest();
-            _SlideManifest.ItemSlideEntries = new TItemSlideEntry[filenames.Count()];
+            SlideManifest = new Messages.ItemSlideManifest();
+            SlideManifest.ItemSlideEntries = new TItemSlideEntry[filenames.Count()];
             int ctr = 0;
             foreach (String filename in filenames)
             {
@@ -161,7 +134,7 @@ namespace IATClient
             return slides;
         }
 
-        public void SetResultData(CResultData rData)
+        public void SetResultData(ResultData.ResultData rData)
         {
             foreach (int i in SlideDictionary.Keys)
                 SlideDictionary[i].SetResultData(rData, i);
