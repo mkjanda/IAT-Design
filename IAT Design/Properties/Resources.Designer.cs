@@ -2012,6 +2012,15 @@ namespace IATClient.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to http://127.0.0.1/IAT/DeploymentUpload/DeploymentFiles.
+        /// </summary>
+        internal static string sDeploymentUploadURL {
+            get {
+                return ResourceManager.GetString("sDeploymentUploadURL", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The server encountered problems while transforming your IAT configuration into web pages and the programs necessary to execute it..
         /// </summary>
         internal static string sDeploymentXsltFailure {
@@ -2864,6 +2873,15 @@ namespace IATClient.Properties {
         internal static string sItemSlideDirectory {
             get {
                 return ResourceManager.GetString("sItemSlideDirectory", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to http://127.0.0.1/IAT/DeploymentUpload/ItemSlideFiles.
+        /// </summary>
+        internal static string sItemSlideUploadURL {
+            get {
+                return ResourceManager.GetString("sItemSlideUploadURL", resourceCulture);
             }
         }
         

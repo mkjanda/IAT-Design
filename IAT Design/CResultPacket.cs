@@ -93,7 +93,7 @@ namespace IATClient
         }
         
 
-        public IResultSet GenerateResultSet(CPartiallyEncryptedRSAKey key)
+        public IResultSet GenerateResultSet(PartiallyEncryptedRSAData key)
         {
             RSACrypt.ImportParameters(key.GetRSAParameters());
             int elemCtr = 0;

@@ -22,14 +22,14 @@ namespace IATClient
         private Func<String, byte[], bool> OnFileReceived;
         private Manifest _SlideManifest = null;
         private ManualResetEvent TransactionComplete = new ManualResetEvent(false), TransactionFailed = new ManualResetEvent(false);
-        private CPartiallyEncryptedRSAKey DataKey;
+        private PartiallyEncryptedRSAData DataKey;
         private object PacketQueueSyncObject = new object();
         private Dictionary<int, CPacket> PacketMap = null;
         private String itemSlideDownloadKey;
         private long clientID;
         private object transmissionLock = new object();
         private ArraySegment<byte> ReceiveBuffer = new ArraySegment<byte>(new byte[8192]);
-        private CEnvelope IncomingMessage = null;
+        private Envelope IncomingMessage = null;
         public ManualResetEvent AbortEvent = null;
         private bool bAbort = false;
 
@@ -101,7 +101,7 @@ namespace IATClient
         private void ShakeHands(INamedXmlSerializable obj)
         {
             HandShake hs = (HandShake)obj;
-            CEnvelope env = new CEnvelope(HandShake.CreateResponse(hs));
+            Envelope env = new Envelope(HandShake.CreateResponse(hs));
             env.SendMessage(ItemSlideWebSocket, AbortToken);
         }
 
@@ -110,14 +110,14 @@ namespace IATClient
             try
             {
                 TransactionRequest trans = (TransactionRequest)obj, outTrans;
-                CEnvelope env;
+                Envelope env;
                 switch (trans.Transaction)
                 {
                     case TransactionRequest.ETransaction.RequestTransmission:
                         outTrans = new TransactionRequest();
                         outTrans.Transaction = TransactionRequest.ETransaction.RequestEncryptionKey;
                         outTrans.IATName = IATName;
-                        env = new CEnvelope(outTrans);
+                        env = new Envelope(outTrans);
                         env.SendMessage(ItemSlideWebSocket, AbortToken);
                         break;
 
@@ -129,7 +129,7 @@ namespace IATClient
                             outTrans = new TransactionRequest();
                             outTrans.Transaction = TransactionRequest.ETransaction.VerifyPassword;
                             outTrans.StringValues["DecryptedTestString"] = Convert.ToBase64String(rsaCrypt.Decrypt(Convert.FromBase64String(trans.StringValues["EncryptedTestString"]), false));
-                            env = new CEnvelope(outTrans);
+                            env = new Envelope(outTrans);
                             env.SendMessage(ItemSlideWebSocket, AbortToken);
                         }
                         catch (Exception ex)
@@ -147,7 +147,7 @@ namespace IATClient
                         SetStatusMessage("Retrieving item slides");
                         outTrans = new TransactionRequest();
                         outTrans.Transaction = TransactionRequest.ETransaction.RequestItemSlideManifest;
-                        env = new CEnvelope(outTrans);
+                        env = new Envelope(outTrans);
                         env.SendMessage(ItemSlideWebSocket, AbortToken);
                         break;
 
@@ -176,7 +176,7 @@ namespace IATClient
                 DataKey.DecryptKey(IATPassword);
                 TransactionRequest outTrans = new TransactionRequest();
                 outTrans.Transaction = TransactionRequest.ETransaction.RequestDataPasswordVerification;
-                CEnvelope env = new CEnvelope(outTrans);
+                Envelope env = new Envelope(outTrans);
                 env.SendMessage(ItemSlideWebSocket, AbortToken);
             }
             catch (Exception ex)
@@ -192,7 +192,7 @@ namespace IATClient
             TransactionRequest trans = new TransactionRequest();
             trans.Transaction = TransactionRequest.ETransaction.RequestItemSlides;
             PacketMap = new Dictionary<int, CPacket>();
-            CEnvelope env = new CEnvelope(trans);
+            Envelope env = new Envelope(trans);
             env.SendMessage(ItemSlideWebSocket, AbortToken);
         }
 
@@ -247,12 +247,12 @@ namespace IATClient
             MainForm.Invoke(new Action<EventHandler, IATConfigMainForm.EProgressBarUses>(MainForm.BeginProgressBarUse), new EventHandler(Abort), IATConfigMainForm.EProgressBarUses.ItemSlideRetrieval);
             SetStatusMessage("Connecting");
             ItemSlideWebSocket = new ClientWebSocket();
-            CEnvelope.ClearMessageMap();
-            CEnvelope.OnReceipt[CEnvelope.EMessageType.Handshake] = new Action<INamedXmlSerializable>(ShakeHands);
-            CEnvelope.OnReceipt[CEnvelope.EMessageType.TransactionRequest] = new Action<INamedXmlSerializable>(OnTransaction);
-            CEnvelope.OnReceipt[CEnvelope.EMessageType.Manifest] = new Action<INamedXmlSerializable>(ManifestReceived);
-            CEnvelope.OnReceipt[CEnvelope.EMessageType.ServerException] = new Action<INamedXmlSerializable>(OnDeploymentException);
-            CEnvelope.OnReceipt[CEnvelope.EMessageType.RSAKeyPair] = new Action<INamedXmlSerializable>(KeyPairReceived);
+            Envelope.ClearMessageMap();
+            Envelope.OnReceipt[Envelope.EMessageType.Handshake] = new Action<INamedXmlSerializable>(ShakeHands);
+            Envelope.OnReceipt[Envelope.EMessageType.TransactionRequest] = new Action<INamedXmlSerializable>(OnTransaction);
+            Envelope.OnReceipt[Envelope.EMessageType.Manifest] = new Action<INamedXmlSerializable>(ManifestReceived);
+            Envelope.OnReceipt[Envelope.EMessageType.ServerException] = new Action<INamedXmlSerializable>(OnDeploymentException);
+            Envelope.OnReceipt[Envelope.EMessageType.RSAKeyPair] = new Action<INamedXmlSerializable>(KeyPairReceived);
             bool connectionMade = false;
             try
             {
@@ -323,7 +323,7 @@ namespace IATClient
                 return;
             TransactionRequest trans = new TransactionRequest();
             trans.Transaction = TransactionRequest.ETransaction.RequestConnection;
-            CEnvelope env = new CEnvelope(trans);
+            Envelope env = new Envelope(trans);
             env.SendMessage(ItemSlideWebSocket, AbortToken);
             int nTrigger = WaitHandle.WaitAny(new WaitHandle[] { TransactionComplete, TransactionFailed });
             if (nTrigger == 1)
@@ -361,7 +361,7 @@ namespace IATClient
                         if (receipt.EndOfMessage)
                         {
                             if (IncomingMessage == null)
-                                IncomingMessage = new CEnvelope();
+                                IncomingMessage = new Envelope();
                             if (IncomingMessage.QueueByteData(ReceiveBuffer.Array.Take(receipt.Count).ToArray(), true))
                                 IncomingMessage = null;
                         }
@@ -369,7 +369,7 @@ namespace IATClient
                         else
                         {
                             if (IncomingMessage == null)
-                                IncomingMessage = new CEnvelope();
+                                IncomingMessage = new Envelope();
                             IncomingMessage.QueueByteData(ReceiveBuffer.Array.Take(receipt.Count).ToArray(), false);
 
                         }

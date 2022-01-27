@@ -11,6 +11,7 @@ using System.Xml;
 using System.Windows.Forms;
 using System.Threading.Tasks;
 using System.Net.WebSockets;
+using IATClient.Messages;
 
 namespace IATClient
 {
@@ -19,18 +20,18 @@ namespace IATClient
         private enum ETransactionStage { unset, verifyingIATExistence, verifyingPassword };
         private object lockObject = new object();
         private IATConfigMainForm MainForm;
-        private Dictionary<String, CResultData> ResultDataMap = new Dictionary<String, CResultData>();
+        private Dictionary<String, ResultData.ResultData> ResultDataMap = new Dictionary<String, ResultData.ResultData>();
         private Dictionary<String, CItemSlideContainer> ItemSlideMap = new Dictionary<String, CItemSlideContainer>();
         private ManualResetEvent TransactionCompleteEvent = new ManualResetEvent(false), TransactionFailedEvent = new ManualResetEvent(false), SlideDownloadWaiting = new ManualResetEvent(true);
         private CancellationToken AbortToken = new CancellationToken();
         private String CurrIATName, CurrIATPassword;
-        private CPartiallyEncryptedRSAKey EncryptionKey;
+        private PartiallyEncryptedRSAData EncryptionKey;
         private ClientWebSocket IATManagerWebSocket;
         private object transmissionLock = new object();
-        private CEnvelope IncomingMessage = null;
+        private Messages.Envelope IncomingMessage = null;
         private ArraySegment<byte> ReceiveBuffer = new ArraySegment<byte>(new byte[8192]);
 
-        public CResultData GetResultData(String iatname)
+        public ResultData.ResultData GetResultData(String iatname)
         {
             if (!ResultDataMap.Keys.Contains(iatname))
                 return null;
@@ -128,7 +129,7 @@ namespace IATClient
         {
             HandShake hs = (HandShake)handshake;
             HandShake outHand = HandShake.CreateResponse(hs);
-            CEnvelope env = new CEnvelope(outHand);
+            Envelope env = new Envelope(outHand);
             env.SendMessage(IATManagerWebSocket, AbortToken);
         }
 
@@ -156,7 +157,7 @@ namespace IATClient
             {
                 TransactionRequest request = new TransactionRequest();
                 request.Transaction = TransactionRequest.ETransaction.RequestServerReport;
-                CEnvelope env = new CEnvelope(request);
+                Envelope env = new Envelope(request);
                 env.SendMessage(IATManagerWebSocket, AbortToken);
             }
         }
@@ -189,23 +190,23 @@ namespace IATClient
             {
                 TransactionCompleteEvent.Reset();
                 TransactionFailedEvent.Reset();
-                CEnvelope.ClearMessageMap();
-                CEnvelope.OnReceipt[CEnvelope.EMessageType.Handshake] = new Action<INamedXmlSerializable>(ShakeHands);
-                CEnvelope.OnReceipt[CEnvelope.EMessageType.TransactionRequest] = new Action<INamedXmlSerializable>(HandshakeConfirmation);
-                CEnvelope.OnReceipt[CEnvelope.EMessageType.ServerReport] = new Action<INamedXmlSerializable>(ReceiveServerReport);
-                CEnvelope.OnReceipt[CEnvelope.EMessageType.ServerException] = new Action<INamedXmlSerializable>(OnDeploymentException);
-                CEnvelope env = new CEnvelope(new TransactionRequest(TransactionRequest.ETransaction.RequestConnection, Properties.Resources.sServerPassword, String.Empty));
+                Messages.Envelope.ClearMessageMap();
+                Messages.Envelope.OnReceipt[Messages.Envelope.EMessageType.Handshake] = new Action<INamedXmlSerializable>(ShakeHands);
+                Messages.Envelope.OnReceipt[Messages.Envelope.EMessageType.TransactionRequest] = new Action<INamedXmlSerializable>(HandshakeConfirmation);
+                Messages.Envelope.OnReceipt[Messages.Envelope.EMessageType.ServerReport] = new Action<INamedXmlSerializable>(ReceiveServerReport);
+                Messages.Envelope.OnReceipt[Messages.Envelope.EMessageType.ServerException] = new Action<INamedXmlSerializable>(OnDeploymentException);
+                Messages.Envelope env = new Messages.Envelope(new TransactionRequest(TransactionRequest.ETransaction.RequestConnection, Properties.Resources.sServerPassword, String.Empty));
                 if (!Connect())
                     return false;
                 env.SendMessage(IATManagerWebSocket, AbortToken);
                 int nTrigger = WaitHandle.WaitAny(new WaitHandle[] { TransactionCompleteEvent, TransactionFailedEvent });
-                CEnvelope.Shutdown();
+                Messages.Envelope.Shutdown();
                 return (nTrigger == 0);
             }
             catch (Exception ex)
             {
                 ErrorReporter.ReportError(new CReportableException("An error occurred retrieving your list of IATs from the server", ex));
-                CEnvelope.Shutdown();
+                Messaging.Envelope.Shutdown();
                 return false;
             }
         }
@@ -214,19 +215,20 @@ namespace IATClient
         {
             TransactionCompleteEvent.Reset();
             TransactionFailedEvent.Reset();
-            CEnvelope.ClearMessageMap();
-            CEnvelope.OnReceipt[CEnvelope.EMessageType.Handshake] = new Action<INamedXmlSerializable>(ShakeHands);
-            CEnvelope.OnReceipt[CEnvelope.EMessageType.TransactionRequest] = new Action<INamedXmlSerializable>(HandshakeConfirmation);
-            CEnvelope.OnReceipt[CEnvelope.EMessageType.ServerReport] = new Action<INamedXmlSerializable>(ReceiveUpdatedServerReport);
-            CEnvelope.OnReceipt[CEnvelope.EMessageType.ServerException] = new Action<INamedXmlSerializable>(OnDeploymentException);
+            Messages.Envelope.ClearMessageMap();
+            Messages.Envelope.OnReceipt[Messages.Envelope.EMessageType.Handshake] = new Action<INamedXmlSerializable>(ShakeHands);
+            Messages.Envelope.OnReceipt[Messages.Envelope.EMessageType.TransactionRequest] = new Action<INamedXmlSerializable>(HandshakeConfirmation);
+            Messages.Envelope.OnReceipt[Messages.Envelope.EMessageType.ServerReport] = new Action<INamedXmlSerializable>(ReceiveUpdatedServerReport);
+            Messages.Envelope.OnReceipt[Messages.Envelope.EMessageType.ServerException] = new Action<INamedXmlSerializable>(OnDeploymentException);
+            Messages.Envelope.OnReceipt[Messages.Envelope.EMessageType.ItemSlidesData] = (msg) => OnItemSlidesData(msg);
             if (!Connect())
                 return false;
             TransactionRequest trans = new TransactionRequest();
             trans.Transaction = TransactionRequest.ETransaction.RequestConnection;
-            CEnvelope env = new CEnvelope(trans);
+            Messages.Envelope env = new Messages.Envelope(trans);
             env.SendMessage(IATManagerWebSocket, AbortToken);
             int nTrigger = WaitHandle.WaitAny(new WaitHandle[] { TransactionCompleteEvent, TransactionFailedEvent });
-            CEnvelope.Shutdown();
+            Messages.Envelope.Shutdown();
             return (nTrigger == 0);
         }
 
@@ -260,14 +262,14 @@ namespace IATClient
                             if (receipt.EndOfMessage)
                             {
                                 if (IncomingMessage == null)
-                                    IncomingMessage = new CEnvelope();
+                                    IncomingMessage = new Envelope();
                                 if (IncomingMessage.QueueByteData(ReceiveBuffer.Array.Take(receipt.Count).ToArray(), true))
                                     IncomingMessage = null;
                             }
                             else
                             {
                                 if (IncomingMessage == null)
-                                    IncomingMessage = new CEnvelope();
+                                    IncomingMessage = new Envelope();
                                 IncomingMessage.QueueByteData(ReceiveBuffer.Array.Take(receipt.Count).ToArray(), false);
                             }
                         }
@@ -307,7 +309,7 @@ namespace IATClient
         public bool RetrieveResults(String IATName, String Password)
         {
             ClearData(IATName);
-            CResultData rd = new CResultData(Properties.Resources.sDataTransactionWebsocketURI, IATName, Password);
+            ResultData.ResultData rd = new ResultData.ResultData(Properties.Resources.sDataTransactionWebsocketURI, IATName, Password);
             if (rd.DoRetrieveData())
             {
                 ResultDataMap[IATName] = rd;
@@ -316,7 +318,7 @@ namespace IATClient
             return false;
         }
 
-        public void RetrieveItemSlides(String iatName, String password)
+        public void RetrieveItemSlides(ItemSlideData data)
         {
             if (ResultDataMap[iatName] == null)
                 return;
@@ -337,7 +339,7 @@ namespace IATClient
                 TransactionRequest trans = new TransactionRequest();
                 trans.Transaction = TransactionRequest.ETransaction.RequestAdminPasswordVerification;
                 trans.IATName = CurrIATName;
-                CEnvelope env = new CEnvelope(trans);
+                Envelope env = new Envelope(trans);
                 env.SendMessage(IATManagerWebSocket, AbortToken);
             }
             catch (Exception ex)
@@ -353,19 +355,19 @@ namespace IATClient
             CurrIATPassword = password;
             TransactionCompleteEvent.Reset();
             TransactionFailedEvent.Reset();
-            CEnvelope.ClearMessageMap();
-            CEnvelope.OnReceipt[CEnvelope.EMessageType.Handshake] = new Action<INamedXmlSerializable>(ShakeHands);
-            CEnvelope.OnReceipt[CEnvelope.EMessageType.TransactionRequest] = new Action<INamedXmlSerializable>(OnDeleteIATDataTransaction);
-            CEnvelope.OnReceipt[CEnvelope.EMessageType.ServerException] = new Action<INamedXmlSerializable>(OnDeploymentException);
-            CEnvelope.OnReceipt[CEnvelope.EMessageType.RSAKeyPair] = new Action<INamedXmlSerializable>(OnAdminKeyReceived);
+            Envelope.ClearMessageMap();
+            Envelope.OnReceipt[Envelope.EMessageType.Handshake] = new Action<INamedXmlSerializable>(ShakeHands);
+            Envelope.OnReceipt[Envelope.EMessageType.TransactionRequest] = new Action<INamedXmlSerializable>(OnDeleteIATDataTransaction);
+            Envelope.OnReceipt[Envelope.EMessageType.ServerException] = new Action<INamedXmlSerializable>(OnDeploymentException);
+            Envelope.OnReceipt[Envelope.EMessageType.RSAKeyPair] = new Action<INamedXmlSerializable>(OnAdminKeyReceived);
             if (!Connect())
                 return false;
             TransactionRequest trans = new TransactionRequest();
             trans.Transaction = TransactionRequest.ETransaction.RequestConnection;
-            CEnvelope env = new CEnvelope(trans);
+            Envelope env = new Envelope(trans);
             env.SendMessage(IATManagerWebSocket, AbortToken);
             int nTrigger = WaitHandle.WaitAny(new WaitHandle[] { TransactionCompleteEvent, TransactionFailedEvent });
-            CEnvelope.Shutdown();
+            Envelope.Shutdown();
             return (nTrigger == 0);
         }
 
@@ -373,12 +375,12 @@ namespace IATClient
         {
             TransactionRequest trans = (TransactionRequest)obj;
             TransactionRequest outTrans = null;
-            CEnvelope env = null;
+            Envelope env = null;
             switch (trans.Transaction)
             {
                 case TransactionRequest.ETransaction.RequestTransmission:
                     outTrans = new TransactionRequest(TransactionRequest.ETransaction.IATExists, IATConfigMainForm.ServerPassword, CurrIATName);
-                    env = new CEnvelope(outTrans);
+                    env = new Envelope(outTrans);
                     env.SendMessage(IATManagerWebSocket, AbortToken);
                     break;
 
@@ -386,7 +388,7 @@ namespace IATClient
                     outTrans = new TransactionRequest();
                     outTrans.Transaction = TransactionRequest.ETransaction.RequestEncryptionKey;
                     outTrans.IATName = CurrIATName;
-                    env = new CEnvelope(outTrans);
+                    env = new Envelope(outTrans);
                     env.SendMessage(IATManagerWebSocket, AbortToken);
                     break;
 
@@ -406,7 +408,7 @@ namespace IATClient
                     outTrans = new TransactionRequest();
                     outTrans.Transaction = TransactionRequest.ETransaction.VerifyPassword;
                     outTrans.StringValues["DecryptedTestString"] = resultStr;
-                    env = new CEnvelope(outTrans);
+                    env = new Envelope(outTrans);
                     env.SendMessage(IATManagerWebSocket, AbortToken);
                     break;
 
@@ -414,7 +416,7 @@ namespace IATClient
                     outTrans = new TransactionRequest();
                     outTrans.Transaction = TransactionRequest.ETransaction.DeleteIATData;
                     outTrans.IATName = CurrIATName;
-                    env = new CEnvelope(outTrans);
+                    env = new Envelope(outTrans);
                     env.SendMessage(IATManagerWebSocket, AbortToken);
                     break;
 
@@ -442,19 +444,19 @@ namespace IATClient
             CurrIATPassword = password;
             TransactionCompleteEvent.Reset();
             TransactionFailedEvent.Reset();
-            CEnvelope.ClearMessageMap();
-            CEnvelope.OnReceipt[CEnvelope.EMessageType.Handshake] = new Action<INamedXmlSerializable>(ShakeHands);
-            CEnvelope.OnReceipt[CEnvelope.EMessageType.TransactionRequest] = new Action<INamedXmlSerializable>(OnDeleteIATTransaction);
-            CEnvelope.OnReceipt[CEnvelope.EMessageType.ServerException] = new Action<INamedXmlSerializable>(OnDeploymentException);
-            CEnvelope.OnReceipt[CEnvelope.EMessageType.RSAKeyPair] = new Action<INamedXmlSerializable>(OnAdminKeyReceived);
+            Envelope.ClearMessageMap();
+            Envelope.OnReceipt[Envelope.EMessageType.Handshake] = new Action<INamedXmlSerializable>(ShakeHands);
+            Envelope.OnReceipt[Envelope.EMessageType.TransactionRequest] = new Action<INamedXmlSerializable>(OnDeleteIATTransaction);
+            Envelope.OnReceipt[Envelope.EMessageType.ServerException] = new Action<INamedXmlSerializable>(OnDeploymentException);
+            Envelope.OnReceipt[Envelope.EMessageType.RSAKeyPair] = new Action<INamedXmlSerializable>(OnAdminKeyReceived);
             if (!Connect())
                 return false;
             TransactionRequest trans = new TransactionRequest();
             trans.Transaction = TransactionRequest.ETransaction.RequestConnection;
-            CEnvelope env = new CEnvelope(trans);
+            Envelope env = new Envelope(trans);
             env.SendMessage(IATManagerWebSocket, AbortToken);
             int nTrigger = WaitHandle.WaitAny(new WaitHandle[] { TransactionCompleteEvent, TransactionFailedEvent });
-            CEnvelope.Shutdown();
+            Envelope.Shutdown();
             return (nTrigger == 0);
         }
 
@@ -462,12 +464,12 @@ namespace IATClient
         {
             TransactionRequest trans = (TransactionRequest)obj;
             TransactionRequest outTrans = null;
-            CEnvelope env = null;
+            Envelope env = null;
             switch (trans.Transaction)
             {
                 case TransactionRequest.ETransaction.RequestTransmission:
                     outTrans = new TransactionRequest(TransactionRequest.ETransaction.IATExists, IATConfigMainForm.ServerPassword, CurrIATName);
-                    env = new CEnvelope(outTrans);
+                    env = new Envelope(outTrans);
                     env.SendMessage(IATManagerWebSocket, AbortToken);
                     break;
 
@@ -475,7 +477,7 @@ namespace IATClient
                     outTrans = new TransactionRequest();
                     outTrans.Transaction = TransactionRequest.ETransaction.RequestEncryptionKey;
                     outTrans.IATName = CurrIATName;
-                    env = new CEnvelope(outTrans);
+                    env = new Envelope(outTrans);
                     env.SendMessage(IATManagerWebSocket, AbortToken);
                     break;
 
@@ -484,7 +486,7 @@ namespace IATClient
                     outTrans.Transaction = TransactionRequest.ETransaction.AbortDeployment;
                     outTrans.IATName = CurrIATName;
                     outTrans.LongValues["DeploymentId"] = trans.LongValues["DeploymentId"];
-                    env = new CEnvelope(outTrans);
+                    env = new Envelope(outTrans);
                     env.SendMessage(IATManagerWebSocket, AbortToken);
                     break;
 
@@ -504,7 +506,7 @@ namespace IATClient
                     outTrans = new TransactionRequest();
                     outTrans.Transaction = TransactionRequest.ETransaction.VerifyPassword;
                     outTrans.StringValues["DecryptedTestString"] = resultStr;
-                    env = new CEnvelope(outTrans);
+                    env = new Envelope(outTrans);
                     env.SendMessage(IATManagerWebSocket, AbortToken);
                     break;
 
@@ -512,7 +514,7 @@ namespace IATClient
                     outTrans = new TransactionRequest();
                     outTrans.Transaction = TransactionRequest.ETransaction.DeleteIAT;
                     outTrans.IATName = CurrIATName;
-                    env = new CEnvelope(outTrans);
+                    env = new Envelope(outTrans);
                     env.SendMessage(IATManagerWebSocket, AbortToken);
                     break;
 

@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Xml;
 
-namespace IATClient
+namespace IATClient.ResultData
 {
     namespace IATResultSetNamespaceV3
     {

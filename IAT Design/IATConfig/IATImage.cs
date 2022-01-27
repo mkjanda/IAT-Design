@@ -10,6 +10,7 @@ namespace IATClient.IATConfig
     public class IATImage
     {
         public List<Uri> SourceUris { get; private set; } = new List<Uri>();
+        public List<int> Indexes { get; private set; } = new List<int>();
         private String sha;
         public int Id { get; set; }
         public String SHA

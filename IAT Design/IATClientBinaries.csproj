@@ -61,10 +61,10 @@
   </PropertyGroup>
   <PropertyGroup />
   <PropertyGroup>
-    <SignAssembly>false</SignAssembly>
+    <SignAssembly>true</SignAssembly>
   </PropertyGroup>
   <PropertyGroup>
-    <AssemblyOriginatorKeyFile>sectigo-unchained-open.pfx</AssemblyOriginatorKeyFile>
+    <AssemblyOriginatorKeyFile>IAT Design.pfx</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <PropertyGroup>
     <RunPostBuildEvent>OnOutputUpdated</RunPostBuildEvent>
@@ -166,13 +166,17 @@
     <Compile Include="DIKeyValueOutline.cs" />
     <Compile Include="CompositeImage.cs" />
     <Compile Include="CServerException.cs" />
-    <Compile Include="CDeploymentProgressUpdate.cs" />
+    <Compile Include="Messages\FileReferences.cs" />
+    <Compile Include="Messages\ItemSlideManifest.cs" />
+    <Compile Include="Messages\Packet.cs" />
+    <Compile Include="Messages\DeploymentProgressUpdate.cs" />
     <Compile Include="CDynamicSpecifier.cs" />
     <Compile Include="CEncryptedKey.cs" />
     <Compile Include="CEncryptionRequest.cs" />
-    <Compile Include="CEnumeration.cs" />
     <Compile Include="CEnumerationValue.cs" />
-    <Compile Include="CEnvelope.cs" />
+    <Compile Include="Messages\ActivationRequest.cs" />
+    <Compile Include="Messages\ActivationResponse.cs" />
+    <Compile Include="Messages\Envelope.cs" />
     <Compile Include="CFixedDigResponse.cs" />
     <Compile Include="CFixedDigResponseObject.cs" />
     <Compile Include="CFontFile.cs" />
@@ -186,7 +190,6 @@
     <Compile Include="CIATItem.cs" />
     <Compile Include="CIATKey.cs" />
     <Compile Include="CIATLayout.cs" />
-    <Compile Include="CIATList.cs" />
     <Compile Include="CIATManager.cs" />
     <Compile Include="CIATPackager.cs" />
     <Compile Include="CIATReversedKey.cs" />
@@ -198,7 +201,6 @@
     <Compile Include="CItemAnalysis.cs" />
     <Compile Include="CItemSlide.cs" />
     <Compile Include="CItemSlideContainer.cs" />
-    <Compile Include="CItemSlideManifest.cs" />
     <Compile Include="CItemSlideRetriever.cs" />
     <Compile Include="CKeyInstructionScreen.cs" />
     <Compile Include="DIBase.cs" />
@@ -238,8 +240,7 @@
     </Compile>
     <Compile Include="CombinedResponseKeyPanel.Designer.cs" />
     <Compile Include="COneStageUploader.cs" />
-    <Compile Include="CPacket.cs" />
-    <Compile Include="CPartiallyEncryptedRSAKey.cs" />
+    <Compile Include="PartiallyEncryptedRSAData.cs" />
     <Compile Include="CPublicKey.cs" />
     <Compile Include="CQueryIATExists.cs" />
     <Compile Include="CRangeSpecifier.cs" />
@@ -248,13 +249,24 @@
     <Compile Include="CRegistry.cs" />
     <Compile Include="CResponse.cs" />
     <Compile Include="CResponseObject.cs" />
-    <Compile Include="CResultData.cs" />
+    <Compile Include="ResultData\Boolean.cs" />
+    <Compile Include="ResultData\BoundedLength.cs" />
+    <Compile Include="ResultData\BoundedNumber.cs" />
+    <Compile Include="ResultData\Date.cs" />
+    <Compile Include="ResultData\FixedDigit.cs" />
+    <Compile Include="ResultData\ItemSlideData.cs" />
+    <Compile Include="ResultData\Likert.cs" />
+    <Compile Include="ResultData\MultiBoolean.cs" />
+    <Compile Include="ResultData\RegEx.cs" />
+    <Compile Include="ResultData\Response.cs" />
+    <Compile Include="ResultData\SurveyCaption.cs" />
+    <Compile Include="ResultData\Color.cs" />
+    <Compile Include="ResultData\ResultData.cs" />
     <Compile Include="CResultDocument.cs" />
     <Compile Include="CResultPacket.cs" />
     <Compile Include="CSearchCriteria.cs" />
     <Compile Include="CSearchDescriptor.cs" />
     <Compile Include="CSearchValue.cs" />
-    <Compile Include="CSelectionSpecifier.cs" />
     <Compile Include="CServerConnection.cs" />
     <Compile Include="CServerReport.cs" />
     <Compile Include="CServerURL.cs" />
@@ -263,12 +275,10 @@
     <Compile Include="CSubjectID.cs" />
     <Compile Include="CSurvey.cs" />
     <Compile Include="CSurveyCaption.cs" />
-    <Compile Include="CSurveyDescriptor.cs" />
+    <Compile Include="ResultData\DateEntry.cs" />
     <Compile Include="CSurveyItem.cs" />
     <Compile Include="CSurveyOutline.cs" />
-    <Compile Include="CSyncEvent.cs" />
     <Compile Include="CSynchronizationPacket.cs" />
-    <Compile Include="CSyncWrapper.cs" />
     <Compile Include="CTextInstructionScreen.cs" />
     <Compile Include="CTextResponse.cs" />
     <Compile Include="CTrueFalseSpecifier.cs" />
@@ -307,8 +317,6 @@
     <Compile Include="FontSelectCombo.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="HandShake.cs" />
-    <Compile Include="HandshakeNamespace.cs" />
     <Compile Include="IATBlockPanel.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -344,9 +352,9 @@
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="IATGenerateBlockSelect.Designer.cs" />
-    <Compile Include="IATResultSetNamespaceV1.cs" />
-    <Compile Include="IATResultSetNamespaceV2.cs" />
-    <Compile Include="IATResultSetNamespaceV3.cs" />
+    <Compile Include="ResultData\IATResultSetNamespaceV1.cs" />
+    <Compile Include="ResultData\IATResultSetNamespaceV2.cs" />
+    <Compile Include="ResultData\IATResultSetNamespaceV3.cs" />
     <Compile Include="IATTabPanel.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -399,7 +407,6 @@
     <Compile Include="ItemSlideDisplayPanel.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="ItemSlideManifest.cs" />
     <Compile Include="ItemSlidePanel.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -428,6 +435,13 @@
     </Compile>
     <Compile Include="MainPanel.Designer.cs" />
     <Compile Include="MaskSpecifierControl.cs" />
+    <Compile Include="Messages\DeploymentUploadInfo.cs" />
+    <Compile Include="Messages\FileEntity.cs" />
+    <Compile Include="Messages\Handshake.cs" />
+    <Compile Include="Messages\IATList.cs" />
+    <Compile Include="Messages\Manifest.cs" />
+    <Compile Include="Messages\ManifestDirectory.cs" />
+    <Compile Include="Messages\ManifestFile.cs" />
     <Compile Include="MissingFontDisplay.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -503,6 +517,11 @@
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="ResponseKeyPanel.Designer.cs" />
+    <Compile Include="ResultData\ResultSetDescriptor.cs" />
+    <Compile Include="ResultData\Survey.cs" />
+    <Compile Include="ResultData\SurveyItem.cs" />
+    <Compile Include="ResultData\WeightedChoice.cs" />
+    <Compile Include="ResultData\WeightedMultiple.cs" />
     <Compile Include="ResultDetailsPanel.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -524,7 +543,6 @@
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="ResultSaveForm.Designer.cs" />
-    <Compile Include="ResultSetDescriptor.cs" />
     <Compile Include="ResultsGridPanel.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -720,18 +738,12 @@
     <None Include="FileManifest.xsd">
       <SubType>Designer</SubType>
     </None>
-    <None Include="HandShake.xsd">
-      <SubType>Designer</SubType>
-    </None>
     <None Include="IAT Design.pfx" />
     <None Include="IATClientBinaries_TemporaryKey.pfx" />
     <None Include="IATConfigFile.xsd">
       <SubType>Designer</SubType>
     </None>
     <None Include="IATDesign.pfx" />
-    <None Include="ItemSlideManifest.xsd">
-      <SubType>Designer</SubType>
-    </None>
     <None Include="ARLRDBD.TTF">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
@@ -748,11 +760,12 @@
     <None Include="ResultDocument.xsd">
       <SubType>Designer</SubType>
     </None>
+    <!--
     <None Include="sectigo-again.pfx" />
     <None Include="sectigo-unchained-open.pfx" />
     <None Include="sectigo-unchained.pfx" />
     <None Include="sectigo.pfx" />
-    <None Include="sectigo.snk" />
+    <None Include="sectigo.snk" />  -->
     <None Include="TektonPro-Bold.otf">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>

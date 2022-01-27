@@ -9,7 +9,7 @@ using System.IO;
 
 namespace IATClient
 {
-    public class CPartiallyEncryptedRSAKey : INamedXmlSerializable
+    public class PartiallyEncryptedRSAData : INamedXmlSerializable
     {
         private String NString = String.Empty, EString = String.Empty;
         private byte[] D, E, P, Q, N, DP, DQ, InverseQ;
@@ -27,14 +27,14 @@ namespace IATClient
         }
 
         public static readonly byte[] IV = new byte[]{ (byte)0xFA, (byte)0x64, (byte)0x92, (byte)0x21, (byte)0x4A, (byte)0x74, (byte)0x41, (byte)0xE9 };
-        public CPartiallyEncryptedRSAKey(EKeyType keyType)
+        public PartiallyEncryptedRSAData(EKeyType keyType)
         {
             KeyType = keyType;
         }
 
-        public static CPartiallyEncryptedRSAKey CreateNullKey()
+        public static PartiallyEncryptedRSAData CreateNullKey()
         {
-            CPartiallyEncryptedRSAKey key = new CPartiallyEncryptedRSAKey(EKeyType.None);
+            PartiallyEncryptedRSAData key = new PartiallyEncryptedRSAData(EKeyType.None);
             key.NString = "NULL";
             key.EString = "NULL";
             key.EncryptedKey = "NULL";
@@ -272,9 +272,9 @@ namespace IATClient
 
     class CRSAKeyPair : INamedXmlSerializable
     {
-        private CPartiallyEncryptedRSAKey _DataKey, _AdminKey;
+        private PartiallyEncryptedRSAData _DataKey, _AdminKey;
 
-        public CPartiallyEncryptedRSAKey DataKey
+        public PartiallyEncryptedRSAData DataKey
         {
             get
             {
@@ -286,7 +286,7 @@ namespace IATClient
             }
         }
 
-        public CPartiallyEncryptedRSAKey AdminKey
+        public PartiallyEncryptedRSAData AdminKey
         {
             get
             {
@@ -300,11 +300,11 @@ namespace IATClient
 
         public CRSAKeyPair()
         {
-            _DataKey = new CPartiallyEncryptedRSAKey(CPartiallyEncryptedRSAKey.EKeyType.Data);
-            _AdminKey = new CPartiallyEncryptedRSAKey(CPartiallyEncryptedRSAKey.EKeyType.Admin);
+            _DataKey = new PartiallyEncryptedRSAData(PartiallyEncryptedRSAData.EKeyType.Data);
+            _AdminKey = new PartiallyEncryptedRSAData(PartiallyEncryptedRSAData.EKeyType.Admin);
         }
 
-        public CRSAKeyPair(CPartiallyEncryptedRSAKey dataKey, CPartiallyEncryptedRSAKey adminKey)
+        public CRSAKeyPair(PartiallyEncryptedRSAData dataKey, PartiallyEncryptedRSAData adminKey)
         {
             _DataKey = dataKey;
             _AdminKey = adminKey;

@@ -109,6 +109,11 @@ namespace IATClient.IATConfig
             : base(EEventType.IATItem)
         {
         }
+
+        public CIATItem GetItem()
+        {
+            return CIAT.SaveFile.GetIATItem(ItemUri);
+        }
  
         public override void WriteXml(XmlWriter writer)
         {

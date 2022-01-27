@@ -15,10 +15,10 @@ namespace IATClient
         private EErrorType _ErrorType;
         private TransactionProgress _TransProgress;
         private String _Message, _Caption;
-        private CDeploymentProgressUpdate _DeploymentProgress = null;
-        private CDeploymentProgressUpdate.EStage _DeploymentPhase;
+        private DeploymentProgressUpdate _DeploymentProgress = null;
+        private DeploymentProgressUpdate.EStage _DeploymentPhase;
 
-        public CDeploymentProgressUpdate DeploymentProgress
+        public DeploymentProgressUpdate DeploymentProgress
         {
             get
             {
@@ -26,7 +26,7 @@ namespace IATClient
             }
         }
 
-        public CDeploymentProgressUpdate.EStage DeploymentPhase
+        public DeploymentProgressUpdate.EStage DeploymentPhase
         {
             get
             {
@@ -136,14 +136,14 @@ namespace IATClient
         public CXmlSerializationException(XmlNode node)
         {
             _ErrorType = (EErrorType)Enum.Parse(typeof(EErrorType), node.SelectSingleNode("ErrorType").InnerText);
-            _DeploymentPhase = (CDeploymentProgressUpdate.EStage)Enum.Parse(typeof(CDeploymentProgressUpdate.EStage), node.SelectSingleNode("DeploymentPhase").InnerText);
+            _DeploymentPhase = (DeploymentProgressUpdate.EStage)Enum.Parse(typeof(DeploymentProgressUpdate.EStage), node.SelectSingleNode("DeploymentPhase").InnerText);
             _ExceptionType = node.SelectSingleNode("Exception/Exception").InnerText;
             _Message = node.SelectSingleNode("Exception/ExceptionMessage").InnerText;
             foreach (XmlNode n in node.SelectNodes("Exception/StackTrace/TraceLine"))
                 StackTrace.Add(n.InnerText);
             if (_ErrorType == EErrorType.terminateProcess)
             {
-                _DeploymentProgress = new CDeploymentProgressUpdate();
+                _DeploymentProgress = new DeploymentProgressUpdate();
                 DeploymentProgress.ReadXml(node.SelectSingleNode("DeploymentProgressUpdate"));
             }
         }
@@ -153,7 +153,7 @@ namespace IATClient
             Data["IATServerException"] = true;
             reader.ReadStartElement();
             _ErrorType = (EErrorType)Enum.Parse(typeof(EErrorType), reader.ReadElementString());
-            _DeploymentPhase = (CDeploymentProgressUpdate.EStage)Enum.Parse(typeof(CDeploymentProgressUpdate.EStage), reader.ReadElementString());
+            _DeploymentPhase = (DeploymentProgressUpdate.EStage)Enum.Parse(typeof(DeploymentProgressUpdate.EStage), reader.ReadElementString());
             reader.ReadStartElement();
             _ExceptionType = reader.ReadElementString();
             _Message = reader.ReadElementString();
@@ -165,7 +165,7 @@ namespace IATClient
             if (_ErrorType == EErrorType.terminateProcess)
             {
                 reader.ReadStartElement();
-                _DeploymentProgress = new CDeploymentProgressUpdate();
+                _DeploymentProgress = new DeploymentProgressUpdate();
                 _DeploymentProgress.ReadXml(reader);
                 reader.ReadEndElement();
             }

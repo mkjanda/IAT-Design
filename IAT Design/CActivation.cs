@@ -14,7 +14,7 @@ using System.Threading.Tasks;
 using System.Xml.Linq;
 using System.Net.WebSockets;
 using System.Net;
-
+using IATClient.Messages;
 namespace IATClient
 {
     class LocalStorage
@@ -405,7 +405,7 @@ namespace IATClient
         private CancellationToken AbortToken = new CancellationToken();
         private String FName, LName, EMail, Title, ProductKey;
         private ActivationConfirmation _Confirmation = null;
-        private CEnvelope IncomingMessage;
+        private Envelope IncomingMessage;
         private Control InvokeTarget;
         private ArraySegment<byte> ReceiveBuffer = new ArraySegment<byte>(new byte[8012]);
         private IATConfigMainForm MainForm
@@ -450,11 +450,11 @@ namespace IATClient
             LocalStorage.Activation[LocalStorage.Field.UserEmail] = EMail;
             LocalStorage.Activation[LocalStorage.Field.ProductKey] = ProductKey;
             LocalStorage.Activation[LocalStorage.Field.UserName] = Title + " " + FName + " " + LName;
-            CEnvelope.ClearMessageMap();
-            CEnvelope.OnReceipt[CEnvelope.EMessageType.Handshake] = new Action<INamedXmlSerializable>(OnHandshake);
-            CEnvelope.OnReceipt[CEnvelope.EMessageType.TransactionRequest] = new Action<INamedXmlSerializable>(OnTransaction);
-            CEnvelope.OnReceipt[CEnvelope.EMessageType.ActivationResponse] = new Action<INamedXmlSerializable>(OnActivationResponse);
-            CEnvelope.OnReceipt[CEnvelope.EMessageType.ServerException] = (ex) =>
+            Envelope.ClearMessageMap();
+            Envelope.OnReceipt[Envelope.EMessageType.Handshake] = new Action<INamedXmlSerializable>(OnHandshake);
+            Envelope.OnReceipt[Envelope.EMessageType.TransactionRequest] = new Action<INamedXmlSerializable>(OnTransaction);
+            Envelope.OnReceipt[Envelope.EMessageType.ActivationResponse] = new Action<INamedXmlSerializable>(OnActivationResponse);
+            Envelope.OnReceipt[Envelope.EMessageType.ServerException] = (ex) =>
             {
                 ActivationResult = ActivationResponse.EResult.ServerFailure;
                 TransactionFailed.Set();
@@ -515,7 +515,7 @@ namespace IATClient
             TransactionRequest outTrans = new TransactionRequest();
             outTrans.Transaction = TransactionRequest.ETransaction.RequestConnection;
             outTrans.ProductKey = productKey;
-            CEnvelope env = new CEnvelope(outTrans);
+            Envelope env = new Envelope(outTrans);
             env.SendMessage(ActivationWebSocket, AbortToken);
             int nTrigger = WaitHandle.WaitAny(new WaitHandle[] { TransactionComplete, TransactionFailed });
             if (nTrigger == 1)
@@ -556,14 +556,14 @@ namespace IATClient
                             if (receipt.EndOfMessage)
                             {
                                 if (IncomingMessage == null)
-                                    IncomingMessage = new CEnvelope();
+                                    IncomingMessage = new Envelope();
                                 if (IncomingMessage.QueueByteData(ReceiveBuffer.Array.Take(receipt.Count).ToArray(), true))
                                     IncomingMessage = null;
                             }
                             else
                             {
                                 if (IncomingMessage == null)
-                                    IncomingMessage = new CEnvelope();
+                                    IncomingMessage = new Envelope();
                                 IncomingMessage.QueueByteData(ReceiveBuffer.Array.Take(receipt.Count).ToArray(), false);
                             }
                         }
@@ -592,7 +592,7 @@ namespace IATClient
         private void OnHandshake(INamedXmlSerializable inHand)
         {
             HandShake outHand = HandShake.CreateResponse((HandShake)inHand);
-            CEnvelope env = new CEnvelope(outHand);
+            Envelope env = new Envelope(outHand);
             env.SendMessage(ActivationWebSocket, AbortToken);
         }
 
@@ -607,7 +607,7 @@ namespace IATClient
                 actRequest.FName = FName;
                 actRequest.LName = LName;
                 actRequest.Title = Title;
-                CEnvelope env = new CEnvelope(actRequest);
+                Envelope env = new Envelope(actRequest);
                 env.SendMessage(ActivationWebSocket, AbortToken);
             }
             else if (inTrans.Transaction == TransactionRequest.ETransaction.NoSuchClient)
@@ -656,252 +656,6 @@ namespace IATClient
 
     }
 
-    class ActivationRequest : INamedXmlSerializable
-    {
-        private String _ActivationCode;
-        private String _FName = String.Empty, _LName = String.Empty, _EMail = String.Empty, _Title = String.Empty;
-
-        public String ActivationCode
-        {
-            get
-            {
-                return _ActivationCode;
-            }
-            set
-            {
-                _ActivationCode = value;
-            }
-        }
-
-        public String EMail
-        {
-            get
-            {
-                return _EMail;
-            }
-            set
-            {
-                _EMail = value;
-            }
-        }
-
-        public String FName
-        {
-            get
-            {
-                return _FName;
-            }
-            set
-            {
-                _FName = value;
-            }
-        }
-
-        public String LName
-        {
-            get
-            {
-                return _LName;
-            }
-            set
-            {
-                _LName = value;
-            }
-        }
-
-        public String Title
-        {
-            get
-            {
-                return _Title;
-            }
-            set
-            {
-                _Title = value;
-            }
-        }
-
-
-        public ActivationRequest()
-        {
-            _ActivationCode = String.Empty;
-        }
-
-        public void ReadXml(XmlReader reader)
-        {
-            reader.ReadStartElement();
-            _ActivationCode = reader.ReadElementString();
-            _EMail = reader.ReadElementString();
-            _FName = reader.ReadElementString();
-            _LName = reader.ReadElementString();
-            reader.ReadEndElement();
-        }
-
-        public void WriteXml(XmlWriter writer)
-        {
-            writer.WriteStartElement("ActivationRequest");
-            writer.WriteElementString("ProductCode", ActivationCode);
-            writer.WriteElementString("EMail", EMail);
-            writer.WriteElementString("Title", Title);
-            writer.WriteElementString("FName", FName);
-            writer.WriteElementString("LName", LName);
-            writer.WriteEndElement();
-        }
-
-        public String GetName()
-        {
-            return "ActivationRequest";
-        }
-
-        public XmlSchema GetSchema()
-        {
-            return null;
-        }
-    }
-
-    public class ActivationResponse : INamedXmlSerializable
-    {
-        public enum EResult { Unset, NoSuchClient, InvalidRequest, ServerFailure, NoActivationsRemaining, InvalidProductCode, ClientFrozen, ClientDeleted, CannotConnect, Success,
-            EmailAlreadyVerified };
-        private EResult _Result;
-        private String _VerificationCode, _ProductKey, _Province, _PostalCode, _Phone, _Name, _EMail, _Country, _City, _Address1, _Address2;
-        private int _UserNum;
-
-        public ActivationResponse() { }
-
-        public String VerificationCode
-        {
-            get
-            {
-                return _VerificationCode;
-            }
-        }
-
-        public String ProductKey
-        {
-            get
-            {
-                return _ProductKey;
-            }
-        }
-
-        public String ClientProvince
-        {
-            get
-            {
-                return _Province;
-            }
-        }
-
-        public String ClientPostalCode
-        {
-            get
-            {
-                return _PostalCode;
-            }
-        }
-
-        public String ClientPhone
-        {
-            get
-            {
-                return _Phone;
-            }
-        }
-
-        public String ClientName
-        {
-            get
-            {
-                return _Name;
-            }
-        }
-
-        public String ClientEMail
-        {
-            get
-            {
-                return _EMail;
-            }
-        }
-
-        public String ClientCity
-        {
-            get
-            {
-                return _City;
-            }
-        }
-
-        public String ClientCountry
-        {
-            get
-            {
-                return _Country;
-            }
-        }
-
-        public String ClientAddress1
-        {
-            get
-            {
-                return _Address1;
-            }
-        }
-
-        public String ClientAddress2
-        {
-            get
-            {
-                return _Address2;
-            }
-        }
-
-        public EResult Result
-        {
-            get
-            {
-                return _Result;
-            }
-            set
-            {
-                _Result = value;
-            }
-        }
-
-        public String GetName()
-        {
-            return "ActivationResponse";
-        }
-
-        public void WriteXml(XmlWriter xWriter)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void ReadXml(XmlReader xReader)
-        {
-            xReader.ReadStartElement("ActivationResponse");
-            _Result = (EResult)Enum.Parse(typeof(EResult), xReader.ReadElementString("ActivationResult"));
-            _ProductKey = xReader.ReadElementString("ProductKey");
-            _VerificationCode = xReader.ReadElementString("VerificationCode");
-            _Name = xReader.ReadElementString("ClientName");
-            _EMail = xReader.ReadElementString("ClientEMail");
-            _Phone = xReader.ReadElementString("Phone");
-            _Address1 = xReader.ReadElementString("Address1");
-            _Address2 = xReader.ReadElementString("Address2");
-            _City = xReader.ReadElementString("City");
-            _Province = xReader.ReadElementString("Province");
-            _PostalCode = xReader.ReadElementString("PostalCode");
-            _Country = xReader.ReadElementString("Country");
-            xReader.ReadEndElement();
-        }
-
-        public XmlSchema GetSchema()
-        {
-            return null;
-        }
-    }
 }
 
 

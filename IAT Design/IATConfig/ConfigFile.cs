@@ -494,7 +494,6 @@ namespace IATClient.IATConfig
                     Format = di.IImage.ImageFormat.Format
                 };
                 bmp.Dispose();
-                memStream.Dispose();
                 return img;
             }, IATImagesProcessed);
             SlideImages = new ImageContainer((DIBase di) =>

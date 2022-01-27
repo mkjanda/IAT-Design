@@ -2,25 +2,28 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 using System.Xml;
 
-namespace IATClient
+namespace IATClient.Messages
 {
-    class CIATList : INamedXmlSerializable
+    class IATList : INamedXmlSerializable
     {
         private List<String> _IATNames = new List<String>();
         private List<CIATAuthorInfo> _Authors = new List<CIATAuthorInfo>();
 
         public List<String> IATNames
         {
-            get {
+            get
+            {
                 return _IATNames;
             }
         }
 
         public List<CIATAuthorInfo> Authors
         {
-            get {
+            get
+            {
                 return _Authors;
             }
         }
@@ -56,7 +59,7 @@ namespace IATClient
             throw new NotImplementedException();
         }
 
-        public class CIATAuthorInfo 
+        public class CIATAuthorInfo
         {
             private String _FName, _LName, _EMail, _Title;
 

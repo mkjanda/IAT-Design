@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Xml;
 
-namespace IATClient
+namespace IATClient.Messages
 {
-    class CDeploymentProgressUpdate : INamedXmlSerializable
+    class DeploymentProgressUpdate : INamedXmlSerializable
     {
         public enum EStage
         {
@@ -30,7 +30,7 @@ namespace IATClient
 
         private static Dictionary<EStage, String> StateMessageDictionary = new Dictionary<EStage, String>();
 
-        static CDeploymentProgressUpdate()
+        static DeploymentProgressUpdate()
         {
             Array stageArray = Enum.GetValues(typeof(EStage));
             for (int ctr = 0; ctr < stageArray.Length; ctr++)
@@ -108,7 +108,7 @@ namespace IATClient
             }
         }
 
-        public CDeploymentProgressUpdate()
+        public DeploymentProgressUpdate()
         {
             _Stage = EStage.unset;
             _ActiveItem = String.Empty;

@@ -3,7 +3,7 @@ using System.Xml;
 using System.Collections;
 using System.Collections.Generic;
 
-namespace IATClient
+namespace IATClient.ResultData
 {
     namespace IATResultSetNamespaceV2
     {
