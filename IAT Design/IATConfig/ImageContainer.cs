@@ -92,9 +92,9 @@ namespace IATClient.IATConfig
                 foreach (var i in ImageList)
                     refs.Add(new ResourceReference()
                     {
-                        ImageUri = i.SourceUris.FirstOrDefault(),
-                        ReferenceIndex = i.Indexes
-                    });
+                        ResourceId = i.Id,
+                        ReferenceIds = i.Indexes
+                    }); ;
                 return refs;
             }
         }

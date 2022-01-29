@@ -9,7 +9,7 @@ namespace IATClient
 {
     class PaintedResultsGridPanel : Panel
     {
-        private CResultData ResultData;
+        private ResultData.ResultData ResultData;
         private Padding CellPadding = new Padding(3, 2, 3, 2);
         private Font DataFont = new Font(System.Drawing.SystemFonts.DefaultFont.FontFamily, 10);
 
@@ -87,7 +87,7 @@ namespace IATClient
 
         }
 
-        void Initialize(CResultData resultData)
+        void Initialize(ResultData.ResultData resultData)
         {
             ResultData = resultData;
             Scale();

@@ -9,7 +9,7 @@ namespace IATClient.Messages
     public class ItemSlideManifest : INamedXmlSerializable
     {
         public Manifest Manifest { get; private set; } = new Manifest();
-        public List<ResourceReference> FileReferences { get; private set; } = new List<ResourceReference>();
+        public List<ResourceReference> ResourceReferences { get; private set; } = new List<ResourceReference>();
 
         public void ReadXml(XmlReader xReader)
         {
@@ -20,7 +20,7 @@ namespace IATClient.Messages
                 xReader.ReadStartElement();
                 var fr = new ResourceReference();
                 fr.ReadXml(xReader);
-                FileReferences.Add(fr);
+                ResourceReferences.Add(fr);
                 xReader.ReadEndElement();
             }
             xReader.ReadEndElement();
@@ -30,10 +30,10 @@ namespace IATClient.Messages
         {
             xWriter.WriteStartElement(GetName());
             Manifest.WriteXml(xWriter);
-            if (FileReferences.Count < 0)
+            if (ResourceReferences.Count < 0)
             {
-                xWriter.WriteStartElement("FileReferences");
-                foreach (var fr in FileReferences)
+                xWriter.WriteStartElement("ResourceReferences");
+                foreach (var fr in ResourceReferences)
                     fr.WriteXml(xWriter);
                 xWriter.WriteEndElement();
             }

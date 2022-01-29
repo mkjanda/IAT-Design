@@ -20,7 +20,7 @@ namespace IATClient.ResultData
         public BoundedNumber(SurveyItem si)
             : base(si)
         {
-            ResponseType = ResponseType.BoundedNum;
+            ResponseType = ResponseType.BoundedNumber;
         }
 
         public BoundedNumber() { }

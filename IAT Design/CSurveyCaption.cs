@@ -5,7 +5,7 @@ using System.Xml.Linq;
 using System.Linq;
 using System.IO;
 using IATClient.ResultData;
-
+using IATClient.IATConfig; 
 namespace IATClient
 {
     class CSurveyCaption : CSurveyItem
@@ -32,11 +32,11 @@ namespace IATClient
 
         public String FontName { get; set; } = PrivateFont.JosefinSans.FamilyName;
 
-        public Color FontColor { get; set; } = NamedColor.UltraViolet.Color;
+        public System.Drawing.Color FontColor { get; set; } = NamedColor.UltraViolet.Color;
 
-        public Color BackColor { get; set; } = NamedColor.StarSapphire.Color;
+        public System.Drawing.Color BackColor { get; set; } = NamedColor.StarSapphire.Color;
 
-        public Color BorderColor { get; set; } = NamedColor.Raspberry.Color;
+        public System.Drawing.Color BorderColor { get; set; } = NamedColor.Raspberry.Color;
 
         public Size CaptionSize
         {
@@ -124,11 +124,11 @@ namespace IATClient
             FontName = elem.Element("FontName").Value;
             FontSize = Convert.ToInt32(elem.Element("FontSize").Value);
             BorderWidth = Convert.ToInt32(elem.Element("BorderWidth").Value);
-            FontColor = Color.FromArgb(Convert.ToInt32(elem.Element("FontColor").Attribute("r").Value), Convert.ToInt32(elem.Element("FontColor").Attribute("g").Value),
+            FontColor = System.Drawing.Color.FromArgb(Convert.ToInt32(elem.Element("FontColor").Attribute("r").Value), Convert.ToInt32(elem.Element("FontColor").Attribute("g").Value),
                 Convert.ToInt32(elem.Element("FontColor").Attribute("b").Value));
-            BackColor = Color.FromArgb(Convert.ToInt32(elem.Element("BackgroundColor").Attribute("r").Value), Convert.ToInt32(elem.Element("BackgroundColor").Attribute("g").Value),
+            BackColor = System.Drawing.Color.FromArgb(Convert.ToInt32(elem.Element("BackgroundColor").Attribute("r").Value), Convert.ToInt32(elem.Element("BackgroundColor").Attribute("g").Value),
                 Convert.ToInt32(elem.Element("BackgroundColor").Attribute("b").Value));
-            BorderColor = Color.FromArgb(Convert.ToInt32(elem.Element("BorderColor").Attribute("r").Value), Convert.ToInt32(elem.Element("BorderColor").Attribute("g").Value),
+            BorderColor = System.Drawing.Color.FromArgb(Convert.ToInt32(elem.Element("BorderColor").Attribute("r").Value), Convert.ToInt32(elem.Element("BorderColor").Attribute("g").Value),
                 Convert.ToInt32(elem.Element("BorderColor").Attribute("b").Value));
         }
 

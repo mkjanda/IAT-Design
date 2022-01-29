@@ -99,7 +99,6 @@ namespace IATClient.ResultData
 
 
         public int ResultDataVersion { get; private set; }
-        private CNorms Norms { get; set; }
 
         private int _ResultDataVersion;
 

@@ -124,10 +124,6 @@
     <Compile Include="AnonymousComparer.cs" />
     <Compile Include="ApplicationEventDispatcher.cs" />
     <Compile Include="ApplicationEvents.cs" />
-    <Compile Include="BoundedLengthDeleteConfirmation.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="BoundedLengthDeleteConfirmation.Designer.cs" />
     <Compile Include="BoundedLengthDisplay.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -251,6 +247,7 @@
     <Compile Include="ResultData\Boolean.cs" />
     <Compile Include="ResultData\BoundedLength.cs" />
     <Compile Include="ResultData\BoundedNumber.cs" />
+    <Compile Include="ResultData\Caption.cs" />
     <Compile Include="ResultData\Date.cs" />
     <Compile Include="ResultData\FixedDigit.cs" />
     <Compile Include="ResultData\ItemSlideData.cs" />
@@ -264,8 +261,6 @@
     <Compile Include="ResultData\ResultData.cs" />
     <Compile Include="CResultDocument.cs" />
     <Compile Include="CResultPacket.cs" />
-    <Compile Include="CSearchDescriptor.cs" />
-    <Compile Include="CSearchValue.cs" />
     <Compile Include="CServerConnection.cs" />
     <Compile Include="CServerReport.cs" />
     <Compile Include="CServerURL.cs" />
@@ -352,9 +347,6 @@
     <Compile Include="ResultData\IATResultSetNamespaceV1.cs" />
     <Compile Include="ResultData\IATResultSetNamespaceV2.cs" />
     <Compile Include="ResultData\IATResultSetNamespaceV3.cs" />
-    <Compile Include="IATTabPanel.cs">
-      <SubType>Component</SubType>
-    </Compile>
     <Compile Include="IATUploadCompleteForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -669,20 +661,11 @@
       <DependentUpon>AboutBox.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="ActivationDialog.resx" />
-    <EmbeddedResource Include="BoundedLengthDeleteConfirmation.resx" />
     <EmbeddedResource Include="ConfirmV11Form.resx">
       <DependentUpon>ConfirmV11Form.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="DataPasswordForm.resx" />
-    <EmbeddedResource Include="DynamicIATPanel.resx" />
     <EmbeddedResource Include="ErrorForm.resx" />
-    <EmbeddedResource Include="IATBlockPanel.resx" />
-    <EmbeddedResource Include="IATConfigMainForm.resx" />
-    <EmbeddedResource Include="IATGenerateBlockSelect.resx" />
-    <EmbeddedResource Include="IATUploadCompleteForm.resx" />
-    <EmbeddedResource Include="IATUploadForm.resx" />
-    <EmbeddedResource Include="ImageBrowser.resx" />
-    <EmbeddedResource Include="ImageKeyPanel.resx" />
     <EmbeddedResource Include="InstructionScreenPanel.resx" />
     <EmbeddedResource Include="InstructionScreenPreview.resx" />
     <EmbeddedResource Include="KeyInstructionsPanel.resx" />
@@ -740,9 +723,6 @@
     <None Include="IATDesign.pfx" />
     <None Include="ARLRDBD.TTF">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="FTLTLT.TTF">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="ITCKRIST.TTF">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>

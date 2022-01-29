@@ -6,6 +6,8 @@ using System.Windows.Forms;
 using System.Drawing;
 using System.Xml.Linq;
 using IATClient.ResultData;
+using IATClient.IATConfig;
+
 namespace IATClient
 {
     /// <summary>

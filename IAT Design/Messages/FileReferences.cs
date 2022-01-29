@@ -9,29 +9,30 @@ namespace IATClient.Messages
 {
     public class ResourceReference : INamedXmlSerializable
     {
-        public Uri ImageUri { get; set; }
-        public List<int> ReferenceIndex { get; set; } = new List<int>();
+        public int ResourceId { get; set; }
+        public List<int> ReferenceIds { get; set; } = new List<int>();
 
         public void ReadXml(XmlReader xReader)
         {
             xReader.ReadStartElement(GetName());
-            ImageUri = new Uri(xReader.ReadElementString("ImageUriOriginalString"), UriKind.Relative);
+            ResourceId = Convert.ToInt32(xReader.ReadElementString("ResourceId"));
             while (xReader.Name == "Reference")
-                ReferenceIndex.Add(Convert.ToInt32(xReader.ReadElementString()));
+                ReferenceIds.Add(Convert.ToInt32(xReader.ReadElementString()));
+            xReader.ReadEndElement();
         }
 
         public void WriteXml(XmlWriter xWriter)
         {
             xWriter.WriteStartElement(GetName());
-            xWriter.WriteElementString("ImageUriOriginalString", ImageUri.OriginalString);
-            foreach (var ndx in ReferenceIndex) 
+            xWriter.WriteElementString("ResourceId", ResourceId.ToString());
+            foreach (var ndx in ReferenceIds) 
                 xWriter.WriteElementString("Reference", ndx.ToString());
             xWriter.WriteEndElement();
         }
 
         public String GetName()
         {
-            return "FileReference";
+            return "ResourceReference";
         }
     }
 }

@@ -78,6 +78,22 @@ namespace IATClient.IATConfig
             }
         }
 
+        public int NumItems
+        {
+            get
+            {
+                return IATEventList.Where(evt => evt.EventType == IATEvent.EEventType.IATItem).Count();
+            }
+        }
+
+        public int NumPresentations
+        {
+            get
+            {
+                return IATEventList.Where(evt => evt.EventType == IATEvent.EEventType.BeginIATBlock).Cast<BeginIATBlock>().Select(evt => evt.NumPresentations).Sum();
+            }
+        }
+
         public String ServerDomain
         {
             get

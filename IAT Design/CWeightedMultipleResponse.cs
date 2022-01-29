@@ -4,6 +4,7 @@ using System.Xml;
 using System.Windows.Forms;
 using System.Xml.Linq;
 using IATClient.ResultData;
+using IATClient.IATConfig;
 
 namespace IATClient
 {

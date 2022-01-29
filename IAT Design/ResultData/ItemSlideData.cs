@@ -9,7 +9,7 @@ using System.Xml.Schema;
 namespace IATClient.ResultData
 {
     [Serializable]
-    [XmlElement(ElementName ="ItemSlideData", Form = XmlSchemaForm.Unqualified, IsNullable = false, Type = typeof(ItemSlideData))]
+    [XmlRoot(ElementName ="ItemSlideData", IsNullable = false)]
     public class ItemSlideData
     {
         [XmlElement("SessionId")]

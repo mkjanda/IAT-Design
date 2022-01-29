@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Xml;
 using System.Xml.Linq;
+using IATClient.ResultData;
+using IATClient.IATConfig;
 
 namespace IATClient
 {
@@ -99,7 +101,7 @@ namespace IATClient
 
         public override Response GenerateSerializableResponse(SurveyItem parentItem)
         {
-            FixedDig r = new FixedDig(parentItem);
+            FixedDigit r = new FixedDigit(parentItem);
             r.NumDigs = NumDigs;
 
             return r;

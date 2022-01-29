@@ -10,6 +10,7 @@ using System.Windows.Forms;
 using System.Threading;
 using System.Linq;
 using System.Threading.Tasks;
+using IATClient.IATConfig;
 
 namespace IATClient
 {
@@ -426,7 +427,6 @@ namespace IATClient
         {
             if (KeySpecifierID == -1)
                 return;
-            DynamicSpecifier.RemoveIATItem(KeySpecifierID, this);
             KeySpecifierID = -1;
         }
 

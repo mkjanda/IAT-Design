@@ -101,5 +101,5 @@ namespace IATClient.ResultData {
     }
 
     [Serializable]
-    public enum ResponseType { None, Boolean, Likert, Date, Multiple, WeightedMultiple, RegEx, MultiBoolean, FixedDig, BoundedNum, BoundedLength, Picture };
+    public enum ResponseType { None, Boolean, Likert, Date, Multiple, WeightedMultiple, RegEx, MultiBoolean, FixedDigit, BoundedNumber, BoundedLength, Picture };
 }

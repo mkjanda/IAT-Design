@@ -17,7 +17,7 @@ namespace IATClient.ResultData
         public FixedDigit(SurveyItem si)
             : base(si)
         {
-            ResponseType = ResponseType.FixedDig;
+            ResponseType = ResponseType.FixedDigit;
         }
 
         public FixedDigit() { }
