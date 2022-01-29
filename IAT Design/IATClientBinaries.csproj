@@ -9,7 +9,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>IATClient</RootNamespace>
     <AssemblyName>DesignBinaries</AssemblyName>
-    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
     <NuGetPackageImportStamp>
@@ -666,6 +666,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="DataPasswordForm.resx" />
     <EmbeddedResource Include="ErrorForm.resx" />
+    <EmbeddedResource Include="IATConfigMainForm.resx">
+      <DependentUpon>IATConfigMainForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="InstructionScreenPanel.resx" />
     <EmbeddedResource Include="InstructionScreenPreview.resx" />
     <EmbeddedResource Include="KeyInstructionsPanel.resx" />
