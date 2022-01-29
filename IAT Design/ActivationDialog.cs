@@ -5,7 +5,7 @@ using System.Windows.Forms;
 using System.Net;
 using System.Text.RegularExpressions;
 using System.Drawing;
-using IATClient.Messaging;
+using IATClient.Messages;
 
 namespace IATClient
 {

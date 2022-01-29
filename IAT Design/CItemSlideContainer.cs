@@ -124,8 +124,8 @@ namespace IATClient
         {
             Task.Run(() =>
             {
-                var fileRefs = SlideManifest.FileReferences;
-                var slideNum = fileRefs.Where(fr => fr.ReferenceIndex.Contains(ndx)).Select(fr => fileRefs.IndexOf(fr)).First();
+                var fileRefs = SlideManifest.ResourceReferences;
+                var slideNum = fileRefs.Where(fr => fr.ReferenceIds.Contains(ndx)).Select(fr => fileRefs.IndexOf(fr)).First();
                 var slide = SlideDictionary[slideNum];
                 slide.ImageRetrievedEvent.WaitOne();
                 Image full = slide.FullSizedImage;

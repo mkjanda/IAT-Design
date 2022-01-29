@@ -8,7 +8,7 @@ namespace IATClient.IATConfig
         private int _ID;
         private String _SurveyName;
         private int _ItemNum;
-        public enum ESpecifierType { Range, Selection, Mask, TrueFalse };
+        public enum ESpecifierType { None, Range, Selection, Mask, TrueFalse };
         protected ESpecifierType Type;
 
         public int ID

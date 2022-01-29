@@ -752,7 +752,7 @@ namespace IATClient
             String newIATName = m_ServerInterfacePanel.IATName_Click((Label)sender);
             if (newIATName == currIAT)
                 return;
-            CResultData rd = IATManager.GetResultData(SelectedIAT);
+            ResultData.ResultData rd = IATManager.GetResultData(SelectedIAT);
             this.Invoke(new Action(ClearResultPanel));
             if (rd != null)
             {

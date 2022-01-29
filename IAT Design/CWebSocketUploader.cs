@@ -612,7 +612,7 @@ namespace IATClient
                         ItemSlideManifest = new ItemSlideManifest();
                         ItemSlideManifest.Manifest.AddFiles(CF.SlideImages.ConstructFileManifest());
                         ItemSlideManifest.Manifest.Type = Manifest.EType.ItemSlides;
-                        ItemSlideManifest.FileReferences.AddRange(CF.SlideImages.ResourceReferences);
+                        ItemSlideManifest.ResourceReferences.AddRange(CF.SlideImages.ResourceReferences);
                         transmission = new Envelope(ItemSlideManifest);
                         transmission.SendMessage(UploadTestWebSocket, AbortToken);
                         break;

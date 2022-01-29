@@ -38,7 +38,7 @@ namespace IATClient
                 _ResultSet = value;
                 if (FullSizedNdx != -1)
                 {
-                    FullSizedSlide.SetResultData(ItemSlideContainer.GetSlideLatencies(FullSizedNdx + 1, value), ItemSlideContainer.GetMeanSlideLatency(FullSizedNdx + 1),
+                    FullSizedSlide.SetResultData(ItemSlideContainer.GetSlideLatencies(FullSizedNdx + 1), ItemSlideContainer.GetMeanSlideLatency(FullSizedNdx + 1),
                         ItemSlideContainer.GetMeanNumErrors(FullSizedNdx + 1), value + 1);
                     FullSizedSlide.Invalidate();
                 }
@@ -163,9 +163,9 @@ namespace IATClient
 //                ThumbPanel.VerticalScroll.Value = thumbPanel.Top - yPos;
                 Controls.Add(FullSizedSlide);
             }
-            FullSizedSlide.SetResultData(ItemSlideContainer.GetSlideLatencies(ndx + 1, ResultSet), ItemSlideContainer.GetMeanSlideLatency(ndx + 1), ItemSlideContainer.GetMeanNumErrors(ndx + 1), ResultSet + 1);
-            var fileRefs = ItemSlideContainer.SlideManifest.FileReferences;
-            var slideNum = fileRefs.Where(fr => fr.ReferenceIndex.Contains(ndx)).Select(fr => fileRefs.IndexOf(fr)).First();
+            FullSizedSlide.SetResultData(ItemSlideContainer.GetSlideLatencies(ndx + 1), ItemSlideContainer.GetMeanSlideLatency(ndx + 1), ItemSlideContainer.GetMeanNumErrors(ndx + 1), ResultSet + 1);
+            var fileRefs = ItemSlideContainer.SlideManifest.ResourceReferences;
+            var slideNum = fileRefs.Where(fr => fr.ReferenceIds.Contains(ndx)).Select(fr => fileRefs.IndexOf(fr)).First();
             var slide = ItemSlideContainer.SlideDictionary[slideNum];
             slide.FullSizedUpdate(ndx);
             FullSizedSlide.Invalidate();

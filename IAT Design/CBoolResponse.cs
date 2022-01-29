@@ -5,6 +5,7 @@ using System.Xml;
 using System.Windows.Forms;
 using System.Xml.Linq;
 using IATClient.ResultData;
+using IATClient.IATConfig; 
 
 namespace IATClient
 {
@@ -147,7 +148,7 @@ namespace IATClient
 
         public override Response GenerateSerializableResponse(SurveyItem parentItem)
         {
-            Boolean r = new Boolean(parentItem);
+            ResultData.Boolean r = new ResultData.Boolean(parentItem);
             r.TrueStatement = TrueStatement;
             r.FalseStatement = FalseStatement;
             return r;

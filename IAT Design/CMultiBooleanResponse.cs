@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Xml;
 using System.Windows.Forms;
+using IATClient.IATConfig;
 using System.Drawing;
 using System.Xml.Linq;
 using IATClient.ResultData;

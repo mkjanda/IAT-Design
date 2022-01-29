@@ -167,10 +167,10 @@ namespace IATClient
             private XsltTransformer xsltTrans;
             private String outputPathTemplate, contentType;
             private int templateStartingVal;
-            private List<uint> ItrCtr;
+            private List<int> ItrCtr;
             private List<int> ItrVal;
 
-            public ExcelMultiTransformComponent(XmlNode transNode, List<uint> itrCtr, List<int> itrVal)
+            public ExcelMultiTransformComponent(XmlNode transNode, List<int> itrCtr, List<int> itrVal)
                 : base(transNode.SelectSingleNode("Content"))
             {
                 xsltExec = XSLTCompiler.Compile(Content);
@@ -553,7 +553,7 @@ namespace IATClient
                         yOffset += sz.Height;
                         break;
 
-                    case ResponseType.FixedDig:
+                    case ResponseType.FixedDigit:
                         FixedDigit fd = (FixedDigit)survey.SurveyItems[ctr].Response;
                         str = String.Format("A response that consists of {0} digits.", fd.NumDigs);
                         sz = g.MeasureString(str, f);
@@ -705,8 +705,8 @@ namespace IATClient
                             sqf.ResponseSummary = "A date in MM/DD/YYYY format.";
                         break;
 
-                    case ResponseType.FixedDig:
-                        FixedDig fdr = (FixedDig)s.SurveyItems[ctr].Response;
+                    case ResponseType.FixedDigit:
+                        FixedDigit fdr = (FixedDigit)s.SurveyItems[ctr].Response;
                         sqf.QuestionText = s.SurveyItems[ctr].Text;
                         sqf.ResponseSummary = String.Format("A series of {0} digits.", fdr.NumDigs);
                         break;
@@ -796,7 +796,7 @@ namespace IATClient
         }
 
 
-        private void ParseResultData(CResultData resultData)
+        private void ParseResultData(ResultData.ResultData resultData)
         {
             if (resultData.Descriptor.TokenType != ETokenType.NONE)
                 ResultDocument.TokenName = resultData.Descriptor.TokenName;
@@ -814,8 +814,8 @@ namespace IATClient
                 if (resultData.IATResults[ctr].IATScore != double.NaN)
                     nValidResults++;
             ResultDocument.NumScoredResults = (uint)nValidResults;
-            ResultDocument.NumIATItems = (uint)resultData.Descriptor.ConfigFile.CountIATItems();
-            ResultDocument.NumPresentations = (uint)resultData.Descriptor.ConfigFile.TotalPresentations;
+            ResultDocument.NumIATItems = (uint)resultData.IATConfiguration.NumItems;
+            ResultDocument.NumPresentations = (uint)resultData.IATConfiguration.NumPresentations;
             ResultDocument.TestAuthor = resultData.Descriptor.TestAuthor;
             DateTime dt = DateTime.Now.ToUniversalTime();
             ResultDocument.RetrievalTime = String.Format("{0:D4}-{1:D2}-{2:D2}T{3:D2}:{4:D2}:{5:D2}Z", dt.Year, dt.Month, dt.Day, dt.Hour, dt.Minute, dt.Second);
@@ -883,7 +883,7 @@ namespace IATClient
                     ResultDocument.TestResult[ctr].IATResult.IATScore = double.NaN;
                 else
                     ResultDocument.TestResult[ctr].IATResult.IATScore = resultData.IATResults[ctr].IATScore;
-                ResultDocument.TestResult[ctr].IATResult.IATResponse = new ResultDocument.TIATResponse[resultData.Descriptor.ConfigFile.TotalPresentations];
+                ResultDocument.TestResult[ctr].IATResult.IATResponse = new ResultDocument.TIATResponse[resultData.IATConfiguration.NumPresentations];
                 for (int ctr2 = 0; ctr2 < resultData.IATResults[ctr].IATResponse.NumItems; ctr2++)
                 {
                     ResultDocument.TestResult[ctr].IATResult.IATResponse[ctr2] = new ResultDocument.TIATResponse();
@@ -922,33 +922,13 @@ namespace IATClient
                     }
                 }
             }
-            var Items = (from tr in ResultDocument.TestResult select from ir in tr.IATResult.IATResponse select ir.ItemNum).Aggregate((items, nextSet) => items.Union(nextSet)).OrderBy(i => i).Distinct();
-            int nItems = Items.Count();
-            /*            var ImageFilenames = (from isl in SlideContainer.SlideManifest.ItemSlideEntries where ((isl.Items as IEnumerable<uint>).Intersect(Items as IEnumerable<uint>).Count() > 0) select isl.SlideFileName).Distinct().OrderBy(s => s);
-                        String[] filenames = new String[Items.Count()];
-                        int ndx = 0;
-                        foreach (uint itemNum in Items)
-                            filenames[ndx++] = SlideContainer.SlideManifest.GetSlideFile((int)itemNum);
-             */
-            ResultDocument.ItemSlide = new ResultDocument.TItemSlide[nItems];
-            int ndx = 0;
-            List<int> slideNums = new List<int>();
-            List<int> slideImgNums = new List<int>();
-            foreach (uint u in Items)
-            {
-                ResultDocument.ItemSlide[ndx] = new ResultDocument.TItemSlide();
-                ResultDocument.ItemSlide[ndx++].ItemNum = (int)u;
-                for (int ctr = 0; ctr < SlideContainer.SlideManifest.ItemSlideEntries.Length; ctr++)
-                    for (int ctr2 = 0; ctr2 < SlideContainer.SlideManifest.ItemSlideEntries[ctr].Items.Length; ctr2++)
-                        if (u == SlideContainer.SlideManifest.ItemSlideEntries[ctr].Items[ctr2])
-                        {
-                            if (!slideNums.Contains(ctr + 1))
-                                slideImgNums.Add(1 + ctr);
-                            slideNums.Add(1 + ctr);
-                        }
-            }
+            var slideNums = (from tr in ResultDocument.TestResult select from ir in tr.IATResult.IATResponse select ir.ItemNum + 1).Aggregate((a1, a2) => a1.Concat(a2)).Cast<int>().Distinct().OrderBy(i => i).ToList();
+            ResultDocument.ItemSlide = new ResultDocument.TItemSlide[slideNums.Count()];
             for (int ctr = 0; ctr < ResultDocument.ItemSlide.Length; ctr++)
-                ResultDocument.ItemSlide[ctr].SlideNum = slideImgNums.IndexOf(slideNums[ctr]) + 1;
+            {
+                ResultDocument.ItemSlide[ctr].SlideNum = slideNums[ctr];
+                ResultDocument.ItemSlide[ctr].ItemNum = ctr;
+            }
         }
 
         public CResultDocument()
@@ -974,7 +954,7 @@ namespace IATClient
             }
         }
 
-        private void LoadTransforms(List<uint> itrCtr, List<int> itrVal)
+        private void LoadTransforms(List<int> itrCtr, List<int> itrVal)
         {
             XmlDocument transDoc = new XmlDocument();
             transDoc.Load(new StringReader(Properties.Resources.ExcelTrans));
@@ -1022,40 +1002,23 @@ namespace IATClient
         {
             try
             {
-                var Items = (from tr in ResultDocument.TestResult select from ir in tr.IATResult.IATResponse select ir.ItemNum).Aggregate((items, nextSet) => items.Union(nextSet)).OrderBy(i => i).Distinct();
-                var slideNums = from i in Items
-                                select (from isl in SlideContainer.SlideManifest.ItemSlideEntries
-                                        where isl.Items.Contains(i)
-                                        select new { ndx = Items.ToList().IndexOf(i), slideNum = SlideContainer.SlideManifest.ItemSlideEntries.ToList().IndexOf(isl) } into slide
-                                        orderby slide.slideNum
-                                        select slide).First();
-                int[] ndxs = new int[Items.Count()];
-                int slideCtr = 0;
-                int prevSlideNum = -1;
-                foreach (var slide in slideNums.OrderBy((e) => e.slideNum))
-                {
-                    if (slide.slideNum == prevSlideNum)
-                        ndxs[slide.ndx] = slideCtr;
-                    else
-                        ndxs[slide.ndx] = ++slideCtr;
-                    prevSlideNum = slide.slideNum;
-                }
-                TItemSlideEntry[] slideEntries = SlideContainer.SlideManifest.ItemSlideEntries;
-                var slideNdxs = from i in Items select from ise in slideEntries select slideEntries.ToList().IndexOf(ise);
-                // var ndxs = from i in Items select (from ise in slideEntries where ise.Items.Contains(i) select new { item = i, slideNum = slideEntries.ToList().IndexOf(ise) }).OrderBy(ndx => ndx).First();
-                //            var Select<TItemSlideEntry, int>((ise, ndx) => SlideContainer.SlideManifest.ItemSlideEntries.ToList<TItemSlideEntry>().IndexOf(ise)).Select<int, int>((slideNum, ndx) => ndx).OrderBy<int, int>(ndx => ndx).First();
-                //var ndxs = from ise in ises select ises.ToList<TItemSlideEntry>().IndexOf(ise) + 1;
-                var SlideEntries = from i in Items select (from isl in SlideContainer.SlideManifest.ItemSlideEntries where isl.Items.Contains(i) select isl).First();
-                var ImageFilenames = (from isl in SlideContainer.SlideManifest.ItemSlideEntries where ((isl.Items as IEnumerable<uint>).Intersect(Items as IEnumerable<uint>).Count() > 0) select Convert.ToInt32(isl.SlideFileName.Substring(5, isl.SlideFileName.IndexOf('.') - 5))).Distinct().OrderBy(i => i);
+                var itemNums = (from tr in ResultDocument.TestResult select from ir in tr.IATResult.IATResponse select ir.ItemNum).
+                    Aggregate((a1, a2) => a1.Concat(a2)).Distinct().Cast<int>().OrderBy(i => i);
+                var slideNums = (from resource in SlideContainer.SlideManifest.ResourceReferences select resource)
+                    .Where(rr => rr.ReferenceIds.Intersect(itemNums).Count() > 0).Select(rr => rr.ResourceId).Distinct().OrderBy(i => i);
+                var indexes = from sn in slideNums select slideNums.ToList().IndexOf(sn);
+//                TItemSlideEntry[] slideEntries = SlideContainer.SlideManifest.ItemSlideEntries;
+  //              var slideNdxs = from i in Items select from ise in slideEntries select slideEntries.ToList().IndexOf(ise);
+    //            var SlideEntries = from i in Items select (from isl in SlideContainer.SlideManifest.ItemSlideEntries where isl.Items.Contains(i) select isl).First();
                 bAbortExport = false;
-                LoadTransforms(Items.ToList<uint>(), ndxs.ToList<int>());
+                LoadTransforms(itemNums.ToList(), indexes.ToList());
                 ZipPackage outZip = (ZipPackage)Package.Open(filename, FileMode.Create);
                 int nTransforms = 0;
                 nTransforms = TransformList.Count();
                 Action<EventHandler, IATConfigMainForm.EProgressBarUses> del = new Action<EventHandler, IATConfigMainForm.EProgressBarUses>(MainForm.BeginProgressBarUse);
                 MainForm.Invoke(del, new EventHandler(Abort), IATConfigMainForm.EProgressBarUses.ExportData);
                 Action<int, int> setRangeDel = (Action<int, int>)MainForm.SetProgressRange;
-                MainForm.Invoke(setRangeDel, 0, (TransformList.OfType<ExcelMultiTransformComponent>().Count() * (Items.Count() - 1) + TransformList.Count()));
+                MainForm.Invoke(setRangeDel, 0, (TransformList.OfType<ExcelMultiTransformComponent>().Count() * (slideNums.Count() - 1) + TransformList.Count()));
                 Action incProgress = new Action(() => MainForm.BeginInvoke(new Action<int>(MainForm.ProgressIncrement), 1));
                 ManualResetEvent transformEvent = new ManualResetEvent(false);
                 TransformWorkers = new WorkerPool(() => { transformEvent.Set(); });
@@ -1085,20 +1048,15 @@ namespace IATClient
                 }
                 List<String> savedImgs = new List<String>();
                 ctr = TitlePageImages.Count + 1;
-                foreach (TItemSlideEntry ise in SlideEntries)
+                foreach (var sn in slideNums)
                 {
-                    if (!savedImgs.Contains(ise.SlideFileName))
+                    lock (ExcelTransform.TransformLock)
                     {
-                        lock (ExcelTransform.TransformLock)
-                        {
-                            zpp = (ZipPackagePart)outZip.CreatePart(PackUriHelper.CreatePartUri(new Uri(String.Format("/xl/media/image{0}.jpg", ctr.ToString()), UriKind.Relative)), System.Net.Mime.MediaTypeNames.Image.Jpeg);
-                            Image img = SlideContainer.GetSlideImage(ise.SlideFileName);
-                            img.Save(zpp.GetStream(), System.Drawing.Imaging.ImageFormat.Jpeg);
-                            zpp.GetStream().Flush();
-                            zpp.GetStream().Close();
-                        }
-                        ctr++;
-                        savedImgs.Add(ise.SlideFileName);
+                        zpp = (ZipPackagePart)outZip.CreatePart(PackUriHelper.CreatePartUri(new Uri(String.Format("/xl/media/image{0}.jpg", ctr.ToString()), UriKind.Relative)), System.Net.Mime.MediaTypeNames.Image.Jpeg);
+                        Image img = SlideContainer.SlideDictionary[sn].FullSizedImage;
+                        img.Save(zpp.GetStream(), System.Drawing.Imaging.ImageFormat.Jpeg);
+                        zpp.GetStream().Flush();
+                        zpp.GetStream().Close();
                     }
                 }
                 transformEvent.WaitOne();

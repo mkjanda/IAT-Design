@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.Xml;
 using System.Net.WebSockets;
 using System.Linq;
+using IATClient.Messages;
 
 namespace IATClient
 {
