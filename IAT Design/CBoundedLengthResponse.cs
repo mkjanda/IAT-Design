@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Xml;
 using System.Xml.Linq;
-
+using IATClient.ResultData;
 namespace IATClient
 { 
     /// <summary>
@@ -142,9 +142,9 @@ namespace IATClient
             return String.Format("\tA string of text between {0} and {1} characters in length\r\n", MinLength, MaxLength);
         }
 
-        public override IATSurveyFile.Response GenerateSerializableResponse(IATSurveyFile.SurveyItem parentItem)
+        public override Response GenerateSerializableResponse(SurveyItem parentItem)
         {
-            IATSurveyFile.BoundedLength r = new IATSurveyFile.BoundedLength(parentItem);
+            BoundedLength r = new BoundedLength(parentItem);
             r.MinLength = MinLength;
             r.MaxLength = MaxLength;
 
@@ -153,7 +153,7 @@ namespace IATClient
 
         public override CSpecifierControlDefinition GetSpecifierControlDefinition()
         {
-            return new CSpecifierControlDefinition(CDynamicSpecifier.ESpecifierType.None);
+            return new CSpecifierControlDefinition(DynamicSpecifier.ESpecifierType.None);
         }
     }
 }

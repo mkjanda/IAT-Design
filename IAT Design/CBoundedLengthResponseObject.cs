@@ -6,6 +6,7 @@ using System.Windows.Forms;
 using System.Drawing;
 using System.Xml;
 using System.Text.RegularExpressions;
+using IATClient.ResultData;
 
 namespace IATClient
 {
@@ -60,10 +61,10 @@ namespace IATClient
         private Func<CResponseObject.CResponseSpecifier> GetBounds = null;
         private new bool bIsNew = true;
 
-        public CBoundedLengthResponseObject(EType type, IATSurveyFile.Response response)
+        public CBoundedLengthResponseObject(EType type, Response response)
             : base(type, response)
         {
-            IATSurveyFile.BoundedLength resp = (IATSurveyFile.BoundedLength)response;
+            BoundedLength resp = (BoundedLength)response;
             GetBounds = new Func<CResponseObject.CResponseSpecifier>(resp.GetBounds);
         }
 
@@ -76,7 +77,7 @@ namespace IATClient
 
         public CBoundedLengthResponseObject(EType type, ResultSetDescriptor rsd) : base(type, rsd) { }
 
-        public CBoundedLengthResponseObject(CBoundedLengthResponseObject obj, IATSurveyFile.BoundedLength resp) : base(obj.Type, resp)
+        public CBoundedLengthResponseObject(CBoundedLengthResponseObject obj, BoundedLength resp) : base(obj.Type, resp)
         {
             GetBounds = new Func<CResponseObject.CResponseSpecifier>(resp.GetBounds);
             _SearchTree = obj.SearchTree.DeepCopy();

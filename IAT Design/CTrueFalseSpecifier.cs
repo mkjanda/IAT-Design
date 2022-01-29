@@ -5,14 +5,14 @@ using System.Text;
 
 namespace IATClient
 {
-    class CTrueFalseSpecifier : CDynamicSpecifier
+    class CTrueFalseSpecifier : DynamicSpecifier
     {
         public CTrueFalseSpecifier() { }
 
         public CTrueFalseSpecifier(String surveyName, int itemNum, List<CIATItem> iatItems)
             : base(surveyName, itemNum, iatItems) { }
 
-        public override CDynamicSpecifier.ESpecifierType SpecifierType
+        public override DynamicSpecifier.ESpecifierType SpecifierType
         {
             get
             {

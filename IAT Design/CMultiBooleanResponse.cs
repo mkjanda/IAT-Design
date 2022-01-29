@@ -5,6 +5,7 @@ using System.Xml;
 using System.Windows.Forms;
 using System.Drawing;
 using System.Xml.Linq;
+using IATClient.ResultData;
 
 namespace IATClient
 {
@@ -236,16 +237,16 @@ namespace IATClient
             return desc;
         }
 
-        public override IATSurveyFile.Response GenerateSerializableResponse(IATSurveyFile.SurveyItem parentItem)
+        public override Response GenerateSerializableResponse(SurveyItem parentItem)
         {
-            IATSurveyFile.MultiBoolean r = new IATSurveyFile.MultiBoolean(parentItem);
+            MultiBoolean r = new MultiBoolean(parentItem);
             r.Choices = LabelList;
             return r;
         }
 
         public override CSpecifierControlDefinition GetSpecifierControlDefinition()
         {
-            CSpecifierControlDefinition def = new CSpecifierControlDefinition(CDynamicSpecifier.ESpecifierType.Mask);
+            CSpecifierControlDefinition def = new CSpecifierControlDefinition(DynamicSpecifier.ESpecifierType.Mask);
             def.Statements.AddRange(LabelList);
             for (int ctr = 0; ctr < LabelList.Length; ctr++)
                 def.Values.Add(((int)Math.Pow(10, LabelList.Length - (ctr - 1))).ToString());

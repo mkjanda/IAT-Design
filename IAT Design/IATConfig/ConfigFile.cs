@@ -546,9 +546,9 @@ namespace IATClient.IATConfig
                         throw new PackagingException(String.Format("Error Packaging IAT Instruction #{0}", ((CInstructionBlock)IAT.Contents[ctr]).IndexInContainer + 1));
                 }
             }
-            //            foreach (CDynamicSpecifier ds in CDynamicSpecifier.GetAllSpecifiers())
+            //            foreach (DynamicSpecifier ds in DynamicSpecifier.GetAllSpecifiers())
             //              DynamicSpecifiers.Add(ds.GetSerializableSpecifier());
-//            CDynamicSpecifier.CompactSpecifierDictionary(IAT);
+//            DynamicSpecifier.CompactSpecifierDictionary(IAT);
             SlideImages.AddDI(null);
             IATImages.AddDI(null);
             IATImagesProcessed.WaitOne();

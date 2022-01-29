@@ -22,7 +22,7 @@ namespace IATClient.ResultData
         private PartiallyEncryptedRSAData DataKey;
         private ManualResetEvent TransactionComplete = new ManualResetEvent(false), TransactionFailed = new ManualResetEvent(false), TransactionAborted = new ManualResetEvent(false);
         private IATConfigMainForm MainForm = (IATConfigMainForm)Application.OpenForms[Properties.Resources.sMainFormName];
-        private ResultSetDescriptor Descriptor = null;
+        public ResultSetDescriptor Descriptor { get; private set; } = null;
         public enum EOutputGrouping { groupedByItem, groupedByTestee, none };
         public enum EDelimitation { comma, space, tab };
         private bool bScored, bAborted = false;
@@ -104,23 +104,8 @@ namespace IATClient.ResultData
             MainForm.Invoke(new Action<int, int>(MainForm.SetProgressRange), min, max);
         }
 
-        public IResultData ResultsInterface
-        {
-            get
-            {
-                return IATResults;
-            }
-        }
-
         public IResultData IATResults { get; private set; } = null;
 
-        public ResultSetDescriptor ResultDescriptor
-        {
-            get
-            {
-                return Descriptor;
-            }
-        }
 
         public IATConfig.ConfigFile IATConfiguration
         {

@@ -5,7 +5,7 @@ using System.Xml;
 using System.Windows.Forms;
 using System.Drawing;
 using System.Xml.Linq;
-
+using IATClient.ResultData;
 namespace IATClient
 {
     /// <summary>
@@ -203,9 +203,9 @@ namespace IATClient
                 return String.Format("\tLikert item with response range 1 to {0}\r\n", ChoiceDescriptions.Count);
         }
 
-        public override IATSurveyFile.Response GenerateSerializableResponse(IATSurveyFile.SurveyItem parentItem)
+        public override Response GenerateSerializableResponse(SurveyItem parentItem)
         {
-            IATSurveyFile.Likert r = new IATSurveyFile.Likert(parentItem);
+            Likert r = new Likert(parentItem);
             r.ReverseScored = ReverseScored;
             r.Choices = ChoiceDescriptions.ToArray();
 
@@ -214,7 +214,7 @@ namespace IATClient
 
         public override CSpecifierControlDefinition GetSpecifierControlDefinition()
         {
-            CSpecifierControlDefinition def = new CSpecifierControlDefinition(CDynamicSpecifier.ESpecifierType.Range);
+            CSpecifierControlDefinition def = new CSpecifierControlDefinition(DynamicSpecifier.ESpecifierType.Range);
             def.Statements.AddRange(ChoiceDescriptions);
             if (ReverseScored)
                 for (int ctr = ChoiceDescriptions.Count; ctr > 0; ctr--)

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Xml;
 using System.Drawing;
+using IATClient.Messages;
 
 namespace IATClient
 {

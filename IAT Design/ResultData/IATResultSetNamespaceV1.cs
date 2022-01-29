@@ -8,8 +8,8 @@ using System.Text;
 using System.Xml;
 using System.Xml.Schema;
 using System.Xml.Serialization;
-using System.Security.Cryptography;
 using System.Windows.Forms;
+using IATClient.ResultData;
 
 namespace IATClient.ResultData
 {
@@ -371,6 +371,16 @@ namespace IATClient.ResultData
                 {
                     return SurveyResults[ndx];
                 }
+            }
+
+            IEnumerator IEnumerable.GetEnumerator()
+            {
+                return GetEnumerator();
+            }
+
+            public IEnumerator<ISurveyItemResponse> GetEnumerator()
+            {
+                return SurveyResults.ToList().GetEnumerator();
             }
 
             public SurveyResponseSet(IResultElemFactory factory) 

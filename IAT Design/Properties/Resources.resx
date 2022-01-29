@@ -1594,4 +1594,7 @@
   <data name="sDeploymentUploadURL" xml:space="preserve">
     <value>http://127.0.0.1/IAT/DeploymentUpload/DeploymentFiles</value>
   </data>
+  <data name="sItemSlideDownloadURL" xml:space="preserve">
+    <value>http://127.0.0.1/IAT/ItemSlides</value>
+  </data>
 </root>

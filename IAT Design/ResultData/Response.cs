@@ -7,6 +7,17 @@ using System.Xml.Serialization;
 
 namespace IATClient.ResultData
 {
+    [Serializable]
+    [XmlInclude(typeof(BoundedLength))]
+    [XmlInclude(typeof(BoundedNumber))]
+    [XmlInclude(typeof(FixedDigit))]
+    [XmlInclude(typeof(RegEx))]
+    [XmlInclude(typeof(WeightedMultiple))]
+    [XmlInclude(typeof(MultiBoolean))]
+    [XmlInclude(typeof(Date))]
+    [XmlInclude(typeof(Likert))]
+    [XmlInclude(typeof(Multiple))]
+    [XmlInclude(typeof(Boolean))]
     public class Response
     {
         [XmlAttribute(AttributeName = "ResponseType", Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]

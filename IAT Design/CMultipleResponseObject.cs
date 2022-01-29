@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Drawing;
 using System.Windows.Forms;
-using System.Xml;
+using IATClient.ResultData;
 
 namespace IATClient
 {
@@ -16,61 +16,11 @@ namespace IATClient
         private RadioButton []ChoiceRadioList = null;
         private Func<int> GetNumStatements = null;
         private Func<int, String> GetStatement = null;
-        /*
-        public CMultipleResponseObject DisplayedResponse
-        {
-            get
-            {
-                CMultipleResponseObject definedResponse;
-                CResponseObject resp = null;
-                if (Type == EType.actual)
-                {
-                    for (int ctr = 0; ctr < ChoiceRadioList.Count; ctr++)
-                        if (ChoiceRadioList[ctr].Checked)
-                        {
-                            definedResponse = new CResponseObject((ctr + 1).ToString(), this);
-                            return definedResponse;
-                        }
-                    definedResponse = new CResponseObject("NULL", this);
-                    return definedResponse;
-                }
-                if ((Type == EType.search) || (Type == EType.correct))
-                {
-                    resp = new CMultipleResponseObject(this, Type);
-                    for (int ctr = 0; ctr < ChoiceCheckList.Count; ctr++)
-                        if (ChoiceCheckList[ctr].Checked)
-                            resp.Check(ctr + 1);
-                    return resp;
-                }
-                throw new InvalidOperationException();
-            }
-            set
-            {
-                if (Type != value.Type)
-                    throw new InvalidOperationException();
-                if (Type == EType.dummy)
-                    return;
-                List<String> respList = value.ToStringList();
-                if (Type == EType.actual)
-                {
-                    ChoiceRadioList[Convert.ToInt32(respList[0]) - 1].Checked = true;
-                    return;
-                }
-                for (int ctr = 0; ctr < ChoiceCheckList.Count; ctr++)
-                {
-                    if (respList.Contains((ctr + 1).ToString()))
-                        ChoiceCheckList[ctr].Checked = true;
-                    else
-                        ChoiceCheckList[ctr].Checked = false;
-                }
-            }
-        }
-        */
-
-        public CMultipleResponseObject(EType type, IATSurveyFile.Response theResp)
+        
+        public CMultipleResponseObject(EType type, Response theResp)
             : base (type, theResp)
         {
-            IATSurveyFile.Multiple resp = (IATSurveyFile.Multiple)theResp;
+            Multiple resp = (Multiple)theResp;
             GetNumStatements = new Func<int>(resp.GetNumStatements);
             GetStatement = new Func<int, String>(resp.GetStatement);
             UpdateResponseObject();
@@ -78,7 +28,7 @@ namespace IATClient
 
         public CMultipleResponseObject(EType type, ResultSetDescriptor rsd) : base(type, rsd) { }
 
-        public CMultipleResponseObject(CMultipleResponseObject obj, IATSurveyFile.Multiple resp)
+        public CMultipleResponseObject(CMultipleResponseObject obj, Multiple resp)
             : base(obj.Type, resp)
         {
             GetNumStatements = new Func<int>(resp.GetNumStatements);

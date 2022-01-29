@@ -671,7 +671,7 @@ namespace IATClient
 
                 // store the schema-ed XML used for result file processing
                 beforeSurveyStream = new MemoryStream();
-                IATSurveyFile.Survey s = new IATSurveyFile.Survey(IAT.BeforeSurvey[ctr1].Name);
+                Survey s = new Survey(IAT.BeforeSurvey[ctr1].Name);
                 s.Timeout = (int)(IAT.BeforeSurvey[ctr1].Timeout * 60000);
                 if (IAT.BeforeSurvey[ctr1].Items[0].IsCaption) {
                     s.SetCaption(IAT.BeforeSurvey[ctr1].Items[0]);
@@ -697,7 +697,7 @@ namespace IATClient
                     s.SetItems(surveyItems);
                     s.NumItems = itemCtr;
                 }
-                XmlSerializer ser = new XmlSerializer(typeof(IATSurveyFile.Survey));
+                XmlSerializer ser = new XmlSerializer(typeof(Survey));
                 ser.Serialize(beforeSurveyStream, s);
                 SASurveys.Add(beforeSurveyStream);
             }
@@ -729,7 +729,7 @@ namespace IATClient
 
                 // store the schema-ed XML used for result file processing
                 afterSurveyStream = new MemoryStream();
-                IATSurveyFile.Survey s = new IATSurveyFile.Survey(IAT.AfterSurvey[ctr1].Name);
+                Survey s = new Survey(IAT.AfterSurvey[ctr1].Name);
                 s.Timeout = (int)(IAT.AfterSurvey[ctr1].Timeout * 60000);
                 if (IAT.AfterSurvey[ctr1].Items[0].IsCaption)
                 {
@@ -760,7 +760,7 @@ namespace IATClient
                     s.SetItems(surveyItems);
                     s.NumItems = itemCtr;
                 }
-                XmlSerializer ser = new XmlSerializer(typeof(IATSurveyFile.Survey));
+                XmlSerializer ser = new XmlSerializer(typeof(Survey));
                 ser.Serialize(afterSurveyStream, s);
                 SASurveys.Add(afterSurveyStream);
             }
@@ -987,7 +987,7 @@ namespace IATClient
             IATConfigFile.BeforeSurveys.AddRange(BeforeSurveys);
             IATConfigFile.AfterSurveys.AddRange(AfterSurveys);
 
-            foreach (CDynamicSpecifier ds in CDynamicSpecifier.GetAllSpecifiers())
+            foreach (DynamicSpecifier ds in DynamicSpecifier.GetAllSpecifiers())
                 IATConfigFile.DynamicSpecifiers.Add(ds.GetSerializableSpecifier());
             ConfigFile = new MemoryStream();
             XmlTextWriter xWriter = new XmlTextWriter(ConfigFile, System.Text.Encoding.Unicode);
@@ -1464,7 +1464,7 @@ namespace IATClient
 
         private void run()
         {
-            CDynamicSpecifier.CompactSpecifierDictionary(IAT);
+            DynamicSpecifier.CompactSpecifierDictionary(IAT);
             bUploadSuccessful = DoUpload();
             if (!Aborted)
                 MainForm.Invoke(EndProgressBarUse);

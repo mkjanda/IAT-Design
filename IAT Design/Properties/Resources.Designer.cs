@@ -2877,6 +2877,15 @@ namespace IATClient.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to http://127.0.0.1/IAT/ItemSlides.
+        /// </summary>
+        internal static string sItemSlideDownloadURL {
+            get {
+                return ResourceManager.GetString("sItemSlideDownloadURL", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to http://127.0.0.1/IAT/DeploymentUpload/ItemSlideFiles.
         /// </summary>
         internal static string sItemSlideUploadURL {

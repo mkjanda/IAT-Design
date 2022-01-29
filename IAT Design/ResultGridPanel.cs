@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using System.Drawing;
-using IATClient.IATResultSetNamespaceV2;
+using IATClient.ResultData;
 
 namespace IATClient
 {
@@ -169,24 +169,6 @@ namespace IATClient
             nMaxIATResultWidth = maxWidth + CellPadding.Horizontal;
             GridColumns.Add(col);
 
-            if (Descriptor.Norms != null)
-            {
-                maxWidth = 0;
-                for (int ctr = 0; ctr < nResults; ctr++)
-                {
-                    Size sz = TextRenderer.MeasureText(ResultSets[ctr].Percentile.ToString("F2") + "%", System.Drawing.SystemFonts.DefaultFont);
-                    if (maxWidth < sz.Width)
-                        maxWidth = sz.Width;
-                }
-                col = new DataGridViewColumn();
-                col.AutoSizeMode = DataGridViewAutoSizeColumnMode.None;
-                col.ReadOnly = true;
-                col.Resizable = DataGridViewTriState.True;
-                col.SortMode = DataGridViewColumnSortMode.Automatic;
-                col.Width = maxWidth + CellPadding.Horizontal;
-                nMaxIATPercentileWidth = maxWidth + CellPadding.Horizontal;
-                GridColumns.Add(col);
-            }
 
             maxWidth = 0;
             for (int ctr = 0; ctr < nResults; ctr++)
@@ -206,21 +188,6 @@ namespace IATClient
 
 
             EnumeratedColumns = new Dictionary<DataGridViewComboBoxColumn, List<String>>();
-            for (int ctr1 = 0; ctr1 < Descriptor.Enumerations.Count; ctr1++)
-            {
-                DataGridViewComboBoxCell dummyComboCell = new DataGridViewComboBoxCell();
-                List<String> enumValList = new List<String>();
-                enumValList.Add(Descriptor.Enumerations[ctr1].Description.Name);
-                for (int ctr2 = 0; ctr2 < Descriptor.Enumerations[ctr1].Description.NumEnumeratedTypes; ctr2++)
-                    enumValList.Add(Descriptor.Enumerations[ctr1].Description[ctr2]);
-                comboCol = new DataGridViewComboBoxColumn();
-                comboCol.AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCellsExceptHeader;
-                comboCol.ToolTipText = Descriptor.Enumerations[ctr1].Description.Name;
-                comboCol.Resizable = DataGridViewTriState.False;
-                comboCol.SortMode = DataGridViewColumnSortMode.Automatic;
-                GridColumns.Add(comboCol);
-                EnumeratedColumns[comboCol] = enumValList;
-            }
 
             ctr3 = ctr4 = ctr5 = 0;
             for (int ctr1 = 0; ctr1 < nBeforeSurveyItems; ctr1++)
@@ -293,32 +260,11 @@ namespace IATClient
                 txtCell.Value = ResultSets[ctr].IATScore.ToString("F4");
                 row.Cells.Add(txtCell);
                 txtCell.Tag = new ResultCell(ResultCell.EResultType.iat, ResultSets[ctr].ResultID, ResultSets[ctr].IATScore.ToString("F4"));
-                if (Descriptor.Norms != null)
-                {
-                    txtCell = new DataGridViewTextBoxCell();
-                    txtCell.ReadOnly = true;
-                    txtCell.Value = ResultSets[ctr].Percentile.ToString("F2") + "%";
-                    row.Cells.Add(txtCell);
-                    txtCell.Tag = new ResultCell(ResultCell.EResultType.percentile, resultID, ResultSets[ctr].Percentile.ToString("F2"));
-                }
                 txtCell = new DataGridViewTextBoxCell();
                 txtCell.ReadOnly = true;
                 txtCell.Value = ResultSets[ctr].Timestamp;
                 row.Cells.Add(txtCell);
                 txtCell.Tag = new ResultCell(ResultCell.EResultType.timestamp, resultID, ResultSets[ctr].Timestamp.ToShortDateString() + " " + ResultSets[ctr].Timestamp.ToShortTimeString());
-                for (int ctr2 = 0; ctr2 < Descriptor.Enumerations.Count; ctr2++)
-                {
-                    DataGridViewComboBoxCell comboCell = new DataGridViewComboBoxCell();
-                    comboCell.DisplayStyle = DataGridViewComboBoxDisplayStyle.DropDownButton;
-                    DataGridViewComboBoxCell.ObjectCollection items = new DataGridViewComboBoxCell.ObjectCollection(comboCell);
-                    List<String> enumTypeList = Descriptor.Enumerations[ctr].Description.GetAllEnumerationTypes();
-                    enumTypeList.Sort();
-                    items.AddRange(enumTypeList);
-                    comboCell.Items.AddRange(items);
-                    comboCell.Value = Descriptor.Enumerations[ctr2][ResultSets[ctr].ResultID];
-                    row.Cells.Add(comboCell);
-                    comboCell.Tag = new ResultCell(ResultCell.EResultType.enumerated, resultID, Descriptor.Enumerations[ctr2][resultID]);
-                }
                 for (int ctr2 = 0; ctr2 < nBeforeSurveyItems; ctr2++)
                 {
                     for (ctr3 = 0; ctr3 < ResultSets[ctr].BeforeSurveys[ctr2].NumItems; ctr3++)
@@ -349,8 +295,6 @@ namespace IATClient
                 maxRowWidth += maxColWidths[ctr];
             int adjustableRowWidth = maxRowWidth;
             maxRowWidth += nMaxIATPercentileWidth + nMaxIATResultWidth + nMaxIATTimestampWidth;
-            for (int ctr = 2 + ((Descriptor.Norms != null) ? 1 : 0); ctr < 2 + ((Descriptor.Norms != null) ? 1 : 0) + Descriptor.Enumerations.Count; ctr++)
-                maxRowWidth += ResultGrid.Columns[ctr].Width;
             bool hScroll = false, vScroll = false;
             if (maxRowWidth >= ResultGrid.ClientRectangle.Width)
                 hScroll = true;
@@ -387,8 +331,6 @@ namespace IATClient
                 else
                     adjustedCellWidths[ctr] = maxColWidths[ctr];
             }
-            for (int ctr = 0; ctr < nBeforeSurveyItems + nAfterSurveyItems; ctr++)
-                ResultGrid.Columns[2 + ((Descriptor.Norms != null) ? 1 : 0) + Descriptor.Enumerations.Count + ctr].Width = adjustedCellWidths[ctr];
         }
 
         private double SD(int[] vals)

@@ -4,21 +4,22 @@ using System.Linq;
 using System.Text;
 using System.Drawing;
 using System.Windows.Forms;
+using IATClient.ResultData;
 
 namespace IATClient
 {
     class CSurveyOutline
     {
-        private IATSurveyFile.Survey Survey;
+        private Survey Survey;
         private List<Label> _CaptionLabels = new List<Label>();
-        private Dictionary<IATSurveyFile.SurveyItem, List<Label>> _SurveyItemLabels = new Dictionary<IATSurveyFile.SurveyItem, List<Label>>();
+        private Dictionary<SurveyItem, List<Label>> _SurveyItemLabels = new Dictionary<SurveyItem, List<Label>>();
         public enum EResponseLabel { numeric, alphabetical };
         private EResponseLabel ResponseLabel;
         private int Indent, LineSpacing, XOffset, Width;
         private Padding CaptionPadding, QuestionPadding, ResponsePadding;
         private Font Font;
 
-        public Dictionary<IATSurveyFile.SurveyItem, List<Label>> SurveyItemLabels
+        public Dictionary<SurveyItem, List<Label>> SurveyItemLabels
         {
             get
             {
@@ -34,7 +35,7 @@ namespace IATClient
             }
         }
 
-        public CSurveyOutline(IATSurveyFile.Survey survey)
+        public CSurveyOutline(Survey survey)
         {
             this.Survey = survey;
             _SurveyItemLabels = null;

@@ -25,9 +25,9 @@ namespace IATClient
         private TextBox SelectStatementBox;
         private bool IsPainting = false;
 
-        public override List<CDynamicSpecifier> GetDefinedSpecifiers()
+        public override List<DynamicSpecifier> GetDefinedSpecifiers()
         {
-            List<CDynamicSpecifier> specifiers = new List<CDynamicSpecifier>();
+            List<DynamicSpecifier> specifiers = new List<DynamicSpecifier>();
             foreach (CMaskSpecifier s in _Specifiers)
                 specifiers.Add(s);
             return specifiers;
@@ -47,7 +47,7 @@ namespace IATClient
             set
             {
                 foreach (CMaskSpecifier s in _Specifiers)
-                    CDynamicSpecifier.DeleteSpecifier(s.ID);
+                    DynamicSpecifier.DeleteSpecifier(s.ID);
                 _Specifiers.Clear();
                 _Specifiers.AddRange(value);
                 for (int ctr = 0; ctr < IATItems.Count; ctr++)

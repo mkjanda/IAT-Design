@@ -9,9 +9,13 @@ using System.Xml.Schema;
 namespace IATClient.ResultData
 {
     [Serializable]
-    [XmlElement(ElementName ="ItemSlideData", Form = XmlSchemaForm.Unqualified, IsNullable = false, Type = typeof(ItemSlideData)]
-    class ItemSlideData
+    [XmlElement(ElementName ="ItemSlideData", Form = XmlSchemaForm.Unqualified, IsNullable = false, Type = typeof(ItemSlideData))]
+    public class ItemSlideData
     {
+        [XmlElement("SessionId")]
+        public String SessionId { get; set; }
+        [XmlElement("DeploymentId")]
+        public String DeploymentId { get; set; }
         [XmlArray("Resources")]
         [XmlArrayItem("Resource", Type=typeof(ResourceEntry))]
         public ResourceEntry[] Resources { get; set; }
@@ -20,7 +24,7 @@ namespace IATClient.ResultData
     }
 
     [Serializable]
-    class ResourceEntry
+    public class ResourceEntry
     {
         [XmlElement(ElementName = "ResourceName", IsNullable = false, Form = XmlSchemaForm.Unqualified, Type = typeof(String))]
         public String ResourceName { get; set; }
@@ -29,11 +33,11 @@ namespace IATClient.ResultData
     }
 
     [Serializable]
-    class ReferenceEntry
+    public class ReferenceEntry
     {
         [XmlElement("ResourceName", Type = typeof(String))]
         public String ResourceName { get; set; }
-        [XmlElement("ReferenceName", Type = typeof(String)))]
+        [XmlElement("ReferenceName", Type = typeof(String))]
         public String[] ReferenceName { get; set; }
     }
 

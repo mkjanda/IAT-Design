@@ -1,17 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
-
+using IATClient.IATConfig;
 using System.Text;
 
 namespace IATClient
 {
     public class CSpecifierControlDefinition
     {
-        private CDynamicSpecifier.ESpecifierType _SpecifierType;
+        private DynamicSpecifier.ESpecifierType _SpecifierType;
         private List<String> _Values;
         private List<String> _Statements;
 
-        public CDynamicSpecifier.ESpecifierType SpecifierType
+        public DynamicSpecifier.ESpecifierType SpecifierType
         {
             get
             {
@@ -39,7 +39,7 @@ namespace IATClient
             }
         }
 
-        public CSpecifierControlDefinition(CDynamicSpecifier.ESpecifierType type)
+        public CSpecifierControlDefinition(DynamicSpecifier.ESpecifierType type)
         {
             _SpecifierType = type;
             _Statements = new List<String>();

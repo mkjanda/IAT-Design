@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Xml;
 using System.Xml.Linq;
+using IATClient.ResultData;
 
 namespace IATClient
 {
@@ -171,9 +172,9 @@ namespace IATClient
             return desc;
         }
 
-        public override IATSurveyFile.Response GenerateSerializableResponse(IATSurveyFile.SurveyItem parentItem)
+        public override Response GenerateSerializableResponse(SurveyItem parentItem)
         {
-            IATSurveyFile.Multiple r = new IATSurveyFile.Multiple(parentItem);
+            Multiple r = new Multiple(parentItem);
             for (int ctr = 0; ctr < Choices.Length; ctr++)
                 r.Choices = Choices;
 
@@ -182,7 +183,7 @@ namespace IATClient
 
         public override CSpecifierControlDefinition GetSpecifierControlDefinition()
         {
-            CSpecifierControlDefinition def = new CSpecifierControlDefinition(CDynamicSpecifier.ESpecifierType.Selection);
+            CSpecifierControlDefinition def = new CSpecifierControlDefinition(DynamicSpecifier.ESpecifierType.Selection);
             def.Statements.AddRange(Choices);
             for (int ctr = 1; ctr <= Choices.Length; ctr++)
                 def.Values.Add(ctr.ToString());

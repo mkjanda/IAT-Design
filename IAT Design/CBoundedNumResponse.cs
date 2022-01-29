@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Text;
 using System.Xml;
 using System.Xml.Linq;
+using IATClient.ResultData;
+using IATClient.IATConfig;
 
 namespace IATClient
 {
@@ -136,9 +138,9 @@ namespace IATClient
             return String.Format("\tA number between {0} and {1}\r\n", MinValue, MaxValue);
         }
 
-        public override IATSurveyFile.Response GenerateSerializableResponse(IATSurveyFile.SurveyItem ParentItem)
+        public override Response GenerateSerializableResponse(SurveyItem ParentItem)
         {
-            IATSurveyFile.BoundedNum r = new IATSurveyFile.BoundedNum(ParentItem);
+            BoundedNumber r = new BoundedNumber(ParentItem);
             r.MinValue = MinValue;
             r.MaxValue = MaxValue;
 
@@ -147,7 +149,7 @@ namespace IATClient
 
         public override CSpecifierControlDefinition GetSpecifierControlDefinition()
         {
-            return new CSpecifierControlDefinition(CDynamicSpecifier.ESpecifierType.None);
+            return new CSpecifierControlDefinition(DynamicSpecifier.ESpecifierType.None);
         }
     }
 }

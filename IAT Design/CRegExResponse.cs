@@ -108,16 +108,16 @@ namespace IATClient
             return String.Format("\tText that matches the regular expression \"{0}\"\r\n", RegEx);
         }
 
-        public override IATSurveyFile.Response GenerateSerializableResponse(IATSurveyFile.SurveyItem parentItem)
+        public override Response GenerateSerializableResponse(SurveyItem parentItem)
         {
-            IATSurveyFile.RegEx r = new IATSurveyFile.RegEx(parentItem);
+            RegEx r = new RegEx(parentItem);
             r.RegularExpression = RegEx;
             return r;
         }
 
         public override CSpecifierControlDefinition GetSpecifierControlDefinition()
         {
-            return new CSpecifierControlDefinition(CDynamicSpecifier.ESpecifierType.None);
+            return new CSpecifierControlDefinition(DynamicSpecifier.ESpecifierType.None);
         }
     }
 }

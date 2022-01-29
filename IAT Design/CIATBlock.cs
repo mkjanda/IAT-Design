@@ -337,7 +337,7 @@ namespace IATClient
         {
             foreach (CIATItem i in ItemTuples.Select(tup => CIAT.SaveFile.GetIATItem(tup.Item2)))
                 if (i.KeySpecifierID != -1)
-                    CDynamicSpecifier.GetSpecifier(i.KeySpecifierID).AddIATItem(i, i.SpecifierArg);
+                    DynamicSpecifier.GetSpecifier(i.KeySpecifierID).AddIATItem(i, i.SpecifierArg);
         }
 */
         public void AddItem(CIATItem i, KeyedDirection kd)

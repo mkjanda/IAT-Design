@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Xml;
 using System.Xml.Linq;
+using IATClient.ResultData;
 
 namespace IATClient
 {
@@ -114,7 +115,7 @@ namespace IATClient
 
         public abstract String GetResponseDesc();
 
-        public abstract IATSurveyFile.Response GenerateSerializableResponse(IATSurveyFile.SurveyItem parentItem);
+        public abstract Response GenerateSerializableResponse(SurveyItem parentItem);
         public abstract object Clone();
         /// <summary>
         /// Creates a blank response of the specified type

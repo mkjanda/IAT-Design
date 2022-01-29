@@ -5,7 +5,7 @@ using System.Text;
 using System.Windows.Forms;
 using System.Drawing;
 using System.Text.RegularExpressions;
-using System.Xml;
+using IATClient.ResultData;
 
 namespace IATClient
 {
@@ -35,12 +35,12 @@ namespace IATClient
 
         public CRegExResponseObject(EType type, ResultSetDescriptor rsd) : base(type, rsd) { }
 
-        public CRegExResponseObject(EType type, IATSurveyFile.Response resp) : base(type, resp)
+        public CRegExResponseObject(EType type, Response resp) : base(type, resp)
         {
-            GetRegEx = new Func<String>(((IATSurveyFile.RegEx)resp).GetRegEx);
+            GetRegEx = new Func<String>(((RegEx)resp).GetRegEx);
         }
 
-        public CRegExResponseObject(CRegExResponseObject obj, IATSurveyFile.RegEx resp)
+        public CRegExResponseObject(CRegExResponseObject obj, RegEx resp)
             : base(obj.Type, resp)
         {
             GetRegEx = new Func<String>(resp.GetRegEx);

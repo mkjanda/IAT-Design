@@ -26,9 +26,9 @@ namespace IATClient
         private List<String> ResponseValues = new List<String>();
         private bool IsPainting = false;
 
-        public override List<CDynamicSpecifier> GetDefinedSpecifiers()
+        public override List<DynamicSpecifier> GetDefinedSpecifiers()
         {
-            List<CDynamicSpecifier> specifiers = new List<CDynamicSpecifier>();
+            List<DynamicSpecifier> specifiers = new List<DynamicSpecifier>();
             specifiers.Add(Specifier);
             return specifiers;
         }
@@ -41,7 +41,7 @@ namespace IATClient
             }
             set
             {
-                CDynamicSpecifier.DeleteSpecifier(_Specifier.ID);
+                DynamicSpecifier.DeleteSpecifier(_Specifier.ID);
                 _Specifier = value;
                 if ((value.SurveyName != Survey.Name) || (value.ItemNum != Survey.GetItemNum(Question)))
                     throw new Exception("Error: Attempt made to modify the survey or survey item in a selection specifier control after it has been instantiated.");

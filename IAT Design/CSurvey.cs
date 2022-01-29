@@ -207,7 +207,7 @@ namespace IATClient
                     if (!Items[ctr].IsCaption)
                         if (Items[ctr].Response.ResponseType == CResponse.EResponseType.FixedDig)
                             if (Items[ctr].IsScored)
-                                if (((CFixedDigResponseObject)Items[ctr].DefinedResponse).IsOneUse)
+                                if (((CFixedDigitResponseObject)Items[ctr].DefinedResponse).IsOneUse)
                                     nOnceOnly++;
                 return nOnceOnly;
             }

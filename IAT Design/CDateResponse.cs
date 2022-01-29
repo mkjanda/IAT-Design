@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Text;
 using System.Xml;
 using System.Xml.Linq;
+using IATClient.ResultData;
+using IATClient.IATConfig;
 
 namespace IATClient
 {
@@ -145,20 +147,20 @@ namespace IATClient
                 return "\tA date\r\n";
         }
 
-        public override IATSurveyFile.Response GenerateSerializableResponse(IATSurveyFile.SurveyItem parentItem)
+        public override Response GenerateSerializableResponse(SurveyItem parentItem)
         {
-            IATSurveyFile.Date r = new IATSurveyFile.Date(parentItem);
+            Date r = new Date(parentItem);
             r.HasEndDate = HasEndDate;
             r.HasStartDate = HasStartDate;
-            r.StartDate = new IATSurveyFile.DateEntry(StartDate);
-            r.EndDate = new IATSurveyFile.DateEntry(EndDate);
+            r.StartDate = new DateEntry(StartDate);
+            r.EndDate = new DateEntry(EndDate);
 
             return r;
         }
 
         public override CSpecifierControlDefinition GetSpecifierControlDefinition()
         {
-            return new CSpecifierControlDefinition(CDynamicSpecifier.ESpecifierType.None);
+            return new CSpecifierControlDefinition(DynamicSpecifier.ESpecifierType.None);
         }
 
 

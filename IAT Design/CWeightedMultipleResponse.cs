@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Xml;
 using System.Windows.Forms;
 using System.Xml.Linq;
+using IATClient.ResultData;
 
 namespace IATClient
 {
@@ -218,19 +219,19 @@ namespace IATClient
             return desc;
         }
 
-        public override IATSurveyFile.Response GenerateSerializableResponse(IATSurveyFile.SurveyItem parentItem)
+        public override Response GenerateSerializableResponse(SurveyItem parentItem)
         {
-            IATSurveyFile.WeightedMultiple r = new IATSurveyFile.WeightedMultiple(parentItem);
-            IATSurveyFile.WeightedChoice[] choices = new IATSurveyFile.WeightedChoice[Choices.Length];
+            WeightedMultiple r = new WeightedMultiple(parentItem);
+            WeightedChoice[] choices = new WeightedChoice[Choices.Length];
             for (int ctr = 0; ctr < Choices.Length; ctr++)
-                choices[ctr] = new IATSurveyFile.WeightedChoice(Weights[ctr], Choices[ctr]);
+                choices[ctr] = new WeightedChoice(Weights[ctr], Choices[ctr]);
             r.Choices = choices;
             return r;
         }
 
         public override CSpecifierControlDefinition GetSpecifierControlDefinition()
         {
-            CSpecifierControlDefinition def = new CSpecifierControlDefinition(CDynamicSpecifier.ESpecifierType.Selection);
+            CSpecifierControlDefinition def = new CSpecifierControlDefinition(DynamicSpecifier.ESpecifierType.Selection);
             def.Statements.AddRange(Choices);
             for (int ctr = 0; ctr < Weights.Length; ctr++)
                 def.Values.Add(Weights[ctr].ToString());

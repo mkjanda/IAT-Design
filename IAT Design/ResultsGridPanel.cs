@@ -4,12 +4,13 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using System.Drawing;
+using IATClient.ResultData;
 
 namespace IATClient
 {
     public class ResultsGridPanel : UserControl
     {
-        private CResultData ResultData;
+        private ResultData.ResultData ResultData;
         private Panel ResultsPanel = new Panel();
         private Dictionary<String, List<int>> ColumnWidths = new Dictionary<String, List<int>>();
         private List<List<Rectangle>> CellRects = new List<List<Rectangle>>();
@@ -129,7 +130,7 @@ namespace IATClient
             {
                 for (int ctr2 = 0; ctr2 < ResultData.ResultDescriptor.BeforeSurveys[ctr].NumItems; ctr2++)
                 {
-                    if (ResultData.ResultDescriptor.BeforeSurveys[ctr].SurveyItems[ctr2].Response.ResponseType == IATSurveyFile.ResponseType.BoundedLength)
+                    if (ResultData.ResultDescriptor.BeforeSurveys[ctr].SurveyItems[ctr2].Response.ResponseType == ResponseType.BoundedLength)
                     {
                         Point pt = new Point(ctr, ctr2);
                         List<String> responses = new List<String>();
@@ -143,7 +144,7 @@ namespace IATClient
             {
                 for (int ctr2 = 0; ctr2 < ResultData.ResultDescriptor.AfterSurveys[ctr].NumItems; ctr2++)
                 {
-                    if (ResultData.ResultDescriptor.AfterSurveys[ctr].SurveyItems[ctr2].Response.ResponseType == IATSurveyFile.ResponseType.BoundedLength)
+                    if (ResultData.ResultDescriptor.AfterSurveys[ctr].SurveyItems[ctr2].Response.ResponseType == ResponseType.BoundedLength)
                     {
                         Point pt = new Point(ctr + ResultData.ResultDescriptor.BeforeSurveys.Count, ctr2);
                         List<String> responses = new List<String>();
@@ -246,7 +247,7 @@ namespace IATClient
                 BoundedLengthItems[elemName] = new List<int>();
                 for (int ctr2 = 0; ctr2 < ResultData.ResultDescriptor.BeforeSurveys[ctr].Questions.Length; ctr2++)
                 {
-                    if (ResultData.ResultDescriptor.BeforeSurveys[ctr].Questions[ctr2].Response.ResponseType == IATSurveyFile.ResponseType.BoundedLength)
+                    if (ResultData.ResultDescriptor.BeforeSurveys[ctr].Questions[ctr2].Response.ResponseType == ResponseType.BoundedLength)
                         BoundedLengthItems[elemName].Add(ctr2);
                 }
             }
@@ -256,7 +257,7 @@ namespace IATClient
                 BoundedLengthItems[elemName] = new List<int>();
                 for (int ctr2 = 0; ctr2 < ResultData.ResultDescriptor.AfterSurveys[ctr].Questions.Length; ctr2++)
                 {
-                    if (ResultData.ResultDescriptor.AfterSurveys[ctr].Questions[ctr2].Response.ResponseType == IATSurveyFile.ResponseType.BoundedLength)
+                    if (ResultData.ResultDescriptor.AfterSurveys[ctr].Questions[ctr2].Response.ResponseType == ResponseType.BoundedLength)
                         BoundedLengthItems[elemName].Add(ctr2);
                 }
             }

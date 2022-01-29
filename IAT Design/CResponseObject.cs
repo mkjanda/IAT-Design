@@ -6,6 +6,7 @@ using System.Windows.Forms;
 using System.Drawing;
 using System.Xml;
 using System.Text.RegularExpressions;
+using IATClient.ResultData;
 
 namespace IATClient
 {
@@ -72,49 +73,48 @@ namespace IATClient
             }
         }
 
-        static public CResponseObject CreateFromResultData(IATSurveyFile.Response resp)
+        static public CResponseObject CreateFromResultData(Response resp)
         {
             CResponseObject respObj = null;
             switch (resp.ResponseType)
             {
-                case IATClient.IATSurveyFile.ResponseType.Boolean:
-                    respObj = new CBoolResponseObject(EType.actual, (IATSurveyFile.Boolean)resp);
+                case ResponseType.Boolean:
+                    respObj = new CBoolResponseObject(EType.actual, resp);
                     break;
 
-                case IATClient.IATSurveyFile.ResponseType.BoundedLength:
+                case ResponseType.BoundedLength:
                     respObj = new CBoundedLengthResponseObject(EType.actual, resp);
                     break;
 
-                case IATClient.IATSurveyFile.ResponseType.BoundedNum:
+                case ResponseType.BoundedNum:
                     respObj = new CBoundedNumResponseObject(EType.actual, resp);
                     break;
 
-                case IATClient.IATSurveyFile.ResponseType.Date:
+                case ResponseType.Date:
                     respObj = new CDateResponseObject(EType.actual, resp);
                     break;
 
-                case IATClient.IATSurveyFile.ResponseType.FixedDig:
-                    respObj = new CFixedDigResponseObject(EType.actual, resp);
+                case ResponseType.FixedDig:
+                    respObj = new CFixedDigitResponseObject(EType.actual, resp);
                     break;
 
-                case IATClient.IATSurveyFile.ResponseType.Likert:
+                case ResponseType.Likert:
                     respObj = new CLikertResponseObject(EType.actual, resp);
                     break;
 
-                case IATClient.IATSurveyFile.ResponseType.MultiBoolean:
+                case ResponseType.MultiBoolean:
                     respObj = new CMultiBooleanResponseObject(EType.actual, resp);
                     break;
 
-                case IATClient.IATSurveyFile.ResponseType.Multiple:
+                case ResponseType.Multiple:
                     respObj = new CMultipleResponseObject(EType.actual, resp);
                     break;
 
-                case IATClient.IATSurveyFile.ResponseType.RegEx:
+                case ResponseType.RegEx:
                     respObj = new CRegExResponseObject(EType.actual, resp);
                     break;
 
-
-                case IATSurveyFile.ResponseType.WeightedMultiple:
+                case ResponseType.WeightedMultiple:
                     respObj = new CWeightedMultipleResponseObject(EType.actual, resp);
                     break;
             }
@@ -813,7 +813,7 @@ namespace IATClient
         }
 
         public enum EType { search, correct, actual, dummy };
-        protected IATResultSetNamespaceV1.AnswerState _AnswerState;
+        protected ResultData.IATResultSetNamespaceV1.AnswerState _AnswerState;
         protected EType _Type;
         private String _Name;
 
@@ -825,7 +825,7 @@ namespace IATClient
             }
         }
 
-        protected CResponseObject(EType type, IATSurveyFile.Response resp)
+        protected CResponseObject(EType type, Response resp)
         {
             _Type = type;
             GetSurveyName = new Func<String>(resp.GetSurveyName);
@@ -843,53 +843,53 @@ namespace IATClient
             GetSurveyName = new Func<String>(csi.GetSurveyName);
         }
 
-        public static CResponseObject CloneResponseObject(CResponseObject obj, IATSurveyFile.Response resp)
+        public static CResponseObject CloneResponseObject(CResponseObject obj, Response resp)
         {
             CResponseObject respObj = null;
             switch (resp.ResponseType)
             {
-                case IATSurveyFile.ResponseType.Boolean:
-                    respObj = new CBoolResponseObject((CBoolResponseObject)obj, (IATSurveyFile.Boolean)resp);
+                case ResponseType.Boolean:
+                    respObj = new CBoolResponseObject((CBoolResponseObject)obj, (ResultData.Boolean)resp);
                     break;
 
-                case IATSurveyFile.ResponseType.BoundedLength:
-                    respObj = new CBoundedLengthResponseObject((CBoundedLengthResponseObject)obj, (IATSurveyFile.BoundedLength)resp);
+                case ResponseType.BoundedLength:
+                    respObj = new CBoundedLengthResponseObject((CBoundedLengthResponseObject)obj, (BoundedLength)resp);
                     break;
 
-                case IATSurveyFile.ResponseType.BoundedNum:
-                    respObj = new CBoundedNumResponseObject((CBoundedNumResponseObject)obj, (IATSurveyFile.BoundedNum)resp);
+                case ResponseType.BoundedNum:
+                    respObj = new CBoundedNumResponseObject((CBoundedNumResponseObject)obj, (BoundedNumber)resp);
                     break;
 
-                case IATSurveyFile.ResponseType.Date:
-                    respObj = new CDateResponseObject((CDateResponseObject)obj, (IATSurveyFile.Date)resp);
+                case ResponseType.Date:
+                    respObj = new CDateResponseObject((CDateResponseObject)obj, (Date)resp);
                     break;
 
-                case IATSurveyFile.ResponseType.FixedDig:
-                    respObj = new CFixedDigResponseObject((CFixedDigResponseObject)obj, (IATSurveyFile.FixedDig)resp);
+                case ResponseType.FixedDig:
+                    respObj = new CFixedDigitResponseObject((CFixedDigitResponseObject)obj, (FixedDigit)resp);
                     break;
 
-                case IATSurveyFile.ResponseType.Likert:
-                    respObj = new CLikertResponseObject((CLikertResponseObject)obj, (IATSurveyFile.Likert)resp);
+                case ResponseType.Likert:
+                    respObj = new CLikertResponseObject((CLikertResponseObject)obj, (Likert)resp);
                     break;
 
-                case IATSurveyFile.ResponseType.MultiBoolean:
-                    respObj = new CMultiBooleanResponseObject((CMultiBooleanResponseObject)obj, (IATSurveyFile.MultiBoolean)resp);
+                case ResponseType.MultiBoolean:
+                    respObj = new CMultiBooleanResponseObject((CMultiBooleanResponseObject)obj, (MultiBoolean)resp);
                     break;
 
-                case IATSurveyFile.ResponseType.Multiple:
-                    respObj = new CMultipleResponseObject((CMultipleResponseObject)obj, (IATSurveyFile.Multiple)resp);
+                case ResponseType.Multiple:
+                    respObj = new CMultipleResponseObject((CMultipleResponseObject)obj, (Multiple)resp);
                     break;
 
-                case IATSurveyFile.ResponseType.None:
+                case ResponseType.None:
                     respObj = null;
                     break;
 
-                case IATSurveyFile.ResponseType.RegEx:
-                    respObj = new CRegExResponseObject((CRegExResponseObject)obj, (IATSurveyFile.RegEx)resp);
+                case ResponseType.RegEx:
+                    respObj = new CRegExResponseObject((CRegExResponseObject)obj, (RegEx)resp);
                     break;
 
-                case IATSurveyFile.ResponseType.WeightedMultiple:
-                    respObj = new CWeightedMultipleResponseObject((CWeightedMultipleResponseObject)obj, (IATSurveyFile.WeightedMultiple)resp);
+                case ResponseType.WeightedMultiple:
+                    respObj = new CWeightedMultipleResponseObject((CWeightedMultipleResponseObject)obj, (WeightedMultiple)resp);
                     break;
             }
             return respObj;

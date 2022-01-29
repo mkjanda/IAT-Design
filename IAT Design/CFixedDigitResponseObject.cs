@@ -7,10 +7,11 @@ using System.Drawing;
 using System.Windows.Forms;
 using System.Text.RegularExpressions;
 using System.IO;
+using IATClient.ResultData;
 
 namespace IATClient
 {
-    class CFixedDigResponseObject : CResponseObject
+    class CFixedDigitResponseObject : CResponseObject
     {
         private List<CFixedSpecifier> CompressionSpecifiers = new List<CFixedSpecifier>();
         private TextBox ValueBox = null;
@@ -354,24 +355,24 @@ namespace IATClient
             }
         }
 
-        public CFixedDigResponseObject(EType type, ResultSetDescriptor rsb)
+        public CFixedDigitResponseObject(EType type, ResultSetDescriptor rsb)
             : base(type, rsb) { }
 
-        public CFixedDigResponseObject(EType type, IATSurveyFile.Response resp) : base(type, resp)
+        public CFixedDigitResponseObject(EType type, Response resp) : base(type, resp)
         {
-            IATSurveyFile.FixedDig theResp = (IATSurveyFile.FixedDig)resp;
+            FixedDigit theResp = (FixedDigit)resp;
             GetNumDigs = new Func<int>(theResp.GetNumDigits);
         }
 
-        public CFixedDigResponseObject(CFixedDigResponseObject obj, IATSurveyFile.Response resp)
+        public CFixedDigitResponseObject(CFixedDigitResponseObject obj, Response resp)
             : base(obj.Type, resp)
         {
-            GetNumDigs = new Func<int>(((IATSurveyFile.FixedDig)resp).GetNumDigits);
+            GetNumDigs = new Func<int>(((FixedDigit)resp).GetNumDigits);
             CompressionSpecifiers.AddRange(obj.CompressionSpecifiers);
             Values.AddRange(obj.Values);
         }
 
-        public CFixedDigResponseObject(EType type, CSurveyItem csi)
+        public CFixedDigitResponseObject(EType type, CSurveyItem csi)
             : base(type, csi)
         {
             GetNumDigs = new Func<int>(((CFixedDigResponse)csi.Response).GetNumDigs);

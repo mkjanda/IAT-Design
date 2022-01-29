@@ -20,9 +20,9 @@ namespace IATClient
         private Padding StatementPadding = new Padding(20, 5, 5, 5);
         private Size StimulusSize = new Size(112, 112);
 
-        public override List<CDynamicSpecifier> GetDefinedSpecifiers()
+        public override List<DynamicSpecifier> GetDefinedSpecifiers()
         {
-            List<CDynamicSpecifier> list = new List<CDynamicSpecifier>();
+            List<DynamicSpecifier> list = new List<DynamicSpecifier>();
             list.Add(_Specifier);
             return list;
         }
@@ -35,7 +35,7 @@ namespace IATClient
             }
             set
             {
-                CDynamicSpecifier.DeleteSpecifier(_Specifier.ID);
+                DynamicSpecifier.DeleteSpecifier(_Specifier.ID);
                 _Specifier = value;
                 IATItems.Clear();
                 IATItems.AddRange(_Specifier.IATItems);

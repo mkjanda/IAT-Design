@@ -8,7 +8,7 @@ namespace IATClient
 {
     abstract class SpecifierPanel : Panel
     {
-        public abstract List<CDynamicSpecifier> GetDefinedSpecifiers();
+        public abstract List<DynamicSpecifier> GetDefinedSpecifiers();
         public DynamicIATPanel.RetrieveIATItemWithNdx IATItemRetriever = null;
         protected static Font DisplayFont = new Font("Arial", 9.75F);
 

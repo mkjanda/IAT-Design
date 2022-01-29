@@ -571,7 +571,7 @@ namespace IATClient
                 bWriter.Flush();
                 
                 // store the schema-ed XML used for result file processing
-                IATSurveyFile.Survey s = new IATSurveyFile.Survey(IAT.BeforeSurvey[ctr1].Name);
+                Survey s = new Survey(IAT.BeforeSurvey[ctr1].Name);
                 s.Timeout = (int)(IAT.BeforeSurvey[ctr1].Timeout * 60000);
                 if (IAT.BeforeSurvey[ctr1].Items[0].IsCaption)
                 {
@@ -602,7 +602,7 @@ namespace IATClient
                     s.NumItems = itemCtr;
                     s.SetItems(surveyItems);
                 }
-                XmlSerializer ser = new XmlSerializer(typeof(IATSurveyFile.Survey));
+                XmlSerializer ser = new XmlSerializer(typeof(Survey));
                 MemoryStream schemaedStream = new MemoryStream();
                 ser.Serialize(schemaedStream, s);
                 bWriter.Write(Convert.ToInt32(schemaedStream.Length));
@@ -633,7 +633,7 @@ namespace IATClient
                 bWriter.Flush();
 
                 // store the schema-ed XML used for result file processing
-                IATSurveyFile.Survey s = new IATSurveyFile.Survey(IAT.AfterSurvey[ctr1].Name);
+                Survey s = new Survey(IAT.AfterSurvey[ctr1].Name);
                 s.Timeout = (int)(IAT.AfterSurvey[ctr1].Timeout * 60000);
                 if (IAT.AfterSurvey[ctr1].Items[0].IsCaption)
                 {
@@ -664,7 +664,7 @@ namespace IATClient
                     s.NumItems = itemCtr;
                     s.SetItems(surveyItems);
                 }
-                XmlSerializer ser = new XmlSerializer(typeof(IATSurveyFile.Survey));
+                XmlSerializer ser = new XmlSerializer(typeof(Survey));
                 MemoryStream schemaedStream = new MemoryStream();
                 ser.Serialize(schemaedStream, s);
                 bWriter.Write(Convert.ToInt32(schemaedStream.Length));
@@ -799,7 +799,7 @@ namespace IATClient
                 
                 // build the config file
                 IATConfigFileNamespace.ConfigFile cf = new IATConfigFileNamespace.ConfigFile(IAT);
-                foreach (CDynamicSpecifier ds in CDynamicSpecifier.GetAllSpecifiers())
+                foreach (DynamicSpecifier ds in DynamicSpecifier.GetAllSpecifiers())
                     
                 
                 // serialize the config file
