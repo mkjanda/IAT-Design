@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using IATClient;
 
 namespace DebugLauncher
 {
@@ -14,7 +15,7 @@ namespace DebugLauncher
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-           new IATClient.Launcher().Launch();
+           new Launcher().Launch();
         }
     }
 }
