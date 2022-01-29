@@ -102,16 +102,4 @@ namespace IATClient.ResultData {
 
     [Serializable]
     public enum ResponseType { None, Boolean, Likert, Date, Multiple, WeightedMultiple, RegEx, MultiBoolean, FixedDig, BoundedNum, BoundedLength, Picture };
-
-    [Serializable]
-    [XmlInclude(typeof(BoundedLength))]
-    [XmlInclude(typeof(BoundedNumber))]
-    [XmlInclude(typeof(FixedDigit))]
-    [XmlInclude(typeof(RegEx))]
-    [XmlInclude(typeof(WeightedMultiple))]
-    [XmlInclude(typeof(MultiBoolean))]
-    [XmlInclude(typeof(Date))]
-    [XmlInclude(typeof(Likert))]
-    [XmlInclude(typeof(Multiple))]
-    [XmlInclude(typeof(Boolean))]
 }

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using System.Drawing;
-using System.Xml;
+using IATClient.ResultData; 
 
 namespace IATClient
 {
@@ -178,9 +178,9 @@ namespace IATClient
             return PreviewPanel;
         }
 
-        public CWeightedMultipleResponseObject(EType type, IATSurveyFile.Response resp) : base(type, resp)
+        public CWeightedMultipleResponseObject(EType type, Response resp) : base(type, resp)
         {
-            IATSurveyFile.WeightedMultiple wResp = (IATSurveyFile.WeightedMultiple)resp;
+            WeightedMultiple wResp = (WeightedMultiple)resp;
             GetNumChoices = new Func<int>(wResp.GetNumStatements);
             GetChoice = new Func<int, String>(wResp.GetChoice);
             GetWeight = new Func<int, int>(wResp.GetChoiceWeight);
@@ -199,7 +199,7 @@ namespace IATClient
             UpdateResponseObject();
         }
 
-        public CWeightedMultipleResponseObject(CWeightedMultipleResponseObject obj, IATSurveyFile.WeightedMultiple resp)
+        public CWeightedMultipleResponseObject(CWeightedMultipleResponseObject obj, WeightedMultiple resp)
             : base(obj.Type, resp)
         {
             GetNumChoices = new Func<int>(resp.GetNumStatements);

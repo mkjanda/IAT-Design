@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Drawing;
 using System.Windows.Forms;
-using System.Xml;
+using IATClient.ResultData;
 
 namespace IATClient
 {
@@ -23,14 +23,14 @@ namespace IATClient
             }
         }
 
-        public CBoolResponseObject(EType type, IATSurveyFile.Response response)
+        public CBoolResponseObject(EType type, Response response)
             : base(type, response)
         {
-            GetTrueStatement = new Func<String>(((IATSurveyFile.Boolean)response).GetTrueStatement);
-            GetFalseStatement = new Func<String>(((IATSurveyFile.Boolean)response).GetFalseStatement);
+            GetTrueStatement = new Func<String>(((ResultData.Boolean)response).GetTrueStatement);
+            GetFalseStatement = new Func<String>(((ResultData.Boolean)response).GetFalseStatement);
         }
 
-        public CBoolResponseObject(CBoolResponseObject obj, IATSurveyFile.Boolean resp) : base(obj.Type, resp)
+        public CBoolResponseObject(CBoolResponseObject obj, ResultData.Boolean resp) : base(obj.Type, resp)
         {
             GetTrueStatement = new Func<String>(resp.GetTrueStatement);
             GetFalseStatement = new Func<String>(resp.GetFalseStatement);

@@ -5,6 +5,8 @@ using System.Xml;
 using System.Windows.Forms;
 using System.Drawing;
 using System.Xml.Linq;
+using IATClient.ResultData;
+using IATClient.IATConfig;
 
 namespace IATClient
 {
@@ -54,14 +56,14 @@ namespace IATClient
             return String.Empty;
         }
 
-        public override IATSurveyFile.Response GenerateSerializableResponse(IATSurveyFile.SurveyItem parentItem)
+        public override Response GenerateSerializableResponse(SurveyItem parentItem)
         {
-            return new IATSurveyFile.Response(parentItem);
+            return new Response(parentItem);
         }
 
         public override CSpecifierControlDefinition GetSpecifierControlDefinition()
         {
-            return new CSpecifierControlDefinition(CDynamicSpecifier.ESpecifierType.None);
+            return new CSpecifierControlDefinition(DynamicSpecifier.ESpecifierType.None);
         }
     }
 }

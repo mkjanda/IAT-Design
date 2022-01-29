@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using System.Drawing;
-using System.Xml;
+using IATClient.ResultData;
 
 namespace IATClient
 {
@@ -456,10 +456,10 @@ namespace IATClient
             }
         }
 
-        public CMultiBooleanResponseObject(EType type, IATSurveyFile.Response theResp)
+        public CMultiBooleanResponseObject(EType type, Response theResp)
             : base(type, theResp)
         {
-            IATSurveyFile.MultiBoolean resp = (IATSurveyFile.MultiBoolean)theResp;
+            MultiBoolean resp = (MultiBoolean)theResp;
             GetNumStatements = new Func<int>(resp.GetNumStatements);
             GetStatement = new Func<int, String>(resp.GetStatement);
             UpdateResponseObject();
@@ -476,7 +476,7 @@ namespace IATClient
             UpdateResponseObject();
         }
 
-        public CMultiBooleanResponseObject(CMultiBooleanResponseObject obj, IATSurveyFile.MultiBoolean resp)
+        public CMultiBooleanResponseObject(CMultiBooleanResponseObject obj, MultiBoolean resp)
             : base(obj.Type, resp)
         {
             GetNumStatements = new Func<int>(resp.GetNumStatements);

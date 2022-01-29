@@ -6,12 +6,12 @@ using System.Threading;
 using System.Net;
 using Microsoft.Win32;
 using System.Security.Cryptography;
-using System.IO;
-using System.Xml;
+using System.Drawing;
 using System.Windows.Forms;
 using System.Threading.Tasks;
 using System.Net.WebSockets;
 using IATClient.Messages;
+using IATClient.ResultData;
 
 namespace IATClient
 {
@@ -206,11 +206,11 @@ namespace IATClient
             catch (Exception ex)
             {
                 ErrorReporter.ReportError(new CReportableException("An error occurred retrieving your list of IATs from the server", ex));
-                Messaging.Envelope.Shutdown();
+                Envelope.Shutdown();
                 return false;
             }
         }
-
+        /*
         public bool UpdateServerReport()
         {
             TransactionCompleteEvent.Reset();
@@ -220,7 +220,7 @@ namespace IATClient
             Messages.Envelope.OnReceipt[Messages.Envelope.EMessageType.TransactionRequest] = new Action<INamedXmlSerializable>(HandshakeConfirmation);
             Messages.Envelope.OnReceipt[Messages.Envelope.EMessageType.ServerReport] = new Action<INamedXmlSerializable>(ReceiveUpdatedServerReport);
             Messages.Envelope.OnReceipt[Messages.Envelope.EMessageType.ServerException] = new Action<INamedXmlSerializable>(OnDeploymentException);
-            Messages.Envelope.OnReceipt[Messages.Envelope.EMessageType.ItemSlidesData] = (msg) => OnItemSlidesData(msg);
+            Messages.Envelope.OnReceipt[Messages.Envelope.EMessageType.ItemSlideData] = (msg) => OnItemSlidesData(msg);
             if (!Connect())
                 return false;
             TransactionRequest trans = new TransactionRequest();
@@ -231,7 +231,7 @@ namespace IATClient
             Messages.Envelope.Shutdown();
             return (nTrigger == 0);
         }
-
+        */
         private void StartMessageReceiver()
         {
             Task<WebSocketReceiveResult> receiveTask = IATManagerWebSocket.ReceiveAsync(ReceiveBuffer, AbortToken);
@@ -318,15 +318,101 @@ namespace IATClient
             return false;
         }
 
-        public void RetrieveItemSlides(ItemSlideData data)
+        public void RetrieveItemSlides(String iatName, String password)
         {
             if (ResultDataMap[iatName] == null)
                 return;
+            CurrIATName = iatName;
+            CurrIATPassword = password;
+            TransactionCompleteEvent.Reset();
+            TransactionFailedEvent.Reset();
+            Envelope.ClearMessageMap();
+            Envelope.OnReceipt[Envelope.EMessageType.Handshake] = new Action<INamedXmlSerializable>(ShakeHands);
+            Envelope.OnReceipt[Envelope.EMessageType.TransactionRequest] = new Action<INamedXmlSerializable>(OnItemSlidesTransaction);
+            Envelope.OnReceipt[Envelope.EMessageType.ServerException] = new Action<INamedXmlSerializable>(OnDeploymentException);
+            Envelope.OnReceipt[Envelope.EMessageType.RSAKeyPair] = new Action<INamedXmlSerializable>(OnAdminKeyReceived);
+            ItemSlideData result = null;
+            Envelope.OnReceipt[Envelope.EMessageType.ItemSlideData] = (slideData) =>
+            {
+                result = slideData as ItemSlideData;
+                TransactionCompleteEvent.Set();
+            };
             if (ItemSlideMap.Keys.Contains(iatName))
                 if (ItemSlideMap[iatName] != null)
                     ItemSlideMap[iatName].Dispose();
-            ItemSlideMap[iatName] = new CItemSlideContainer(iatName, password, ResultDataMap[iatName].ResultDescriptor.ConfigFile);
+
+            int nTrigger = WaitHandle.WaitAny(new WaitHandle[] { TransactionFailedEvent, TransactionCompleteEvent }, 10000, true);
+            if (nTrigger != 1)
+                return;
+            ItemSlideMap[iatName] = new CItemSlideContainer(result, new Size(ResultDataMap[iatName].IATConfiguration.Layout.InteriorWidth, 
+                ResultDataMap[iatName].IATConfiguration.Layout.InteriorHeight), Images.ImageManager.ThumbnailSize, ResultDataMap[iatName]);
             ItemSlideMap[iatName].StartRetrieval();
+        }
+
+
+        private void OnItemSlidesTransaction(INamedXmlSerializable obj)
+        {
+            TransactionRequest trans = (TransactionRequest)obj;
+            TransactionRequest outTrans = null;
+            Envelope env = null;
+            switch (trans.Transaction)
+            {
+                case TransactionRequest.ETransaction.RequestTransmission:
+                    outTrans = new TransactionRequest(TransactionRequest.ETransaction.IATExists, IATConfigMainForm.ServerPassword, CurrIATName);
+                    env = new Envelope(outTrans);
+                    env.SendMessage(IATManagerWebSocket, AbortToken);
+                    break;
+
+                case TransactionRequest.ETransaction.IATExists:
+                    outTrans = new TransactionRequest();
+                    outTrans.Transaction = TransactionRequest.ETransaction.RequestEncryptionKey;
+                    outTrans.IATName = CurrIATName;
+                    env = new Envelope(outTrans);
+                    env.SendMessage(IATManagerWebSocket, AbortToken);
+                    break;
+
+                case TransactionRequest.ETransaction.VerifyPassword:
+                    String resultStr = String.Empty;
+                    try
+                    {
+                        RSACryptoServiceProvider rsaCrypt = new RSACryptoServiceProvider();
+                        rsaCrypt.ImportParameters(EncryptionKey.GetRSAParameters());
+                        resultStr = Convert.ToBase64String(rsaCrypt.Decrypt(Convert.FromBase64String(trans.StringValues["EncryptedTestString"]), false));
+                    }
+                    catch (Exception ex)
+                    {
+                        MainForm.BeginInvoke(new Action<String, String>(MainForm.OperationFailed), "The password you entered for this IAT is incorrect.", "Incorrect Password");
+                        TransactionFailedEvent.Set();
+                    }
+                    outTrans = new TransactionRequest();
+                    outTrans.Transaction = TransactionRequest.ETransaction.VerifyPassword;
+                    outTrans.StringValues["DecryptedTestString"] = resultStr;
+                    env = new Envelope(outTrans);
+                    env.SendMessage(IATManagerWebSocket, AbortToken);
+                    break;
+
+                case TransactionRequest.ETransaction.PasswordValid:
+                    outTrans = new TransactionRequest();
+                    outTrans.Transaction = TransactionRequest.ETransaction.RequestItemSlideManifest;
+                    outTrans.IATName = CurrIATName;
+                    env = new Envelope(outTrans);
+                    env.SendMessage(IATManagerWebSocket, AbortToken);
+                    break;
+
+                case TransactionRequest.ETransaction.PasswordInvalid:
+                    MainForm.BeginInvoke(new Action<String, String>(MainForm.OperationFailed), "The password you entered for this IAT is incorrect.", "Incorrect Password");
+                    TransactionFailedEvent.Set();
+                    break;
+
+
+                case TransactionRequest.ETransaction.TransactionFail:
+                    MainForm.BeginInvoke(new Action<String, String>(MainForm.OperationFailed), "The deletion of your IAT data failed for unknown reasons.", "Deletion failed");
+                    TransactionFailedEvent.Set();
+                    break;
+
+            }
+
+
         }
 
         private void OnAdminKeyReceived(INamedXmlSerializable obj)

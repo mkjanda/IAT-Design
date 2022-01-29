@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using System.Drawing;
-using System.Xml;
+using IATClient.ResultData;
 
 namespace IATClient
 {
@@ -18,9 +18,9 @@ namespace IATClient
         private Func<bool> GetReverseScored;
         private Func<int> GetNumStatements;
 
-        public CLikertResponseObject(EType type, IATSurveyFile.Response response) : base(type, response)
+        public CLikertResponseObject(EType type, Response response) : base(type, response)
         {
-            IATSurveyFile.Likert resp = (IATSurveyFile.Likert)response;
+            Likert resp = (Likert)response;
             GetStatement = new Func<int, String>(resp.GetStatement);
             GetReverseScored = new Func<bool>(resp.IsReverseScored);
             GetNumStatements = new Func<int>(resp.GetNumStatements);
@@ -29,7 +29,7 @@ namespace IATClient
 
         public CLikertResponseObject(EType type, ResultSetDescriptor rsd) : base(type, rsd) { }
 
-        public CLikertResponseObject(CResponseObject obj, IATSurveyFile.Likert resp) : base(obj.Type, resp)
+        public CLikertResponseObject(CResponseObject obj, Likert resp) : base(obj.Type, resp)
         {
             CLikertResponseObject lObj = (CLikertResponseObject)obj;
             GetStatement = new Func<int, String>(resp.GetStatement);

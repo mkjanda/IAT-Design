@@ -49,7 +49,7 @@ namespace IATClient.Messages
         private INamedXmlSerializable _Message;
         public enum EMessageType
         {
-            ResultSetDescriptor, ConfigFile, ActivationRequest, ActivationResponse, DeploymentProgress, Handshake, IATList, Manifest, ItemSlideManifest,
+            ResultSetDescriptor, ConfigFile, ActivationRequest, ActivationResponse, DeploymentProgress, Handshake, IATList, Manifest, ItemSlideManifest, ItemSlideData,
             Packet, RSAKeyPair, QueryIATExists, TransactionRequest, ServerReport, ServerException, ResultPacket, UploadRequest, UploadProgress, GenericException, ClientException
         };
         private EMessageType _MessageType;

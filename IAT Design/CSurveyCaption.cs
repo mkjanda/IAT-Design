@@ -4,6 +4,7 @@ using System.Windows.Forms;
 using System.Xml.Linq;
 using System.Linq;
 using System.IO;
+using IATClient.ResultData;
 
 namespace IATClient
 {
@@ -131,9 +132,9 @@ namespace IATClient
                 Convert.ToInt32(elem.Element("BorderColor").Attribute("b").Value));
         }
 
-        public override IATSurveyFile.SurveyItem GenerateSerializableItem(IATSurveyFile.Survey s)
+        public override SurveyItem GenerateSerializableItem(Survey s)
         {
-            IATSurveyFile.Caption caption = new IATSurveyFile.Caption(s, -1);
+            Caption caption = new Caption(s, -1);
             caption.Text = Text;
             caption.BorderWidth = BorderWidth;
             caption.FontSize = FontSize;

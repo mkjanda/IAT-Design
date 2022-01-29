@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using System.Drawing;
-using System.Xml;
+using IATClient.ResultData;
  
 namespace IATClient
 {
@@ -33,16 +33,16 @@ namespace IATClient
             }
         }
 
-        public CDateResponseObject(EType type, IATSurveyFile.Response response)
+        public CDateResponseObject(EType type, Response response)
             : base(type, response)
         {
             Answer = String.Empty;
-            GetDateBounds = new Func<CResponseObject.CResponseSpecifier>(((IATSurveyFile.Date)response).GetDateBounds);
+            GetDateBounds = new Func<CResponseObject.CResponseSpecifier>(((Date)response).GetDateBounds);
         }
 
         public CDateResponseObject(EType type, ResultSetDescriptor rsd) : base(type, rsd) { }
 
-        public CDateResponseObject(CDateResponseObject obj, IATSurveyFile.Date resp)
+        public CDateResponseObject(CDateResponseObject obj, Date resp)
             : base(obj.Type, resp)
         {
             _Answer = obj._Answer;

@@ -23,9 +23,9 @@ namespace IATClient
         private List<CIATItem> IATItems = new List<CIATItem>();
         private CRangeSpecifier _Specifier = new CRangeSpecifier();
 
-        public override List<CDynamicSpecifier> GetDefinedSpecifiers()
+        public override List<DynamicSpecifier> GetDefinedSpecifiers()
         {
-            List<CDynamicSpecifier> specifiers = new List<CDynamicSpecifier>();
+            List<DynamicSpecifier> specifiers = new List<DynamicSpecifier>();
             specifiers.Add(Specifier);
             return specifiers;
         }
@@ -38,7 +38,7 @@ namespace IATClient
             }
             set
             {
-                CDynamicSpecifier.DeleteSpecifier(_Specifier.ID);
+                DynamicSpecifier.DeleteSpecifier(_Specifier.ID);
                 _Specifier = value;
                 _Specifier.IsReverseScored = ((CLikertResponse)Question.Response).ReverseScored;
                 IATItems.Clear();

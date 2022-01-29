@@ -11,6 +11,7 @@ using System.Security.Cryptography;
 using System.Threading.Tasks;
 using System.Net.WebSockets;
 using System.Linq;
+using IATClient.Messages;
 
 namespace IATClient
 {
@@ -24,7 +25,7 @@ namespace IATClient
         private ManualResetEvent TransactionComplete = new ManualResetEvent(false), TransactionFailed = new ManualResetEvent(false);
         private PartiallyEncryptedRSAData DataKey;
         private object PacketQueueSyncObject = new object();
-        private Dictionary<int, CPacket> PacketMap = null;
+        private Dictionary<int, Packet> PacketMap = null;
         private String itemSlideDownloadKey;
         private long clientID;
         private object transmissionLock = new object();
@@ -188,10 +189,10 @@ namespace IATClient
         private void ManifestReceived(INamedXmlSerializable obj)
         {
             _SlideManifest = (Manifest)obj;
-            SetProgressBarRange(0, (int)((_SlideManifest.TotalSize / CPacket.PacketLength) + 1));
+            SetProgressBarRange(0, (int)((_SlideManifest.TotalSize / Packet.PacketLength) + 1));
             TransactionRequest trans = new TransactionRequest();
             trans.Transaction = TransactionRequest.ETransaction.RequestItemSlides;
-            PacketMap = new Dictionary<int, CPacket>();
+            PacketMap = new Dictionary<int, Packet>();
             Envelope env = new Envelope(trans);
             env.SendMessage(ItemSlideWebSocket, AbortToken);
         }

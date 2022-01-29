@@ -31,12 +31,12 @@ namespace IATClient
             {
                 if (InitialSpecifierIDs.Count > 0)
                     foreach (int id in InitialSpecifierIDs)
-                        CDynamicSpecifier.DeleteSpecifier(id);
+                        DynamicSpecifier.DeleteSpecifier(id);
                 foreach (SpecifierPanel sp in SpecifierPanelList)
                 {
-                    List<CDynamicSpecifier> specifiers = sp.GetDefinedSpecifiers();
-                    foreach (CDynamicSpecifier s in specifiers)
-                        CDynamicSpecifier.AddSpecifier(s);
+                    List<DynamicSpecifier> specifiers = sp.GetDefinedSpecifiers();
+                    foreach (DynamicSpecifier s in specifiers)
+                        DynamicSpecifier.AddSpecifier(s);
                 }
                 _Block = value;
                 SuspendLayout();
@@ -107,14 +107,14 @@ namespace IATClient
                 StimulusScroll.StopTimer();
                 SpecifierPanel.Controls.Clear();
                 foreach (int i in InitialSpecifierIDs)
-                    CDynamicSpecifier.DeleteSpecifier(i);
+                    DynamicSpecifier.DeleteSpecifier(i);
                 InitialSpecifierIDs.Clear();
-                List<CDynamicSpecifier> specifiers;
+                List<DynamicSpecifier> specifiers;
                 foreach (SpecifierPanel p in SpecifierPanelList)
                 {
                     specifiers = p.GetDefinedSpecifiers();
-                    foreach (CDynamicSpecifier ds in specifiers)
-                        CDynamicSpecifier.AddSpecifier(ds);
+                    foreach (DynamicSpecifier ds in specifiers)
+                        DynamicSpecifier.AddSpecifier(ds);
                 }
             }
             else

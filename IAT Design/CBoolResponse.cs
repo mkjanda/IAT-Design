@@ -4,6 +4,7 @@ using System.Text;
 using System.Xml;
 using System.Windows.Forms;
 using System.Xml.Linq;
+using IATClient.ResultData;
 
 namespace IATClient
 {
@@ -144,9 +145,9 @@ namespace IATClient
             return String.Format("\t1 - {0}\r\n\t0 - {1}\r\n", TrueStatement, FalseStatement);
         }
 
-        public override IATSurveyFile.Response GenerateSerializableResponse(IATSurveyFile.SurveyItem parentItem)
+        public override Response GenerateSerializableResponse(SurveyItem parentItem)
         {
-            IATSurveyFile.Boolean r = new IATSurveyFile.Boolean(parentItem);
+            Boolean r = new Boolean(parentItem);
             r.TrueStatement = TrueStatement;
             r.FalseStatement = FalseStatement;
             return r;
@@ -154,7 +155,7 @@ namespace IATClient
 
         public override CSpecifierControlDefinition GetSpecifierControlDefinition()
         {
-            CSpecifierControlDefinition def = new CSpecifierControlDefinition(CDynamicSpecifier.ESpecifierType.Selection);
+            CSpecifierControlDefinition def = new CSpecifierControlDefinition(DynamicSpecifier.ESpecifierType.Selection);
             def.Statements.Add(TrueStatement);
             def.Statements.Add(FalseStatement);
             def.Values.Add("1");

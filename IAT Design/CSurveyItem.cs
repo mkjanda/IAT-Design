@@ -6,6 +6,8 @@ using System.Windows.Forms;
 using System.IO;
 using System.Drawing;
 using System.Xml.Linq;
+using IATClient.ResultData;
+
 
 namespace IATClient
 {
@@ -361,7 +363,7 @@ namespace IATClient
                     break;
 
                 case CResponse.EResponseType.FixedDig:
-                    _DefinedResponse = new CFixedDigResponseObject(CResponseObject.EType.correct, this);
+                    _DefinedResponse = new CFixedDigitResponseObject(CResponseObject.EType.correct, this);
                     break;
 
                 case CResponse.EResponseType.Instruction:
@@ -413,7 +415,7 @@ namespace IATClient
                     break;
 
                 case CResponse.EResponseType.FixedDig:
-                    DummyResponse = new CFixedDigResponseObject(CResponseObject.EType.dummy, this);
+                    DummyResponse = new CFixedDigitResponseObject(CResponseObject.EType.dummy, this);
                     break;
 
                 case CResponse.EResponseType.Instruction:
@@ -462,11 +464,11 @@ namespace IATClient
             return String.Format("{0}\r\n{1}", Text, Response.GetResponseDesc());
         }
 
-        public virtual IATSurveyFile.SurveyItem GenerateSerializableItem(IATSurveyFile.Survey s)
+        public virtual SurveyItem GenerateSerializableItem(Survey s)
         {
             if (ParentSurveyUri == null)
                 return null;
-            IATSurveyFile.SurveyItem item = new IATSurveyFile.SurveyItem(s, CIAT.SaveFile.GetSurvey(ParentSurveyUri).GetItemNum(this));
+            SurveyItem item = new SurveyItem(s, CIAT.SaveFile.GetSurvey(ParentSurveyUri).GetItemNum(this));
             item.Text = Text;
             return item;
         }

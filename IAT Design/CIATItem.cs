@@ -426,7 +426,7 @@ namespace IATClient
         {
             if (KeySpecifierID == -1)
                 return;
-            CDynamicSpecifier.RemoveIATItem(KeySpecifierID, this);
+            DynamicSpecifier.RemoveIATItem(KeySpecifierID, this);
             KeySpecifierID = -1;
         }
 

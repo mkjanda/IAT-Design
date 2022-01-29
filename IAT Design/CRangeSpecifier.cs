@@ -5,7 +5,7 @@ using System.Text;
 
 namespace IATClient
 {
-    class CRangeSpecifier : CDynamicSpecifier
+    class CRangeSpecifier : DynamicSpecifier
     {
         public int Cutoff { get; set; }
         public bool IsReverseScored { get; set; }

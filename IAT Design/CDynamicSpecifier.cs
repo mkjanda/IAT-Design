@@ -6,7 +6,7 @@ using System.Xml;
 
 namespace IATClient
 {
-    public abstract class CDynamicSpecifier : IStoredInXml
+    public abstract class DynamicSpecifier : IStoredInXml
     {
         private CSurvey _Survey;
         private String _SurveyName;
@@ -16,7 +16,7 @@ namespace IATClient
         public enum ESpecifierType { Range, Mask, Selection, None, TrueFalse };
 
         private static List<int> IDList = new List<int>();
-        private static Dictionary<int, CDynamicSpecifier> KeySpecifierDictionary = new Dictionary<int, CDynamicSpecifier>();
+        private static Dictionary<int, DynamicSpecifier> KeySpecifierDictionary = new Dictionary<int, DynamicSpecifier>();
 
         public static void ClearSpecifierDictionary()
         {
@@ -53,7 +53,7 @@ namespace IATClient
         public static void DeleteSpecifier(int ID)
         {
             IDList.Remove(ID);
-            CDynamicSpecifier ds = KeySpecifierDictionary[ID];
+            DynamicSpecifier ds = KeySpecifierDictionary[ID];
             KeySpecifierDictionary.Remove(ID);
             foreach (CIATItem i in ds.IATItems)
             {
@@ -76,7 +76,7 @@ namespace IATClient
         {
             List<int> unusedSpecifiers = new List<int>();
 
-            foreach (CDynamicSpecifier ds in KeySpecifierDictionary.Values)
+            foreach (DynamicSpecifier ds in KeySpecifierDictionary.Values)
             {
                 bool bFound = false;
                 for (int ctr1 = 0; ctr1 < iat.Blocks.Count; ctr1++)
@@ -99,27 +99,27 @@ namespace IATClient
                 KeySpecifierDictionary.Remove(i);
         }
 
-        public static CDynamicSpecifier GetSpecifier(int ID)
+        public static DynamicSpecifier GetSpecifier(int ID)
         {
             return KeySpecifierDictionary[ID];
         }
 
-        public static void AddSpecifier(CDynamicSpecifier specifier)
+        public static void AddSpecifier(DynamicSpecifier specifier)
         {
             KeySpecifierDictionary[specifier.ID] = specifier;
         }
 
         public static void RemoveIATItem(int ID, CIATItem item)
         {
-            CDynamicSpecifier ds = KeySpecifierDictionary[ID];
+            DynamicSpecifier ds = KeySpecifierDictionary[ID];
             item.SpecifierArg = String.Empty;
             item.KeySpecifierID = -1;
             ds.RemoveIATItem(item);
         }
 
-        public static List<CDynamicSpecifier> GetAllSpecifiers()
+        public static List<DynamicSpecifier> GetAllSpecifiers()
         {
-            return new List<CDynamicSpecifier>(KeySpecifierDictionary.Values);
+            return new List<DynamicSpecifier>(KeySpecifierDictionary.Values);
         }
 
         public virtual void RemoveIATItem(CIATItem item)
@@ -168,7 +168,7 @@ namespace IATClient
             }
         }
 
-        public CDynamicSpecifier()
+        public DynamicSpecifier()
         {
             SurveyName = String.Empty;
             ItemNum = -1;
@@ -176,7 +176,7 @@ namespace IATClient
             IDList.Add(ID);
         }
 
-        public CDynamicSpecifier(String surveyName, int itemNum, List<CIATItem> IATitems)
+        public DynamicSpecifier(String surveyName, int itemNum, List<CIATItem> IATitems)
         {
             _SurveyName = surveyName;
             _ItemNum = itemNum;
@@ -198,7 +198,7 @@ namespace IATClient
             for (int ctr = 0; ctr < nSpecifiers; ctr++)
             {
 
-                CDynamicSpecifier result = null;
+                DynamicSpecifier result = null;
 
                 ESpecifierType type = (ESpecifierType)Enum.Parse(typeof(ESpecifierType), node.ChildNodes[ctr].Attributes["SpecifierType"].Value);
                 switch (type)
@@ -232,14 +232,14 @@ namespace IATClient
         {
             writer.WriteStartElement("KeySpecifierDictionary");
             writer.WriteAttributeString("NumSpecifiers", KeySpecifierDictionary.Count.ToString());
-            foreach (CDynamicSpecifier ds in KeySpecifierDictionary.Values)
+            foreach (DynamicSpecifier ds in KeySpecifierDictionary.Values)
                 ds.WriteToXml(writer);
             writer.WriteEndElement();
         }
 
         private static void ResolveSpecifierSurveys(CIAT iat)
         {
-            foreach (CDynamicSpecifier ds in KeySpecifierDictionary.Values)
+            foreach (DynamicSpecifier ds in KeySpecifierDictionary.Values)
             {
                 for (int ctr = 0; ctr < iat.BeforeSurvey.Count; ctr++)
                     if (iat.BeforeSurvey[ctr].Name == ds.SurveyName)

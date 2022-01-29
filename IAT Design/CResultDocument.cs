@@ -6,13 +6,13 @@ using System.Text;
 using System.Xml;
 using System.Xml.Serialization;
 using System.IO;
-using IATClient.IATResultSetNamespaceV2;
 using System.IO.Packaging;
 using System.Security.Cryptography;
 using System.Drawing;
 using System.Threading;
 using System.Windows.Forms;
 using Saxon.Api;
+using IATClient.ResultData;
 
 namespace IATClient
 {
@@ -302,7 +302,7 @@ namespace IATClient
 
 
         private XmlDocument ResponseDoc = new XmlDocument();
-        private IATClient.ResultDocument.ResultDocument ResultDocument = new IATClient.ResultDocument.ResultDocument();
+        private ResultDocument.ResultDocument ResultDocument = new ResultDocument.ResultDocument();
         private MemoryStream ResultXML = new MemoryStream();
         private static List<ExcelTransform> TransformList = new List<ExcelTransform>();
         private Package XLSXPackage = null;
@@ -357,7 +357,7 @@ namespace IATClient
 
         }
 
-        private void BuildTitlePage(CResultData rd)
+        private void BuildTitlePage(ResultData.ResultData rd)
         {
             TitlePageImages.Clear();
             Image canvasBmp = new Bitmap(1000, 5000);
@@ -387,11 +387,11 @@ namespace IATClient
             }
             Font titleFont = new Font(System.Drawing.SystemFonts.DefaultFont.FontFamily, 18F);
             Font headerFont = new Font(System.Drawing.SystemFonts.DefaultFont.FontFamily, 13F);
-            SizeF sz = g.MeasureString("Results for " + rd.ResultDescriptor.ConfigFile.Name, titleFont);
-            g.DrawString("Results for " + rd.ResultDescriptor.ConfigFile.Name, titleFont, Brushes.DarkBlue, new PointF(500 - (sz.Width / 2), yOffset));
+            SizeF sz = g.MeasureString("Results for " + rd.Descriptor.ConfigFile.Name, titleFont);
+            g.DrawString("Results for " + rd.Descriptor.ConfigFile.Name, titleFont, Brushes.DarkBlue, new PointF(500 - (sz.Width / 2), yOffset));
             yOffset += sz.Height + 25;
-            sz = g.MeasureString(String.Format("Test Author: {0}", rd.ResultDescriptor.TestAuthor), titleFont);
-            g.DrawString(String.Format("Test Author: {0}", rd.ResultDescriptor.TestAuthor), titleFont, Brushes.DarkBlue, new PointF(500 - (sz.Width / 2), yOffset));
+            sz = g.MeasureString(String.Format("Test Author: {0}", rd.Descriptor.TestAuthor), titleFont);
+            g.DrawString(String.Format("Test Author: {0}", rd.Descriptor.TestAuthor), titleFont, Brushes.DarkBlue, new PointF(500 - (sz.Width / 2), yOffset));
             yOffset += sz.Height + 25;
             String str = String.Format("Mean: {0:F6}                  Standard Deviation: {1:F6}", rd.Mean, rd.SD);
             sz = g.MeasureString(str, headerFont);
@@ -404,8 +404,8 @@ namespace IATClient
             g.DrawString("Summary Grid Format", headerFont, Brushes.Black, new PointF(100, yOffset));
             yOffset += sz.Height + 10;
             int colNum = 1;
-            if (rd.ResultDescriptor.TokenType != ETokenType.NONE) { 
-                str = String.Format("Column {0}: {1} (test taker token)", colNumToName(colNum++), rd.ResultDescriptor.TokenName);
+            if (rd.Descriptor.TokenType != ETokenType.NONE) { 
+                str = String.Format("Column {0}: {1} (test taker token)", colNumToName(colNum++), rd.Descriptor.TokenName);
                 sz = g.MeasureString(str, font);
                 if (yOffset + sz.Height > canvasBmp.Height)
                 {
@@ -422,11 +422,11 @@ namespace IATClient
                 yOffset += 10 + sz.Height;
             }
 
-            for (int ctr = 0; ctr < rd.ResultDescriptor.BeforeSurveys.Count; ctr++)
+            for (int ctr = 0; ctr < rd.Descriptor.BeforeSurveys.Count; ctr++)
             {
-                if (rd.ResultDescriptor.BeforeSurveys[ctr].NumQuestions == 0)
+                if (rd.Descriptor.BeforeSurveys[ctr].NumQuestions == 0)
                     continue;
-                Image surveyImg = GenerateSurveySummary(rd.ResultDescriptor.BeforeSurveys[ctr], colNum, font);
+                Image surveyImg = GenerateSurveySummary(rd.Descriptor.BeforeSurveys[ctr], colNum, font);
                 if (surveyImg.Height + yOffset > canvasBmp.Height)
                 {
                     titlePageImg = new Bitmap(1000, ((int)Math.Ceiling(yOffset) % 20 == 0) ? (int)Math.Ceiling(yOffset) : ((int)Math.Ceiling(yOffset) + 20 - ((int)Math.Ceiling(yOffset) % 20)));
@@ -441,7 +441,7 @@ namespace IATClient
                 g.DrawImage(surveyImg, new PointF(150, yOffset));
                 yOffset += 10 + surveyImg.Height;
                 surveyImg.Dispose();
-                colNum += rd.ResultDescriptor.BeforeSurveys[ctr].NumQuestions;
+                colNum += rd.Descriptor.BeforeSurveys[ctr].NumQuestions;
             }
             str = String.Format("Column {0}: IAT Score", colNumToName(colNum++));
             sz = g.MeasureString(str, font);
@@ -458,11 +458,11 @@ namespace IATClient
             }
             g.DrawString(str, font, Brushes.Black, new PointF(150, yOffset));
             yOffset += sz.Height + 10;
-            for (int ctr = 0; ctr < rd.ResultDescriptor.AfterSurveys.Count; ctr++)
+            for (int ctr = 0; ctr < rd.Descriptor.AfterSurveys.Count; ctr++)
             {
-                if (rd.ResultDescriptor.AfterSurveys[ctr].NumQuestions == 0)
+                if (rd.Descriptor.AfterSurveys[ctr].NumQuestions == 0)
                     continue;
-                Image surveyImg = GenerateSurveySummary(rd.ResultDescriptor.AfterSurveys[ctr], colNum, font);
+                Image surveyImg = GenerateSurveySummary(rd.Descriptor.AfterSurveys[ctr], colNum, font);
                 if (surveyImg.Height + yOffset > canvasBmp.Height)
                 {
                     titlePageImg = new Bitmap(1000, ((int)Math.Ceiling(yOffset) % 20 == 0) ? (int)Math.Ceiling(yOffset) : ((int)Math.Ceiling(yOffset) + 20 - ((int)Math.Ceiling(yOffset) % 20)));
@@ -477,7 +477,7 @@ namespace IATClient
                 g.DrawImage(surveyImg, new PointF(150, yOffset));
                 yOffset += surveyImg.Height + 10;
                 surveyImg.Dispose();
-                colNum += rd.ResultDescriptor.AfterSurveys[ctr].NumQuestions;
+                colNum += rd.Descriptor.AfterSurveys[ctr].NumQuestions;
             }
             titlePageImg = new Bitmap(1000, ((int)Math.Ceiling(yOffset) % 20 == 0) ? (int)Math.Ceiling(yOffset) : ((int)Math.Ceiling(yOffset) + 20 - ((int)Math.Ceiling(yOffset) % 20)));
             copyG = Graphics.FromImage(titlePageImg);
@@ -493,7 +493,7 @@ namespace IATClient
                 ResultDocument.TitlePage.PageHeights[ctr] = TitlePageImages[ctr].Height;
         }
 
-        private Image GenerateSurveySummary(IATSurveyFile.Survey survey, int colNum, Font f)
+        private Image GenerateSurveySummary(Survey survey, int colNum, Font f)
         {
             int ctr2;
             Image surveyImage = new Bitmap(750, 5000);
@@ -504,7 +504,7 @@ namespace IATClient
             float yOffset = 0;
             for (int ctr = 0; ctr < survey.SurveyItems.Length; ctr++)
             {
-                if (survey.SurveyItems[ctr].Response.ResponseType == IATClient.IATSurveyFile.ResponseType.None)
+                if (survey.SurveyItems[ctr].Response.ResponseType == ResponseType.None)
                     continue;
                 String str = String.Format("Column {0}", colNumToName(colNum++));
                 SizeF sz = g.MeasureString(str, f);
@@ -515,31 +515,31 @@ namespace IATClient
                 yOffset += sz.Height + 5;
                 switch (survey.SurveyItems[ctr].Response.ResponseType)
                 {
-                    case IATClient.IATSurveyFile.ResponseType.Boolean:
+                    case ResponseType.Boolean:
                         str = "A true/false response. 1 represents \"true\" and 0 represents \"false\"";
                         sz = g.MeasureString(str, f);
                         g.DrawString(str, f, Brushes.Black, new PointF(colLabelRight + 15, yOffset));
                         yOffset += sz.Height;
                         break;
 
-                    case IATClient.IATSurveyFile.ResponseType.BoundedLength:
-                        IATSurveyFile.BoundedLength bl = (IATSurveyFile.BoundedLength)survey.SurveyItems[ctr].Response;
+                    case ResponseType.BoundedLength:
+                        BoundedLength bl = (BoundedLength)survey.SurveyItems[ctr].Response;
                         str = String.Format("A text response between {0} and {1} characters in length.", bl.MinLength, bl.MaxLength);
                         sz = g.MeasureString(str, f);
                         g.DrawString(str, f, Brushes.Black, new PointF(colLabelRight + 15, yOffset));
                         yOffset += sz.Height;
                         break;
 
-                    case IATClient.IATSurveyFile.ResponseType.BoundedNum:
-                        IATSurveyFile.BoundedNum bn = (IATSurveyFile.BoundedNum)survey.SurveyItems[ctr].Response;
+                    case ResponseType.BoundedNumber:
+                        BoundedNumber bn = (BoundedNumber)survey.SurveyItems[ctr].Response;
                         str = String.Format("A numeric response between {0} and {1}.", bn.MinValue, bn.MaxValue);
                         sz = g.MeasureString(str, f);
                         g.DrawString(str, f, Brushes.Black, new PointF(colLabelRight + 15, yOffset));
                         yOffset += sz.Height;
                         break;
 
-                    case IATClient.IATSurveyFile.ResponseType.Date:
-                        IATSurveyFile.Date d = (IATSurveyFile.Date)survey.SurveyItems[ctr].Response;
+                    case ResponseType.Date:
+                        Date d = (Date)survey.SurveyItems[ctr].Response;
                         if (d.HasStartDate && d.HasEndDate)
                             str = String.Format("A date that falls between {0}/{1}/{2} and {3}/{4}/{5} in MM/DD/YYYY format.", d.StartDate.Month, d.StartDate.Day, d.StartDate.Year, d.EndDate.Month, d.EndDate.Day, d.EndDate.Year);
                         else if (d.HasStartDate)
@@ -553,16 +553,16 @@ namespace IATClient
                         yOffset += sz.Height;
                         break;
 
-                    case IATClient.IATSurveyFile.ResponseType.FixedDig:
-                        IATSurveyFile.FixedDig fd = (IATSurveyFile.FixedDig)survey.SurveyItems[ctr].Response;
+                    case ResponseType.FixedDig:
+                        FixedDigit fd = (FixedDigit)survey.SurveyItems[ctr].Response;
                         str = String.Format("A response that consists of {0} digits.", fd.NumDigs);
                         sz = g.MeasureString(str, f);
                         g.DrawString(str, f, Brushes.Black, new PointF(colLabelRight + 15, yOffset));
                         yOffset += sz.Height;
                         break;
 
-                    case IATClient.IATSurveyFile.ResponseType.Likert:
-                        IATSurveyFile.Likert l = (IATSurveyFile.Likert)survey.SurveyItems[ctr].Response;
+                    case ResponseType.Likert:
+                        Likert l = (Likert)survey.SurveyItems[ctr].Response;
                         if (l.ReverseScored)
                             str = String.Format("An already reverse-scored likert response with {0} options.", l.Choices.Length);
                         else
@@ -580,8 +580,8 @@ namespace IATClient
                         yOffset -= 5;
                         break;
 
-                    case IATClient.IATSurveyFile.ResponseType.MultiBoolean:
-                        IATSurveyFile.MultiBoolean mb = (IATSurveyFile.MultiBoolean)survey.SurveyItems[ctr].Response;
+                    case ResponseType.MultiBoolean:
+                        MultiBoolean mb = (MultiBoolean)survey.SurveyItems[ctr].Response;
                         str = "A multiple selection item whose respone is represented by a series of 1's and 0's where a 1 indicate that a choice was selected and a zero indicates that choice was not." +
                             " Each choice is listed below with the correspding digit. If this digit is 1, that choice was selected by the test taker.";
                         sz = g.MeasureString(str, f, (int)(surveyImage.Width - colLabelRight - 15));
@@ -598,8 +598,8 @@ namespace IATClient
                         yOffset -= 5;
                         break;
 
-                    case IATClient.IATSurveyFile.ResponseType.Multiple:
-                        IATSurveyFile.Multiple mlt = (IATSurveyFile.Multiple)survey.SurveyItems[ctr].Response;
+                    case ResponseType.Multiple:
+                        Multiple mlt = (Multiple)survey.SurveyItems[ctr].Response;
                         str = "A multiple choice question with the following options:";
                         sz = g.MeasureString(str, f, (int)(surveyImage.Width - colLabelRight - 15));
                         g.DrawString(str, f, Brushes.Black, new PointF(colLabelRight + 15, yOffset));
@@ -614,15 +614,15 @@ namespace IATClient
                         }
                         break;
 
-                    case IATClient.IATSurveyFile.ResponseType.RegEx:
-                        str = String.Format("A text response that matches the regular expression, {0}", ((IATSurveyFile.RegEx)survey.SurveyItems[ctr].Response).RegularExpression);
+                    case ResponseType.RegEx:
+                        str = String.Format("A text response that matches the regular expression, {0}", ((RegEx)survey.SurveyItems[ctr].Response).RegularExpression);
                         sz = g.MeasureString(str, f, (int)(surveyImage.Width - colLabelRight - 15));
                         g.DrawString(str, f, Brushes.Black, new RectangleF(new PointF(colLabelRight + 15, yOffset), sz));
                         yOffset += sz.Height;
                         break;
 
-                    case IATClient.IATSurveyFile.ResponseType.WeightedMultiple:
-                        IATSurveyFile.WeightedMultiple wmr = (IATSurveyFile.WeightedMultiple)survey.SurveyItems[ctr].Response;
+                    case ResponseType.WeightedMultiple:
+                        WeightedMultiple wmr = (WeightedMultiple)survey.SurveyItems[ctr].Response;
                         str = "A multiple choice question where each choice is assigned a weight. The weight value appears, not the ordinal value of the choice.";
                         sz = g.MeasureString(str, f, (int)(surveyImage.Width - colLabelRight - 15));
                         g.DrawString(str, f, Brushes.Black, new RectangleF(new PointF(colLabelRight + 15, yOffset), sz));
@@ -647,52 +647,52 @@ namespace IATClient
             return retImg;
         }
 
-        private IATClient.ResultDocument.TSurveyFormat ParseSurveyFormat(IATSurveyFile.Survey s, int elemNum)
+        private ResultDocument.TSurveyFormat ParseSurveyFormat(Survey s, int elemNum)
         {
-            IATClient.ResultDocument.TSurveyFormat Survey = new IATClient.ResultDocument.TSurveyFormat();
+            ResultDocument.TSurveyFormat Survey = new ResultDocument.TSurveyFormat();
             Survey.ElementNum = elemNum;
             if (s.HasCaption)
                 Survey.CaptionText = s.Caption.Text;
             else
                 Survey.CaptionText = String.Empty;
-            Survey.Questions = new IATClient.ResultDocument.TSurveyQuestionFormat[s.SurveyItems.Length];
+            Survey.Questions = new ResultDocument.TSurveyQuestionFormat[s.SurveyItems.Length];
             for (int ctr = 0; ctr < s.SurveyItems.Length; ctr++)
             {
-                IATClient.ResultDocument.TSurveyQuestionFormat sqf = new IATClient.ResultDocument.TSurveyQuestionFormat();
-                sqf.ResponseType = (IATClient.ResultDocument.TResponseType)Enum.Parse(typeof(IATClient.ResultDocument.TResponseType), s.SurveyItems[ctr].Response.ResponseType.ToString());
+                ResultDocument.TSurveyQuestionFormat sqf = new ResultDocument.TSurveyQuestionFormat();
+                sqf.ResponseType = (ResultDocument.TResponseType)Enum.Parse(typeof(ResultDocument.TResponseType), s.SurveyItems[ctr].Response.ResponseType.ToString());
                 switch (s.SurveyItems[ctr].Response.ResponseType)
                 {
-                    case IATClient.IATSurveyFile.ResponseType.None:
+                    case ResponseType.None:
                         sqf.QuestionText = s.SurveyItems[ctr].Text;
                         break;
 
-                    case IATClient.IATSurveyFile.ResponseType.Boolean:
+                    case ResponseType.Boolean:
                         sqf.QuestionText = s.SurveyItems[ctr].Text;
-                        sqf.ResponseSummary = String.Format("1 : {0}, 0 : {1}", ((IATSurveyFile.Boolean)s.SurveyItems[ctr].Response).TrueStatement,
-                                ((IATSurveyFile.Boolean)s.SurveyItems[ctr].Response).FalseStatement);
-                        sqf.Choices = new IATClient.ResultDocument.TChoiceFormat[2];
-                        sqf.Choices[0] = new IATClient.ResultDocument.TChoiceFormat();
-                        sqf.Choices[1] = new IATClient.ResultDocument.TChoiceFormat();
-                        sqf.Choices[0].Text = ((IATSurveyFile.Boolean)s.SurveyItems[ctr].Response).TrueStatement;
-                        sqf.Choices[1].Text = ((IATSurveyFile.Boolean)s.SurveyItems[ctr].Response).FalseStatement;
+                        sqf.ResponseSummary = String.Format("1 : {0}, 0 : {1}", ((ResultData.Boolean)s.SurveyItems[ctr].Response).TrueStatement,
+                                ((ResultData.Boolean)s.SurveyItems[ctr].Response).FalseStatement);
+                        sqf.Choices = new ResultDocument.TChoiceFormat[2];
+                        sqf.Choices[0] = new ResultDocument.TChoiceFormat();
+                        sqf.Choices[1] = new ResultDocument.TChoiceFormat();
+                        sqf.Choices[0].Text = ((ResultData.Boolean)s.SurveyItems[ctr].Response).TrueStatement;
+                        sqf.Choices[1].Text = ((ResultData.Boolean)s.SurveyItems[ctr].Response).FalseStatement;
                         sqf.Choices[0].Value = "1";
                         sqf.Choices[1].Value = "0";
                         break;
 
-                    case IATClient.IATSurveyFile.ResponseType.BoundedLength:
+                    case ResponseType.BoundedLength:
                         sqf.QuestionText = s.SurveyItems[ctr].Text;
-                        sqf.ResponseSummary = String.Format("Between {0} and {1} characters of text.", ((IATSurveyFile.BoundedLength)s.SurveyItems[ctr].Response).MinLength,
-                                ((IATSurveyFile.BoundedLength)s.SurveyItems[ctr].Response).MaxLength);
+                        sqf.ResponseSummary = String.Format("Between {0} and {1} characters of text.", ((BoundedLength)s.SurveyItems[ctr].Response).MinLength,
+                                ((BoundedLength)s.SurveyItems[ctr].Response).MaxLength);
                         break;
 
-                    case IATClient.IATSurveyFile.ResponseType.BoundedNum:
-                        IATSurveyFile.BoundedNum bnr = (IATSurveyFile.BoundedNum)s.SurveyItems[ctr].Response;
+                    case ResponseType.BoundedNumber:
+                        BoundedNumber bnr = (BoundedNumber)s.SurveyItems[ctr].Response;
                         sqf.QuestionText = s.SurveyItems[ctr].Text;
                         sqf.ResponseSummary = String.Format("A number between {0} and {1}.", bnr.MinValue, bnr.MaxValue);
                         break;
 
-                    case IATClient.IATSurveyFile.ResponseType.Date:
-                        IATSurveyFile.Date dr = (IATSurveyFile.Date)s.SurveyItems[ctr].Response;
+                    case ResponseType.Date:
+                        Date dr = (Date)s.SurveyItems[ctr].Response;
                         sqf.QuestionText = s.SurveyItems[ctr].Text;
                         if (dr.HasStartDate && dr.HasEndDate)
                             sqf.ResponseSummary = String.Format("A date between {0}/{1}/{2} and {3}/{4}/{5}.", dr.StartDate.Month, dr.StartDate.Day, dr.StartDate.Year,
@@ -705,24 +705,24 @@ namespace IATClient
                             sqf.ResponseSummary = "A date in MM/DD/YYYY format.";
                         break;
 
-                    case IATClient.IATSurveyFile.ResponseType.FixedDig:
-                        IATSurveyFile.FixedDig fdr = (IATSurveyFile.FixedDig)s.SurveyItems[ctr].Response;
+                    case ResponseType.FixedDig:
+                        FixedDig fdr = (FixedDig)s.SurveyItems[ctr].Response;
                         sqf.QuestionText = s.SurveyItems[ctr].Text;
                         sqf.ResponseSummary = String.Format("A series of {0} digits.", fdr.NumDigs);
                         break;
 
-                    case IATClient.IATSurveyFile.ResponseType.Likert:
-                        IATSurveyFile.Likert lr = (IATSurveyFile.Likert)s.SurveyItems[ctr].Response;
+                    case ResponseType.Likert:
+                        Likert lr = (Likert)s.SurveyItems[ctr].Response;
                         sqf.QuestionText = s.SurveyItems[ctr].Text;
                         if (lr.ReverseScored)
                             sqf.ResponseSummary = String.Format("A {0}-point reverse-scored likert scale.", lr.Choices.Length);
                         else
                             sqf.ResponseSummary = String.Format("A {0}-point likert scale.", lr.Choices.Length);
                         int lCtr = lr.ReverseScored ? lr.Choices.Length : 1;
-                        sqf.Choices = new IATClient.ResultDocument.TChoiceFormat[lr.Choices.Length];
+                        sqf.Choices = new ResultDocument.TChoiceFormat[lr.Choices.Length];
                         for (int ctr2 = 0; ctr2 < lr.Choices.Length; ctr2++)
                         {
-                            sqf.Choices[ctr2] = new IATClient.ResultDocument.TChoiceFormat();
+                            sqf.Choices[ctr2] = new ResultDocument.TChoiceFormat();
                             sqf.Choices[ctr2].Text = lr.Choices[ctr2];
                             sqf.Choices[ctr2].Value = lCtr.ToString();
                             if (lr.ReverseScored)
@@ -732,8 +732,8 @@ namespace IATClient
                         }
                         break;
 
-                    case IATClient.IATSurveyFile.ResponseType.MultiBoolean:
-                        IATSurveyFile.MultiBoolean mbr = (IATSurveyFile.MultiBoolean)s.SurveyItems[ctr].Response;
+                    case ResponseType.MultiBoolean:
+                        MultiBoolean mbr = (MultiBoolean)s.SurveyItems[ctr].Response;
                         sqf.QuestionText = s.SurveyItems[ctr].Text;
                         if ((mbr.MinSelections == 0) && (mbr.MaxSelections == mbr.Choices.Length))
                             sqf.ResponseSummary = "A selection of the following.";
@@ -743,10 +743,10 @@ namespace IATClient
                             sqf.ResponseSummary = String.Format("A selecion of more than {0} of the following.", mbr.MinSelections);
                         else
                             sqf.ResponseSummary = String.Format("A selection of between {0} and {1} of the following.", mbr.MinSelections, mbr.MaxSelections);
-                        sqf.Choices = new IATClient.ResultDocument.TChoiceFormat[mbr.Choices.Length];
+                        sqf.Choices = new ResultDocument.TChoiceFormat[mbr.Choices.Length];
                         for (int ctr2 = 0; ctr2 < mbr.Choices.Length; ctr2++)
                         {
-                            sqf.Choices[ctr2] = new IATClient.ResultDocument.TChoiceFormat();
+                            sqf.Choices[ctr2] = new ResultDocument.TChoiceFormat();
                             sqf.Choices[ctr2].Text = mbr.Choices[ctr2];
                             String val = String.Empty;
                             for (int ctr22 = mbr.Choices.Length - 1; ctr22 > ctr2; ctr22--)
@@ -758,33 +758,33 @@ namespace IATClient
                         }
                         break;
 
-                    case IATClient.IATSurveyFile.ResponseType.Multiple:
-                        IATSurveyFile.Multiple mr = (IATSurveyFile.Multiple)s.SurveyItems[ctr].Response;
+                    case ResponseType.Multiple:
+                        Multiple mr = (Multiple)s.SurveyItems[ctr].Response;
                         sqf.QuestionText = s.SurveyItems[ctr].Text;
                         sqf.ResponseSummary = "A multiple choice item with the following options.";
-                        sqf.Choices = new IATClient.ResultDocument.TChoiceFormat[mr.Choices.Length];
+                        sqf.Choices = new ResultDocument.TChoiceFormat[mr.Choices.Length];
                         for (int ctr2 = 0; ctr2 < mr.Choices.Length; ctr2++)
                         {
-                            sqf.Choices[ctr2] = new IATClient.ResultDocument.TChoiceFormat();
+                            sqf.Choices[ctr2] = new ResultDocument.TChoiceFormat();
                             sqf.Choices[ctr2].Text = mr.Choices[ctr2];
                             sqf.Choices[ctr2].Value = (ctr2 + 1).ToString();
                         }
                         break;
 
-                    case IATClient.IATSurveyFile.ResponseType.RegEx:
-                        IATSurveyFile.RegEx rR = (IATSurveyFile.RegEx)s.SurveyItems[ctr].Response;
+                    case ResponseType.RegEx:
+                        RegEx rR = (RegEx)s.SurveyItems[ctr].Response;
                         sqf.QuestionText = s.SurveyItems[ctr].Text;
                         sqf.ResponseSummary = String.Format("A text response that fits the form of the regular expression /{0}/", rR.RegularExpression);
                         break;
 
-                    case IATClient.IATSurveyFile.ResponseType.WeightedMultiple:
-                        IATSurveyFile.WeightedMultiple wmR = (IATSurveyFile.WeightedMultiple)s.SurveyItems[ctr].Response;
+                    case ResponseType.WeightedMultiple:
+                        WeightedMultiple wmR = (WeightedMultiple)s.SurveyItems[ctr].Response;
                         sqf.QuestionText = s.SurveyItems[ctr].Text;
                         sqf.ResponseSummary = String.Format("A multiple choice item with {0} choices where each choice is assigned a numerical value", wmR.Choices.Length);
-                        sqf.Choices = new IATClient.ResultDocument.TChoiceFormat[wmR.Choices.Length];
+                        sqf.Choices = new ResultDocument.TChoiceFormat[wmR.Choices.Length];
                         for (int ctr2 = 0; ctr2 < wmR.Choices.Length; ctr2++)
                         {
-                            sqf.Choices[ctr2] = new IATClient.ResultDocument.TChoiceFormat();
+                            sqf.Choices[ctr2] = new ResultDocument.TChoiceFormat();
                             sqf.Choices[ctr2].Text = wmR.Choices[ctr2].Text;
                             sqf.Choices[ctr2].Value = wmR.Choices[ctr2].Weight.ToString();
                         }
@@ -798,108 +798,108 @@ namespace IATClient
 
         private void ParseResultData(CResultData resultData)
         {
-            if (resultData.ResultDescriptor.TokenType != ETokenType.NONE)
-                ResultDocument.TokenName = resultData.ResultDescriptor.TokenName;
+            if (resultData.Descriptor.TokenType != ETokenType.NONE)
+                ResultDocument.TokenName = resultData.Descriptor.TokenName;
             ResultDocument.NumResults = (uint)resultData.IATResults.NumResultSets; ;
-            ResultDocument.NumBlockPresentations = new uint[resultData.ResultDescriptor.ConfigFile.NumBlocks];
-            ResultDocument.ItemSlideSize = new IATClient.ResultDocument.TItemSlideSize();
+            ResultDocument.NumBlockPresentations = new uint[resultData.Descriptor.ConfigFile.NumBlocks];
+            ResultDocument.ItemSlideSize = new ResultDocument.TItemSlideSize();
             ResultDocument.ItemSlideSize.NumCols = (int)Math.Floor((1038096F * (float)(SlideContainer.DisplaySize.Width)) / (500F * 120237F));
             ResultDocument.ItemSlideSize.ColOffset = (int)((1038096F * (float)(SlideContainer.DisplaySize.Width) / 500F) - ((float)ResultDocument.ItemSlideSize.NumCols * 120237F));
             ResultDocument.ItemSlideSize.NumRows = (int)Math.Floor((1038096F * (float)(SlideContainer.DisplaySize.Height)) / (500F * 39927F));
             ResultDocument.ItemSlideSize.RowOffset = (int)((1038096F * (float)(SlideContainer.DisplaySize.Height) / 500F) - ((float)ResultDocument.ItemSlideSize.NumRows * 39927F));
             for (int ctr = 0; ctr < ResultDocument.NumBlockPresentations.Length; ctr++)
-                ResultDocument.NumBlockPresentations[ctr] = resultData.ResultDescriptor.ConfigFile.GetNumPresentationsInBlock(ctr + 1);
+                ResultDocument.NumBlockPresentations[ctr] = resultData.Descriptor.ConfigFile.GetNumPresentationsInBlock(ctr + 1);
             int nValidResults = 0;
             for (int ctr = 0; ctr < resultData.IATResults.NumResultSets; ctr++)
                 if (resultData.IATResults[ctr].IATScore != double.NaN)
                     nValidResults++;
             ResultDocument.NumScoredResults = (uint)nValidResults;
-            ResultDocument.NumIATItems = (uint)resultData.ResultDescriptor.ConfigFile.CountIATItems();
-            ResultDocument.NumPresentations = (uint)resultData.ResultDescriptor.ConfigFile.TotalPresentations;
-            ResultDocument.TestAuthor = resultData.ResultDescriptor.TestAuthor;
+            ResultDocument.NumIATItems = (uint)resultData.Descriptor.ConfigFile.CountIATItems();
+            ResultDocument.NumPresentations = (uint)resultData.Descriptor.ConfigFile.TotalPresentations;
+            ResultDocument.TestAuthor = resultData.Descriptor.TestAuthor;
             DateTime dt = DateTime.Now.ToUniversalTime();
             ResultDocument.RetrievalTime = String.Format("{0:D4}-{1:D2}-{2:D2}T{3:D2}:{4:D2}:{5:D2}Z", dt.Year, dt.Month, dt.Day, dt.Hour, dt.Minute, dt.Second);
-            List<IATSurveyFile.Survey> surveyList = new List<IATSurveyFile.Survey>();
+            List<Survey> surveyList = new List<Survey>();
             List<int> nonInstSurveys = new List<int>();
 
-            for (int ctr = 0; ctr < resultData.ResultDescriptor.BeforeSurveys.Count; ctr++)
+            for (int ctr = 0; ctr < resultData.Descriptor.BeforeSurveys.Count; ctr++)
             {
                 try
                 {
                     int nQuests = 0;
-                    for (int ctr2 = 0; ctr2 < resultData.ResultDescriptor.BeforeSurveys[ctr].SurveyItems.Length; ctr2++)
-                        if (resultData.ResultDescriptor.BeforeSurveys[ctr].SurveyItems[ctr2].Response.ResponseType != IATClient.IATSurveyFile.ResponseType.None)
+                    for (int ctr2 = 0; ctr2 < resultData.Descriptor.BeforeSurveys[ctr].SurveyItems.Length; ctr2++)
+                        if (resultData.Descriptor.BeforeSurveys[ctr].SurveyItems[ctr2].Response.ResponseType != ResponseType.None)
                         {
                             nQuests = 1;
                             break;
                         }
                     if (nQuests > 0)
                     {
-                        surveyList.Add(resultData.ResultDescriptor.BeforeSurveys[ctr]);
+                        surveyList.Add(resultData.Descriptor.BeforeSurveys[ctr]);
                         nonInstSurveys.Add(ctr);
                     }
                 }
                 catch (Exception ex) { }
             }
             int nBeforeQuestionnaires = nonInstSurveys.Count;
-            for (int ctr = 0; ctr < resultData.ResultDescriptor.AfterSurveys.Count; ctr++)
+            for (int ctr = 0; ctr < resultData.Descriptor.AfterSurveys.Count; ctr++)
             {
                 try
                 {
                     int nQuests = 0;
-                    for (int ctr2 = 0; ctr2 < resultData.ResultDescriptor.AfterSurveys[ctr].SurveyItems.Length; ctr2++)
-                        if (resultData.ResultDescriptor.AfterSurveys[ctr].SurveyItems[ctr2].Response.ResponseType != IATClient.IATSurveyFile.ResponseType.None)
+                    for (int ctr2 = 0; ctr2 < resultData.Descriptor.AfterSurveys[ctr].SurveyItems.Length; ctr2++)
+                        if (resultData.Descriptor.AfterSurveys[ctr].SurveyItems[ctr2].Response.ResponseType != ResponseType.None)
                         {
                             nQuests = 1;
                             break;
                         }
                     if (nQuests > 0)
                     {
-                        surveyList.Add(resultData.ResultDescriptor.AfterSurveys[ctr]);
-                        nonInstSurveys.Add(ctr + resultData.ResultDescriptor.BeforeSurveys.Count);
+                        surveyList.Add(resultData.Descriptor.AfterSurveys[ctr]);
+                        nonInstSurveys.Add(ctr + resultData.Descriptor.BeforeSurveys.Count);
                     }
                 }
                 catch (Exception ex) { }
             }
-            ResultDocument.SurveyDesign = new IATClient.ResultDocument.SurveyFormats();
-            ResultDocument.SurveyDesign.SurveyFormat = new IATClient.ResultDocument.TSurveyFormat[surveyList.Count];
+            ResultDocument.SurveyDesign = new ResultDocument.SurveyFormats();
+            ResultDocument.SurveyDesign.SurveyFormat = new ResultDocument.TSurveyFormat[surveyList.Count];
             for (int ctr = 0; ctr < nonInstSurveys.Count; ctr++)
-                ResultDocument.SurveyDesign.SurveyFormat[ctr] = ParseSurveyFormat(surveyList[ctr], ctr + 1 + ((ctr >= resultData.ResultDescriptor.BeforeSurveys.Count) ? 1 : 0));
+                ResultDocument.SurveyDesign.SurveyFormat[ctr] = ParseSurveyFormat(surveyList[ctr], ctr + 1 + ((ctr >= resultData.Descriptor.BeforeSurveys.Count) ? 1 : 0));
 
-            ResultDocument.TestResult = new IATClient.ResultDocument.TTestResult[resultData.IATResults.NumResultSets];
+            ResultDocument.TestResult = new ResultDocument.TTestResult[resultData.IATResults.NumResultSets];
             for (int ctr = 0; ctr < resultData.IATResults.NumResultSets; ctr++)
             {
-                ResultDocument.TestResult[ctr] = new IATClient.ResultDocument.TTestResult();
-                if (resultData.ResultDescriptor.TokenType == ETokenType.NONE)
+                ResultDocument.TestResult[ctr] = new ResultDocument.TTestResult();
+                if (resultData.Descriptor.TokenType == ETokenType.NONE)
                     ResultDocument.TestResult[ctr].Token = null;
                 else
                 {
                     ResultDocument.TestResult[ctr].Token = new ResultDocument.CDATA();
                     ResultDocument.TestResult[ctr].Token.Content = resultData.IATResults[ctr].Token;
                 }
-                ResultDocument.TestResult[ctr].IATResult = new IATClient.ResultDocument.TIATResult();
-                ResultDocument.TestResult[ctr].IATResult.ElementNum = resultData.ResultDescriptor.BeforeSurveys.FindAll(s => s.NumQuestions > 0).Count + 1;
+                ResultDocument.TestResult[ctr].IATResult = new ResultDocument.TIATResult();
+                ResultDocument.TestResult[ctr].IATResult.ElementNum = resultData.Descriptor.BeforeSurveys.FindAll(s => s.NumQuestions > 0).Count + 1;
                 if (resultData.IATResults[ctr].IATScore == Double.NaN)
                     ResultDocument.TestResult[ctr].IATResult.IATScore = double.NaN;
                 else
                     ResultDocument.TestResult[ctr].IATResult.IATScore = resultData.IATResults[ctr].IATScore;
-                ResultDocument.TestResult[ctr].IATResult.IATResponse = new IATClient.ResultDocument.TIATResponse[resultData.ResultDescriptor.ConfigFile.TotalPresentations];
+                ResultDocument.TestResult[ctr].IATResult.IATResponse = new ResultDocument.TIATResponse[resultData.Descriptor.ConfigFile.TotalPresentations];
                 for (int ctr2 = 0; ctr2 < resultData.IATResults[ctr].IATResponse.NumItems; ctr2++)
                 {
-                    ResultDocument.TestResult[ctr].IATResult.IATResponse[ctr2] = new IATClient.ResultDocument.TIATResponse();
+                    ResultDocument.TestResult[ctr].IATResult.IATResponse[ctr2] = new ResultDocument.TIATResponse();
                     ResultDocument.TestResult[ctr].IATResult.IATResponse[ctr2].Error = resultData.IATResults[ctr].IATResponse[ctr2].Error;
                     ResultDocument.TestResult[ctr].IATResult.IATResponse[ctr2].ItemNum = (uint)resultData.IATResults[ctr].IATResponse[ctr2].ItemNumber;
                     ResultDocument.TestResult[ctr].IATResult.IATResponse[ctr2].Latency = (uint)resultData.IATResults[ctr].IATResponse[ctr2].ResponseTime;
                 }
-                ResultDocument.TestResult[ctr].SurveyResults = new IATClient.ResultDocument.TSurveyResponse[nonInstSurveys.Count];
+                ResultDocument.TestResult[ctr].SurveyResults = new ResultDocument.TSurveyResponse[nonInstSurveys.Count];
                 for (int ctr2 = 0; ctr2 < nonInstSurveys.Count; ctr2++)
                 {
-                    ResultDocument.TestResult[ctr].SurveyResults[ctr2] = new IATClient.ResultDocument.TSurveyResponse();
-                    ResultDocument.TestResult[ctr].SurveyResults[ctr2].ElementNum = ctr2 + 1 + ((nonInstSurveys[ctr2] < resultData.ResultDescriptor.BeforeSurveys.Count) ? 0 : 1);
+                    ResultDocument.TestResult[ctr].SurveyResults[ctr2] = new ResultDocument.TSurveyResponse();
+                    ResultDocument.TestResult[ctr].SurveyResults[ctr2].ElementNum = ctr2 + 1 + ((nonInstSurveys[ctr2] < resultData.Descriptor.BeforeSurveys.Count) ? 0 : 1);
                     ResultDocument.TestResult[ctr].SurveyResults[ctr2].Answer = new string[surveyList[ctr2].NumItems];
                     for (int ctr3 = 0; ctr3 < surveyList[ctr2].NumItems; ctr3++)
                     {
-                        if (nonInstSurveys[ctr2] < resultData.ResultDescriptor.BeforeSurveys.Count)
+                        if (nonInstSurveys[ctr2] < resultData.Descriptor.BeforeSurveys.Count)
                         {
                             ISurveyItemResponse resp = resultData.IATResults[ctr].BeforeSurveys[nonInstSurveys[ctr2]][ctr3];
                             if (resp.IsBlank)
@@ -911,7 +911,7 @@ namespace IATClient
                         }
                         else
                         {
-                            ISurveyItemResponse resp = resultData.IATResults[ctr].AfterSurveys[nonInstSurveys[ctr2] - resultData.ResultDescriptor.BeforeSurveys.Count][ctr3];
+                            ISurveyItemResponse resp = resultData.IATResults[ctr].AfterSurveys[nonInstSurveys[ctr2] - resultData.Descriptor.BeforeSurveys.Count][ctr3];
                             if (resp.IsBlank)
                                 ResultDocument.TestResult[ctr].SurveyResults[ctr2].Answer[ctr3] = Properties.Resources.sUnanswered;
                             else if (resp.WasForceSubmitted)
@@ -930,13 +930,13 @@ namespace IATClient
                         foreach (uint itemNum in Items)
                             filenames[ndx++] = SlideContainer.SlideManifest.GetSlideFile((int)itemNum);
              */
-            ResultDocument.ItemSlide = new IATClient.ResultDocument.TItemSlide[nItems];
+            ResultDocument.ItemSlide = new ResultDocument.TItemSlide[nItems];
             int ndx = 0;
             List<int> slideNums = new List<int>();
             List<int> slideImgNums = new List<int>();
             foreach (uint u in Items)
             {
-                ResultDocument.ItemSlide[ndx] = new IATClient.ResultDocument.TItemSlide();
+                ResultDocument.ItemSlide[ndx] = new ResultDocument.TItemSlide();
                 ResultDocument.ItemSlide[ndx++].ItemNum = (int)u;
                 for (int ctr = 0; ctr < SlideContainer.SlideManifest.ItemSlideEntries.Length; ctr++)
                     for (int ctr2 = 0; ctr2 < SlideContainer.SlideManifest.ItemSlideEntries[ctr].Items.Length; ctr2++)
@@ -955,14 +955,14 @@ namespace IATClient
         {
         }
 
-        public void SetResultData(CResultData resultData, CItemSlideContainer slideContainer)
+        public void SetResultData(ResultData.ResultData resultData, CItemSlideContainer slideContainer)
         {
             try
             {
                 SlideContainer = slideContainer;
                 BuildTitlePage(resultData);
                 ParseResultData(resultData);
-                XmlSerializer ser = new XmlSerializer(typeof(IATClient.ResultDocument.ResultDocument));
+                XmlSerializer ser = new XmlSerializer(typeof(ResultDocument.ResultDocument));
                 ResultXML = new MemoryStream();
                 ser.Serialize(ResultXML, ResultDocument);
                 ResultXML.Seek(0, SeekOrigin.Begin);

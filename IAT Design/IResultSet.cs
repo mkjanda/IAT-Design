@@ -30,7 +30,7 @@ namespace IATClient
         int ResultDataVersion { get; }
     }
 
-    public interface IResultData
+    public interface IResultData : IEnumerable<IResultSet>
     {
         int NumResultSets { get; }
         void AppendResultSet(IResultSet rs);
@@ -83,7 +83,7 @@ namespace IATClient
         void WriteXml(XmlWriter writer);
     }
 
-    public interface ISurveyResponse : IResultSetElem
+    public interface ISurveyResponse : IResultSetElem, IEnumerable<ISurveyItemResponse>
     {
         ISurveyItemResponse this[int ndx] { get; }
         void WriteXml(XmlWriter writer);

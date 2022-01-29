@@ -5,7 +5,7 @@ using System.Text;
 using System.Windows.Forms;
 using System.Xml;
 using System.Drawing;
-using System.Globalization;
+using IATClient.ResultData;
 
 namespace IATClient
 {
@@ -19,15 +19,15 @@ namespace IATClient
         private new bool bIsNew = true;
         private bool bIsUnanswered = false, bIsNull = false;
 
-        public CBoundedNumResponseObject(EType type, IATSurveyFile.Response response) : base(type, response)
+        public CBoundedNumResponseObject(EType type, Response response) : base(type, response)
         {
-            IATSurveyFile.BoundedNum resp = (IATSurveyFile.BoundedNum)response;
+            BoundedNumber resp = (BoundedNumber)response;
             GetBounds = new Func<CResponseObject.CResponseSpecifier>(resp.GetBounds);
         }
 
         public CBoundedNumResponseObject(EType type, ResultSetDescriptor rsd) : base(type, rsd) { }
 
-        public CBoundedNumResponseObject(CBoundedNumResponseObject obj, IATSurveyFile.BoundedNum resp)
+        public CBoundedNumResponseObject(CBoundedNumResponseObject obj, BoundedNumber resp)
             : base(obj.Type, resp)
         {
             GetBounds = new Func<CResponseObject.CResponseSpecifier>(resp.GetBounds);

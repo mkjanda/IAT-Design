@@ -97,9 +97,9 @@ namespace IATClient
             return String.Format("\t{0} digits\r\n", NumDigs);
         }
 
-        public override IATSurveyFile.Response GenerateSerializableResponse(IATSurveyFile.SurveyItem parentItem)
+        public override Response GenerateSerializableResponse(SurveyItem parentItem)
         {
-            IATSurveyFile.FixedDig r = new IATSurveyFile.FixedDig(parentItem);
+            FixedDig r = new FixedDig(parentItem);
             r.NumDigs = NumDigs;
 
             return r;
@@ -107,7 +107,7 @@ namespace IATClient
 
         public override CSpecifierControlDefinition GetSpecifierControlDefinition()
         {
-            return new CSpecifierControlDefinition(CDynamicSpecifier.ESpecifierType.None);
+            return new CSpecifierControlDefinition(DynamicSpecifier.ESpecifierType.None);
         }
     }
 }

@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using System.Drawing;
+using IATClient.ResultData;
+using System.Drawing;
 
 namespace IATClient
 {
@@ -14,10 +16,10 @@ namespace IATClient
         private ToolStripButton CloseButton, SplitButton, NextButton, PreviousButton;
         private ToolStripComboBox TestItemCombo, ResultSetCombo;
         private int _CurrResultSet;
-        private CResultData ResultData;
+        private ResultData.ResultData ResultData;
         private CItemSlideContainer ItemSlideContainer;
-        private IATSurveyFile.Survey []BeforeSurveys;
-        private IATSurveyFile.Survey []AfterSurveys;
+        private Survey []BeforeSurveys;
+        private Survey []AfterSurveys;
         private int _ResultPartNdx = -1;
         private Panel ContainerPanel = null, PreviewPanel = null;
         private Action<Panel> OnClose;
@@ -57,12 +59,12 @@ namespace IATClient
             }
         }
 
-        public ResultDetailsPanel(int nWidth, CResultData resultData, CItemSlideContainer itemSlideContainer, int nResultPart, Action<Panel> onClose, Action onSplit)
+        public ResultDetailsPanel(int nWidth, ResultData.ResultData resultData, CItemSlideContainer itemSlideContainer, int nResultPart, Action<Panel> onClose, Action onSplit)
         {
             this.Width = nWidth;
             OnClose = onClose;
             OnSplit = onSplit;
-            this.BackColor = Color.White;
+            this.BackColor = System.Drawing.Color.White;
             _CurrResultSet = -1;
             ResultData = resultData;
             ItemSlideContainer = itemSlideContainer;
@@ -110,7 +112,7 @@ namespace IATClient
             Header.Items.Add(NextButton);
             TestItemCombo = new ToolStripComboBox();
             szMaxItem = new Size(0, 0);
-            for (int ctr = 0; ctr < ResultData.ResultDescriptor.BeforeSurveys.Count + ResultData.ResultDescriptor.AfterSurveys.Count; ctr++)
+            for (int ctr = 0; ctr < ResultData.Descriptor.BeforeSurveys.Count + ResultData.Descriptor.AfterSurveys.Count; ctr++)
             {
                 Size sz = TextRenderer.MeasureText(String.Format("Survey #{0}", ctr + 1), TestItemCombo.Font);
                 if (sz.Width > szMaxItem.Width)
@@ -124,11 +126,11 @@ namespace IATClient
             testItemLabel.Size = TextRenderer.MeasureText(testItemLabel.Text, testItemLabel.Font) + new Size(ToolStripItemPadding.Horizontal, ToolStripItemPadding.Vertical);
             Header.Items.Add(testItemLabel);
             TestItemCombo.Size = szMaxItem + new Size(ToolStripItemPadding.Horizontal, ToolStripItemPadding.Vertical);
-            for (int ctr = 0; ctr < ResultData.ResultDescriptor.BeforeSurveys.Count; ctr++)
+            for (int ctr = 0; ctr < ResultData.Descriptor.BeforeSurveys.Count; ctr++)
                 TestItemCombo.Items.Add(String.Format("Survey #{0}", ctr + 1));
             TestItemCombo.Items.Add("IAT Score");
-            for (int ctr = 0; ctr < ResultData.ResultDescriptor.AfterSurveys.Count; ctr++)
-                TestItemCombo.Items.Add(String.Format("Survey #{0}", ctr + ResultData.ResultDescriptor.BeforeSurveys.Count + 1));
+            for (int ctr = 0; ctr < ResultData.Descriptor.AfterSurveys.Count; ctr++)
+                TestItemCombo.Items.Add(String.Format("Survey #{0}", ctr + ResultData.Descriptor.BeforeSurveys.Count + 1));
             TestItemCombo.DropDownStyle = ComboBoxStyle.DropDownList;
             TestItemCombo.SelectedIndex = nResultPart;
             TestItemCombo.SelectedIndexChanged += new EventHandler(TestItemCombo_SelectedIndexChanged);
@@ -153,8 +155,8 @@ namespace IATClient
             ContainerPanel.Location = new Point(0, Header.Height);
             ContainerPanel.Height = this.Height - Header.Height;
             ContainerPanel.Controls.Clear();
-            BeforeSurveys = ResultData.ResultDescriptor.BeforeSurveys.ToArray();
-            AfterSurveys = ResultData.ResultDescriptor.AfterSurveys.ToArray();
+            BeforeSurveys = ResultData.Descriptor.BeforeSurveys.ToArray();
+            AfterSurveys = ResultData.Descriptor.AfterSurveys.ToArray();
             if (ResultPartNdx < BeforeSurveys.Length)
             {
                 PreviewPanel = BeforeSurveys[ResultPartNdx].GeneratePreview(this.Width - 20);
@@ -179,23 +181,7 @@ namespace IATClient
                 Controls.Add(PreviewPanel);
                 Controls.Remove(ContainerPanel);
                 ((ItemSlidePanel)PreviewPanel).Initialize(ItemSlideContainer);
-         //       PreviewPanel.AutoScroll = true;
-//                ContainerPanel.Controls.Add(PreviewPanel);
             }
-/*            
-            if (PreviewPanel.Height > this.Height - Header.Height)
-            {
-             
-                PreviewPanel.VerticalScroll.Enabled = true;
-                PreviewPanel.VerticalScroll.Visible = true;
-                PreviewPanel.VerticalScroll.Minimum = 0;
-                PreviewPanel.VerticalScroll.Maximum = PreviewPanel.Height - p.Height;
-                PreviewPanel.VerticalScroll.Value = 0;
-                PreviewPanel.VerticalScroll.SmallChange = PreviewPanel.Height >> 4;
-                PreviewPanel.VerticalScroll.LargeChange = PreviewPanel.Height;
-                PreviewPanel.Scroll += new ScrollEventHandler(PreviewPanel_Scroll);
-            }
-  */          
             Invalidate();
             CurrResultSet = _CurrResultSet;
         }
@@ -228,7 +214,7 @@ namespace IATClient
 
         private void NextButton_Click(object sender, EventArgs e)
         {
-            if (CurrResultSet + 1 < ResultData.ResultDescriptor.NumResults)
+            if (CurrResultSet + 1 < ResultData.Descriptor.NumResults)
                 ResultSetCombo.Text = (CurrResultSet + 2).ToString();
         }
 

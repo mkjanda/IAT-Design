@@ -6,12 +6,12 @@ using System.Text;
 
 namespace IATClient
 {
-    class CMaskSpecifier : CDynamicSpecifier
+    class CMaskSpecifier : DynamicSpecifier
     {
         public String Mask { get; set; }
         public KeyedDirection KeyedDir { get; set; }
 
-        public override CDynamicSpecifier.ESpecifierType SpecifierType
+        public override DynamicSpecifier.ESpecifierType SpecifierType
         {
             get
             {

@@ -452,7 +452,7 @@ namespace IATClient
             _AfterSurvey.Clear();
             _Blocks.Clear();
             _InstructionBlocks.Clear();
-//            CDynamicSpecifier.ClearSpecifierDictionary();
+//            DynamicSpecifier.ClearSpecifierDictionary();
             Contents.Clear();
             Name = String.Empty;
             CIAT.SaveFile.ActivityLog.LogEvent(ActivityLog.EventType.Delete, URI);

@@ -14,9 +14,9 @@ namespace IATClient
         private CSurveyItem Question;
         private Label NoSpecifierLabel;
 
-        public override List<CDynamicSpecifier> GetDefinedSpecifiers()
+        public override List<DynamicSpecifier> GetDefinedSpecifiers()
         {
-            return new List<CDynamicSpecifier>();
+            return new List<DynamicSpecifier>();
         }
 
         public InertSpecifierControl(CSurvey survey, CSurveyItem question, int width)
