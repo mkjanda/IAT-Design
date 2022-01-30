@@ -7,4 +7,17 @@ In order for the program to start, it must be activated but this is not possible
 
 ![2022-01-30 (2)](https://user-images.githubusercontent.com/35156960/151716403-ec2898f5-2ca4-4430-9563-076092dea40e.png)
 
+
+
+```xml
+<IATDesign>
+<Version>1.1.1.43</Version>
+<Version_1_1_confirmed>True</Version_1_1_confirmed>
+<IATActivationKey>laH8pGseVWi++RPTwjWHQxTrCGMBI6ciMwCIWfEWM7qzt9iszRk30wZYdiZqwYPy</IATActivationKey>
+<UserEMail>nikki@bix.blue</UserEMail>
+<IATProductCode>2L9JBMR74EYKHJ7RKWPE</IATProductCode>
+<ClientName>Ms Nikki Lissome</ClientName>
+</IATDesign>
+```
+
 Note the AppData folder is hidden by default.
