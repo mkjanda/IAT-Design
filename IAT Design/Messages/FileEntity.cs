@@ -23,7 +23,6 @@ namespace IATClient.Messages
                 _Path = value;
             }
         }
-        protected EFileEntityType _FileEntityType;
         protected String _Name = String.Empty;
         protected String _Path = String.Empty;
 
@@ -31,13 +30,7 @@ namespace IATClient.Messages
 
         public abstract String Name { get; set; }
 
-        public EFileEntityType FileEntityType
-        {
-            get
-            {
-                return _FileEntityType;
-            }
-        }
+        public EFileEntityType FileEntityType { get; protected set; }
 
         public abstract int NumEntities { get; }
 

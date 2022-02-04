@@ -93,8 +93,8 @@ namespace IATClient.IATConfig
                     refs.Add(new ResourceReference()
                     {
                         ResourceId = i.Id,
-                        ReferenceIds = i.Indexes
-                    }); ;
+                        ReferenceIds = i.Indexes.Cast<long>().ToList()
+                    });
                 return refs;
             }
         }

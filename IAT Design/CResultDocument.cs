@@ -13,6 +13,7 @@ using System.Threading;
 using System.Windows.Forms;
 using Saxon.Api;
 using IATClient.ResultData;
+using IATClient.Messages;
 
 namespace IATClient
 {
@@ -1004,8 +1005,9 @@ namespace IATClient
             {
                 var itemNums = (from tr in ResultDocument.TestResult select from ir in tr.IATResult.IATResponse select ir.ItemNum).
                     Aggregate((a1, a2) => a1.Concat(a2)).Distinct().Cast<int>().OrderBy(i => i);
-                var slideNums = (from resource in SlideContainer.SlideManifest.ResourceReferences select resource)
-                    .Where(rr => rr.ReferenceIds.Intersect(itemNums).Count() > 0).Select(rr => rr.ResourceId).Distinct().OrderBy(i => i);
+                var slideNums = SlideContainer.SlideManifest.Contents.Cast<ManifestFile>().Where(f => itemNums.Contains(f.ResourceId)).Where(f2 => itemNums.Contains(f2.ResourceId))
+                    .Select(f => f.ReferenceIds).Cast<IEnumerable<int>>().Aggregate((r1, r2) => r1.Concat(r2)).Distinct().OrderBy(i => i);
+
                 var indexes = from sn in slideNums select slideNums.ToList().IndexOf(sn);
 //                TItemSlideEntry[] slideEntries = SlideContainer.SlideManifest.ItemSlideEntries;
   //              var slideNdxs = from i in Items select from ise in slideEntries select slideEntries.ToList().IndexOf(ise);

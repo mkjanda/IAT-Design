@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
+using System.IO;
 using System.Threading;
 using System.Net;
 using Microsoft.Win32;
@@ -9,6 +9,7 @@ using System.Security.Cryptography;
 using System.Drawing;
 using System.Windows.Forms;
 using System.Threading.Tasks;
+using System.Collections.Specialized;
 using System.Net.WebSockets;
 using IATClient.Messages;
 using IATClient.ResultData;
@@ -178,11 +179,6 @@ namespace IATClient
             TransactionCompleteEvent.Set();
         }
 
-        public bool ItemSlidesDownloaded(String iatName)
-        {
-            return ItemSlideMap[iatName].ItemSlideDownloadComplete;
-        }
-
 
         public bool RetrieveServerReport()
         {
@@ -195,7 +191,7 @@ namespace IATClient
                 Messages.Envelope.OnReceipt[Messages.Envelope.EMessageType.TransactionRequest] = new Action<INamedXmlSerializable>(HandshakeConfirmation);
                 Messages.Envelope.OnReceipt[Messages.Envelope.EMessageType.ServerReport] = new Action<INamedXmlSerializable>(ReceiveServerReport);
                 Messages.Envelope.OnReceipt[Messages.Envelope.EMessageType.ServerException] = new Action<INamedXmlSerializable>(OnDeploymentException);
-                Messages.Envelope env = new Messages.Envelope(new TransactionRequest(TransactionRequest.ETransaction.RequestConnection, Properties.Resources.sServerPassword, String.Empty));
+                Messages.Envelope env = new Messages.Envelope(new TransactionRequest(TransactionRequest.ETransaction.RequestConnection));
                 if (!Connect())
                     return false;
                 env.SendMessage(IATManagerWebSocket, AbortToken);
@@ -210,28 +206,7 @@ namespace IATClient
                 return false;
             }
         }
-        /*
-        public bool UpdateServerReport()
-        {
-            TransactionCompleteEvent.Reset();
-            TransactionFailedEvent.Reset();
-            Messages.Envelope.ClearMessageMap();
-            Messages.Envelope.OnReceipt[Messages.Envelope.EMessageType.Handshake] = new Action<INamedXmlSerializable>(ShakeHands);
-            Messages.Envelope.OnReceipt[Messages.Envelope.EMessageType.TransactionRequest] = new Action<INamedXmlSerializable>(HandshakeConfirmation);
-            Messages.Envelope.OnReceipt[Messages.Envelope.EMessageType.ServerReport] = new Action<INamedXmlSerializable>(ReceiveUpdatedServerReport);
-            Messages.Envelope.OnReceipt[Messages.Envelope.EMessageType.ServerException] = new Action<INamedXmlSerializable>(OnDeploymentException);
-            Messages.Envelope.OnReceipt[Messages.Envelope.EMessageType.ItemSlideData] = (msg) => OnItemSlidesData(msg);
-            if (!Connect())
-                return false;
-            TransactionRequest trans = new TransactionRequest();
-            trans.Transaction = TransactionRequest.ETransaction.RequestConnection;
-            Messages.Envelope env = new Messages.Envelope(trans);
-            env.SendMessage(IATManagerWebSocket, AbortToken);
-            int nTrigger = WaitHandle.WaitAny(new WaitHandle[] { TransactionCompleteEvent, TransactionFailedEvent });
-            Messages.Envelope.Shutdown();
-            return (nTrigger == 0);
-        }
-        */
+
         private void StartMessageReceiver()
         {
             Task<WebSocketReceiveResult> receiveTask = IATManagerWebSocket.ReceiveAsync(ReceiveBuffer, AbortToken);
@@ -318,10 +293,10 @@ namespace IATClient
             return false;
         }
 
-        public void RetrieveItemSlides(String iatName, String password)
+        public bool RetrieveItemSlides(String iatName, String password)
         {
             if (ResultDataMap[iatName] == null)
-                return;
+                return false;
             CurrIATName = iatName;
             CurrIATPassword = password;
             TransactionCompleteEvent.Reset();
@@ -331,22 +306,18 @@ namespace IATClient
             Envelope.OnReceipt[Envelope.EMessageType.TransactionRequest] = new Action<INamedXmlSerializable>(OnItemSlidesTransaction);
             Envelope.OnReceipt[Envelope.EMessageType.ServerException] = new Action<INamedXmlSerializable>(OnDeploymentException);
             Envelope.OnReceipt[Envelope.EMessageType.RSAKeyPair] = new Action<INamedXmlSerializable>(OnAdminKeyReceived);
-            ItemSlideData result = null;
-            Envelope.OnReceipt[Envelope.EMessageType.ItemSlideData] = (slideData) =>
-            {
-                result = slideData as ItemSlideData;
-                TransactionCompleteEvent.Set();
-            };
+            Envelope.OnReceipt[Envelope.EMessageType.Manifest] = new Action<INamedXmlSerializable>(OnManifest);
+            if (!Connect())
+                return false;
+            var requestConnection = new TransactionRequest(TransactionRequest.ETransaction.RequestConnection);
+            requestConnection.IATName = iatName;
+            var env = new Envelope(requestConnection);
+            env.SendMessage(IATManagerWebSocket, AbortToken);
             if (ItemSlideMap.Keys.Contains(iatName))
                 if (ItemSlideMap[iatName] != null)
                     ItemSlideMap[iatName].Dispose();
-
             int nTrigger = WaitHandle.WaitAny(new WaitHandle[] { TransactionFailedEvent, TransactionCompleteEvent }, 10000, true);
-            if (nTrigger != 1)
-                return;
-            ItemSlideMap[iatName] = new CItemSlideContainer(result, new Size(ResultDataMap[iatName].IATConfiguration.Layout.InteriorWidth, 
-                ResultDataMap[iatName].IATConfiguration.Layout.InteriorHeight), Images.ImageManager.ThumbnailSize, ResultDataMap[iatName]);
-            ItemSlideMap[iatName].StartRetrieval();
+            return (nTrigger == 1);
         }
 
 
@@ -358,7 +329,7 @@ namespace IATClient
             switch (trans.Transaction)
             {
                 case TransactionRequest.ETransaction.RequestTransmission:
-                    outTrans = new TransactionRequest(TransactionRequest.ETransaction.IATExists, IATConfigMainForm.ServerPassword, CurrIATName);
+                    outTrans = new TransactionRequest(TransactionRequest.ETransaction.IATExists, CurrIATName);
                     env = new Envelope(outTrans);
                     env.SendMessage(IATManagerWebSocket, AbortToken);
                     break;
@@ -411,8 +382,27 @@ namespace IATClient
                     break;
 
             }
+        }
 
-
+        private void OnManifest(INamedXmlSerializable message)
+        {
+            var manifest = message as Manifest;
+            WebClient web = new WebClient();
+            var query = new NameValueCollection(3);
+            query.Add("ProductKey", LocalStorage.Activation[LocalStorage.Field.ProductKey]);
+            query.Add("TestName", CurrIATName);
+            web.QueryString = query;
+            byte[] itemSlideData = web.DownloadData(Properties.Resources.sItemSlideDownloadURL);
+            var receipt = new MemoryStream(itemSlideData);
+            var slideData = new List<byte[]>();
+            foreach (var file in manifest.Contents.Where(fe => fe.FileEntityType == FileEntity.EFileEntityType.File).Cast<ManifestFile>())
+            {
+                byte[] sd = new byte[file.Size];
+                receipt.Write(sd, 0, (int)file.Size);
+                slideData.Add(sd);
+            }
+            ItemSlideMap[CurrIATName] = new CItemSlideContainer(ResultDataMap[CurrIATName], slideData, manifest);
+            TransactionCompleteEvent.Set();
         }
 
         private void OnAdminKeyReceived(INamedXmlSerializable obj)
@@ -465,7 +455,7 @@ namespace IATClient
             switch (trans.Transaction)
             {
                 case TransactionRequest.ETransaction.RequestTransmission:
-                    outTrans = new TransactionRequest(TransactionRequest.ETransaction.IATExists, IATConfigMainForm.ServerPassword, CurrIATName);
+                    outTrans = new TransactionRequest(TransactionRequest.ETransaction.IATExists, CurrIATName);
                     env = new Envelope(outTrans);
                     env.SendMessage(IATManagerWebSocket, AbortToken);
                     break;
@@ -554,7 +544,7 @@ namespace IATClient
             switch (trans.Transaction)
             {
                 case TransactionRequest.ETransaction.RequestTransmission:
-                    outTrans = new TransactionRequest(TransactionRequest.ETransaction.IATExists, IATConfigMainForm.ServerPassword, CurrIATName);
+                    outTrans = new TransactionRequest(TransactionRequest.ETransaction.IATExists, CurrIATName);
                     env = new Envelope(outTrans);
                     env.SendMessage(IATManagerWebSocket, AbortToken);
                     break;

@@ -44,8 +44,7 @@ namespace IATClient
         private ClientWebSocket UploadTestWebSocket;
         private enum EDeploymentStage { requestingConnection = 0, shakingHands = 1, queryingDuplicateIAT = 2, requestingDeployment = 3, performingDeployment = 4 };
         private EDeploymentStage deploymentStage;
-        private Manifest DeploymentFileManifest;
-        public ItemSlideManifest ItemSlideManifest;
+        private Manifest Manifest;
         private int ClientID;
         private IATConfig.ConfigFile CF;
         private ManualResetEvent UploadSuccess = new ManualResetEvent(false), UploadFailed = new ManualResetEvent(false), UploadCancelled = new ManualResetEvent(false);
@@ -243,8 +242,7 @@ namespace IATClient
 
         private void BuildFileManifest()
         {
-            DeploymentFileManifest = new Manifest();
-            DeploymentFileManifest.Type = Manifest.EType.DeploymentFiles;
+            Manifest = new Manifest();
             CF.UploadTimeMillis = UploadTimeMillis;
             CF.ClientID = ClientID;
             ConfigFileXML = new MemoryStream();
@@ -256,11 +254,11 @@ namespace IATClient
             ManifestFile configFile = new ManifestFile(IATName, ConfigFileXML.Length);
             ProcessSurveys(Properties.Resources.sDefaultIATServerDomain, Convert.ToInt32(Properties.Resources.sDefaultIATServerPort));
             int nFiles = 2 + CF.IATImages.NumImages + (Surveys.Count * 2) + ((UniqueRespXML == null) ? 0 : 1);
-            DeploymentFileManifest.AddFile(configFile);
+            Manifest.AddFile(configFile);
             if (UniqueRespXML != null)
             {
                 ManifestFile urf = new ManifestFile("UniqueResponse.xml", UniqueRespXML.Length);
-                DeploymentFileManifest.AddFile(urf);
+                Manifest.AddFile(urf);
             }
             String surveyFNameBase;
             Regex r = new Regex("[^a-zaA-Z0-9]");
@@ -271,12 +269,13 @@ namespace IATClient
                 else
                     surveyFNameBase = IAT.AfterSurvey[ctr2 - IAT.BeforeSurvey.Count].Name;
                 surveyFNameBase = r.Replace(surveyFNameBase, "");
-                DeploymentFileManifest.AddFile(new ManifestFile(String.Format("{0}", surveyFNameBase), Surveys[ctr2].Length));
-                DeploymentFileManifest.AddFile(new ManifestFile(String.Format("{0}-DataRetrieval.xml", surveyFNameBase), SASurveys[ctr2].Length));
+                Manifest.AddFile(new ManifestFile(String.Format("{0}", surveyFNameBase), Surveys[ctr2].Length));
+                Manifest.AddFile(new ManifestFile(String.Format("{0}-DataRetrieval.xml", surveyFNameBase), SASurveys[ctr2].Length));
             }
-            DeploymentFileManifest.AddFiles(CF.IATImages.ConstructFileManifest());
+            Manifest.AddFiles(CF.IATImages.ConstructFileManifest());
             foreach (Tuple<String, MemoryStream> tup in SurveyImages)
-                DeploymentFileManifest.AddFile(new ManifestFile(tup.Item1, tup.Item2.Length));
+                Manifest.AddFile(new ManifestFile(tup.Item1, tup.Item2.Length));
+            Manifest.AddFiles(CF.SlideImages.ConstructFileManifest());
         }
 
         private bool SendDeploymentFiles(long deploymentId, String sessionId)
@@ -327,45 +326,18 @@ namespace IATClient
             }
         }
 
-        private bool SendItemSlides(CUploadRequest upReq)
+        private void SendItemSlides(long deploymentId, String sessionId)
         {
             CF.SlidesProcessed.WaitOne();
             byte[][] itemSlideData = CF.SlideImages.GetImageData();
             MemoryStream memStream = new MemoryStream();
             for (int ctr = 0; ctr < itemSlideData.Length; ctr++)
                 memStream.Write(itemSlideData[ctr], 0, itemSlideData[ctr].Length);
-            try
-            {
-                HttpWebRequest req = WebRequest.CreateHttp(String.Format(Properties.Resources.sUploadURI, upReq.DeploymentID, upReq.ItemSlideUploadKey, ItemSlideManifest.Manifest.TotalSize));
-                req.Method = "POST";
-                req.Timeout = 600000;
-                req.ReadWriteTimeout = 600000;
-                Stream upStream = req.GetRequestStream();
-                upStream.Write(memStream.ToArray(), 0, (int)memStream.Length);
-                HttpStatusCode code = (req.GetResponse() as HttpWebResponse).StatusCode;
-                if (code != HttpStatusCode.OK)
-                    throw new Exception("Failed to upload IAT with status code " + code.ToString());
-                return true;
-            }
-            catch (WebException ex)
-            {   
-                if (ex.Status != WebExceptionStatus.ProtocolError)
-                {
-                    ErrorReporter.ReportError(new CReportableException("Failed to upload IAT", ex));
-                }
-                UploadFailed.Set();
-                return false;
-            }
-            catch (Exception ex)
-            {
-                ErrorReporter.ReportError(new CReportableException("Failed to upload IAT", ex));
-                UploadFailed.Set();
-                return false;
-            }
-            finally
-            {
-                memStream.Dispose();
-            }
+            WebClient web = new WebClient();
+            web.Headers["deploymentId"] = deploymentId.ToString();
+            web.Headers["sessionId"] = sessionId;
+            web.UploadData(Properties.Resources.sItemSlideUploadURL, memStream.ToArray());
+            memStream.Dispose();
         }
 
         public void OnRSAKeyPairReceipt(INamedXmlSerializable keyPair)
@@ -408,14 +380,6 @@ namespace IATClient
                     MainForm.Invoke(SetProgressRange, update.ProgressMin, update.ProgressMax);
                 MainForm.Invoke(ProgressIncrement, update.CurrentProgress);
             }
-        }
-
-        private void UploadData(INamedXmlSerializable upReq)
-        {
-            CUploadRequest uploadRequest = (CUploadRequest)upReq;
-            SetStatusMessage("Uploading test");
-            if (!SendItemSlides(uploadRequest))
-                return;
         }
 
         private void TransactionReceived(INamedXmlSerializable T)
@@ -581,7 +545,7 @@ namespace IATClient
                         break;
 
                     case TransactionRequest.ETransaction.TokenDefinitionReceived:
-                        transmission = new Envelope(DeploymentFileManifest);
+                        transmission = new Envelope(Manifest);
                         SetStatusMessage("Uploading file manifest");
                         transmission.SendMessage(UploadTestWebSocket, AbortToken);
                         break;
@@ -597,7 +561,7 @@ namespace IATClient
                             else
                             {
                                 SetStatusMessage("Uploading file manifest");
-                                transmission = new Envelope(DeploymentFileManifest);
+                                transmission = new Envelope(Manifest);
                                 transmission.SendMessage(UploadTestWebSocket, AbortToken);
                             }
                         }
@@ -609,20 +573,10 @@ namespace IATClient
 
                     case TransactionRequest.ETransaction.DeploymentFileManifestReceived:
                         SendDeploymentFiles(trans.LongValues["deploymentId"], trans.StringValues["sessionId"]);
-                        ItemSlideManifest = new ItemSlideManifest();
-                        ItemSlideManifest.Manifest.AddFiles(CF.SlideImages.ConstructFileManifest());
-                        ItemSlideManifest.Manifest.Type = Manifest.EType.ItemSlides;
-                        ItemSlideManifest.ResourceReferences.AddRange(CF.SlideImages.ResourceReferences);
-                        transmission = new Envelope(ItemSlideManifest);
-                        transmission.SendMessage(UploadTestWebSocket, AbortToken);
                         break;
 
                     case TransactionRequest.ETransaction.ItemSlideManifestReceived:
-                        byte[] fileData = CF.SlideImages.GetImageData().Aggregate((b1, b2) => b1.Concat(b2).ToArray());
-                        var web = new WebClient();
-                        web.Headers["sessionId"] = trans.StringValues["sessionId"];
-                        web.Headers["deploymentId"] = trans.LongValues["deploymentId"].ToString();
-                        web.UploadData(Properties.Resources.sItemSlideUploadURL, fileData);
+                        SendItemSlides(trans.LongValues["deploymentId"], trans.StringValues["sessionId"]);
                         break;
 
                     case TransactionRequest.ETransaction.RequestIATUpload:
@@ -745,7 +699,6 @@ namespace IATClient
             Envelope.OnReceipt[Envelope.EMessageType.ServerException] = new Action<INamedXmlSerializable>(OnDeploymentException);
             Envelope.OnReceipt[Envelope.EMessageType.DeploymentProgress] = new Action<INamedXmlSerializable>(OnDeploymentProgressUpdate);
             Envelope.OnReceipt[Envelope.EMessageType.RSAKeyPair] = new Action<INamedXmlSerializable>(OnRSAKeyPairReceipt);
-            Envelope.OnReceipt[Envelope.EMessageType.UploadRequest] = new Action<INamedXmlSerializable>(UploadData);
             MainForm.Invoke(new Action<EventHandler, IATConfigMainForm.EProgressBarUses>(MainForm.BeginProgressBarUse), new EventHandler(OnCancel), IATConfigMainForm.EProgressBarUses.Upload);
             UploadTestWebSocket = new ClientWebSocket();
             SetStatusMessage("Preparing Upload");

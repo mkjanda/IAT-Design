@@ -5,6 +5,7 @@ using System.Threading;
 using System.Windows.Forms;
 using System.Drawing;
 using IATClient.ResultData;
+using IATClient.Messages;
 
 namespace IATClient
 {
@@ -98,11 +99,11 @@ namespace IATClient
                     FullSizedSlide.SetImage(actionImage)
                         ), new object[] { img });
                 };
-                foreach (var reference in itemSlideContainer.SlideData.ReferenceEntries[ctr].ReferenceName)
+                foreach (var reference in itemSlideContainer.SlideManifest.Contents.Cast<ManifestFile>().Select(f => f.ReferenceIds).Cast<IEnumerable<int>>()
+                    .Aggregate((l1, l2) => l1.Concat(l2)))
                 {
                     slide.ThumbnailRequesters[Convert.ToInt32(reference)] = (actionImage) => thumbPanel.BeginInvoke(new Action<Image>((img) => thumbPanel.SetBackgroundImage(img)), new object[] { actionImage });
                 }
-                ItemSlideContainer.StartRetrieval();
                 ItemSlideContainer.ProcessSlides();
             }
             nCols = this.Width / (ItemSlideContainer.ThumbnailSize.Width + ThumbnailPadding.Horizontal);
@@ -164,8 +165,8 @@ namespace IATClient
                 Controls.Add(FullSizedSlide);
             }
             FullSizedSlide.SetResultData(ItemSlideContainer.GetSlideLatencies(ndx + 1), ItemSlideContainer.GetMeanSlideLatency(ndx + 1), ItemSlideContainer.GetMeanNumErrors(ndx + 1), ResultSet + 1);
-            var fileRefs = ItemSlideContainer.SlideManifest.ResourceReferences;
-            var slideNum = fileRefs.Where(fr => fr.ReferenceIds.Contains(ndx)).Select(fr => fileRefs.IndexOf(fr)).First();
+            var fileRefs = ItemSlideContainer.SlideManifest.Contents.Cast<ManifestFile>().Select(f => new { res = f.ResourceId, refs = f.ReferenceIds });
+            var slideNum = fileRefs.Where(fr => fr.refs.Contains(ndx)).Select(fr => fr.res).First();
             var slide = ItemSlideContainer.SlideDictionary[slideNum];
             slide.FullSizedUpdate(ndx);
             FullSizedSlide.Invalidate();
