@@ -162,7 +162,7 @@
     <Compile Include="DIKeyValueOutline.cs" />
     <Compile Include="CompositeImage.cs" />
     <Compile Include="CServerException.cs" />
-    <Compile Include="Messages\FileReferences.cs" />
+    <Compile Include="Messages\ResourceReferences.cs" />
     <Compile Include="Messages\ItemSlideManifest.cs" />
     <Compile Include="Messages\Packet.cs" />
     <Compile Include="Messages\DeploymentProgressUpdate.cs" />
@@ -250,7 +250,6 @@
     <Compile Include="ResultData\Caption.cs" />
     <Compile Include="ResultData\Date.cs" />
     <Compile Include="ResultData\FixedDigit.cs" />
-    <Compile Include="ResultData\ItemSlideData.cs" />
     <Compile Include="ResultData\Likert.cs" />
     <Compile Include="ResultData\MultiBoolean.cs" />
     <Compile Include="ResultData\Multiple.cs" />
@@ -631,7 +630,7 @@
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="TransactionEvent.cs" />
-    <Compile Include="TransactionRequest.cs" />
+    <Compile Include="Messages\TransactionRequest.cs" />
     <Compile Include="TrueFalseDisplay.cs">
       <SubType>UserControl</SubType>
     </Compile>

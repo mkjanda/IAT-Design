@@ -157,7 +157,7 @@ namespace IATClient.Messages
         public ManifestDirectory()
         {
             Contents = new List<FileEntity>();
-            _FileEntityType = EFileEntityType.Directory;
+            FileEntityType = EFileEntityType.Directory;
             Name = String.Empty;
         }
 
@@ -165,7 +165,7 @@ namespace IATClient.Messages
         {
             Name = name;
             Contents = new List<FileEntity>();
-            _FileEntityType = EFileEntityType.Directory;
+            FileEntityType = EFileEntityType.Directory;
         }
 
         public override void WriteXml(XmlWriter writer)
@@ -173,7 +173,7 @@ namespace IATClient.Messages
             writer.WriteStartElement("Directory");
             writer.WriteElementString("Path", Path.Replace("\\", "/"));
             writer.WriteElementString("Name", Name);
-            writer.WriteElementString("Size", Size.ToString());
+            writer.WriteElementString("EntityType", FileEntityType.ToString());
             foreach (FileEntity fe in Contents)
                 if (fe.FileEntityType == EFileEntityType.Directory)
                     fe.WriteXml(writer);
@@ -191,21 +191,18 @@ namespace IATClient.Messages
             reader.ReadStartElement();
             Path = reader.ReadElementString("Path").Replace("/", "\\");
             Name = reader.ReadElementString("Name");
-            _Size = Convert.ToInt64(reader.ReadElementString("Size"));
-            while (reader.IsStartElement())
+            Enum.TryParse<EFileEntityType>(reader.ReadElementString("EntityType"), out EFileEntityType FileEntityType);
+            while (reader.Name == "Directory")
             {
-                if (reader.Name == "Directory")
-                {
-                    ManifestDirectory dir = new ManifestDirectory();
-                    dir.ReadXml(reader);
-                    Contents.Add(dir);
-                }
-                else if (reader.Name == "File")
-                {
-                    ManifestFile f = new ManifestFile();
-                    f.ReadXml(reader);
-                    Contents.Add(f);
-                }
+                ManifestDirectory md = new ManifestDirectory();
+                md.ReadXml(reader);
+                Contents.Add(md);
+            }
+            while (reader.Name == "File")
+            {
+                ManifestFile mf = new ManifestFile();
+                mf.ReadXml(reader);
+                Contents.Add(mf);
             }
             reader.ReadEndElement();
         }

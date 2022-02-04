@@ -11,21 +11,7 @@ namespace IATClient.Messages
     public class Manifest : INamedXmlSerializable
     {
         private String _IATName = String.Empty;
-        private List<FileEntity> Contents = new List<FileEntity>();
-        public enum EType { ItemSlides, DeploymentFiles };
-        private EType _Type = EType.DeploymentFiles;
-
-        public EType Type
-        {
-            get
-            {
-                return _Type;
-            }
-            set
-            {
-                _Type = value;
-            }
-        }
+        public List<FileEntity> Contents { get; private set; } = new List<FileEntity>();
 
         public void AddFile(ManifestFile f)
         {
@@ -105,23 +91,6 @@ namespace IATClient.Messages
             return d.CountFiles();
         }
 
-        public int FileCount
-        {
-            get
-            {
-                int nFiles = 0;
-                for (int ctr = 0; ctr < Contents.Count; ctr++)
-                {
-                    if (Contents[ctr].FileEntityType == FileEntity.EFileEntityType.File)
-                        nFiles++;
-                    else
-                        nFiles += CountFiles((ManifestDirectory)Contents[ctr]);
-                }
-                return nFiles;
-            }
-        }
-
-
         public Manifest()
         {
         }
@@ -152,10 +121,7 @@ namespace IATClient.Messages
         public void WriteXml(XmlWriter writer)
         {
             writer.WriteStartElement("Manifest");
-            writer.WriteAttributeString("Size", TotalSize.ToString());
-            writer.WriteAttributeString("Type", Type.ToString());
             writer.WriteElementString("IATName", IATName);
-            writer.WriteStartElement("ManifestItems");
             foreach (FileEntity fe in Contents)
                 if (fe.FileEntityType == FileEntity.EFileEntityType.Directory)
                     fe.WriteXml(writer);
@@ -163,33 +129,26 @@ namespace IATClient.Messages
                 if (fe.FileEntityType == FileEntity.EFileEntityType.File)
                     fe.WriteXml(writer);
             writer.WriteEndElement();
-            writer.WriteEndElement();
         }
 
         public void ReadXml(XmlReader reader)
         {
             if (Convert.ToBoolean(reader["HasException"]))
                 throw new CXmlSerializationException(reader);
-            _Type = (EType)Enum.Parse(typeof(EType), reader["Type"]);
             reader.ReadStartElement("Manifest");
             IATName = reader.ReadElementString("IATName");
-            reader.ReadStartElement("ManifestItems");
-            while (reader.IsStartElement())
+            while(reader.Name == "Directory")
             {
-                if (reader.Name == "Directory")
-                {
-                    ManifestDirectory dir = new ManifestDirectory();
-                    dir.ReadXml(reader);
-                    Contents.Add(dir);
-                }
-                else if (reader.Name == "File")
-                {
-                    ManifestFile f = new ManifestFile();
-                    f.ReadXml(reader);
-                    Contents.Add(f);
-                }
+                ManifestDirectory md = new ManifestDirectory();
+                md.ReadXml(reader);
+                Contents.Add(md);
             }
-            reader.ReadEndElement();
+            while (reader.Name == "File")
+            {
+                ManifestFile mf = new ManifestFile();
+                mf.ReadXml(reader);
+                Contents.Add(mf);
+            }
             reader.ReadEndElement();
         }
 

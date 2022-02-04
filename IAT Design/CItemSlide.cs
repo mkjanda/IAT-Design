@@ -15,12 +15,15 @@ namespace IATClient
     {
         public Action<int> FullSizedUpdate { get; set; }
         public Dictionary<int, Action<Image>> ThumbnailRequesters { get; private set; } = new Dictionary<int, Action<Image>>();
+        public int ResourceId { get; set; }
+        public List<int> ReferenceIds { get; private set; } = new List<int>();
         public ManualResetEvent ImageRetrievedEvent { get; private set; } = new ManualResetEvent(false);
         public Image FullSizedImage { get; set; }
         public Image DisplayImage { get; set; }
         public Image ThumbnailImage { get; set; }
         public double MeanLatency { get; private set; } = Double.NaN;
         public double MeanNumErrors { get; private set; } = Double.NaN;
+        public long ImageDataSize { get; set; } = 0;
         public List<List<long>> SubjectLatencies { get; private set; } = new List<List<long>>();
         public readonly object lockObj = new object();
 

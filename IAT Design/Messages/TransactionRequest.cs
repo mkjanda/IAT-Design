@@ -45,7 +45,15 @@ namespace IATClient
             ActivationKey = LocalStorage.Activation[LocalStorage.Field.ActivationKey];
         }
 
-        public TransactionRequest(ETransaction tType, String ServerPass, String IATName)
+        public TransactionRequest(ETransaction tType)
+        {
+            Transaction = tType;
+            IATName = String.Empty;
+            ProductKey = LocalStorage.Activation[LocalStorage.Field.ProductKey];
+            ActivationKey = LocalStorage.Activation[LocalStorage.Field.ActivationKey];
+        }
+
+        public TransactionRequest(ETransaction tType, String IATName)
         {
             Transaction = tType;
             this.IATName = IATName;

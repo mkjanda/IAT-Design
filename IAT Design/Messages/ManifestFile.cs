@@ -9,6 +9,13 @@ namespace IATClient.Messages
 {
     public class ManifestFile : FileEntity
     {
+        public enum EResourceType { ItemSlide, DeploymentFile, UpdateFile };
+
+        public EResourceType ResourceType { get; private set; }
+
+        public int ResourceId { get; set; } = -1;
+        public List<int> ReferenceIds { get; private set; } = new List<int>();
+
         public override long Size
         {
             get
@@ -28,8 +35,6 @@ namespace IATClient.Messages
                 return Size;
             }
         }
-
-        public String Addendum { get; set; } = String.Empty;
 
         public override string Name
         {
@@ -88,13 +93,13 @@ namespace IATClient.Messages
 
         public ManifestFile()
         {
-            _FileEntityType = EFileEntityType.File;
+            FileEntityType = EFileEntityType.File;
             _Size = 0;
         }
 
         public ManifestFile(String fName, long size)
         {
-            _FileEntityType = EFileEntityType.File;
+            FileEntityType = EFileEntityType.File;
             Name = fName;
             _Size = size;
         }
@@ -104,10 +109,18 @@ namespace IATClient.Messages
             writer.WriteStartElement("File");
             writer.WriteElementString("Path", Path.Replace("\\", "/"));
             writer.WriteElementString("Name", Name);
-            writer.WriteElementString("Size", Size.ToString());
+            writer.WriteElementString("EntityType", FileEntityType.ToString());
             writer.WriteElementString("MimeType", MimeType);
-            if (Addendum != String.Empty)
-                writer.WriteElementString("Addendum", Addendum);
+            writer.WriteElementString("Size", Size.ToString());
+            writer.WriteElementString("ResourceType", ResourceType.ToString());
+            if ((ResourceId != -1) && (ReferenceIds.Count > 0))
+            {
+                writer.WriteStartElement("ResourceReference");
+                writer.WriteElementString("ResourceId", ResourceId.ToString());
+                foreach (var i in ReferenceIds)
+                    writer.WriteElementString("ReferenceId", i.ToString());
+                writer.WriteEndElement();
+            }
             writer.WriteEndElement();
         }
 
@@ -119,7 +132,23 @@ namespace IATClient.Messages
             Path = reader.ReadElementString("Path").Replace("/", "\\");
             _Name = reader.ReadElementString("Name");
             _Size = Convert.ToInt64(reader.ReadElementString());
+            String fe = reader.ReadElementString("EntityType");
+            Enum.TryParse<EFileEntityType>(fe, out EFileEntityType type);
+            FileEntityType = type;
             MimeType = reader.ReadElementString("MimeType");
+            Size = Convert.ToInt32(reader.ReadElementString("Size"));
+            String rt = reader.ReadElementString("ResourceType");
+            Enum.TryParse<EResourceType>(rt, out EResourceType rType);
+            ResourceType = rType;
+            if (reader.Name == "ResourceReference")
+            {
+                ReferenceIds.Clear();
+                reader.ReadStartElement("ResourceReference");
+                ResourceId = Convert.ToInt32(reader.ReadElementString("ResourceId"));
+                while (reader.Name == "ReferenceId")
+                    ReferenceIds.Add(Convert.ToInt32(reader.ReadElementString("ReferenceId")));
+                reader.ReadEndElement();
+            }
             reader.ReadEndElement();
         }
     }

@@ -622,13 +622,14 @@ namespace IATClient
             Task.Run(() =>
             {
                 m_ServerInterfacePanel.IATPanel.Enabled = false;
+                var result = IATManager.RetrieveItemSlides(SelectedIAT, password);
                 Task downloadSlides = new Task(() =>
                 {
                     IATManager.RetrieveItemSlides(SelectedIAT, password);
                 });
                 downloadSlides.RunSynchronously();
                 bool again = true;
-                while (!IATManager.ItemSlidesDownloaded(SelectedIAT) && again)
+                while (!result && again)
                 {
                     if (MessageBox.Show("Would you like to attempt to retrieve item slides again?", "Slide Retrieval Failed", MessageBoxButtons.YesNo) == DialogResult.Yes)
                         downloadSlides.RunSynchronously();
@@ -640,7 +641,7 @@ namespace IATClient
                         again = false;
                     }
                 }
-                if (IATManager.ItemSlidesDownloaded(SelectedIAT))
+                if (result)
                     m_ServerInterfacePanel.EnableControlsAsync(ServerInterfacePanel.EControls.testLabels | ServerInterfacePanel.EControls.exportButton | ServerInterfacePanel.EControls.deleteButtons);
                 else
                     m_ServerInterfacePanel.EnableControlsAsync(ServerInterfacePanel.EControls.deleteButtons | ServerInterfacePanel.EControls.retrieveButton | ServerInterfacePanel.EControls.testLabels);
