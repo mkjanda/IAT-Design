@@ -3,7 +3,7 @@ For the latest function version of my software, go to https://iatsoftware.net. D
 
 ![iat-design-screenshots](https://user-images.githubusercontent.com/35156960/155851736-763821db-a960-455b-bee0-4ac44ab8fa39.gif)
 
-In order for the program to start, it must be activated but this is not possible right now wikth all the URLs pointing to 127.0.0.1 instead of iatsoftware.net. Insert the following ik a file named IATDesign.xml in "%USER%\AppData\Local\IATSoftware"
+In order for the program to start, it must be activated but this is not possible right now wikth all the URLs pointing to localhost instead of iatsoftware.net. Insert the following ik a file named IATDesign.xml in "%USER%\AppData\Local\IATSoftware"
 
 ```xml
 <?xml version="1.0" encoding="utf-8"?>
@@ -17,4 +17,4 @@ In order for the program to start, it must be activated but this is not possible
 </IATDesign>
 ```
 
-Note that the AppData directory is hidden by default. If the software is downloaded from https://iatsoftware.net, then it can be activated with a few clicks and an email confirmation &mdash; since I allow people to upload images to my server that I have no time to review, the email confirmation seemed wise.
+Note that the AppData directory is hidden by default.
