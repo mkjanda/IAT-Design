@@ -3,7 +3,7 @@ For the latest function version of my software, go to https://iatsoftware.net. D
 
 ![iat-design-screenshots](https://user-images.githubusercontent.com/35156960/155851736-763821db-a960-455b-bee0-4ac44ab8fa39.gif)
 
-In order for the program to start, it must be activated but this is not possible right now wikth all the URLs pointing to localhost instead of iatsoftware.net. Insert the following ik a file named IATDesign.xml in *%USER%\AppData\Local\IATSoftware*
+In order for the program to start, it must be activated but this is not possible right now wikth all the URLs pointing to localhost instead of iatsoftware.net. Insert the following ik a file named IATDesign.xml in <b>%USER%\AppData\Local\IATSoftware</b>
 
 ```xml
 <?xml version="1.0" encoding="utf-8"?>
