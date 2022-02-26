@@ -387,7 +387,7 @@ namespace IATClient
                 List<CFontFile.FontItem> resultList = new List<CFontFile.FontItem>();
 
                 resultList.AddRange(InstructionScreens.Select((scrn, ndx) => new { s = scrn, n = ndx }).Where(t => t.s.Type != InstructionScreenType.Blank).
-                    Select((t) => new { idi = CIAT.SaveFile.GetDI(t.s.InstructionsUri) as DIText, ndx = t.n }).
+                    Select((t) => new { idi = CIAT.SaveFile.GetDI(t.s.InstructionsUri) as DIText, ndx = t.n + 1 }).
                     Where((t) => t.idi.PhraseFontFamily != String.Empty).Aggregate(new Dictionary<String, List<Tuple<int, DIText>>>(), (dic, t) =>
                     {
                         if (!dic.ContainsKey(t.idi.PhraseFontFamily))

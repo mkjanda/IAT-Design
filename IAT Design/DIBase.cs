@@ -647,10 +647,10 @@ namespace IATClient
             {
                 Uri oldUri = URI;
                 CIAT.SaveFile.Replace(this, target);
-                Save();
+  //              Save();
                 target.Replaced = true;
                 target.Dispose();
-                CIAT.SaveFile.DeletePart(oldUri);
+//                CIAT.SaveFile.DeletePart(oldUri);
             }
         }
 
@@ -780,18 +780,22 @@ namespace IATClient
         {
             get
             {
-                if (base.IImage.Img == null)
+                lock (lockObject)
                 {
-                    var bmp = new Bitmap(10, 10);
-                    Color c = Color.Black;
-                    using (Graphics g = Graphics.FromImage(bmp))
+                    if (IsDisposed)
                     {
-                        Brush br = new SolidBrush(c);
-                        g.FillRectangle(Brushes.Black, new Rectangle(new Point(0, 0), new Size(10, 10)));
-                        br.Dispose();
+                        var bmp = new Bitmap(10, 10);
+                        Color c = Color.Black;
+                        using (Graphics g = Graphics.FromImage(bmp))
+                        {
+                            Brush br = new SolidBrush(c);
+                            g.FillRectangle(Brushes.Black, new Rectangle(new Point(0, 0), new Size(10, 10)));
+                            br.Dispose();
+                        }
+                        bmp.MakeTransparent(c);
+                        base.IImage.Img = bmp;
+                        IsDisposed = false;
                     }
-                    bmp.MakeTransparent(c);
-                    base.IImage.Img = bmp;
                 }
                 return base.IImage;
             }
@@ -805,6 +809,16 @@ namespace IATClient
 
         public DINull()
         {
+            var bmp = new Bitmap(10, 10);
+            Color c = Color.Black;
+            using (Graphics g = Graphics.FromImage(bmp))
+            {
+                Brush br = new SolidBrush(c);
+                g.FillRectangle(Brushes.Black, new Rectangle(new Point(0, 0), new Size(10, 10)));
+                br.Dispose();
+            }
+            bmp.MakeTransparent(c);
+            base.IImage.Img = bmp;
         }
 
         public DINull(Uri uri)
@@ -845,6 +859,7 @@ namespace IATClient
 
         public override void Dispose()
         {
+            IsDisposed = true;
         }
     }
 }

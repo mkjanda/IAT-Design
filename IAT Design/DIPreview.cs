@@ -20,7 +20,6 @@ namespace IATClient
         private IImageDisplay _ThumbnailPreviewPane = null;
         private bool ForcedOneShot { get; set; } = false;
         private ManualResetEvent JpegGenerated = new ManualResetEvent(true);
-        public Action<Image> OnJpegGenerated = null;
 
         protected ConcurrentDictionary<LayoutItem, IUri> PreviewComponents = new ConcurrentDictionary<LayoutItem, IUri>();
         private Bitmap Thumbnail = null;
@@ -152,8 +151,6 @@ namespace IATClient
                 if (ThumbnailPreviewPane != null)
                     CIAT.ImageManager.GenerateThumb(IImage);
             }
-            if (OnJpegGenerated != null)
-                OnJpegGenerated(img.Img);
             ForcedOneShot = false;
         }
 
@@ -162,7 +159,7 @@ namespace IATClient
         {
             if (IsDisposed || Broken)
                 return null;
-            if ((PreviewPanel == null) && (OnJpegGenerated == null) && (!ForcedOneShot))
+            if ((PreviewPanel == null) && (!ForcedOneShot))
                 return null;
             var bSz = BoundingSize;
             var componentList = PreviewComponents.Keys.ToList();
@@ -194,32 +191,21 @@ namespace IATClient
 
         public Image SaveToJpeg()
         {
-            JpegGenerated.Reset();
-            object lockObj = new object();
-            Image jpg = null;
-            OnJpegGenerated = (img) =>
-            {
-                if (!Monitor.TryEnter(lockObj))
-                {
-                    img.Dispose();
-                    return;
-                }
-                jpg = new Bitmap(ImageMediaType.FullPreview.ImageSize.Width, ImageMediaType.FullPreview.ImageSize.Height, System.Drawing.Imaging.PixelFormat.Format32bppRgb);
+            ForcedOneShot = true;
+            var img = Generate();
+            ForcedOneShot = false;
+            var jpg = new Bitmap(ImageMediaType.FullPreview.ImageSize.Width, ImageMediaType.FullPreview.ImageSize.Height, System.Drawing.Imaging.PixelFormat.Format32bppRgb);
                 var backBr = new SolidBrush(CIAT.SaveFile.Layout.BackColor);
-                using (Graphics gr = Graphics.FromImage(img))
+                using (Graphics gr = Graphics.FromImage(jpg))
                 {
                     gr.FillRectangle(backBr, new Rectangle(0, 0, ImageMediaType.FullPreview.ImageSize.Width, ImageMediaType.FullPreview.ImageSize.Height));
                     gr.SmoothingMode = SmoothingMode.HighQuality;
                     gr.InterpolationMode = InterpolationMode.HighQualityBicubic;
                     gr.PixelOffsetMode = PixelOffsetMode.HighQuality;
+
                     gr.DrawImage(img, new Rectangle(0, 0, jpg.Width, jpg.Height));
                 }
-                OnJpegGenerated = null;
-                JpegGenerated.Set();
                 img.Dispose();
-                Monitor.Exit(lockObj);
-            };
-            JpegGenerated.WaitOne();
             return jpg;
         }
 
@@ -269,7 +255,7 @@ namespace IATClient
                 var li = LayoutItem.FromString(elem.Value);
                 if (Convert.ToBoolean(elem.Attribute("Observed").Value))
                     PreviewComponents[li] = new UriObserver(CIAT.SaveFile.GetObservableUri(diUri));
-                else
+                else if (CIAT.SaveFile.PartExists(diUri))
                     PreviewComponents[li] = CIAT.SaveFile.GetDI(diUri).IUri;
             }
             Modified = false;

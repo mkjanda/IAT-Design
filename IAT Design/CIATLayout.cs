@@ -368,17 +368,19 @@ namespace IATClient
             {
                 if (value == null)
                 {
-                    if (_ErrorMarkUri != null)
-                        ErrorMark.Dispose();
+                    if (_ErrorMarkUri == null)
+                        return;
+                    ErrorMarkObservableUri.Value = null;
+                    ErrorMark.Dispose();
                     _ErrorMarkUri = null;
-                    ErrorMarkObservableUri.URI = null;
                 }
                 else if (value.Equals(_ErrorMarkUri))
                     return;
                 if (_ErrorMarkUri != null)
                     CIAT.SaveFile.GetDI(_ErrorMarkUri).Dispose();
-                if (ErrorMarkObservableUri.URI.Equals(_ErrorMarkUri))
-                    ErrorMarkObservableUri.URI = value;
+                
+                if ((value != null) && (ErrorMarkObservableUri.Value.Equals(_ErrorMarkUri)))
+                    ErrorMarkObservableUri.Value = value;
                 _ErrorMarkUri = value;
             }
         }
@@ -400,10 +402,15 @@ namespace IATClient
                 return _LeftKeyValueOutlineUri;
             } set
             {
-                if (_LeftKeyValueOutlineUri != null)
-                    CIAT.SaveFile.GetDI(_LeftKeyValueOutlineUri).Dispose();
-                if (LeftKeyValueOutlineObservableUri.URI.Equals(_LeftKeyValueOutlineUri))
-                    LeftKeyValueOutlineObservableUri.URI = value; 
+                if ((value == null) && (_LeftKeyValueOutlineUri != null))
+                {
+                    _LeftKeyValueOutlineObservableUri.Value = null;
+                    LeftKeyValueOutline.Dispose();
+                    _LeftKeyValueOutlineUri = null;
+                    return;
+                }
+                if (LeftKeyValueOutlineObservableUri.Value.Equals(_LeftKeyValueOutlineUri))
+                    LeftKeyValueOutlineObservableUri.Value  = value; 
                 _LeftKeyValueOutlineUri = value;
             }
         }
@@ -426,10 +433,15 @@ namespace IATClient
             }
             set
             {
-                if (_RightKeyValueOutlineUri != null)
-                    CIAT.SaveFile.GetDI(_RightKeyValueOutlineUri).Dispose();
-                if (RightKeyValueOutlineObservableUri.URI.Equals(_RightKeyValueOutlineUri))
-                    RightKeyValueOutlineObservableUri.URI = value;
+                if ((value == null) && (RightKeyValueOutlineUri != null))
+                {
+                    RightKeyValueOutlineObservableUri.Value = null;
+                    RightKeyValueOutline.Dispose();
+                    _RightKeyValueOutlineUri = null;
+                    return;
+                }
+                if (RightKeyValueOutlineObservableUri.Value.Equals(_RightKeyValueOutlineUri))
+                    RightKeyValueOutlineObservableUri.Value = value;
                 _RightKeyValueOutlineUri = value;
             }
         }
@@ -922,12 +934,10 @@ namespace IATClient
 
         public void Dispose()
         {
-            CIAT.SaveFile.GetDI(ErrorMarkUri)?.Dispose();
-            CIAT.SaveFile.GetDI(LeftKeyValueOutlineUri)?.Dispose();
-            CIAT.SaveFile.GetDI(RightKeyValueOutlineUri)?.Dispose();
-            ErrorMarkObservableUri?.Dispose();
-            LeftKeyValueOutlineObservableUri?.Dispose();
-            RightKeyValueOutlineObservableUri?.Dispose();
+            ErrorMarkUri = null;
+            LeftKeyValueOutlineUri = null;
+            RightKeyValueOutlineUri = null;
+            CIAT.SaveFile.DeletePackageLevelRelationship(BaseType);
             CIAT.SaveFile.DeletePart(this.URI);
         }
 

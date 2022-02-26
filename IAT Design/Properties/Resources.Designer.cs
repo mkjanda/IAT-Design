@@ -19,7 +19,7 @@ namespace IATClient.Properties {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "16.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "17.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     internal class Resources {
@@ -3219,7 +3219,7 @@ namespace IATClient.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to You have not selected replacement fonts for one or more items. The system default font will be substituted if you proceed. Please understand that this substitution will become permanent when you save your test. In other words, copying the save file back to the last machine it was open on will not restore your font selections. Do you wish to proceed?.
+        ///   Looks up a localized string similar to You have not selected replacement fonts for one or more items. The system default font will be substituted if you proceed. Please understand that this substitution will become permanent when you save your test. In other words, copying the save file back to the machine it was last opened on will not restore your font selections. Do you wish to proceed?.
         /// </summary>
         internal static string sMissingFontFormContainsDefaultFont {
             get {

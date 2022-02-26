@@ -1364,7 +1364,7 @@
     <value>You must select replacement fonts to continue. The test design program will close if you choose to proceed. Click the Cancel button to choose replacement fonts or OK to exit the program.</value>
   </data>
   <data name="sMissingFontFormContainsDefaultFont" xml:space="preserve">
-    <value>You have not selected replacement fonts for one or more items. The system default font will be substituted if you proceed. Please understand that this substitution will become permanent when you save your test. In other words, copying the save file back to the last machine it was open on will not restore your font selections. Do you wish to proceed?</value>
+    <value>You have not selected replacement fonts for one or more items. The system default font will be substituted if you proceed. Please understand that this substitution will become permanent when you save your test. In other words, copying the save file back to the machine it was last opened on will not restore your font selections. Do you wish to proceed?</value>
   </data>
   <data name="sConnectionTimeoutCaption" xml:space="preserve">
     <value>Communication Error</value>

@@ -10,7 +10,7 @@ using System.Xml.Linq;
 
 namespace IATClient
 {
-    public class CMockItemScreen : CInstructionScreen
+    public class CMockItemScreen : CKeyInstructionScreen
     {
         public override string MimeType
         {

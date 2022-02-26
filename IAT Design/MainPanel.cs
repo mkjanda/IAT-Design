@@ -177,6 +177,7 @@ namespace IATClient
             {
                 if (IsDisposed)
                     return;
+                if (IsHandleCreated)
                 this.BeginInvoke(new Action(() =>
                 {
                     ValidateTest();

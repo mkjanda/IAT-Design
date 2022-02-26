@@ -513,9 +513,9 @@ namespace IATClient
                             LRSize = new Size((int)((double)llrHeight * arLR), llrHeight);
                         LV1Rect = new Rectangle(new Point((bounds.Width - ULSize.Width) >> 1, ptConjunction.Y - (VertPadding >> 1) - ULSize.Height), ULSize);
                         RV1Rect = new Rectangle(new Point((bounds.Width - URSize.Width) >> 1, ptConjunction.Y - (VertPadding >> 1) - URSize.Height), URSize);
-                        LV2Rect = new Rectangle(new Point((bounds.Width - LLSize.Width) >> 1, ptConjunction.Y + conjunction.AbsoluteBounds.Height + (VertPadding >> 1)),
+                        LV2Rect = new Rectangle(new Point((bounds.Width - LLSize.Width) >> 1, ptConjunction.Y + conjunction.AbsoluteBounds.Height + (VertPadding >> 2)),
                             LLSize);
-                        RV2Rect = new Rectangle(new Point((bounds.Width - LRSize.Width) >> 1, ptConjunction.Y + conjunction.AbsoluteBounds.Height + (VertPadding >> 1)),
+                        RV2Rect = new Rectangle(new Point((bounds.Width - LRSize.Width) >> 1, ptConjunction.Y + conjunction.AbsoluteBounds.Height + (VertPadding >> 2)),
                             LRSize);
                         if (LRSize.Height > LLSize.Height)
                             LV2Rect = new Rectangle(new Point(LV2Rect.Value.X, LV2Rect.Value.Y + ((LRSize.Height - LLSize.Height) >> 1)), LLSize);

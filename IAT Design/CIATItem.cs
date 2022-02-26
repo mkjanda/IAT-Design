@@ -393,7 +393,7 @@ namespace IATClient
             if (elem.Element("rStimulusId") != null)
                 StimulusUri = CIAT.SaveFile.GetRelationship(this, elem.Element("rStimulusId").Value).TargetUri;
             else
-                StimulusUri = null;
+                StimulusUri = DINull.DINull.URI;
             _IsDisposed = Convert.ToBoolean(elem.Element("Disposed").Value);
             if (elem.Element("KeySpecifierID") == null) {
                 KeySpecifierID = -1;
