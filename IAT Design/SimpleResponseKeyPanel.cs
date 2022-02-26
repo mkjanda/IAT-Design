@@ -38,7 +38,6 @@ namespace IATClient
         private RadioButton TextRadio = new RadioButton(), ImageRadio = new RadioButton();
         private static int TextPanelWidth = 375;
         private static Size ImagePanelSize = new Size(375, 77);
-        private bool UpdatingInternally = false;
         private GroupBox SimpleResponseKeyGroup = new GroupBox();
         private IImageDisplay KeyPreview;
         private ResponseKeySide Side;

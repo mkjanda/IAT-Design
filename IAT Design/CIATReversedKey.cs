@@ -52,7 +52,7 @@ namespace IATClient
             get
             {
                 if (BaseKeyUri == null)
-                    return new DINull();
+                    return DIBase.DINull;
                 return CIAT.SaveFile.GetIATKey(BaseKeyUri).RightValue;
             }
         }
@@ -62,7 +62,7 @@ namespace IATClient
             get
             {
                 if (BaseKeyUri == null)
-                    return new DINull();
+                    return DIBase.DINull;
                 return CIAT.SaveFile.GetIATKey(BaseKeyUri).LeftValue;
             }
         }
@@ -72,7 +72,7 @@ namespace IATClient
             get
             {
                 if (BaseKeyUri == null)
-                    return new DINull().URI;
+                    return DIBase.DINull.URI;
                 return LeftValue.URI;
             }
             set
@@ -86,7 +86,7 @@ namespace IATClient
             get
             {
                 if (BaseKeyUri == null)
-                    return new DINull().URI;
+                    return DIBase.DINull.URI;
                 return RightValue.URI;
             }
             set

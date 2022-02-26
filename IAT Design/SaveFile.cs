@@ -924,9 +924,10 @@ namespace IATClient
             try
             {
                 PackagePart part = SavePackage.GetPart(srcUri);
-                String rId = part.GetRelationships().Where(pr => pr.TargetUri.Equals(targetUri)).First().Id;
-                part.DeleteRelationship(rId);
-                return rId;
+                var rel = part.GetRelationships().Where(pr => pr.TargetUri.Equals(targetUri)).FirstOrDefault();
+                if (rel != null)
+                    part.DeleteRelationship(rel.Id);
+                return (rel == null) ? null : rel.Id;
             }
             catch (Exception)
             {
@@ -1588,47 +1589,53 @@ namespace IATClient
         {
             if (IsDisposing || IsDisposed)
                 return;
-            IsDisposing = true;
-            try
+            Task.Run(() =>
             {
-//                ActivityLog.LogEvent(ActivityLog.EventType.Delete, IAT.URI);
-                ImageManager.Dispose();
-  /*              lock (saveLock)
-                {
-                    foreach (var k in Keys.Values.Where(key => key is CIATDualKey))
-                        k.Dispose();
-                    foreach (var k in Keys.Values.Where(key => key is CIATReversedKey))
-                        k.Dispose();
-                    foreach (var k in Keys.Values.Where(key => key is CIATKey))
-                        k.Dispose();
-                    foreach (var b in IATBlocks.Values)
-                        b.Dispose();
-                    foreach (var item in IATItems.Values)
-                        item.Dispose();
-                    foreach (var ib in InstructionBlocks.Values)
-                        ib.Dispose();
-                    foreach (var s in Surveys.Values)
-                        s.Dispose();
-                    foreach (var i in IImages.Values)
-                        i.Dispose();
-                    foreach (var ou in ObservableUris.Values)
-                        ou.Dispose();
-                }
-                DisposingEvent.Reset();*/
-            }
-            finally
-            {
-                IsDisposed = true;
-                SavePackage.Close();
+                IsDisposing = true;
+                ioLock.EnterWriteLock();
                 try
                 {
-                    PackageStream.Dispose();
+                    //                ActivityLog.LogEvent(ActivityLog.EventType.Delete, IAT.URI);
+                    ImageManager.Dispose();
+                    Layout?.Dispose();
+                    /*              lock (saveLock)
+                                  {
+                                      foreach (var k in Keys.Values.Where(key => key is CIATDualKey))
+                                          k.Dispose();
+                                      foreach (var k in Keys.Values.Where(key => key is CIATReversedKey))
+                                          k.Dispose();
+                                      foreach (var k in Keys.Values.Where(key => key is CIATKey))
+                                          k.Dispose();
+                                      foreach (var b in IATBlocks.Values)
+                                          b.Dispose();
+                                      foreach (var item in IATItems.Values)
+                                          item.Dispose();
+                                      foreach (var ib in InstructionBlocks.Values)
+                                          ib.Dispose();
+                                      foreach (var s in Surveys.Values)
+                                          s.Dispose();
+                                      foreach (var i in IImages.Values)
+                                          i.Dispose();
+                                      foreach (var ou in ObservableUris.Values)
+                                          ou.Dispose();
+                                  }
+                                  DisposingEvent.Reset();*/
                 }
-                catch (Exception ex)
+                finally
                 {
+                    IsDisposed = true;
+                    SavePackage.Close();
+                    try
+                    {
+                        PackageStream.Dispose();
+                    }
+                    catch (Exception ex)
+                    {
+                    }
+                    ioLock.ExitWriteLock();
                 }
-            }
-            DisposingEvent.Set();
+                DisposingEvent.Set();
+            });
         }
     }
 }

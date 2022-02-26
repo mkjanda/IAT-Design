@@ -20,7 +20,7 @@ namespace IATClient.IATConfig
             {
                 if (_LeftResponseDisplayID != -1)
                     return _LeftResponseDisplayID;
-                _LeftResponseDisplayID = ConfigFile.GetIATImage(CIAT.SaveFile.GetIATKey(KeyedScreen.ResponseKeyUri).LeftValueUri).Id;
+                _LeftResponseDisplayID = ConfigFile.GetIATImage(CIAT.SaveFile.GetIATKey(InstructionScreen.ResponseKeyUri).LeftValueUri).Id;
                 return _LeftResponseDisplayID;
             }
             set
@@ -35,7 +35,7 @@ namespace IATClient.IATConfig
             {
                 if (_RightResponseDisplayID != -1)
                     return _RightResponseDisplayID;
-                _RightResponseDisplayID = ConfigFile.GetIATImage(CIAT.SaveFile.GetIATKey(KeyedScreen.ResponseKeyUri).RightValueUri).Id;
+                _RightResponseDisplayID = ConfigFile.GetIATImage(CIAT.SaveFile.GetIATKey(InstructionScreen.ResponseKeyUri).RightValueUri).Id;
                 return _RightResponseDisplayID;
             }
             set

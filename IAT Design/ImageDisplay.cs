@@ -66,11 +66,14 @@ namespace IATClient
 
         public void ClearImage()
         {
-            this.BeginInvoke(new Action(() => ImageBox.Image = DINull.DINull.IImage.Img));
+            if (IsHandleCreated)
+                this.BeginInvoke(new Action(() => ImageBox.Image = DINull.DINull.IImage.Img));
         }
 
         public virtual void SetImage(Images.IImageMedia image)
         {
+            if (!IsHandleCreated)
+                return;
             this.BeginInvoke(new Action(() => ImageBox.Image = image.Img));
 /*            System.Drawing.Image img = null;
             if (image != null) 

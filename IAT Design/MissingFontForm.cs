@@ -14,7 +14,7 @@ namespace IATClient
     {
         private MissingFontDisplay MissingFontDisplay;
         private Button ReplaceFontsButton = new Button();
-
+        private DialogResult close = DialogResult.No;
         public MissingFontForm(CFontFile.FontItem []missingFonts)
         {
             InitializeComponent();
@@ -30,7 +30,7 @@ namespace IATClient
             ReplaceFontsButton.Location = new Point((this.Width - ReplaceFontsButton.Width) >> 1, this.MissingFontDisplay.Bottom + 20);
             ReplaceFontsButton.DialogResult = DialogResult.OK;
             ReplaceFontsButton.Click += new EventHandler(ReplaceFontsButton_Click);
-            this.FormClosing += new FormClosingEventHandler(MissingFontForm_Closing);
+            this.FormClosed += new FormClosedEventHandler(MissingFontForm_Closed);
         }
 
         private void MissingFontDisplay_SizeChanged(object sender, EventArgs e)
@@ -38,22 +38,27 @@ namespace IATClient
             this.ReplaceFontsButton.Top = this.MissingFontDisplay.Bottom + 20;
         }
 
-        private void MissingFontForm_Closing(object sender, FormClosingEventArgs e)
+        private void MissingFontForm_Closed(object sender, FormClosedEventArgs e)
+        {
+            if (close == DialogResult.Yes)
+                Application.OpenForms[Properties.Resources.sMainFormName].Close();
+        }
+
+        private void ReplaceFontsButton_Click(object sender, EventArgs e)
         {
             if (this.MissingFontDisplay.ContainsDefaultFonts())
             {
                 if (MessageBox.Show(Properties.Resources.sMissingFontFormContainsDefaultFont, "Confirm", MessageBoxButtons.YesNo) == DialogResult.No)
                 {
-                    e.Cancel = true;
                     return;
                 }
+                else
+                {
+                    close = DialogResult.No;
+                }
+                this.Close();
+                return;
             }
-        }
-
-        private void ReplaceFontsButton_Click(object sender, EventArgs e)
-        {
-            this.Close();
-            return;
         }
 
         public String[] GetReplacementFontFamilies()

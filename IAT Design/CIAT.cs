@@ -80,10 +80,10 @@ namespace IATClient
         static CIAT() { }
         public static void Create()
         {
-            SaveFile?.Dispose();
-            SaveFile = new SaveFile();
-            SaveFile.IAT = new CIAT();
-            ImageManager.StartWorkers();
+            CIAT.SaveFile?.Dispose();
+            CIAT.SaveFile = new SaveFile();
+            CIAT.SaveFile.IAT = new CIAT();
+            CIAT.SaveFile.ImageManager.StartWorkers();
         }
 
         private IATConfigMainForm MainForm

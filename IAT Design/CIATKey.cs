@@ -138,15 +138,11 @@ namespace IATClient
             }
             set
             {
-                DIBase oldVal = (_LeftValueUri == null) ? null : CIAT.SaveFile.GetDI(_LeftValueUri);
-                if (_LeftValueUri != null)
-                    (CIAT.SaveFile.GetDI(_LeftValueUri) as IDisposable).Dispose();
-                _LeftValueUri = value;
                 (CIAT.SaveFile.GetDI(value) as IResponseKeyDI).AddKeyOwner(this);
-                List<CIATDualKey> dkOwners = KeyOwners.Cast<CIATKey>().Where(ko => ko.KeyType == IATKeyType.DualKey).Cast<CIATDualKey>().ToList();
-                foreach (CIATDualKey dk in dkOwners)
-                    dk.GenerateKeyValues();
-                oldVal?.Dispose();
+                if (_LeftValueUri != null)
+                    //                    CIAT.SaveFile.GetDI(value).Replace(LeftValue);
+                    LeftValue.Dispose();
+                _LeftValueUri = value;
             }
         }
         public virtual Uri RightValueUri
@@ -157,15 +153,11 @@ namespace IATClient
             }
             set
             {
-                DIBase oldVal = (_RightValueUri == null) ? null : CIAT.SaveFile.GetDI(_RightValueUri);
-                if (_RightValueUri != null)
-                    (CIAT.SaveFile.GetDI(_RightValueUri) as IDisposable).Dispose();
-                _RightValueUri = value;
                 (CIAT.SaveFile.GetDI(value) as IResponseKeyDI).AddKeyOwner(this);
-                List<CIATDualKey> dkOwners = KeyOwners.Cast<CIATKey>().Where(ko => ko.KeyType == IATKeyType.DualKey).Cast<CIATDualKey>().ToList();
-                foreach (CIATDualKey dk in dkOwners)
-                    dk.GenerateKeyValues();
-                oldVal?.Dispose();
+                if (_RightValueUri != null)
+                    //        CIAT.SaveFile.GetDI(value).Replace(RightValue);
+                    RightValue.Dispose();
+                _RightValueUri = value;
             }
         }
 

@@ -112,6 +112,8 @@ namespace IATClient.Images
                 List<Tuple<Image, Size>> failedResizes = new List<Tuple<Image, Size>>();
                 while ((ResizerQueue.TryTake(out Tuple<Image, Size> resize)) && !Halting)
                 {
+                    if (resize.Item1.URI == null)
+                        continue;
                     if (!CIAT.SaveFile.PartExists(resize.Item1.URI))
                         continue;
                     else if (!resize.Item1.PerformResize(resize.Item2))
@@ -144,12 +146,6 @@ namespace IATClient.Images
                     while (b.TryTake(out Bitmap bmp))
                         bmp.Dispose();
             }
-        }
-
-        public void AddImageToCache(ImageMedia iMedia)
-        {
-
-            CachedImages.Add(iMedia);
         }
 
         public void StartWorkers()

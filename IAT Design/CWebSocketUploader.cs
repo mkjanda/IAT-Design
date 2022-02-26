@@ -251,15 +251,12 @@ namespace IATClient
             CF.WriteXml(xWriter);
             xWriter.WriteEndDocument();
             xWriter.Flush();
-            ManifestFile configFile = new ManifestFile(IATName, ConfigFileXML.Length);
-            ProcessSurveys(Properties.Resources.sDefaultIATServerDomain, Convert.ToInt32(Properties.Resources.sDefaultIATServerPort));
-            int nFiles = 2 + CF.IATImages.NumImages + (Surveys.Count * 2) + ((UniqueRespXML == null) ? 0 : 1);
-            Manifest.AddFile(configFile);
-            if (UniqueRespXML != null)
+            Manifest.AddFile(new ManifestFile(IATName + ".xml", ConfigFileXML.Length)
             {
-                ManifestFile urf = new ManifestFile("UniqueResponse.xml", UniqueRespXML.Length);
-                Manifest.AddFile(urf);
-            }
+                ResourceType = ManifestFile.EResourceType.DeploymentFile,
+                ResourceId = 1
+            });
+            ProcessSurveys(Properties.Resources.sDefaultIATServerDomain, Convert.ToInt32(Properties.Resources.sDefaultIATServerPort));
             String surveyFNameBase;
             Regex r = new Regex("[^a-zaA-Z0-9]");
             for (int ctr2 = 0; ctr2 < Surveys.Count; ctr2++)
@@ -269,13 +266,34 @@ namespace IATClient
                 else
                     surveyFNameBase = IAT.AfterSurvey[ctr2 - IAT.BeforeSurvey.Count].Name;
                 surveyFNameBase = r.Replace(surveyFNameBase, "");
-                Manifest.AddFile(new ManifestFile(String.Format("{0}", surveyFNameBase), Surveys[ctr2].Length));
-                Manifest.AddFile(new ManifestFile(String.Format("{0}-DataRetrieval.xml", surveyFNameBase), SASurveys[ctr2].Length));
+                Manifest.AddFile(new ManifestFile(String.Format("{0}", surveyFNameBase), Surveys[ctr2].Length)
+                {
+                    ResourceType = ManifestFile.EResourceType.DeploymentFile,
+                    ResourceId = 2 * ctr2 + 2
+                });
+                Manifest.AddFile(new ManifestFile(String.Format("{0}-DataRetrieval.xml", surveyFNameBase), SASurveys[ctr2].Length)
+                {
+                    ResourceType = ManifestFile.EResourceType.DeploymentFile,
+                    ResourceId = 2 * ctr2 + 3
+                });
             }
-            Manifest.AddFiles(CF.IATImages.ConstructFileManifest());
+            if (UniqueRespXML != null)
+            {
+                ManifestFile urf = new ManifestFile("UniqueResponse.xml", UniqueRespXML.Length)
+                {
+                    ResourceType = ManifestFile.EResourceType.DeploymentFile,
+                    ResourceId = Surveys.Count * 2 + 2
+                };
+                Manifest.AddFile(urf);
+            }
             foreach (Tuple<String, MemoryStream> tup in SurveyImages)
-                Manifest.AddFile(new ManifestFile(tup.Item1, tup.Item2.Length));
-            Manifest.AddFiles(CF.SlideImages.ConstructFileManifest());
+                Manifest.AddFile(new ManifestFile(tup.Item1, tup.Item2.Length)
+                {
+                    ResourceId = Manifest.NumEntities + 1,
+                    ResourceType = ManifestFile.EResourceType.DeploymentFile
+                });
+            Manifest.AddFiles(CF.IATImages.ConstructFileManifest(ManifestFile.EResourceType.DeploymentImage));
+            Manifest.AddFiles(CF.SlideImages.ConstructFileManifest(ManifestFile.EResourceType.ItemSlide));
         }
 
         private bool SendDeploymentFiles(long deploymentId, String sessionId)
@@ -572,11 +590,8 @@ namespace IATClient
                         break;
 
                     case TransactionRequest.ETransaction.DeploymentFileManifestReceived:
-                        SendDeploymentFiles(trans.LongValues["deploymentId"], trans.StringValues["sessionId"]);
-                        break;
-
-                    case TransactionRequest.ETransaction.ItemSlideManifestReceived:
-                        SendItemSlides(trans.LongValues["deploymentId"], trans.StringValues["sessionId"]);
+                        SendDeploymentFiles(trans.LongValues["DeploymentId"], trans.StringValues["SessionId"]);
+                        SendItemSlides(trans.LongValues["DeploymentId"], trans.StringValues["SessionId"]);
                         break;
 
                     case TransactionRequest.ETransaction.RequestIATUpload:
@@ -715,16 +730,19 @@ namespace IATClient
                 xWriter.Flush();
             }
             SetStatusMessage("Establishing connection");
-            var connectTask = UploadTestWebSocket.ConnectAsync(new Uri(Properties.Resources.sDataTransactionWebsocketURI), WebSocketCancellationToken);
-            connectTask.Wait(15000);
-            if (connectTask.IsFaulted)
+            Task connectTask = null;
+            try
             {
-                foreach (Exception ex in connectTask.Exception.InnerExceptions)
-                    ErrorReporter.ReportError(new CReportableException("Error connecting to server for test upload", ex));
+                connectTask = UploadTestWebSocket.ConnectAsync(new Uri(Properties.Resources.sDataTransactionWebsocketURI), WebSocketCancellationToken);
+                connectTask.Wait(10000);
+            }
+            catch (AggregateException aggEx)
+            {
+                foreach (var ex in aggEx.InnerExceptions)
+                    ErrorReporter.ReportError(new CReportableException("Error on test upload", ex));
                 return false;
             }
-            if (!connectTask.IsCompleted)
-            {
+            if (!connectTask.IsCompleted) {
                 ErrorReporter.ReportError(new CReportableException("Timeout connecting to server for test upload", new TimeoutException()));
                 return false;
             }

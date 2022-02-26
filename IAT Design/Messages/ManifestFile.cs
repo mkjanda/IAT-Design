@@ -9,9 +9,9 @@ namespace IATClient.Messages
 {
     public class ManifestFile : FileEntity
     {
-        public enum EResourceType { ItemSlide, DeploymentFile, UpdateFile };
+        public enum EResourceType { ItemSlide, DeploymentFile, UpdateFile, DeploymentImage };
 
-        public EResourceType ResourceType { get; private set; }
+        public EResourceType ResourceType { get; set; }
 
         public int ResourceId { get; set; } = -1;
         public List<int> ReferenceIds { get; private set; } = new List<int>();
@@ -100,7 +100,7 @@ namespace IATClient.Messages
         public ManifestFile(String fName, long size)
         {
             FileEntityType = EFileEntityType.File;
-            Name = fName;
+            Name = fName.Replace("\\", "/");
             _Size = size;
         }
 
@@ -113,14 +113,9 @@ namespace IATClient.Messages
             writer.WriteElementString("MimeType", MimeType);
             writer.WriteElementString("Size", Size.ToString());
             writer.WriteElementString("ResourceType", ResourceType.ToString());
-            if ((ResourceId != -1) && (ReferenceIds.Count > 0))
-            {
-                writer.WriteStartElement("ResourceReference");
-                writer.WriteElementString("ResourceId", ResourceId.ToString());
-                foreach (var i in ReferenceIds)
-                    writer.WriteElementString("ReferenceId", i.ToString());
-                writer.WriteEndElement();
-            }
+            writer.WriteElementString("ResourceId", ResourceId.ToString());
+            foreach (var referenceId in ReferenceIds)
+                writer.WriteElementString("ReferenceId", referenceId.ToString());
             writer.WriteEndElement();
         }
 

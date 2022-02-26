@@ -24,7 +24,6 @@ namespace IATClient.IATConfig
     {
         private String _ServerDomain = String.Empty, _ServerPath = String.Empty;
         private int _ServerPort = -1;
-        private List<IATEvent> IATEventList;
         private int NumIATItems { get; set; } = 0;
         private int NumSlidesProcessed { get; set; } = 0;
         private bool _Is7Block;
@@ -82,7 +81,7 @@ namespace IATClient.IATConfig
         {
             get
             {
-                return IATEventList.Where(evt => evt.EventType == IATEvent.EEventType.IATItem).Count();
+                return EventList.Where(evt => evt.EventType == IATEvent.EEventType.IATItem).Count();
             }
         }
 
@@ -90,7 +89,7 @@ namespace IATClient.IATConfig
         {
             get
             {
-                return IATEventList.Where(evt => evt.EventType == IATEvent.EEventType.BeginIATBlock).Cast<BeginIATBlock>().Select(evt => evt.NumPresentations).Sum();
+                return EventList.Where(evt => evt.EventType == IATEvent.EEventType.BeginIATBlock).Cast<BeginIATBlock>().Select(evt => evt.NumPresentations).Sum();
             }
         }
 
@@ -376,10 +375,10 @@ namespace IATClient.IATConfig
             DIBase DisplayItem = item.Stimulus as DIBase;
             IATImages.AddDI(DisplayItem);
             SlideImages.AddDI(item.GetDIPreview(block.URI));
-            IATEventList.Add(new IATItem()
+            EventList.Add(new IATItem()
             {
                 ConfigFile = this,
-                ItemUri = DisplayItem.URI,
+                ItemUri = item.URI,
                 KeyedDir = item.GetKeyedDirection(block.URI),
                 BlockNum = block.IndexInContainer + 1,
                 OriginatingBlock = item.OriginatingBlock,
@@ -393,28 +392,27 @@ namespace IATClient.IATConfig
             IATImages.AddDI(CIAT.SaveFile.GetDI(Block.InstructionsUri));
             IATImages.AddDI(CIAT.SaveFile.GetDI(Block.Key.LeftValue.URI));
             IATImages.AddDI(CIAT.SaveFile.GetDI(Block.Key.RightValue.URI));
-            IATEventList.Add(new BeginIATBlock()
+            EventList.Add(new BeginIATBlock()
             {
                 ConfigFile = this,
                 BlockUri = Block.URI
             });
             for (int ctr = 0; ctr < Block.NumItems; ctr++)
                 ProcessIATItem(Block[ctr], Block);
-            IATEventList.Add(new EndIATBlock());
+            EventList.Add(new EndIATBlock());
             return true;
         }
 
         private void ProcessTextInstructionScreen(CTextInstructionScreen screen)
         {
             IATImages.AddDI(CIAT.SaveFile.GetDI(screen.InstructionsUri));
-            IATImages.AddDI(CIAT.SaveFile.GetDI(screen.URI));
             IATImages.AddDI(CIAT.SaveFile.GetDI(screen.ContinueInstructionsUri));
             var processedScreen= new TextInstructionScreen()
             {
                 ConfigFile = this,
                 InstructionScreen = screen
             };
-            IATEventList.Add(processedScreen);
+            EventList.Add(processedScreen);
         }
 
         private void ProcessMockItemInstructionScreen(IATClient.CMockItemScreen screen)
@@ -424,7 +422,7 @@ namespace IATClient.IATConfig
             IATImages.AddDI(CIAT.SaveFile.GetDI(CIAT.SaveFile.GetIATKey(screen.ResponseKeyUri).RightValueUri));
             IATImages.AddDI(CIAT.SaveFile.GetDI(screen.InstructionsUri));
             IATImages.AddDI(CIAT.SaveFile.GetDI(screen.ContinueInstructionsUri));
-            IATEventList.Add(new MockItemInstructionScreen()
+            EventList.Add(new MockItemInstructionScreen()
             {
                 ConfigFile = this,
                 InstructionScreen = screen
@@ -437,7 +435,7 @@ namespace IATClient.IATConfig
             IATImages.AddDI(CIAT.SaveFile.GetDI(CIAT.SaveFile.GetIATKey(screen.ResponseKeyUri).RightValueUri));
             IATImages.AddDI(CIAT.SaveFile.GetDI(screen.InstructionsUri));
             IATImages.AddDI(CIAT.SaveFile.GetDI(screen.ContinueInstructionsUri));
-            IATEventList.Add(new KeyedInstructionScreen()
+            EventList.Add(new KeyedInstructionScreen()
             {
                 ConfigFile = this,
                 InstructionScreen = screen
@@ -453,7 +451,7 @@ namespace IATClient.IATConfig
             else
                 beginInstructions.AlternatedWith = InstructionBlock.AlternateInstructionBlock.IndexInContainer + 1;
             beginInstructions.NumInstructionScreens = InstructionBlock.NumScreens;
-            _EventList.Add(beginInstructions);
+            EventList.Add(beginInstructions);
             for (int ctr = 0; ctr < InstructionBlock.NumScreens; ctr++)
             {
                 if (InstructionBlock[ctr].Type == InstructionScreenType.MockItem)

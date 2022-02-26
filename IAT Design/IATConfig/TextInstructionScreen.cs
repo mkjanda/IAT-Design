@@ -13,7 +13,7 @@ namespace IATClient.IATConfig
             {
                 if (_InstructionsDisplayID != -1)
                     return _InstructionsDisplayID;
-                _InstructionsDisplayID = ConfigFile.GetIATImage((InstructionScreen as CTextInstructionScreen).InstructionsUri).Id;
+                _InstructionsDisplayID = ConfigFile.GetIATImage(InstructionScreen.InstructionsUri).Id;
                 return _InstructionsDisplayID;
             }
             protected set
