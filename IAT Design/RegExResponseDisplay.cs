@@ -44,7 +44,9 @@ namespace IATClient
         public RegExResponseDisplay()
         {
             RegEx = new TextBox();
+            RegEx.Text = RegExDefaultText;
             TestBox = new TextBox();
+            TestBox.Text = TestDefaultText;
             foreach (var box in new TextBox[]{ RegEx, TestBox})
             {
                 box.FontChanged += (sender, args) =>
@@ -95,7 +97,7 @@ namespace IATClient
                 box.TabStop = true;
                 if (box == RegEx)
                     box.Text = RegExDefaultText;
-                box.TextChanged += (sender, args) => LayoutBox(box);
+                box.TextChanged += (sender, args) => LayoutControl();
                 box.MouseClick += new MouseEventHandler(ResponseDisplay_MouseClick);
                 box.ForeColor = Format.Color;
                 Controls.Add(box);
@@ -109,14 +111,17 @@ namespace IATClient
                     new Point(RegEx.Location.X, (int)LabelRect.Bottom + LinePadding - ((RegEx.BorderStyle == BorderStyle.FixedSingle) ? RegEx.Margin.Top : 0));
                 }
                 box.Width = Size.Width - InteriorPadding.Horizontal;
+                LayoutBox(box);
             };
             this.Height = TestBox.Bottom + InteriorPadding.Top;
             this.Paint += (sender, args) => ResponseDisplay_Paint(sender, args);
-            Invalidate();
+            this.Load += (s, a) => LayoutControl();
         }
 
         public override async void LayoutControl()
         {
+            if (!IsHandleCreated)
+                return;
             Action a = () =>
             {
                 if (!Monitor.TryEnter(lockObj))
@@ -147,16 +152,19 @@ namespace IATClient
 
         protected void LayoutBox(TextBox box)
         {
-            Size szF = Size.Empty;
-            int nLines = 1;
-            box.Width = InvalidLabelLeftMargin;
-            szF = (box.Text == String.Empty) ? new Size(box.Width, box.Height) : TextRenderer.MeasureText(box.Text, DisplayFont,
-                new Size(box.Width - InteriorPadding.Horizontal, 0), TextFormatFlags.TextBoxControl | TextFormatFlags.WordBreak);
-            double lineHeight = ((double)(DisplayFont.FontFamily.GetCellAscent(DisplayFont.Style) + DisplayFont.FontFamily.GetCellDescent(DisplayFont.Style))
-                / (double)DisplayFont.FontFamily.GetEmHeight(DisplayFont.Style)) * Format.FontSizeAsPixels;
-            nLines = (int)Math.Floor((double)(szF.Height - box.Margin.Vertical) / (double)DisplayFont.Size);
-            box.Height = szF.Height + box.Margin.Vertical;
-            Invalidate();
+            box.Width = this.Width - Padding.Horizontal - 270;
+            box.Font = DisplayFont;
+            Size szQ = TextRenderer.MeasureText((box.Text == String.Empty) ? "Qy" : box.Text, DisplayFont, new Size(Size.Width - box.Padding.Horizontal, 0),
+                TextFormatFlags.TextBoxControl | TextFormatFlags.WordBreak);
+            if (box.Focused)
+                szQ.Height += 2;
+            double LineHeight = ((double)DisplayFont.FontFamily.GetLineSpacing(DisplayFont.Style) / (double)DisplayFont.FontFamily.GetEmHeight(DisplayFont.Style)) *
+                        Format.FontSizeAsPixels;
+            int nLines = (int)Math.Round((double)szQ.Height / LineHeight);
+            if (nLines == 0)
+                nLines = 1;
+            box.Height = TextRenderer.MeasureText((box.Text == String.Empty) ? "Q" : box.Text, DisplayFont, new Size(box.Width, 0),
+                TextFormatFlags.WordBreak | TextFormatFlags.TextBoxControl).Height + Padding.Vertical;
         }
         
 
@@ -264,7 +272,7 @@ namespace IATClient
                 {
                     if (TestBox.Text != TestDefaultText)
                     {
-                        if (Regex.IsMatch(TestBox.Text, RegEx.Text))
+                        if (Regex.IsMatch(TestBox.Text, RegEx.Text, RegexOptions.ECMAScript))
                             e.Graphics.DrawString(MatchLabel, DisplayFont, Brushes.Green, new Point(Padding.Left + TestResultLeftLabelMargin, TestBox.Location.Y));
                         else
                             e.Graphics.DrawString(NoMatchLabel, DisplayFont, Brushes.Red, new Point(Padding.Left + TestResultLeftLabelMargin, TestBox.Location.Y));

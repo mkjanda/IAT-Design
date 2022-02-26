@@ -409,7 +409,6 @@ namespace IATClient
                     _LeftKeyValueOutlineUri = null;
                     return;
                 }
-                if (LeftKeyValueOutlineObservableUri.Value.Equals(_LeftKeyValueOutlineUri))
                     LeftKeyValueOutlineObservableUri.Value  = value; 
                 _LeftKeyValueOutlineUri = value;
             }

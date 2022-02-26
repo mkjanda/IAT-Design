@@ -24,15 +24,11 @@ namespace IATClient
             set
             {
                 SII = value as CSurveyItemImage;
-                Size siiSz = SII.SurveyImage.IImage.OriginalSize;
-                double siiAr = (double)siiSz.Width / (double)siiSz.Height;
-                if (siiSz.Width > Width)
-                {
-                    this.Height = (int)(this.Width / siiAr);
-                }
+                var ar = (double)this.Width / (double)this.Height;
+                var origImg = SII.SurveyImage.IImage.OriginalImage.Img;
+                var siiAr = (double)SII.SurveyImage.IImage.OriginalSize.Width / SII.SurveyImage.IImage.OriginalSize.Height;
                 SII.SurveyImage.PreviewPanel = this;
-                SII.SurveyImage.IImage.Resize(Size);
-
+                SII.SurveyImage.IImage.Resize(new Size(Math.Min(this.Width, origImg.Width), (int)(Math.Min(this.Width, origImg.Width) / siiAr)));
             }
         }
 
@@ -55,12 +51,15 @@ namespace IATClient
                 }
                 else
                 {
-                    if (base.Height == value)
-                        return;
-                    base.Height = value;
+                    this.BeginInvoke(new Action(() => {
+                        if (base.Height == value)
+                            return;
+                        base.Height = value;
+                    }));
                 }
             }
         }
+
 
         public new int Width
         {
@@ -75,16 +74,14 @@ namespace IATClient
             }
         }
 
-        public Task<int> RecalcSize(bool recalcChildren)
+        public Task<int> RecalcSize(bool children)
         {
+            if (SII == null)
+                return Task.Run(() => 0);
             Size siiSz = SII.SurveyImage.IImage.OriginalSize;
             double siiAr = (double)siiSz.Width / (double)siiSz.Height;
-            if (siiSz.Width > Width)
-            {
-                this.Height = (int)(this.Width / siiAr);
-            }
-            SII.SurveyImage.PreviewPanel = this;
-            SII.SurveyImage.IImage.Resize(Size);
+            this.Height = (int)(Math.Min(this.Width, SII.SurveyImage.IImage.Size.Width) / siiAr);
+            (Parent as SurveyDisplay).RecalcSize(false);
             return Task.Run(() => ImageBox.Height);
         }
 
@@ -93,30 +90,55 @@ namespace IATClient
             ImageBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage;
             ImageBox.Dock = System.Windows.Forms.DockStyle.Fill;
             ImageBox.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.Resize += new EventHandler((sender, args) =>
-            {
-                RecalcSize(true);
-            });
+            ImageBox.BackColor = System.Drawing.Color.White;
             ImageBox.Click += new EventHandler((sender, args) =>
             {
                 (Parent as SurveyDisplay)?.SelectionChanged(this, ModifierKeys);
             });
+            this.HandleCreated += (sender, args) =>
+            {
+                this.Width = Parent.Width;
+                if (SII != null)
+                {
+                    var ar = (double)this.Width / (double)this.Height;
+                    var origImg = SII.SurveyImage.IImage.OriginalImage.Img;
+                    var siiAr = (double)SII.SurveyImage.IImage.OriginalSize.Width / SII.SurveyImage.IImage.OriginalSize.Height;
+                    SII.SurveyImage.PreviewPanel = this;
+                    SII.SurveyImage.IImage.Resize(new Size(Math.Min(this.Width, origImg.Width), (int)(Math.Min(this.Width, origImg.Width) / siiAr)));
+                }
+            };
             this.BackColor = Color.White;
         }
         
 
         public override void SetImage(Images.IImageMedia image)
         {
+            RecalcSize(false);
             var img = image.Img;
-            this.BeginInvoke(new Action(() =>
+            if (!this.IsHandleCreated)
             {
-                bool bResize = true;
-                if ((img != null) && (ImageBox.Image != null))
-                    bResize = (ImageBox.Image.Size.Height != img.Size.Height) ? true : false;
-                ImageBox.Image = img;
-                if (bResize)
-                    this.Size = img.Size;
-            }));
+                this.HandleCreated += (sender, args) =>
+                {
+                    bool bResize = true;
+                    if ((img != null) && (ImageBox.Image != null))
+                        bResize = (ImageBox.Image.Size.Height != img.Size.Height) ? true : false;
+                    ImageBox.Image = img;
+    //                if (bResize)
+      //                  this.Size = img.Size;
+                };
+            }
+            else
+            {
+                this.BeginInvoke(new Action(() =>
+                {
+                    bool bResize = true;
+                    if ((img != null) && (ImageBox.Image != null))
+                        bResize = (ImageBox.Image.Size.Height != img.Size.Height) ? true : false;
+                    ImageBox.Image = img;
+//                    if (bResize)
+  //                      this.Size = img.Size;
+                }));
+            }
         } 
     }
 }

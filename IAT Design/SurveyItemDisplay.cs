@@ -58,6 +58,7 @@ namespace IATClient
         void SurveyItemDisplay_MouseEnter(object sender, EventArgs e)
         {
             Active = true;
+            Invalidate();
         }
 
         protected virtual void OnActivate(bool BecomingActive)

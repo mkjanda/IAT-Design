@@ -10,7 +10,7 @@ namespace IATClient
     class QuestionDisplay : SurveyItemDisplay
     {
         private Font displayFont = null;
-        protected static readonly Padding QuestionEditMargin = new Padding(16, 16, 50, 6), QuestionEditPadding = new Padding(5);
+        protected static readonly Padding QuestionEditMargin = new Padding(10, 16, 30, 6), QuestionEditPadding = new Padding(5, 5, 10, 5);
         protected static readonly Padding ResponseEditMargin = new Padding(10, 5, 10, 5);
         protected TextBox QuestionEdit;
         protected bool _IsSelected;
@@ -268,15 +268,14 @@ namespace IATClient
                 ((SurveyDisplay)Parent)?.SelectionChanged(this, ModifierKeys);
                 if (OptionalRect.Contains(args.Location)) {
                     bOptional = !bOptional;
-                    Invalidate();
                 }
                 else if (FormatRect.Contains(args.Location))
                 {
                     bFormatting = true;
-                    Invalidate();
                     CIAT.Dispatcher.Dispatch<IFormatSurveyItemText>(new CFormatSurveyItemText(this));
                     CIAT.Dispatcher.AddListener<ISurveyItemFormatChanged>(SetSurveyItemFormat);
                 }
+                Invalidate();
             };
             QuestionEdit.MouseHover += (sender, args) =>
             {
@@ -327,7 +326,7 @@ namespace IATClient
             QuestionEdit.TextChanged += (sender, args) => {
                 if (IsHandleCreated)
                 {
-                    SizeQuestionEdit(false);
+                    RecalcSize(false);
                     if (SurveyItem != null)
                         SurveyItem.Text = QuestionEdit.Text;
                 }
@@ -472,8 +471,10 @@ namespace IATClient
                 bool resize = (nLines != QuestionLines);
                 QuestionLines = nLines;
             //                QuestionEdit.Height = szQ.Height; 
-            QuestionEdit.Size = TextRenderer.MeasureText(QuestionEdit.Text, DisplayFont, new Size(QuestionEdit.Width, 0),
-                TextFormatFlags.WordBreak | TextFormatFlags.TextBoxControl);
+            QuestionEdit.Height = TextRenderer.MeasureText(QuestionEdit.Text, DisplayFont, new Size(QuestionEdit.Width, 0),
+                TextFormatFlags.WordBreak | TextFormatFlags.TextBoxControl).Height + QuestionEditPadding.Vertical;
+
+
          //       if (resize)
                   //   RecalcSize(false);
     //        }
