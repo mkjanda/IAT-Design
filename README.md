@@ -1,10 +1,7 @@
 # IAT-Design
 For the latest function version of my software, go to https://iatsoftware.net. Documentation and sample tests are available there.
 
-
-![2022-01-29](https://user-images.githubusercontent.com/35156960/151680317-b3bbfc17-bd2c-4a58-8f3f-b2019ee2a6de.png)
-
-![image](https://user-images.githubusercontent.com/35156960/155844551-d9786e43-358d-47df-8ead-9d8810a6d043.png)
+![iat-design-screenshots](https://user-images.githubusercontent.com/35156960/155851736-763821db-a960-455b-bee0-4ac44ab8fa39.gif)
 
 In order for the program to start, it must be activated but this is not possible right now wikth all the URLs pointing to 127.0.0.1 instead of iatsoftware.net. Insert the following ik a file named IATDesign.xml in "%USER%\AppData\Local\IATSoftware"
 
