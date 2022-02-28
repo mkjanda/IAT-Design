@@ -1,5 +1,5 @@
 # IAT-Design
-<b>IAT Design\bin\Release\IATDesign.exe</b> is the executable that will start the software. It is not quite ready in its current form to be put on the server and will not connect to it. If you really want, you can download the server software and follow the setup instructions. If you're psychotically fixatted on me or view it as social commentary or something. For the latest function version of my software that is fully functional, go to https://iatsoftware.net. Documentation and sample tests are available there as well.
+<b>IAT Design\bin\Release</b> will contain the necessary files once the software is built. It is not quite ready in its current form to be put on the server and will not connect to it. If you really want, you can download the server software and follow the setup instructions. If you're psychotically fixatted on me or view it as social commentary or something. For the latest function version of my software that is fully functional, go to https://iatsoftware.net. Documentation and sample tests are available there as well.
 
 ![iat-design-screenshots](https://user-images.githubusercontent.com/35156960/155852232-4c53ddf5-c079-4f59-ac82-ea3e0dedf670.gif)
 
