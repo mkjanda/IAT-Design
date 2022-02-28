@@ -1,10 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Drawing;
 using System.Data;
+using System.Drawing;
 using System.Linq;
-using System.Text;
 using System.Windows.Forms;
 
 namespace IATClient
@@ -20,10 +17,10 @@ namespace IATClient
         private static float[] AvailableLineSpacing = { 1, 1.25F, 1.5F, 1.75F, 2, 2.25F, 2.5F, 2.75F, 3 };
 
         private CKeyInstructionScreen _KeyedInstructionScreen = null;
-        
+
         public InstructionScreenPanel ParentControl
         {
-            get 
+            get
             {
                 return (InstructionScreenPanel)Parent;
             }
@@ -170,7 +167,7 @@ namespace IATClient
                 return;
             if (ResponseKeyDrop.SelectedItem == null)
                 KeyedInstructionScreen.ResponseKeyUri = null;
-            else 
+            else
                 KeyedInstructionScreen.ResponseKeyUri = (ResponseKeyDrop.SelectedItem as CIATKey).URI;
         }
 
@@ -185,8 +182,8 @@ namespace IATClient
             if (IsDisposed)
                 return;
             IsDisposed = true;
-       //     if (KeyedInstructionScreen != null)
-         //       KeyedInstructionScreen.Dispose();
+            //     if (KeyedInstructionScreen != null)
+            //       KeyedInstructionScreen.Dispose();
             base.Dispose();
         }
     }

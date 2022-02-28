@@ -1,19 +1,19 @@
-﻿using System;
+﻿using IATClient.Messages;
+using IATClient.ResultData;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Xml;
-using System.Xml.Serialization;
+using System.Drawing;
 using System.IO;
 using System.IO.Packaging;
+using System.Linq;
 using System.Security.Cryptography;
-using System.Drawing;
+using System.Text;
 using System.Threading;
 using System.Windows.Forms;
+using System.Xml;
+using System.Xml.Serialization;
 using Saxon.Api;
-using IATClient.ResultData;
-using IATClient.Messages;
 
 namespace IATClient
 {
@@ -86,13 +86,13 @@ namespace IATClient
                     Serializer ser = XSLTProcessor.NewSerializer(txtWriter);
                     xsltTrans.InitialContextNode = inputNode;
                     xsltTrans.Run(ser);
-                txtWriter.Flush();
-                XmlDocument doc = new XmlDocument();
-                doc.Load(new StringReader(txtWriter.ToString()));
+                    txtWriter.Flush();
+                    XmlDocument doc = new XmlDocument();
+                    doc.Load(new StringReader(txtWriter.ToString()));
                     if (responseDoc.DocumentElement.SelectSingleNode("Addendum") == null)
                         responseDoc.DocumentElement.AppendChild(responseDoc.CreateElement("Addendum"));
                     responseDoc.DocumentElement["Addendum"].AppendChild(responseDoc.ImportNode(doc.DocumentElement, true));
-                incrementProgress.Invoke();
+                    incrementProgress.Invoke();
                 }
             }
         }
@@ -145,7 +145,7 @@ namespace IATClient
                     TextWriter txtWriter = new StreamWriter(memStream, Encoding.UTF8);
                     Serializer ser = XSLTProcessor.NewSerializer(txtWriter);
                     XdmNode inputNode;
-                    lock (TransformLock)  
+                    lock (TransformLock)
                     {
                         inputNode = XSLTProcessor.NewDocumentBuilder().Build(responseDoc.DocumentElement);
                         xsltTrans.InitialContextNode = inputNode;
@@ -203,13 +203,14 @@ namespace IATClient
                         MemoryStream memStream = new MemoryStream();
                         Int32 ndx = (Int32)a.Argument;
                         XdmNode inputNode;
-                        lock (TransformLock) {
+                        lock (TransformLock)
+                        {
                             responseDoc.SelectSingleNode("//IterationCount").InnerText = ItrCtr[ndx].ToString();
                             responseDoc.SelectSingleNode("//IterationValue").InnerText = ItrVal[ndx].ToString();
                             inputNode = XSLTProcessor.NewDocumentBuilder().Build(responseDoc.DocumentElement);
-                        TextWriter txtWriter = new StreamWriter(memStream, Encoding.UTF8);
-                        Serializer ser = XSLTProcessor.NewSerializer(txtWriter);
-                        xsltTrans.InitialContextNode = inputNode;
+                            TextWriter txtWriter = new StreamWriter(memStream, Encoding.UTF8);
+                            Serializer ser = XSLTProcessor.NewSerializer(txtWriter);
+                            xsltTrans.InitialContextNode = inputNode;
                             xsltTrans.Run(ser);
                             txtWriter.Flush();
                             ZipPackagePart zpp = (ZipPackagePart)package.CreatePart(new Uri(String.Format(outputPathTemplate, templateStartingVal + ndx), UriKind.Relative), contentType, CompressionOption.Normal);
@@ -405,7 +406,8 @@ namespace IATClient
             g.DrawString("Summary Grid Format", headerFont, Brushes.Black, new PointF(100, yOffset));
             yOffset += sz.Height + 10;
             int colNum = 1;
-            if (rd.Descriptor.TokenType != ETokenType.NONE) { 
+            if (rd.Descriptor.TokenType != ETokenType.NONE)
+            {
                 str = String.Format("Column {0}: {1} (test taker token)", colNumToName(colNum++), rd.Descriptor.TokenName);
                 sz = g.MeasureString(str, font);
                 if (yOffset + sz.Height > canvasBmp.Height)
@@ -1009,9 +1011,9 @@ namespace IATClient
                     .Select(f => f.ReferenceIds).Cast<IEnumerable<int>>().Aggregate((r1, r2) => r1.Concat(r2)).Distinct().OrderBy(i => i);
 
                 var indexes = from sn in slideNums select slideNums.ToList().IndexOf(sn);
-//                TItemSlideEntry[] slideEntries = SlideContainer.SlideManifest.ItemSlideEntries;
-  //              var slideNdxs = from i in Items select from ise in slideEntries select slideEntries.ToList().IndexOf(ise);
-    //            var SlideEntries = from i in Items select (from isl in SlideContainer.SlideManifest.ItemSlideEntries where isl.Items.Contains(i) select isl).First();
+                //                TItemSlideEntry[] slideEntries = SlideContainer.SlideManifest.ItemSlideEntries;
+                //              var slideNdxs = from i in Items select from ise in slideEntries select slideEntries.ToList().IndexOf(ise);
+                //            var SlideEntries = from i in Items select (from isl in SlideContainer.SlideManifest.ItemSlideEntries where isl.Items.Contains(i) select isl).First();
                 bAbortExport = false;
                 LoadTransforms(itemNums.ToList(), indexes.ToList());
                 ZipPackage outZip = (ZipPackage)Package.Open(filename, FileMode.Create);

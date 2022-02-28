@@ -75,49 +75,49 @@ namespace IATClient
             if (!IsHandleCreated)
                 return;
             this.BeginInvoke(new Action(() => ImageBox.Image = image.Img));
-/*            System.Drawing.Image img = null;
-            if (image != null) 
-                  img = ScalePreview(image.Img);
-            //img = image.Img;
-            EventHandler setImage;
-            if (img == null)
-                setIm
-            {
-                ImageBox.SuspendLayout();
-                Image i = ImageBox.Image;
-                ImageBox.BackColor = CIAT.SaveFile.Layout.BackColor;
-                if (i != null)
-                {
-                    ImageBox.Image = null;
-                    CIAT.ImageManager.ReleaseImage(i);
-                }
-                ImageBox.ResumeLayout(false);
-                return;
-            }
-            EventHandler setImage = new EventHandler((sender, args) =>
-            {
-                try
-                {
-                    Image i = ImageBox.Image;
-                    SuspendLayout();
-                    ImageBox.BackColor = CIAT.SaveFile.Layout.BackColor;
-                    if (i != null)
-                    {
-                        ImageBox.Image = null;
-                        CIAT.ImageManager.ReleaseImage(i);
-                    }
-                    ImageBox.Image = img;
-                    ResumeLayout(true);
-                }
-                catch (Exception ex)
-                {
-                    ErrorReporter.ReportError(new CReportableException("Error updating preview", ex));
-                }
-            });
-            if (!IsHandleCreated)
-                this.HandleCreated += (s, a) => setImage(s, a);
-            else
-                this.BeginInvoke(setImage);*/
+            /*            System.Drawing.Image img = null;
+                        if (image != null) 
+                              img = ScalePreview(image.Img);
+                        //img = image.Img;
+                        EventHandler setImage;
+                        if (img == null)
+                            setIm
+                        {
+                            ImageBox.SuspendLayout();
+                            Image i = ImageBox.Image;
+                            ImageBox.BackColor = CIAT.SaveFile.Layout.BackColor;
+                            if (i != null)
+                            {
+                                ImageBox.Image = null;
+                                CIAT.ImageManager.ReleaseImage(i);
+                            }
+                            ImageBox.ResumeLayout(false);
+                            return;
+                        }
+                        EventHandler setImage = new EventHandler((sender, args) =>
+                        {
+                            try
+                            {
+                                Image i = ImageBox.Image;
+                                SuspendLayout();
+                                ImageBox.BackColor = CIAT.SaveFile.Layout.BackColor;
+                                if (i != null)
+                                {
+                                    ImageBox.Image = null;
+                                    CIAT.ImageManager.ReleaseImage(i);
+                                }
+                                ImageBox.Image = img;
+                                ResumeLayout(true);
+                            }
+                            catch (Exception ex)
+                            {
+                                ErrorReporter.ReportError(new CReportableException("Error updating preview", ex));
+                            }
+                        });
+                        if (!IsHandleCreated)
+                            this.HandleCreated += (s, a) => setImage(s, a);
+                        else
+                            this.BeginInvoke(setImage);*/
         }
 
         public ImageDisplay()
@@ -125,12 +125,12 @@ namespace IATClient
             ImageBox.Dock = DockStyle.Fill;
             ImageBox.SizeMode = PictureBoxSizeMode.Zoom;
             ImageBox.BackColor = CIAT.SaveFile.Layout.BackColor;
-            base.Controls.Add(ImageBox); 
+            base.Controls.Add(ImageBox);
         }
 
         public new void Dispose()
         {
-            if (ImageBox.Image != null) 
+            if (ImageBox.Image != null)
                 CIAT.ImageManager.ReleaseImage(ImageBox.Image);
             ImageBox.Image = null;
             base.Dispose();

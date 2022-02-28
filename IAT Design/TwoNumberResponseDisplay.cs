@@ -1,9 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-
+using System.Drawing;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Drawing;
 using System.Windows.Forms;
 
 namespace IATClient
@@ -13,7 +11,7 @@ namespace IATClient
         protected NumericUpDown Value2;
         protected Rectangle Value2Rect;
         protected String Value2Label;
-        
+
         protected override int ValueEntryWidth
         {
             get
@@ -116,12 +114,14 @@ namespace IATClient
             e.Graphics.DrawString(Value1Label, DisplayFont, br, new Point(LengthEditMargin.Left, Padding.Top + LinePadding));
             if (!Value1.Visible)
                 e.Graphics.DrawString(Value1.Value.ToString(), DisplayFont, blackBr, new Point(Value1.Left, Padding.Top + LinePadding));
-            if (Value1.Location.Y == Value2.Location.Y) {
+            if (Value1.Location.Y == Value2.Location.Y)
+            {
                 e.Graphics.DrawString(Value2Label, DisplayFont, br, new Point((ClientSize.Width >> 1) + LengthEditMargin.Left, Padding.Top + LinePadding));
                 if (!Value2.Visible)
                     e.Graphics.DrawString(Value2.Value.ToString(), DisplayFont, blackBr, new Point(Value2.Left, Padding.Top + LinePadding));
             }
-            else {
+            else
+            {
                 e.Graphics.DrawString(Value2Label, DisplayFont, br, new Point(LengthEditMargin.Left, Padding.Top + Value1.Height + (LinePadding << 1)));
                 if (!Value2.Visible)
                     e.Graphics.DrawString(Value2.Value.ToString(), DisplayFont, blackBr, new Point(Value2.Left, Padding.Top + Value1.Height + (LinePadding << 1)));

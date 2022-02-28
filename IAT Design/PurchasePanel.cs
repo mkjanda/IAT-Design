@@ -1,15 +1,15 @@
-﻿using System;
+﻿using mshtml;
+using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using System.Drawing;
 using System.IO;
+using System.Linq;
+using System.Net;
+using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Xml;
-using System.Drawing;
-using System.Net;
-using System.Text.RegularExpressions;
-using mshtml;
 namespace IATClient
 {
     [System.Runtime.InteropServices.ComVisibleAttribute(true)]
@@ -322,7 +322,7 @@ namespace IATClient
             if (cookies == null)
             {
                 this.SubmitButton.Enabled = true;
-            } 
+            }
             else
             {
                 Match m = exp.Match(cookies);
@@ -354,11 +354,12 @@ namespace IATClient
             long totalBytesRead = 0;
             int nBytesRead;
             byte[] buff = new byte[65536];
-            while ((nBytesRead = s.Read(buff, 0, 65536)) != 0) {
+            while ((nBytesRead = s.Read(buff, 0, 65536)) != 0)
+            {
                 memStream.Write(buff, 0, nBytesRead);
                 totalBytesRead += nBytesRead;
             }
-            
+
             browserWindow.DocumentCompleted += hPageLoaded;
             this.BeginInvoke(new Action<String>(SetBrowserWindowContent), Encoding.UTF8.GetString(memStream.ToArray()));
             JSESSIONID = resp.Cookies["JSESSIONID"].Value;
@@ -384,20 +385,20 @@ namespace IATClient
         {
             mshtml.IHTMLDocument3 doc = (mshtml.IHTMLDocument3)browserWindow.Document.DomDocument;
             adminPrice = Convert.ToInt32(((mshtml.IHTMLInputElement)doc.getElementById("AdministrationsDrop_" + ((mshtml.IHTMLSelectElement)doc.getElementById("AdministrationsDrop")).selectedIndex.ToString())).value);
-            UpdateTotal(); 
+            UpdateTotal();
         }
 
         public void IATQuantityChanged()
         {
             mshtml.IHTMLDocument3 doc = (mshtml.IHTMLDocument3)browserWindow.Document.DomDocument;
-            iatPrice = Convert.ToInt32(((mshtml.IHTMLInputElement)doc.getElementById("IATsDrop_" + ((mshtml.IHTMLSelectElement)doc.getElementById("IATsDrop")).selectedIndex.ToString())).value); 
+            iatPrice = Convert.ToInt32(((mshtml.IHTMLInputElement)doc.getElementById("IATsDrop_" + ((mshtml.IHTMLSelectElement)doc.getElementById("IATsDrop")).selectedIndex.ToString())).value);
             UpdateTotal();
         }
 
         public void DiskSpaceChanged()
         {
             mshtml.IHTMLDocument3 doc = (mshtml.IHTMLDocument3)browserWindow.Document.DomDocument;
-            diskSpacePrice = Convert.ToInt32(((mshtml.IHTMLInputElement)doc.getElementById("DiskSpaceDrop_" + ((mshtml.IHTMLSelectElement)doc.getElementById("DiskSpaceDrop")).selectedIndex.ToString())).value); 
+            diskSpacePrice = Convert.ToInt32(((mshtml.IHTMLInputElement)doc.getElementById("DiskSpaceDrop_" + ((mshtml.IHTMLSelectElement)doc.getElementById("DiskSpaceDrop")).selectedIndex.ToString())).value);
             UpdateTotal();
         }
 

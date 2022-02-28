@@ -1,12 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
-using System.Xml;
-using System.IO;
 using System.Drawing;
-using System.Windows.Forms;
-using System.Threading;
+using System.IO;
 using System.Linq;
+using System.Windows.Forms;
 using System.Xml.Linq;
 
 namespace IATClient
@@ -43,7 +40,8 @@ namespace IATClient
 
         private void GeneratePreview(Bitmap bmp)
         {
-            using (Graphics g = Graphics.FromImage(bmp)) {
+            using (Graphics g = Graphics.FromImage(bmp))
+            {
                 Brush br = new SolidBrush(CIAT.SaveFile.Layout.BackColor);
                 g.FillRectangle(br, new Rectangle(new Point(0, 0), CIAT.SaveFile.Layout.InteriorSize));
                 br.Dispose();
@@ -146,10 +144,10 @@ namespace IATClient
             {
                 if ((AltGroup != null) && (value != null))
                     if (!AltGroup.URI.Equals(value.URI))
-                {
-                    MessageBox.Show("Dispose of the alternation group and instantiate a new one.");
-                    return;
-                }
+                    {
+                        MessageBox.Show("Dispose of the alternation group and instantiate a new one.");
+                        return;
+                    }
                 AltGroup = value;
             }
         }
@@ -398,8 +396,11 @@ namespace IATClient
                         t.Value.Select(tup => tup.Item1), t.Value.Select(tup => tup.Item2))));
                 resultList.AddRange(InstructionScreens.Select((instrScrn, i) => new
                 {
-                    cdi = CIAT.SaveFile.GetDI(instrScrn.ContinueInstructionsUri) as DIText, ndx = i + 1}).
-                    Where((t) => t.cdi.PhraseFontFamily != String.Empty).Aggregate(new Dictionary<String, List<Tuple<int, DIText>>>(), (dic, t) => { 
+                    cdi = CIAT.SaveFile.GetDI(instrScrn.ContinueInstructionsUri) as DIText,
+                    ndx = i + 1
+                }).
+                    Where((t) => t.cdi.PhraseFontFamily != String.Empty).Aggregate(new Dictionary<String, List<Tuple<int, DIText>>>(), (dic, t) =>
+                    {
                         if (!dic.ContainsKey(t.cdi.PhraseFontFamily))
                             dic[t.cdi.PhraseFontFamily] = new List<Tuple<int, DIText>>();
                         dic[t.cdi.PhraseFontFamily].Add(new Tuple<int, DIText>(t.ndx, t.cdi));

@@ -1,9 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Xml;
-using System.IO.Packaging;
 
 namespace IATClient.Messages
 {
@@ -26,7 +23,7 @@ namespace IATClient.Messages
         {
             xWriter.WriteStartElement(GetName());
             xWriter.WriteElementString("ResourceId", ResourceId.ToString());
-            foreach (var ndx in ReferenceIds) 
+            foreach (var ndx in ReferenceIds)
                 xWriter.WriteElementString("ReferenceId", ndx.ToString());
             xWriter.WriteEndElement();
         }

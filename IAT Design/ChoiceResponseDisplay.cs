@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
-using System.Windows.Forms;
 using System.Drawing;
-using System.Threading;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 namespace IATClient
 {
     abstract class ChoiceResponseDisplay : ResponseDisplay
@@ -122,16 +120,16 @@ namespace IATClient
             box.ForeColor = Format.Color;
             box.BorderStyle = BorderStyle.None;
             ChoiceEdits.Add(box);
-/*            int boxWidth = Size.Width - InteriorPadding.Horizontal - ChoiceEditPadding.Horizontal;
-            int textHeight = TextRenderer.MeasureText(box.Text, DisplayFont, new Size(boxWidth, 1),
-                    TextFormatFlags.WordBreak | TextFormatFlags.TextBoxControl).Height;
-            int lineHeight = (int)(DisplayFont.FontFamily.GetLineSpacing(DisplayFont.Style) * DisplayFont.Size / DisplayFont.FontFamily.GetEmHeight(FontStyle.Regular));
-            int nLines = (int)Math.Floor((double)textHeight / (double)lineHeight);
-            int boxHeight = nLines * lineHeight + 6;
-            int boxX = InteriorPadding.Left + ChoiceEditPadding.Left;
-            int boxY = this.Size.Height - InteriorPadding.Bottom - ChoiceEditPadding.Vertical - box.Size.Height;
-            box.Location = new Point(boxX, boxY);
-            box.Size = new Size(boxWidth, boxHeight); */
+            /*            int boxWidth = Size.Width - InteriorPadding.Horizontal - ChoiceEditPadding.Horizontal;
+                        int textHeight = TextRenderer.MeasureText(box.Text, DisplayFont, new Size(boxWidth, 1),
+                                TextFormatFlags.WordBreak | TextFormatFlags.TextBoxControl).Height;
+                        int lineHeight = (int)(DisplayFont.FontFamily.GetLineSpacing(DisplayFont.Style) * DisplayFont.Size / DisplayFont.FontFamily.GetEmHeight(FontStyle.Regular));
+                        int nLines = (int)Math.Floor((double)textHeight / (double)lineHeight);
+                        int boxHeight = nLines * lineHeight + 6;
+                        int boxX = InteriorPadding.Left + ChoiceEditPadding.Left;
+                        int boxY = this.Size.Height - InteriorPadding.Bottom - ChoiceEditPadding.Vertical - box.Size.Height;
+                        box.Location = new Point(boxX, boxY);
+                        box.Size = new Size(boxWidth, boxHeight); */
             Controls.Add(box);
             if (CanAddChoices)
                 CreateDeleteButton();
@@ -143,31 +141,31 @@ namespace IATClient
         private bool SizeChoiceEdit(TextBox box, bool force)
         {
             int ndx = ChoiceEdits.IndexOf(box);
-/*            int boxWidth = Size.Width - InteriorPadding.Horizontal - ChoiceEditPadding.Horizontal;
-            int textHeight = TextRenderer.MeasureText(box.Text, DisplayFont, new Size(boxWidth, 1),
-                    TextFormatFlags.WordBreak | TextFormatFlags.TextBoxControl).Height;
-            int lineHeight = (int)(DisplayFont.FontFamily.GetLineSpacing(DisplayFont.Style) * DisplayFont.Size / DisplayFont.FontFamily.GetEmHeight(FontStyle.Regular));
-            int nLines = (int)Math.Floor((double)textHeight / (double)lineHeight);
-            int boxHeight = (int)(nLines * lineHeight * 1.428);
-            box.Size = new Size(boxWidth, boxHeight);
-            return true;
-        }
-*/
+            /*            int boxWidth = Size.Width - InteriorPadding.Horizontal - ChoiceEditPadding.Horizontal;
+                        int textHeight = TextRenderer.MeasureText(box.Text, DisplayFont, new Size(boxWidth, 1),
+                                TextFormatFlags.WordBreak | TextFormatFlags.TextBoxControl).Height;
+                        int lineHeight = (int)(DisplayFont.FontFamily.GetLineSpacing(DisplayFont.Style) * DisplayFont.Size / DisplayFont.FontFamily.GetEmHeight(FontStyle.Regular));
+                        int nLines = (int)Math.Floor((double)textHeight / (double)lineHeight);
+                        int boxHeight = (int)(nLines * lineHeight * 1.428);
+                        box.Size = new Size(boxWidth, boxHeight);
+                        return true;
+                    }
+            */
             Size szF = Size.Empty;
             int nLines = 1;
             box.Width = Size.Width - InteriorPadding.Horizontal - ChoiceEditPadding.Horizontal;
-            szF = (box.Text == String.Empty) ? new Size(box.Width, box.Height) : TextRenderer.MeasureText(box.Text, DisplayFont, 
-                new Size(box.Width - InteriorPadding.Horizontal - ChoiceEditPadding.Horizontal, 0), 
+            szF = (box.Text == String.Empty) ? new Size(box.Width, box.Height) : TextRenderer.MeasureText(box.Text, DisplayFont,
+                new Size(box.Width - InteriorPadding.Horizontal - ChoiceEditPadding.Horizontal, 0),
                 TextFormatFlags.TextBoxControl | TextFormatFlags.WordBreak);
-            double lineHeight = ((double)(DisplayFont.FontFamily.GetCellAscent(DisplayFont.Style) + DisplayFont.FontFamily.GetCellDescent(DisplayFont.Style)) 
+            double lineHeight = ((double)(DisplayFont.FontFamily.GetCellAscent(DisplayFont.Style) + DisplayFont.FontFamily.GetCellDescent(DisplayFont.Style))
                 / (double)DisplayFont.FontFamily.GetEmHeight(DisplayFont.Style)) * Format.FontSizeAsPixels;
             nLines = (int)Math.Floor((double)(szF.Height - box.Margin.Vertical) / (double)DisplayFont.Size);
-                box.Width = Size.Width - InteriorPadding.Horizontal - ChoiceEditPadding.Horizontal;
-//                NumLinesInChoices[ndx] = nLines;
-                box.Height = szF.Height + (box.Focused ? 4 : 0);
-                box.ResumeLayout(false);
-                box.Invalidate();
-                return true;
+            box.Width = Size.Width - InteriorPadding.Horizontal - ChoiceEditPadding.Horizontal;
+            //                NumLinesInChoices[ndx] = nLines;
+            box.Height = szF.Height + (box.Focused ? 4 : 0);
+            box.ResumeLayout(false);
+            box.Invalidate();
+            return true;
         }
 
         private void Choice_TextChanged(object sender, EventArgs e)

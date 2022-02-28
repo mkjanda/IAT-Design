@@ -1,11 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.IO;
-using System.Drawing;
-using System.Xml;
-using System.Windows.Forms;
+using System.Linq;
 using System.Xml.Linq;
 
 namespace IATClient
@@ -92,7 +88,7 @@ namespace IATClient
             (CIAT.SaveFile.GetDI(PreviewUri) as DIPreview).ScheduleInvalidation();
         }
 
-        public CKeyInstructionScreen(Uri uri) : base(uri) 
+        public CKeyInstructionScreen(Uri uri) : base(uri)
         {
         }
 
@@ -107,10 +103,12 @@ namespace IATClient
         }
 
 
-        public override void Save() {
+        public override void Save()
+        {
             XDocument xDoc = new XDocument();
             String rKey = String.Empty;
-            if (ResponseKeyUri != null) {
+            if (ResponseKeyUri != null)
+            {
                 rKey = CIAT.SaveFile.GetRelationshipsByType(this.URI, BaseType, typeof(CIATKey)).Where(pr => pr.TargetUri.Equals(ResponseKeyUri)).First().Id;
             }
             String rInstructionsId = CIAT.SaveFile.GetRelationshipsByType(this.URI, BaseType, typeof(DIBase)).Where(pr => pr.TargetUri.Equals(InstructionsUri)).First().Id;
@@ -118,7 +116,7 @@ namespace IATClient
             String rPreviewId = CIAT.SaveFile.GetRelationshipsByType(this.URI, BaseType, typeof(DIBase)).Where(pr => pr.TargetUri.Equals(PreviewUri)).First().Id;
             String rParentBlockId = CIAT.SaveFile.GetRelationshipsByType(this.URI, BaseType, typeof(CInstructionBlock)).Where(pr => pr.TargetUri.Equals(ParentBlockUri)).First().Id;
             xDoc.Document.Add(new XElement("InstructionScreen", new XAttribute("Type", InstructionScreenType.ResponseKey.ToString()), new XElement("rParentBlockId", rParentBlockId),
-                new XElement("rContinueInstructionsId", rContinueInstructionsId), new XElement("rInstructionsId", rInstructionsId), 
+                new XElement("rContinueInstructionsId", rContinueInstructionsId), new XElement("rInstructionsId", rInstructionsId),
                 new XElement("rPreviewId", rPreviewId), new XElement("ContinueKey", ContinueKey)));
             if (rKey != String.Empty)
                 xDoc.Root.Add(new XElement("rResponseKeyId", rKey));

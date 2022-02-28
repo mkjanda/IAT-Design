@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Drawing;
-using System.Windows.Forms;
+using System.IO;
 using System.Linq;
+using System.Windows.Forms;
 using System.Xml.Linq;
 
 namespace IATClient
@@ -33,7 +33,7 @@ namespace IATClient
         {
             get
             {
-                    return CIAT.SaveFile.GetRelationshipsByType(this.URI, BaseType, typeof(CIATKey)).Select(pr => CIAT.SaveFile.GetIATKey(pr.TargetUri)).FirstOrDefault();
+                return CIAT.SaveFile.GetRelationshipsByType(this.URI, BaseType, typeof(CIATKey)).Select(pr => CIAT.SaveFile.GetIATKey(pr.TargetUri)).FirstOrDefault();
             }
             set
             {
@@ -237,7 +237,7 @@ namespace IATClient
             xDoc.Root.Add(new XElement("rPreviewId", rPreviewId));
             xDoc.Root.Add(new XElement("IsDynamicallyKeyed", IsDynamicallyKeyed.ToString()));
             foreach (String rId in ItemTuples.Select(tup => tup.Item1))
-               xDoc.Root.Add(new XElement("rItemId", rId));
+                xDoc.Root.Add(new XElement("rItemId", rId));
             Stream s = CIAT.SaveFile.GetWriteStream(this);
             xDoc.Save(s);
             s.Dispose();
@@ -290,10 +290,10 @@ namespace IATClient
             {
                 if ((AltGroup != null) && (value != null))
                     if (!AltGroup.URI.Equals(value.URI))
-                {
-                    MessageBox.Show("Dispose of the alternation group and instantiate a new one.");
-                    return;
-                }
+                    {
+                        MessageBox.Show("Dispose of the alternation group and instantiate a new one.");
+                        return;
+                    }
                 AltGroup = value;
             }
         }
@@ -332,14 +332,14 @@ namespace IATClient
                 return _IndexInContents;
             }
         }
-/*
-        public void ResolveSpecifiers()
-        {
-            foreach (CIATItem i in ItemTuples.Select(tup => CIAT.SaveFile.GetIATItem(tup.Item2)))
-                if (i.KeySpecifierID != -1)
-                    DynamicSpecifier.GetSpecifier(i.KeySpecifierID).AddIATItem(i, i.SpecifierArg);
-        }
-*/
+        /*
+                public void ResolveSpecifiers()
+                {
+                    foreach (CIATItem i in ItemTuples.Select(tup => CIAT.SaveFile.GetIATItem(tup.Item2)))
+                        if (i.KeySpecifierID != -1)
+                            DynamicSpecifier.GetSpecifier(i.KeySpecifierID).AddIATItem(i, i.SpecifierArg);
+                }
+        */
         public void AddItem(CIATItem i, KeyedDirection kd)
         {
             String rId = CIAT.SaveFile.CreateRelationship(BaseType, i.BaseType, this.URI, i.URI);
@@ -366,7 +366,8 @@ namespace IATClient
                 b = CIAT.SaveFile.IAT.Blocks[6];
                 b.ItemTuples.Add(new Tuple<String, Uri>(CIAT.SaveFile.CreateRelationship(b.BaseType, i.BaseType, b.URI, i.URI), i.URI));
                 i.AddParentBlock(CIAT.SaveFile.IAT.Blocks[6], kd);
-            } else if (blockNum == 2)
+            }
+            else if (blockNum == 2)
             {
                 b = CIAT.SaveFile.IAT.Blocks[4];
                 b.ItemTuples.Add(new Tuple<String, Uri>(CIAT.SaveFile.CreateRelationship(b.BaseType, i.BaseType, b.URI, i.URI), i.URI));
@@ -375,7 +376,7 @@ namespace IATClient
                 b.ItemTuples.Add(new Tuple<String, Uri>(CIAT.SaveFile.CreateRelationship(b.BaseType, i.BaseType, b.URI, i.URI), i.URI));
                 i.AddParentBlock(CIAT.SaveFile.IAT.Blocks[5], kd.Opposite);
                 b = CIAT.SaveFile.IAT.Blocks[6];
-                b.ItemTuples.Add(new Tuple<String, Uri>(CIAT.SaveFile.CreateRelationship(b.BaseType, i.BaseType, b.URI, i.URI), i.URI)); 
+                b.ItemTuples.Add(new Tuple<String, Uri>(CIAT.SaveFile.CreateRelationship(b.BaseType, i.BaseType, b.URI, i.URI), i.URI));
                 i.AddParentBlock(CIAT.SaveFile.IAT.Blocks[6], kd.Opposite);
             }
         }
@@ -522,7 +523,7 @@ namespace IATClient
             }
             CIAT.SaveFile.GetDI(PreviewUri).Dispose();
             BlockPreviewLambda.Dispose();
-            List<CIATItem> items = ItemTuples.Select(tup => CIAT.SaveFile.GetIATItem(tup.Item2)).ToList(); 
+            List<CIATItem> items = ItemTuples.Select(tup => CIAT.SaveFile.GetIATItem(tup.Item2)).ToList();
             foreach (CIATItem i in items)
             {
                 RemoveItem(i);

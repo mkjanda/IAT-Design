@@ -1,14 +1,11 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
-using System.Management;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
-using System.IO.Packaging;
 using System.Threading;
-using System.Threading.Tasks;
-using System.Collections.Concurrent;
 
 namespace IATClient.Images
 {
@@ -30,7 +27,7 @@ namespace IATClient.Images
         private System.Threading.Timer ThumbGenerationThread = null, FetchThread = null, CacheThread = null, ResizerThread = null, BitmapBagThread = null;
         private Action<object> ThumbGenerationAction, CacheAction, ResizerAction = null, BitmapBagAction = null;
         private bool Halting { get; set; }
-        public bool IsDisposing { get; private set; } = false; 
+        public bool IsDisposing { get; private set; } = false;
         public bool IsDisposed { get; private set; } = false;
         private ConcurrentBag<ImageMedia> CachedImages = new ConcurrentBag<ImageMedia>();
         public bool WorkersRunning { get; private set; } = false;
@@ -170,11 +167,9 @@ namespace IATClient.Images
                 while (cb.TryTake(out bmp))
                     bmp.Dispose();
             }
-            ManualResetEvent thumbThread = new ManualResetEvent(false), fetchThread = new ManualResetEvent(false), storeThread = new ManualResetEvent(false),
-                cacheThread = new ManualResetEvent(false), resizerThread = new ManualResetEvent(false);
-            ThumbGenerationThread?.Dispose(thumbThread);
-            CacheThread?.Dispose(cacheThread);
-            ResizerThread?.Dispose(resizerThread);
+            ThumbGenerationThread?.Dispose();
+            CacheThread?.Dispose();
+            ResizerThread?.Dispose();
             CachedImages = null;
             FetchBag = null;
             ThumbGenerations = null;

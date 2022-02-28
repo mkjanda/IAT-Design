@@ -1,9 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Windows.Forms;
 using System.Drawing;
-using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace IATClient
 {
@@ -130,7 +127,7 @@ namespace IATClient
             this.MouseDown += new MouseEventHandler(ScrollingPreviewPanelPane_MouseDown);
             this.MouseMove += new MouseEventHandler(ScrollingPreviewPanelPane_MouseMove);
             this.MouseUp += new MouseEventHandler(ScrollingPreviewPanelPane_MouseUp);
-            this.DragDrop += new DragEventHandler(ScrollingPreviewPanelPane_DragDrop); 
+            this.DragDrop += new DragEventHandler(ScrollingPreviewPanelPane_DragDrop);
             this.DragOver += new DragEventHandler(ScrollingPreviewPanelPane_DragOver);
             this.DragLeave += new EventHandler(ScrollingPreviewPanelPane_DragLeave);
             this.AllowDrop = true;

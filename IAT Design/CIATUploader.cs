@@ -677,210 +677,210 @@ namespace IATClient
                         MySOAP.CallSOAP(Properties.Resources.sDataProviderServlet, MySOAP.ESoapAction.RequestRSAKey, trans, dataKey);
                         trans.StringValue = CPartiallyEncryptedRSAKey.EKeyType.Admin.ToString();
                         MySOAP.CallSOAP(Properties.Resources.sDataProviderServlet, MySOAP.ESoapAction.RequestRSAKey, trans, adminKey);   */
-                    /*
-                    }
-                    else
-                    {
-                        MySOAP.CurrentTransactionEvent.AddChildEvent("Generating IAT Encryption Data");
-                        dataKey = new CPartiallyEncryptedRSAKey(CPartiallyEncryptedRSAKey.EKeyType.Data);
-                        dataKey.Generate(DataPassword);
-                        adminKey = new CPartiallyEncryptedRSAKey(CPartiallyEncryptedRSAKey.EKeyType.Admin);
-                        adminKey.Generate(AdminPassword);
-                    }
-                    SetStatusMessage(Properties.Resources.sUnpackingPackageFileMsg);
-                    ResetProgress();
-                    ServerContext = ServerURL.Substring(0, ServerURL.IndexOf("/IATServer") + "/IATServer".Length);
-                    ProcessPackageFile(clientID);
-                    ConfigFileData = new MemoryStream();
-                    XmlWriter xmlWriter = new XmlTextWriter(ConfigFileData, Encoding.Unicode);
-                    ConfigFile.WriteXml(xmlWriter);
-                    xmlWriter.Flush();
-                    SchemalessIATData = GenerateSchemalessXML(ConfigFile);
-                    IATManifest = GenerateFileManifest();
-                    MySOAP.CurrentTransactionEvent.AddChildEvent("Sending IAT File Manifest");
-                    MySOAP.CallSOAP(ServerURL, Convert.ToInt32(Properties.Resources.sDataProviderPort), MySOAP.ESoapAction.InitiateIATDeployment, IATManifest, inTrans);
-                    if (inTrans.Transaction == TransactionRequest.ETransaction.TransactionFail)
-                    {
-                        ERegisterIATResult regIATResult = (ERegisterIATResult)Enum.Parse(typeof(ERegisterIATResult), inTrans.StringValue);
-                        if (regIATResult == ERegisterIATResult.InsufficientDiskSpace)
-                        {
-                            OperationFailed("Insufficient Disk Space", "You do not have enough disk space alotted to your account to upload this IAT.  If you wish to more or have questions regarding this, please contact us at admin@iatsoftware.net");
-                            return;
-                        }
-                        else if (regIATResult == ERegisterIATResult.InsufficientIATs)
-                        {
-                            OperationFailed("Insufficient IATs", "You have already uploaded as many IATs as permitted by your alotted quota.  If you wish to increase your quoata or have questions regarding this, please contact us at admin@iatsoftware.net");
-                            return;
-                        }
-                        else if (regIATResult == ERegisterIATResult.DatabaseError)
-                        {
-                            throw new IATUploadException("Database Error", MySOAP.TerminateTransaction("The IAT server encountered an error while attempting to register your IAT.  If this problem persists, please contact us at admin@iatsoftware.net."));
-                        }
-                    }
-                    if (!bIATExists)
-                    {
-                        MySOAP.CurrentTransactionEvent.AddChildEvent("Recording IAT Encryption Data");
-                        dataKey = new CPartiallyEncryptedRSAKey(CPartiallyEncryptedRSAKey.EKeyType.Data);
-                        dataKey.Generate(MainForm.DataRetrievalPassword);
-                        adminKey = new CPartiallyEncryptedRSAKey(CPartiallyEncryptedRSAKey.EKeyType.Admin);
-                        adminKey.Generate(MainForm.AdminPassword);
-                        CRSAKeyPair keyPair = new CRSAKeyPair(dataKey, adminKey);
-                        MySOAP.CallSOAP(Properties.Resources.sDataProviderServlet, Convert.ToInt32(Properties.Resources.sDataProviderPort), MySOAP.ESoapAction.RecordEncryptionKey, keyPair, inTrans);
-                        if (inTrans.Transaction != TransactionRequest.ETransaction.TransactionSuccess)
-                            throw new IATUploadException("Server Error", MySOAP.TerminateTransaction("An error occurred while attempting to register your IAT encryption key."));
-                    }
-                    /*
-                else
-                {
-                    MySOAP.CurrentTransactionEvent.AddChildEvent("
-                    trans.Transaction = TransactionRequest.ETransaction.RequestRSAKey;
-                    trans.StringValue = CPartiallyEncryptedRSAKey.EKeyType.Data.ToString();
-                    trans.IsLastTransaction = false;
-                    dataKey = new CPartiallyEncryptedRSAKey(CPartiallyEncryptedRSAKey.EKeyType.Data);
-                    MySOAP.CallSOAP(Properties.Resources.sDataProviderServlet, MySOAP.ESoapAction.RequestRSAKey, trans, dataKey);
-                    adminKey = new CPartiallyEncryptedRSAKey(CPartiallyEncryptedRSAKey.EKeyType.Admin);
-                    trans.StringValue = CPartiallyEncryptedRSAKey.EKeyType.Admin.ToString();
-                    trans.IsLastTransaction = false;
-                    MySOAP.CallSOAP(Properties.Resources.sDataProviderServlet, MySOAP.ESoapAction.RequestRSAKey, trans, adminKey);
-                }*//*
-                    trans.Transaction = TransactionRequest.ETransaction.DoIATDeploy;
-                    MySOAP.CallSOAP(Properties.Resources.sDataProviderServlet, Convert.ToInt32(Properties.Resources.sDataProviderPort), MySOAP.ESoapAction.DoIATDeploy, trans, inTrans);
-                    if (inTrans.Transaction != TransactionRequest.ETransaction.RequestTransmission)
-                        throw new IATUploadException("Server Error", MySOAP.TerminateTransaction("The IAT server encountered an error while preparing to receive your IAT.  If this problem persists, please contact us at admin@iatsoftware.net."));
-                    CPacketTransmission.ETransmissionResult transResult = SendManifest();
-                    if (transResult == CPacketTransmission.ETransmissionResult.Fail)
-                        throw new IATUploadException("Server Error", MySOAP.TerminateTransaction("An error occurred while uploading your IAT.  This could be due to connectivity issues or might be an error on the server end."));
-                    ResetProgress();
-                    CDeploymentProgressUpdate.EStage deploymentStage = CDeploymentProgressUpdate.EStage.unset;
-                    trans.Transaction = TransactionRequest.ETransaction.QueryDeploymentProgress;
-                    CDeploymentProgressUpdate update = new CDeploymentProgressUpdate();
-                    int nDeploymentStage = -1;
-                    MySOAP.BeginNewTransactionEvent("Awaiting Deployment Confirmation");
-                    TransactionEvent tEvent = null;
-                    while ((deploymentStage != CDeploymentProgressUpdate.EStage.done) && (deploymentStage != CDeploymentProgressUpdate.EStage.timerExpired)
-                        || (deploymentStage != CDeploymentProgressUpdate.EStage.failed))
-                    {
-                        MySOAP.CallSOAP(Properties.Resources.sDataProviderServlet, Convert.ToInt32(Properties.Resources.sDataProviderPort), MySOAP.ESoapAction.QueryDeploymentProgress, trans, update);
-                        if (nDeploymentStage != update.StageNum)
-                        {
-                            if (tEvent != null)
-                                if (tEvent.MaxProgressValue != -1)
-                                    tEvent.ProgressValue = tEvent.MaxProgressValue;
-                            tEvent = MySOAP.CurrentTransactionEvent.AddChildEvent(update.StatusMessage);
-                            SetStatusMessage(update.StatusMessage);
-                            if (update.ProgressMax > 0)
-                            {
-                                tEvent.MaxProgressValue = update.ProgressMax;
-                                tEvent.ProgressValue = update.CurrentProgress;
-                                SetProgressRange(0, update.ProgressMax);
-                                SetProgressValue(update.CurrentProgress);
-                            }
-                            if (update.ActiveItem == String.Empty)
-                                SetStatusMessage(update.StatusMessage);
-                        }
-                        else if (update.ProgressMax != -1)
-                        {
-                            tEvent.ProgressValue = update.CurrentProgress;
-                            SetProgressValue(update.CurrentProgress);
-                        }
-                        deploymentStage = update.Stage;
-                    }
-                    trans.Transaction = TransactionRequest.ETransaction.VerifyIATDeployment;
-                    trans.IATName = MainForm.IATName;
-                    MySOAP.CallSOAP(Properties.Resources.sDataProviderServlet, Convert.ToInt32(Properties.Resources.sDataProviderPort), MySOAP.ESoapAction.VerifyIATDeployment, trans, inTrans);
-                    if (inTrans.Transaction != TransactionRequest.ETransaction.TransactionSuccess)
-                    {
-                        EDeployResult deployResult = (EDeployResult)Enum.Parse(typeof(EDeployResult), inTrans.StringValue);
-                        String deployErrorMessage;
-                        switch (deployResult)
-                        {
-                            case EDeployResult.backupLost:
-                                deployErrorMessage = "Prior to deploying your IAT, the server made a backup of the existing IAT. The result set generated by your new IAT was of a different format " +
-                                    "from the result set of the existing IAT. Incongruous result set formats cannot coexist in the database for the same IAT so your attempt to overwrite the existing " +
-                                    "failed. Furthermore, the server failed to restore the backup it created of your existing IAT. You may redeploy your original IAT without error. If you do not have " +
-                                    "a copy of your original IAT, please contact us at admin@iatsoftware.net so we can attempt to restore your original IAT.";
-                                break;
-
-                            case EDeployResult.cannotBackup:
-                                deployErrorMessage = "Prior to attempting the redeployment of your IAT, the server attempted to backup the existing IAT. This backup failed. It is unlikely that your " +
-                                    "original IAT was lost. However, you should ensure that it still administers correctly. If you encounter an error, please contact us at admin@iatsoftware.net so can " +
-                                    "attempt to restore your original IAT. It is unwise to attempt to redeploy your original IAT if you encounter an administration error.";
-                                break;
-
-                            case EDeployResult.databaseError:
-                                deployErrorMessage = "A database error occurred on the server. If this problem persists, please contact us at admin@iatsoftware.net.";
-                                break;
-
-                            case EDeployResult.deploymentTimerExpired:
-                                deployErrorMessage = "A long period of inactivity occured during IAT deployment and the server presummed deployment had failed. If this was due to internet connectivity issues " +
-                                    "during deployment, please try again. If this problem persists, please contact us at admin@iatsoftware.net.";
-                                break;
-
-                            case EDeployResult.fileDeploymentError:
-                                deployErrorMessage = "An error occurred either in the the transfer of your IAT package or the server was unable to process and store your IAT. This could be due " +
-                                    "to a corrupt package file. Please repackage your IAT and reattempt deployment. If this does not resolve the issue, please contact us at admin@iatsoftware.net.";
-                                break;
-
-                            case EDeployResult.genericError:
-                                deployErrorMessage = "The server failed to deploy your IAT. Please try again. If this problem persists, please contact us at admin@iatsoftware.net.";
-                                break;
-
-                            case EDeployResult.incompatibleResultDescriptors:
-                                deployErrorMessage = "The result set format that would be generated by your new IAT is not compatible with the result set format of the existing IAT. The server " +
-                                    "would be unable to continue recording result data atop the result data already collected and so redeployment was rejected. If you have deleted your result data or if no result data has been collected yet, please delete your IAT as well " +
-                                    "and try again.";
-                                break;
-
-                            case EDeployResult.transformError:
-                                deployErrorMessage = "The server encountered an error while processing your IAT. This could be due " +
-                                    "to a corrupt package file. Please repackage your IAT and reattempt deployment. If this does not resolve the issue, please contact us at admin@iatsoftware.net.";
-                                break;
-
-                            default:
-                                deployErrorMessage = "A corrupt transmission was recieved from the server while attempting to verify the deployment of your IAT. Please check to see if your IAT " +
-                                    "administers correctly by copying the following URL into the address bar of your web browser.  Please either bookmark this URL or copy and paste it into a file " +
-                                    "as it is the location of your IAT on the Internet:\r\n" + ServerURL.Substring(0, ServerURL.LastIndexOf("/") + 1) + String.Format(Properties.Resources.sIATServletURLPart, ConfigFile.Name, clientID) +
-                                    "\r\nIf your IAT does not administer correctly, attempt redeployment. If this does not resolve the issue, please contact us at admin@iatsoftware.net.";
-                                break;
-
-                        }
-                        throw new IATUploadException("IAT Deployment Error", MySOAP.TerminateTransaction(deployErrorMessage));
-                    }
-                    MySOAP.EndTransaction();
-                }
-                catch (UploadAbortedException)
-                {
-                    MySOAP.TerminateConnection(Properties.Resources.sDataProviderServlet);
-                }
-                catch (TimeoutException ex)
-                {
-                    throw new IATUploadException(ex.Message, "Server Not Responsive", ex);
-                }
-                catch (WebException ex)
-                {
-                    throw new IATUploadException(ex.Message, "Server Error", ex);
-                }
-                catch (CXmlSerializationException ex)
-                {
-                    throw new IATUploadException(ex.Message, "Server Error", ex);
-                }
-            }
-            catch (CXmlSerializationException ex)
-            {
-                ErrorReportDisplay errorDisplay = new ErrorReportDisplay(ex.Message, ex);
-                ShowForm(errorDisplay);
-            }
-        }
-
-        public void DeployIAT()
-        {
-            _AbortFlag = false;
-            ThreadStart threadStart = new ThreadStart(run);
-            Thread thread = new Thread(threadStart);
-            MainForm.BeginProgressBarUse(OnAbort, IATConfigMainForm.EProgressBarUses.Upload);
-            thread.Start();
-        }
+/*
+}
+else
+{
+    MySOAP.CurrentTransactionEvent.AddChildEvent("Generating IAT Encryption Data");
+    dataKey = new CPartiallyEncryptedRSAKey(CPartiallyEncryptedRSAKey.EKeyType.Data);
+    dataKey.Generate(DataPassword);
+    adminKey = new CPartiallyEncryptedRSAKey(CPartiallyEncryptedRSAKey.EKeyType.Admin);
+    adminKey.Generate(AdminPassword);
+}
+SetStatusMessage(Properties.Resources.sUnpackingPackageFileMsg);
+ResetProgress();
+ServerContext = ServerURL.Substring(0, ServerURL.IndexOf("/IATServer") + "/IATServer".Length);
+ProcessPackageFile(clientID);
+ConfigFileData = new MemoryStream();
+XmlWriter xmlWriter = new XmlTextWriter(ConfigFileData, Encoding.Unicode);
+ConfigFile.WriteXml(xmlWriter);
+xmlWriter.Flush();
+SchemalessIATData = GenerateSchemalessXML(ConfigFile);
+IATManifest = GenerateFileManifest();
+MySOAP.CurrentTransactionEvent.AddChildEvent("Sending IAT File Manifest");
+MySOAP.CallSOAP(ServerURL, Convert.ToInt32(Properties.Resources.sDataProviderPort), MySOAP.ESoapAction.InitiateIATDeployment, IATManifest, inTrans);
+if (inTrans.Transaction == TransactionRequest.ETransaction.TransactionFail)
+{
+    ERegisterIATResult regIATResult = (ERegisterIATResult)Enum.Parse(typeof(ERegisterIATResult), inTrans.StringValue);
+    if (regIATResult == ERegisterIATResult.InsufficientDiskSpace)
+    {
+        OperationFailed("Insufficient Disk Space", "You do not have enough disk space alotted to your account to upload this IAT.  If you wish to more or have questions regarding this, please contact us at admin@iatsoftware.net");
+        return;
     }
+    else if (regIATResult == ERegisterIATResult.InsufficientIATs)
+    {
+        OperationFailed("Insufficient IATs", "You have already uploaded as many IATs as permitted by your alotted quota.  If you wish to increase your quoata or have questions regarding this, please contact us at admin@iatsoftware.net");
+        return;
+    }
+    else if (regIATResult == ERegisterIATResult.DatabaseError)
+    {
+        throw new IATUploadException("Database Error", MySOAP.TerminateTransaction("The IAT server encountered an error while attempting to register your IAT.  If this problem persists, please contact us at admin@iatsoftware.net."));
+    }
+}
+if (!bIATExists)
+{
+    MySOAP.CurrentTransactionEvent.AddChildEvent("Recording IAT Encryption Data");
+    dataKey = new CPartiallyEncryptedRSAKey(CPartiallyEncryptedRSAKey.EKeyType.Data);
+    dataKey.Generate(MainForm.DataRetrievalPassword);
+    adminKey = new CPartiallyEncryptedRSAKey(CPartiallyEncryptedRSAKey.EKeyType.Admin);
+    adminKey.Generate(MainForm.AdminPassword);
+    CRSAKeyPair keyPair = new CRSAKeyPair(dataKey, adminKey);
+    MySOAP.CallSOAP(Properties.Resources.sDataProviderServlet, Convert.ToInt32(Properties.Resources.sDataProviderPort), MySOAP.ESoapAction.RecordEncryptionKey, keyPair, inTrans);
+    if (inTrans.Transaction != TransactionRequest.ETransaction.TransactionSuccess)
+        throw new IATUploadException("Server Error", MySOAP.TerminateTransaction("An error occurred while attempting to register your IAT encryption key."));
+}
+/*
+else
+{
+MySOAP.CurrentTransactionEvent.AddChildEvent("
+trans.Transaction = TransactionRequest.ETransaction.RequestRSAKey;
+trans.StringValue = CPartiallyEncryptedRSAKey.EKeyType.Data.ToString();
+trans.IsLastTransaction = false;
+dataKey = new CPartiallyEncryptedRSAKey(CPartiallyEncryptedRSAKey.EKeyType.Data);
+MySOAP.CallSOAP(Properties.Resources.sDataProviderServlet, MySOAP.ESoapAction.RequestRSAKey, trans, dataKey);
+adminKey = new CPartiallyEncryptedRSAKey(CPartiallyEncryptedRSAKey.EKeyType.Admin);
+trans.StringValue = CPartiallyEncryptedRSAKey.EKeyType.Admin.ToString();
+trans.IsLastTransaction = false;
+MySOAP.CallSOAP(Properties.Resources.sDataProviderServlet, MySOAP.ESoapAction.RequestRSAKey, trans, adminKey);
+}*//*
+    trans.Transaction = TransactionRequest.ETransaction.DoIATDeploy;
+    MySOAP.CallSOAP(Properties.Resources.sDataProviderServlet, Convert.ToInt32(Properties.Resources.sDataProviderPort), MySOAP.ESoapAction.DoIATDeploy, trans, inTrans);
+    if (inTrans.Transaction != TransactionRequest.ETransaction.RequestTransmission)
+        throw new IATUploadException("Server Error", MySOAP.TerminateTransaction("The IAT server encountered an error while preparing to receive your IAT.  If this problem persists, please contact us at admin@iatsoftware.net."));
+    CPacketTransmission.ETransmissionResult transResult = SendManifest();
+    if (transResult == CPacketTransmission.ETransmissionResult.Fail)
+        throw new IATUploadException("Server Error", MySOAP.TerminateTransaction("An error occurred while uploading your IAT.  This could be due to connectivity issues or might be an error on the server end."));
+    ResetProgress();
+    CDeploymentProgressUpdate.EStage deploymentStage = CDeploymentProgressUpdate.EStage.unset;
+    trans.Transaction = TransactionRequest.ETransaction.QueryDeploymentProgress;
+    CDeploymentProgressUpdate update = new CDeploymentProgressUpdate();
+    int nDeploymentStage = -1;
+    MySOAP.BeginNewTransactionEvent("Awaiting Deployment Confirmation");
+    TransactionEvent tEvent = null;
+    while ((deploymentStage != CDeploymentProgressUpdate.EStage.done) && (deploymentStage != CDeploymentProgressUpdate.EStage.timerExpired)
+        || (deploymentStage != CDeploymentProgressUpdate.EStage.failed))
+    {
+        MySOAP.CallSOAP(Properties.Resources.sDataProviderServlet, Convert.ToInt32(Properties.Resources.sDataProviderPort), MySOAP.ESoapAction.QueryDeploymentProgress, trans, update);
+        if (nDeploymentStage != update.StageNum)
+        {
+            if (tEvent != null)
+                if (tEvent.MaxProgressValue != -1)
+                    tEvent.ProgressValue = tEvent.MaxProgressValue;
+            tEvent = MySOAP.CurrentTransactionEvent.AddChildEvent(update.StatusMessage);
+            SetStatusMessage(update.StatusMessage);
+            if (update.ProgressMax > 0)
+            {
+                tEvent.MaxProgressValue = update.ProgressMax;
+                tEvent.ProgressValue = update.CurrentProgress;
+                SetProgressRange(0, update.ProgressMax);
+                SetProgressValue(update.CurrentProgress);
+            }
+            if (update.ActiveItem == String.Empty)
+                SetStatusMessage(update.StatusMessage);
+        }
+        else if (update.ProgressMax != -1)
+        {
+            tEvent.ProgressValue = update.CurrentProgress;
+            SetProgressValue(update.CurrentProgress);
+        }
+        deploymentStage = update.Stage;
+    }
+    trans.Transaction = TransactionRequest.ETransaction.VerifyIATDeployment;
+    trans.IATName = MainForm.IATName;
+    MySOAP.CallSOAP(Properties.Resources.sDataProviderServlet, Convert.ToInt32(Properties.Resources.sDataProviderPort), MySOAP.ESoapAction.VerifyIATDeployment, trans, inTrans);
+    if (inTrans.Transaction != TransactionRequest.ETransaction.TransactionSuccess)
+    {
+        EDeployResult deployResult = (EDeployResult)Enum.Parse(typeof(EDeployResult), inTrans.StringValue);
+        String deployErrorMessage;
+        switch (deployResult)
+        {
+            case EDeployResult.backupLost:
+                deployErrorMessage = "Prior to deploying your IAT, the server made a backup of the existing IAT. The result set generated by your new IAT was of a different format " +
+                    "from the result set of the existing IAT. Incongruous result set formats cannot coexist in the database for the same IAT so your attempt to overwrite the existing " +
+                    "failed. Furthermore, the server failed to restore the backup it created of your existing IAT. You may redeploy your original IAT without error. If you do not have " +
+                    "a copy of your original IAT, please contact us at admin@iatsoftware.net so we can attempt to restore your original IAT.";
+                break;
+
+            case EDeployResult.cannotBackup:
+                deployErrorMessage = "Prior to attempting the redeployment of your IAT, the server attempted to backup the existing IAT. This backup failed. It is unlikely that your " +
+                    "original IAT was lost. However, you should ensure that it still administers correctly. If you encounter an error, please contact us at admin@iatsoftware.net so can " +
+                    "attempt to restore your original IAT. It is unwise to attempt to redeploy your original IAT if you encounter an administration error.";
+                break;
+
+            case EDeployResult.databaseError:
+                deployErrorMessage = "A database error occurred on the server. If this problem persists, please contact us at admin@iatsoftware.net.";
+                break;
+
+            case EDeployResult.deploymentTimerExpired:
+                deployErrorMessage = "A long period of inactivity occured during IAT deployment and the server presummed deployment had failed. If this was due to internet connectivity issues " +
+                    "during deployment, please try again. If this problem persists, please contact us at admin@iatsoftware.net.";
+                break;
+
+            case EDeployResult.fileDeploymentError:
+                deployErrorMessage = "An error occurred either in the the transfer of your IAT package or the server was unable to process and store your IAT. This could be due " +
+                    "to a corrupt package file. Please repackage your IAT and reattempt deployment. If this does not resolve the issue, please contact us at admin@iatsoftware.net.";
+                break;
+
+            case EDeployResult.genericError:
+                deployErrorMessage = "The server failed to deploy your IAT. Please try again. If this problem persists, please contact us at admin@iatsoftware.net.";
+                break;
+
+            case EDeployResult.incompatibleResultDescriptors:
+                deployErrorMessage = "The result set format that would be generated by your new IAT is not compatible with the result set format of the existing IAT. The server " +
+                    "would be unable to continue recording result data atop the result data already collected and so redeployment was rejected. If you have deleted your result data or if no result data has been collected yet, please delete your IAT as well " +
+                    "and try again.";
+                break;
+
+            case EDeployResult.transformError:
+                deployErrorMessage = "The server encountered an error while processing your IAT. This could be due " +
+                    "to a corrupt package file. Please repackage your IAT and reattempt deployment. If this does not resolve the issue, please contact us at admin@iatsoftware.net.";
+                break;
+
+            default:
+                deployErrorMessage = "A corrupt transmission was recieved from the server while attempting to verify the deployment of your IAT. Please check to see if your IAT " +
+                    "administers correctly by copying the following URL into the address bar of your web browser.  Please either bookmark this URL or copy and paste it into a file " +
+                    "as it is the location of your IAT on the Internet:\r\n" + ServerURL.Substring(0, ServerURL.LastIndexOf("/") + 1) + String.Format(Properties.Resources.sIATServletURLPart, ConfigFile.Name, clientID) +
+                    "\r\nIf your IAT does not administer correctly, attempt redeployment. If this does not resolve the issue, please contact us at admin@iatsoftware.net.";
+                break;
+
+        }
+        throw new IATUploadException("IAT Deployment Error", MySOAP.TerminateTransaction(deployErrorMessage));
+    }
+    MySOAP.EndTransaction();
+}
+catch (UploadAbortedException)
+{
+    MySOAP.TerminateConnection(Properties.Resources.sDataProviderServlet);
+}
+catch (TimeoutException ex)
+{
+    throw new IATUploadException(ex.Message, "Server Not Responsive", ex);
+}
+catch (WebException ex)
+{
+    throw new IATUploadException(ex.Message, "Server Error", ex);
+}
+catch (CXmlSerializationException ex)
+{
+    throw new IATUploadException(ex.Message, "Server Error", ex);
+}
+}
+catch (CXmlSerializationException ex)
+{
+ErrorReportDisplay errorDisplay = new ErrorReportDisplay(ex.Message, ex);
+ShowForm(errorDisplay);
+}
+}
+
+public void DeployIAT()
+{
+_AbortFlag = false;
+ThreadStart threadStart = new ThreadStart(run);
+Thread thread = new Thread(threadStart);
+MainForm.BeginProgressBarUse(OnAbort, IATConfigMainForm.EProgressBarUses.Upload);
+thread.Start();
+}
+}
 
 }
 */

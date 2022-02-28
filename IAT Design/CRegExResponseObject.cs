@@ -1,11 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Windows.Forms;
+﻿using IATClient.ResultData;
+using System;
 using System.Drawing;
 using System.Text.RegularExpressions;
-using IATClient.ResultData;
+using System.Windows.Forms;
 
 namespace IATClient
 {
@@ -15,7 +12,7 @@ namespace IATClient
         private Label AnswerRegExLabel = null, SearchRegExLabel = null;
         private Func<String> GetRegEx = null;
         private String _Answer = String.Empty, _SearchVal = String.Empty, _CorrectAnswer = String.Empty;
-        
+
         /*
         public CRegExResponseObject DisplayedResponse
         {
@@ -165,7 +162,7 @@ namespace IATClient
                 }
                 else
                 {
-                    AnswerBox.Text = String.Empty; 
+                    AnswerBox.Text = String.Empty;
                 }
             }
         }

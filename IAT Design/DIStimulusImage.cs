@@ -1,14 +1,7 @@
 ﻿using System;
-using System.Collections.Concurrent;
-using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
-using System.IO.Packaging;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
 using System.Xml.Linq;
-using System.Windows.Forms;
 
 namespace IATClient
 {
@@ -82,7 +75,7 @@ namespace IATClient
         {
         }
 
-        public DIStimulusImage(Images.IImage img) : base(img) 
+        public DIStimulusImage(Images.IImage img) : base(img)
         {
             this.IImage.CreateThumbnail();
         }

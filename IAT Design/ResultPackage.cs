@@ -1,12 +1,10 @@
-﻿using System;
+﻿using IATClient.ResultData;
+using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Text;
 using System.Xml;
 using System.Xml.Schema;
 using System.Xml.Serialization;
-using System.Security.Cryptography;
-using IATClient.ResultData;
 
 namespace IATClient
 {

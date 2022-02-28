@@ -25,7 +25,8 @@ namespace Launcher
         private int downloadFrame = 0;
         public DownloadSplash()
         {
-            InitializeComponent();
+          
+          //  InitializeComponent();
         }
 
         public new void Show()

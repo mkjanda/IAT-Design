@@ -1,7 +1,7 @@
 ﻿using System;
-using System.Windows.Forms;
-using System.Text.RegularExpressions;
 using System.Linq;
+using System.Text.RegularExpressions;
+using System.Windows.Forms;
 
 namespace IATClient
 {
@@ -20,7 +20,8 @@ namespace IATClient
             SubmitButton.Click += (sender, args) =>
             {
                 Regex emailRegex = new Regex(@".+@.+\..+"), productKeyRegex = new Regex(@"[A-Z0-9]{20}");
-                if (!emailRegex.IsMatch(EmailBox.Text.Trim()) && (EmailBox.Text.Trim() != String.Empty)) {
+                if (!emailRegex.IsMatch(EmailBox.Text.Trim()) && (EmailBox.Text.Trim() != String.Empty))
+                {
                     System.Windows.Forms.MessageBox.Show("Invalid Email", "");
                     return;
                 }

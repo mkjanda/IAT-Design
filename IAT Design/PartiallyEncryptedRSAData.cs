@@ -1,11 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
+using System.IO;
+using System.Security.Cryptography;
 using System.Xml;
 using System.Xml.Linq;
 using System.Xml.Schema;
-using System.Security.Cryptography;
-using System.IO;
 
 namespace IATClient
 {
@@ -26,7 +24,7 @@ namespace IATClient
             }
         }
 
-        public static readonly byte[] IV = new byte[]{ (byte)0xFA, (byte)0x64, (byte)0x92, (byte)0x21, (byte)0x4A, (byte)0x74, (byte)0x41, (byte)0xE9 };
+        public static readonly byte[] IV = new byte[] { (byte)0xFA, (byte)0x64, (byte)0x92, (byte)0x21, (byte)0x4A, (byte)0x74, (byte)0x41, (byte)0xE9 };
         public PartiallyEncryptedRSAData(EKeyType keyType)
         {
             KeyType = keyType;
@@ -76,7 +74,7 @@ namespace IATClient
             for (int ctr = 0; ctr < 12; ctr++)
                 productNums[ctr] = 0;
             int ndx = 0;
- 
+
 
             for (int ctr = 0; ctr < productHex.Length; ctr++)
             {
@@ -131,40 +129,40 @@ namespace IATClient
         {
             if (_Decrypted)
                 return;
-                byte[] desCipher = stringToDESCipherKey(password);
-                MemoryStream memStream = new MemoryStream(Convert.FromBase64String(EncryptedKey));
-                DESCryptoServiceProvider desCrypt = new DESCryptoServiceProvider();
-                desCrypt.Mode = CipherMode.CBC;
-                desCrypt.Padding = PaddingMode.ISO10126;
-                MemoryStream keyStream = new MemoryStream();
-                CryptoStream cStream = new CryptoStream(keyStream, desCrypt.CreateDecryptor(desCipher, IV), CryptoStreamMode.Write);
-                memStream.Seek(0, SeekOrigin.Begin);
-                cStream.Write(memStream.ToArray(), 0, (int)memStream.Length);
-                cStream.FlushFinalBlock();
-                keyStream.Seek(0, SeekOrigin.Begin);
-                BinaryReader bReader = new BinaryReader(keyStream);
-                int len = bReader.ReadInt32();
-                N = bReader.ReadBytes(len);
-                len = bReader.ReadInt32();
-                E = bReader.ReadBytes(len);
-                len = bReader.ReadInt32();
-                D = bReader.ReadBytes(len);
-                len = bReader.ReadInt32();
-                P = bReader.ReadBytes(len);
-                len = bReader.ReadInt32();
-                Q = bReader.ReadBytes(len);
-                len = bReader.ReadInt32();
-                DP = bReader.ReadBytes(len);
-                len = bReader.ReadInt32();
-                DQ = bReader.ReadBytes(len);
-                len = bReader.ReadInt32();
-                InverseQ = bReader.ReadBytes(len);
-                _Decrypted = true;
+            byte[] desCipher = stringToDESCipherKey(password);
+            MemoryStream memStream = new MemoryStream(Convert.FromBase64String(EncryptedKey));
+            DESCryptoServiceProvider desCrypt = new DESCryptoServiceProvider();
+            desCrypt.Mode = CipherMode.CBC;
+            desCrypt.Padding = PaddingMode.ISO10126;
+            MemoryStream keyStream = new MemoryStream();
+            CryptoStream cStream = new CryptoStream(keyStream, desCrypt.CreateDecryptor(desCipher, IV), CryptoStreamMode.Write);
+            memStream.Seek(0, SeekOrigin.Begin);
+            cStream.Write(memStream.ToArray(), 0, (int)memStream.Length);
+            cStream.FlushFinalBlock();
+            keyStream.Seek(0, SeekOrigin.Begin);
+            BinaryReader bReader = new BinaryReader(keyStream);
+            int len = bReader.ReadInt32();
+            N = bReader.ReadBytes(len);
+            len = bReader.ReadInt32();
+            E = bReader.ReadBytes(len);
+            len = bReader.ReadInt32();
+            D = bReader.ReadBytes(len);
+            len = bReader.ReadInt32();
+            P = bReader.ReadBytes(len);
+            len = bReader.ReadInt32();
+            Q = bReader.ReadBytes(len);
+            len = bReader.ReadInt32();
+            DP = bReader.ReadBytes(len);
+            len = bReader.ReadInt32();
+            DQ = bReader.ReadBytes(len);
+            len = bReader.ReadInt32();
+            InverseQ = bReader.ReadBytes(len);
+            _Decrypted = true;
         }
 
         public void Generate(String password)
         {
-            byte []desCipher = stringToDESCipherKey(password);
+            byte[] desCipher = stringToDESCipherKey(password);
             RSACryptoServiceProvider rsaCrypt = new RSACryptoServiceProvider();
             RSAParameters rsaParams = rsaCrypt.ExportParameters(true);
             N = rsaParams.Modulus;

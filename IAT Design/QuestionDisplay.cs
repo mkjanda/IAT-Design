@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using System.Drawing;
-using System.Windows.Forms;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace IATClient
 {
@@ -251,13 +251,15 @@ namespace IATClient
             };
             MouseMove += (sender, args) =>
             {
-                if (FormatRect.Contains(args.Location)) {
+                if (FormatRect.Contains(args.Location))
+                {
                     if (bFormatHover == false)
                     {
                         bFormatHover = true;
                         Invalidate();
                     }
-                } else if (bFormatHover == true)
+                }
+                else if (bFormatHover == true)
                 {
                     bFormatHover = false;
                     Invalidate();
@@ -266,7 +268,8 @@ namespace IATClient
             MouseClick += (sender, args) =>
             {
                 ((SurveyDisplay)Parent)?.SelectionChanged(this, ModifierKeys);
-                if (OptionalRect.Contains(args.Location)) {
+                if (OptionalRect.Contains(args.Location))
+                {
                     bOptional = !bOptional;
                 }
                 else if (FormatRect.Contains(args.Location))
@@ -323,7 +326,8 @@ namespace IATClient
                     CIAT.Dispatcher.AddListener<ISurveyItemFormatChanged>(SetSurveyItemFormat);
                 }
             };
-            QuestionEdit.TextChanged += (sender, args) => {
+            QuestionEdit.TextChanged += (sender, args) =>
+            {
                 if (IsHandleCreated)
                 {
                     RecalcSize(false);
@@ -357,7 +361,7 @@ namespace IATClient
             CollapseButton.BackColor = this.BackColor;
             CollapseButton.Image = Properties.Resources.CollapseArrow;
             CollapseButton.Size = Properties.Resources.CollapseArrow.Size + new Size(4, 4);
-            CollapseButton.Location = new Point(ExpandButton.Location.X - CollapseButton.Size.Width + 10 , Padding.Top);
+            CollapseButton.Location = new Point(ExpandButton.Location.X - CollapseButton.Size.Width + 10, Padding.Top);
             CollapseButton.Click += (sender, args) =>
             {
                 ResponseEdit.IsCollapsed = true;
@@ -466,18 +470,18 @@ namespace IATClient
             int nLines = (int)Math.Round((double)szQ.Height / LineHeight);
             if (nLines == 0)
                 nLines = 1;
-//            if ((nLines != QuestionLines) || force)
-  //          {
-                bool resize = (nLines != QuestionLines);
-                QuestionLines = nLines;
+            //            if ((nLines != QuestionLines) || force)
+            //          {
+            bool resize = (nLines != QuestionLines);
+            QuestionLines = nLines;
             //                QuestionEdit.Height = szQ.Height; 
             QuestionEdit.Height = TextRenderer.MeasureText(QuestionEdit.Text, DisplayFont, new Size(QuestionEdit.Width, 0),
                 TextFormatFlags.WordBreak | TextFormatFlags.TextBoxControl).Height + QuestionEditPadding.Vertical;
 
 
-         //       if (resize)
-                  //   RecalcSize(false);
-    //        }
+            //       if (resize)
+            //   RecalcSize(false);
+            //        }
         }
 
         protected int RecalculatingSize = 0;
@@ -536,23 +540,23 @@ namespace IATClient
             Brush br;
             Pen pen;
             System.Drawing.Color rectColor, outlineColor;
-                outlineColor = Color.Chartreuse;
+            outlineColor = Color.Chartreuse;
             Brush backBr = new SolidBrush(this.BackColor);
             br = new SolidBrush(outlineColor);
             pen = new Pen(br);
             e.Graphics.DrawRectangle(pen, new Rectangle(0, Padding.Top + CollapseButton.Size.Height >> 1, this.Size.Width - 1, this.Size.Height - Padding.Top - CollapseButton.Size.Height));
-                if (bFormatHover || bFormatting)
-                    e.Graphics.FillRectangle(Brushes.CornflowerBlue, FormatRect);
-                else
-                    e.Graphics.FillRectangle(Brushes.White, FormatRect);
-                e.Graphics.DrawRectangle(pen, FormatRect);
-                e.Graphics.DrawString("Format Text", System.Drawing.SystemFonts.DialogFont, Brushes.Black, new PointF(FormatRect.Left + 5, FormatRect.Top + 2));
-                if (!bOptional)
-                    e.Graphics.FillRectangle(backBr, OptionalRect);
-                else
-                    e.Graphics.FillRectangle(Brushes.CornflowerBlue, OptionalRect);
-                e.Graphics.DrawRectangle(pen, OptionalRect);
-                e.Graphics.DrawString("Optional", System.Drawing.SystemFonts.DialogFont, Brushes.Black, new PointF(OptionalRect.Left + 5, OptionalRect.Top + 2));
+            if (bFormatHover || bFormatting)
+                e.Graphics.FillRectangle(Brushes.CornflowerBlue, FormatRect);
+            else
+                e.Graphics.FillRectangle(Brushes.White, FormatRect);
+            e.Graphics.DrawRectangle(pen, FormatRect);
+            e.Graphics.DrawString("Format Text", System.Drawing.SystemFonts.DialogFont, Brushes.Black, new PointF(FormatRect.Left + 5, FormatRect.Top + 2));
+            if (!bOptional)
+                e.Graphics.FillRectangle(backBr, OptionalRect);
+            else
+                e.Graphics.FillRectangle(Brushes.CornflowerBlue, OptionalRect);
+            e.Graphics.DrawRectangle(pen, OptionalRect);
+            e.Graphics.DrawString("Optional", System.Drawing.SystemFonts.DialogFont, Brushes.Black, new PointF(OptionalRect.Left + 5, OptionalRect.Top + 2));
             if (bOptional)
             {
                 e.Graphics.FillRectangle(Brushes.CornflowerBlue, OptionalRect);

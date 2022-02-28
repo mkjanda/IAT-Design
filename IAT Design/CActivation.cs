@@ -1,20 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using IATClient.Messages;
 using Microsoft.Win32;
-using System.Xml.Serialization;
-using System.Xml;
-using System.Xml.Schema;
-using System.Security.Cryptography;
+using System;
+using System.Collections.Generic;
 using System.IO;
-using System.Windows.Forms;
+using System.Linq;
+using System.Net;
+using System.Net.WebSockets;
+using System.Security.Cryptography;
+using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 using System.Xml.Linq;
-using System.Net.WebSockets;
-using System.Net;
-using IATClient.Messages;
 namespace IATClient
 {
     class LocalStorage
@@ -124,8 +121,8 @@ namespace IATClient
             {
                 if (Activation[Field.ProductKey] == null)
                     return EActivationStatus.NotActivated;
-//                if (CVersion.Compare(new CVersion(Activation[Field.Version]), new CVersion(Properties.Resources.sVersion)) != 0)
-  //                  return EActivationStatus.InconsistentVersion;
+                //                if (CVersion.Compare(new CVersion(Activation[Field.Version]), new CVersion(Properties.Resources.sVersion)) != 0)
+                //                  return EActivationStatus.InconsistentVersion;
                 if (Activation[Field.ActivationKey] != null)
                 {
                     if (IsActivatedCode(Activation[Field.ProductKey], Activation[Field.ActivationKey]))
@@ -624,7 +621,8 @@ namespace IATClient
             {
                 ActivationResult = ActivationResponse.EResult.NoActivationsRemaining;
                 TransactionFailed.Set();
-            } else if (inTrans.Transaction == TransactionRequest.ETransaction.EMailAlreadyVerified)
+            }
+            else if (inTrans.Transaction == TransactionRequest.ETransaction.EMailAlreadyVerified)
             {
                 LocalStorage.Activation[LocalStorage.Field.UserEmail] = EMail;
                 LocalStorage.Activation[LocalStorage.Field.ProductKey] = ProductKey;

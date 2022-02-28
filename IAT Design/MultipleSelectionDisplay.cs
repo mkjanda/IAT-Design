@@ -1,9 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-
+using System.Drawing;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Drawing;
 using System.Windows.Forms;
 
 namespace IATClient
@@ -70,7 +68,8 @@ namespace IATClient
                     MaxSelections.Visible = true;
                     Invalidate();
                 }
-                else if (!MaxSelections.Bounds.Contains(args.Location) && MaxSelections.Visible) {
+                else if (!MaxSelections.Bounds.Contains(args.Location) && MaxSelections.Visible)
+                {
                     MaxSelections.Visible = false;
                     Invalidate();
                 }
@@ -79,7 +78,8 @@ namespace IATClient
                     MinSelections.Visible = true;
                     Invalidate();
                 }
-                else if (!MinSelections.Bounds.Contains(args.Location) && MinSelections.Visible) {
+                else if (!MinSelections.Bounds.Contains(args.Location) && MinSelections.Visible)
+                {
                     MinSelections.Visible = false;
                     Invalidate();
                 }
@@ -94,11 +94,11 @@ namespace IATClient
             };
             MinSelections.ValueChanged += new EventHandler(MinSelections_ValueChanged);
             MaxSelections.ValueChanged += new EventHandler(MaxSelections_ValueChanged);
-         //   this.MouseMove += new MouseEventHandler(MultipleSelectionDisplay_MouseMove);
+            //   this.MouseMove += new MouseEventHandler(MultipleSelectionDisplay_MouseMove);
             Controls.Add(MinSelections);
             Controls.Add(MaxSelections);
-           // MinSelections.MouseClick += new MouseEventHandler(ResponseDisplay_MouseClick);
-           /// MaxSelections.MouseClick += new MouseEventHandler(ResponseDisplay_MouseClick);
+            // MinSelections.MouseClick += new MouseEventHandler(ResponseDisplay_MouseClick);
+            /// MaxSelections.MouseClick += new MouseEventHandler(ResponseDisplay_MouseClick);
         }
 
         void MaxSelections_ValueChanged(object sender, EventArgs e)
@@ -257,7 +257,7 @@ namespace IATClient
             Size szMaxLabel = TextRenderer.MeasureText(Properties.Resources.sMaxNumSelectionsLabel, DisplayFont);
             e.Graphics.DrawString(Properties.Resources.sMinNumSelectionsLabel, DisplayFont, controlBrush, ptMinSelectionsLabel);
             if (!MinSelections.Visible)
-                e.Graphics.DrawString(MinSelections.Value.ToString(), DisplayFont, br, MinSelections.Location);            
+                e.Graphics.DrawString(MinSelections.Value.ToString(), DisplayFont, br, MinSelections.Location);
             e.Graphics.DrawString(Properties.Resources.sMaxNumSelectionsLabel, DisplayFont, controlBrush, ptMaxSelectionsLabel);
             if (!MaxSelections.Visible)
                 e.Graphics.DrawString(MaxSelections.Value.ToString(), DisplayFont, br, MaxSelections.Location);
@@ -268,7 +268,7 @@ namespace IATClient
         protected override void DeleteChoiceButton_Click(object sender, EventArgs e)
         {
             base.DeleteChoiceButton_Click(sender, e);
-            if (ChoiceEdits.Count <= MinSelections.Maximum) 
+            if (ChoiceEdits.Count <= MinSelections.Maximum)
                 MinSelections.Maximum = ChoiceEdits.Count;
             if (MinSelections.Value > ChoiceEdits.Count)
                 MinSelections.Value = ChoiceEdits.Count;

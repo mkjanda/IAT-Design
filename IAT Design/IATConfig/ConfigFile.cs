@@ -1,20 +1,13 @@
 ﻿using System;
-using System.Timers;
-using System.Collections;
 using System.Collections.Generic;
-using System.Drawing;
-using System.Drawing.Drawing2D;
 using System.IO;
-using System.Text;
-using System.Threading;
-using System.Text.RegularExpressions;
-using System.Xml;
-using System.Xml.Serialization;
-using System.Xml.Schema;
-using System.Security.Cryptography;
 using System.Linq;
-using System.Threading.Tasks;
-using System.Collections.Concurrent;
+using System.Security.Cryptography;
+using System.Text.RegularExpressions;
+using System.Threading;
+using System.Xml;
+using System.Xml.Schema;
+using System.Xml.Serialization;
 
 namespace IATClient.IATConfig
 {
@@ -384,7 +377,7 @@ namespace IATClient.IATConfig
                 OriginatingBlock = item.OriginatingBlock,
                 ItemNum = ++ItemCtr
             });
-            
+
         }
 
         private bool ProcessIATBlock(CIATBlock Block, bool IsPracticeBlock, int blockNum)
@@ -407,7 +400,7 @@ namespace IATClient.IATConfig
         {
             IATImages.AddDI(CIAT.SaveFile.GetDI(screen.InstructionsUri));
             IATImages.AddDI(CIAT.SaveFile.GetDI(screen.ContinueInstructionsUri));
-            var processedScreen= new TextInstructionScreen()
+            var processedScreen = new TextInstructionScreen()
             {
                 ConfigFile = this,
                 InstructionScreen = screen
@@ -475,7 +468,7 @@ namespace IATClient.IATConfig
         {
             _BeforeSurveys = new List<IATSurvey>();
             _AfterSurveys = new List<IATSurvey>();
- //           _DisplayItems = new DisplayItemList();
+            //           _DisplayItems = new DisplayItemList();
             _EventList = new IATEventList();
             Layout = new IATLayout();
         }
@@ -524,7 +517,7 @@ namespace IATClient.IATConfig
                 memStream.Dispose();
                 return iImg;
             }, SlidesProcessed);
-//            _DisplayItems = new DisplayItemList();
+            //            _DisplayItems = new DisplayItemList();
             _EventList = new IATEventList();
             Layout = new IATLayout(CIAT.SaveFile.Layout);
             if (iat.UniqueResponse.ItemNum != -1)
@@ -562,7 +555,7 @@ namespace IATClient.IATConfig
             }
             //            foreach (DynamicSpecifier ds in DynamicSpecifier.GetAllSpecifiers())
             //              DynamicSpecifiers.Add(ds.GetSerializableSpecifier());
-//            DynamicSpecifier.CompactSpecifierDictionary(IAT);
+            //            DynamicSpecifier.CompactSpecifierDictionary(IAT);
             SlideImages.AddDI(null);
             IATImages.AddDI(null);
             IATImagesProcessed.WaitOne();

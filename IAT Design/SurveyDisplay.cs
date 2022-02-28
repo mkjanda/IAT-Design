@@ -1,13 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Drawing;
 using System.Data;
+using System.Drawing;
 using System.Linq;
-using System.Threading;
-using System.Windows.Forms;
-using System.Threading;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace IATClient
 {
@@ -192,7 +189,8 @@ namespace IATClient
                 si.Dispose();
             foreach (var qd in QuestionEdits)
             {
-                if (qd.SurveyItem.Text == String.Empty) {
+                if (qd.SurveyItem.Text == String.Empty)
+                {
                     if (qd.SurveyItem.Response.ResponseType == CResponse.EResponseType.Instruction)
                         qd.SurveyItem.Text = Properties.Resources.sDefaultInstructionText;
                     else
@@ -347,7 +345,8 @@ namespace IATClient
         private int _QuestionDisplayWidth;
         public int QuestionDisplayWidth
         {
-            get {
+            get
+            {
                 //        return _QuestionDisplayWidth;
                 return ClientSize.Width;
             }
@@ -369,7 +368,7 @@ namespace IATClient
                     else if (QuestionEdits[ctr].Width != value - QuestionDisplayMargin.Horizontal - InteriorPadding.Horizontal)
                         QuestionEdits[ctr].Width = value - QuestionDisplayMargin.Horizontal - InteriorPadding.Horizontal;
                 }*/
-    //            this.Width = value;
+                //            this.Width = value;
             }
         }
 
@@ -460,7 +459,7 @@ namespace IATClient
                     LastSelectedQuestionNdx = QuestionEdits.IndexOf(sender); ;
                 }
             }
-            if (EnableInsert != null) 
+            if (EnableInsert != null)
                 EnableInsert(NumSelectedQuestions == 1, ClipboardFresh);
             Invalidate();
         }
@@ -487,14 +486,14 @@ namespace IATClient
                 qEdit = new QuestionDisplay();
                 Controls.Add(qEdit);
                 qEdit.Size = new Size(QuestionDisplayWidth - QuestionDisplayMargin.Horizontal - InteriorPadding.Horizontal, 1);
-                    qEdit.BackColor = this.BackColor;
+                qEdit.BackColor = this.BackColor;
                 qEdit.SurveyItem = si;
             }
-            if (!bInsert) 
+            if (!bInsert)
                 QuestionEdits.Add(qEdit);
-            else if ((HasCaption) && (LastSelectedQuestionNdx == 0)) 
+            else if ((HasCaption) && (LastSelectedQuestionNdx == 0))
                 QuestionEdits.Insert(1, qEdit);
-            else 
+            else
                 QuestionEdits.Insert(LastSelectedQuestionNdx, qEdit);
             if (bInsert)
                 LastSelectedQuestionNdx++;
@@ -620,7 +619,8 @@ namespace IATClient
                         {
                             QuestionEdits.Insert(1, instruct);
                             Survey.Items.Insert(1, instruct.SurveyItem);
-                        } else
+                        }
+                        else
                         {
                             QuestionEdits.Insert(LastSelectedQuestionNdx, instruct);
                             Survey.Items.Insert(LastSelectedQuestionNdx, instruct.SurveyItem);

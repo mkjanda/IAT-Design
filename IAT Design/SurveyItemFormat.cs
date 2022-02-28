@@ -1,10 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Drawing;
-using System.Xml;
+using System.Linq;
 using System.Text.RegularExpressions;
+using System.Xml;
 using System.Xml.Linq;
 
 namespace IATClient
@@ -30,10 +28,11 @@ namespace IATClient
         public bool Bold { get; set; }
         public bool Italic { get; set; }
         public enum EFor { Item, Response };
-        public EFor For { get; set;}
+        public EFor For { get; set; }
 
         private int _FontSizeAsPixels { get; set; }
-        public int FontSizeAsPixels {
+        public int FontSizeAsPixels
+        {
             get
             {
                 Regex regex = new Regex("([0-9]+).*");

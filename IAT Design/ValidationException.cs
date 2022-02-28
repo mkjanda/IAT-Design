@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
-using System.Windows.Forms;
 
 namespace IATClient
 {
@@ -10,7 +8,9 @@ namespace IATClient
         void ValidateItem(Dictionary<IValidatedItem, CValidationException> ErrorDictionary);
     }
 
-    public enum EValidationException { BlockResponseKeyUndefined, ItemKeyedDirUndefined, ItemStimulusUndefined, ImageStimulusIncompletelyInitialized, TextStimlusIncompletelyInitialized,
+    public enum EValidationException
+    {
+        BlockResponseKeyUndefined, ItemKeyedDirUndefined, ItemStimulusUndefined, ImageStimulusIncompletelyInitialized, TextStimlusIncompletelyInitialized,
         InstructionScreenWithoutType, KeyInstructionScreenWithoutResponseKey, MockItemScreenWithoutResponseKey, MockItemScreenWithoutStimulus, MockItemScreenWithIncompletelyInitializedTextStimulus,
         MockItemScreenWithIncompletelyInitializedImageStimulus, TextInstructionsBlank, ContinueInstructionsBlank, BlockHasNoItems, InstructionBlockHasNoItems
 
@@ -20,7 +20,7 @@ namespace IATClient
     {
         public abstract String ContainerNum { get; }
         public abstract String ItemNum { get; }
-       
+
         public abstract void OpenItem(IATConfigMainForm mainForm);
     }
 
@@ -102,7 +102,7 @@ namespace IATClient
     }
 
 
-    public class CValidationException : Exception 
+    public class CValidationException : Exception
     {
         private EValidationException _Type;
         private CLocationDescriptor _LocationDescriptor;
@@ -117,7 +117,7 @@ namespace IATClient
 
         public CLocationDescriptor LocationDescriptor
         {
-            get 
+            get
             {
                 return _LocationDescriptor;
             }
@@ -151,7 +151,7 @@ namespace IATClient
 
                     case EValidationException.InstructionScreenWithoutType:
                         return String.Format(Properties.Resources.sInstructionScreenTypeNotSet, LocationDescriptor.ContainerNum, LocationDescriptor.ItemNum);
-                        
+
                     case EValidationException.ItemKeyedDirUndefined:
                         return String.Format(Properties.Resources.sItemLacksKeyedDir, LocationDescriptor.ContainerNum, LocationDescriptor.ItemNum);
 

@@ -1,14 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.IO;
-using System.Xml.Serialization;
-using System.Text;
-using System.Threading;
-using System.Xml;
-using System.Windows.Forms;
-
-namespace IATClient
+﻿namespace IATClient
 {
     /*
     public class CIATPackager : IStoredInXml

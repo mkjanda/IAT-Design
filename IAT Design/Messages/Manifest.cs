@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Xml;
 using System.Xml.Schema;
 
@@ -137,7 +134,7 @@ namespace IATClient.Messages
                 throw new CXmlSerializationException(reader);
             reader.ReadStartElement("Manifest");
             IATName = reader.ReadElementString("IATName");
-            while(reader.Name == "Directory")
+            while (reader.Name == "Directory")
             {
                 ManifestDirectory md = new ManifestDirectory();
                 md.ReadXml(reader);

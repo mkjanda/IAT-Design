@@ -1,11 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace IATClient
@@ -15,7 +9,7 @@ namespace IATClient
         private MissingFontDisplay MissingFontDisplay;
         private Button ReplaceFontsButton = new Button();
         private DialogResult close = DialogResult.No;
-        public MissingFontForm(CFontFile.FontItem []missingFonts)
+        public MissingFontForm(CFontFile.FontItem[] missingFonts)
         {
             InitializeComponent();
             this.AutoScroll = true;

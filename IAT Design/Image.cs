@@ -2,16 +2,12 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Drawing2D;
-using System.IO;
 using System.Linq;
-using System.IO.Packaging;
-using System.Windows.Forms;
-using System.Xml;
-using System.Xml.Linq;
 
 namespace IATClient.Images
 {
-    public class ImageFormat {
+    public class ImageFormat
+    {
         public static readonly ImageFormat Jpeg = new ImageFormat("jpeg", "image/jpeg", System.Drawing.Imaging.ImageFormat.Jpeg);
         public static readonly ImageFormat Jpg = new ImageFormat("jpg", "image/jpg", System.Drawing.Imaging.ImageFormat.Jpeg);
         public static readonly ImageFormat Tiff = new ImageFormat("tiff", "image/tiff", System.Drawing.Imaging.ImageFormat.Tiff);
@@ -25,7 +21,7 @@ namespace IATClient.Images
             Format = format;
         }
         public String Extension { get; private set; }
-        public String MimeType { get; private set; } 
+        public String MimeType { get; private set; }
         public System.Drawing.Imaging.ImageFormat Format { get; private set; }
         private static IEnumerable<ImageFormat> All = new ImageFormat[] { Jpeg, Jpg, Tiff, Tif, Png, Bmp };
         public static ImageFormat FromExtension(String ext)
@@ -135,7 +131,7 @@ namespace IATClient.Images
                 if (_Thumbnail == null)
                     _Thumbnail = new ImageMedia(ImageFormat, ImageMediaType.Thumbnail);
                 CIAT.SaveFile.CreateRelationship(BaseType, _Thumbnail.BaseType, URI, _Thumbnail.URI);
-                
+
             }
 
             public Size OriginalSize
@@ -147,30 +143,30 @@ namespace IATClient.Images
                     return OriginalImage.Size;
                 }
             }
-/*
-            public String AttachUser(DIBase di)
-            {
-                if (DIUsers.ContainsKey(di))
-                    return DIUsers[di];
-                DIUsers[di] = CIAT.SaveFile.CreateRelationship(di.BaseType, BaseType, di.URI, URI);
-                return DIUsers[di];
-            }
+            /*
+                        public String AttachUser(DIBase di)
+                        {
+                            if (DIUsers.ContainsKey(di))
+                                return DIUsers[di];
+                            DIUsers[di] = CIAT.SaveFile.CreateRelationship(di.BaseType, BaseType, di.URI, URI);
+                            return DIUsers[di];
+                        }
 
-            public void DetachUser(DIBase di)
-            {
-                DIUsers.Remove(di);
-                if (DIUsers.Count == 0)
-                {
-                    if (OriginalImage != null)
-                    {
-                        base.Img = OriginalImage.Img;
-                        OriginalImage.Dispose();
-                    }
-                    if (Thumbnail != null)
-                        Thumbnail.Dispose();
-                }
-            }
-*/
+                        public void DetachUser(DIBase di)
+                        {
+                            DIUsers.Remove(di);
+                            if (DIUsers.Count == 0)
+                            {
+                                if (OriginalImage != null)
+                                {
+                                    base.Img = OriginalImage.Img;
+                                    OriginalImage.Dispose();
+                                }
+                                if (Thumbnail != null)
+                                    Thumbnail.Dispose();
+                            }
+                        }
+            */
             protected Image()
             {
             }
@@ -193,7 +189,7 @@ namespace IATClient.Images
                 MetaData = new ImageMetaData(this);
             }
 
-            public Image(System.Drawing.Image img, ImageFormat format, DIType diType) 
+            public Image(System.Drawing.Image img, ImageFormat format, DIType diType)
             {
                 DIType = diType;
                 ImageFormat = format;
@@ -271,13 +267,13 @@ namespace IATClient.Images
                 {
                     double arImg = (double)img.Width / (double)img.Height;
                     Size szResize;
-                    double arSizeRect = (double)Math.Min(ImageMediaType.ImageSize.Width, img.Size.Width) / 
+                    double arSizeRect = (double)Math.Min(ImageMediaType.ImageSize.Width, img.Size.Width) /
                         (double)Math.Min(ImageMediaType.ImageSize.Height, img.Size.Height);
                     if (arImg > arSizeRect)
-                        szResize = new Size(Math.Min(ImageMediaType.ImageSize.Width, img.Size.Width), 
+                        szResize = new Size(Math.Min(ImageMediaType.ImageSize.Width, img.Size.Width),
                             (int)(Math.Min(ImageMediaType.ImageSize.Width, img.Size.Width) / arImg));
                     else
-                        szResize = new Size((int)(Math.Min(ImageMediaType.ImageSize.Height, img.Size.Height) * arImg), 
+                        szResize = new Size((int)(Math.Min(ImageMediaType.ImageSize.Height, img.Size.Height) * arImg),
                             Math.Min(ImageMediaType.ImageSize.Height, img.Size.Height));
                     Bitmap bmp = CIAT.ImageManager.RequestBitmap(ImageMediaType);
                     Rectangle destRect = new Rectangle((img.Width - szResize.Width) >> 1, (img.Height - szResize.Height) >> 1, szResize.Width, szResize.Height);
@@ -301,111 +297,111 @@ namespace IATClient.Images
                 CIAT.SaveFile.Register(this);
                 MetaData = new ImageMetaData(this);
             }
-/*
-            public Image(Uri u, System.Drawing.Image img, ImageFormat format, DIType diType)
-            {
-                ImageMediaType = ImageMediaType.FromDIType(diType);
-                DIType = diType;
-                ImageFormat = ImageFormat.Png;
-                URI = CIAT.SaveFile.CreatePart(u, MimeType);
-                this.Size = img.Size;
-                _OriginalImage = new ImageMedia(img.Clone() as System.Drawing.Image, format, ImageMediaType.VariableSize);
-                if (ImageMediaType == ImageMediaType.VariableSize)
-                {
-                    img.Tag = ImageMediaType;
-                    base.Img = img.Clone() as System.Drawing.Image;
-                    AbsoluteBounds = new Rectangle(new Point(0, 0), img.Size);
-                    img.Dispose();
-                }
-                else if ((ImageMediaType.ImageSize.Width >= img.Width) || (ImageMediaType.ImageSize.Height >= img.Height))
-                {
-                    Bitmap bmp = CIAT.ImageManager.RequestBitmap(ImageMediaType);
-                    AbsoluteBounds = new Rectangle(new Point((bmp.Width - img.Width) >> 1, (bmp.Height - img.Height) >> 1), img.Size);
-                    using (Graphics g = Graphics.FromImage(bmp))
-                    {
-                        Brush backBrush = new SolidBrush(CIAT.SaveFile.Layout.BackColor);
-                        g.SmoothingMode = SmoothingMode.HighQuality;
-                        g.InterpolationMode = InterpolationMode.HighQualityBicubic;
-                        g.PixelOffsetMode = PixelOffsetMode.HighQuality;
-                        g.FillRectangle(backBrush, new Rectangle(0, 0, bmp.Width, bmp.Height));
-                        g.DrawImage(img, AbsoluteBounds);
-                        backBrush.Dispose();
-                    }
-                    bmp.MakeTransparent(CIAT.SaveFile.Layout.BackColor);
-                    bmp.Tag = ImageMediaType;
-                    base.Img = bmp;
-                    img.Dispose();
-                }
-                else if (!ImageMediaType.ImageSize.Equals(img.Size))
-                {
-                    Size szResize, pendingResize = ImageMediaType.ImageSize;
-                    double arImg = (double)img.Size.Width / (double)img.Size.Height;
-                    double arSizeRect = (double)Math.Min(pendingResize.Width, img.Size.Width) / (double)Math.Min(pendingResize.Height, img.Size.Height);
-                    if ((img.Size.Width <= pendingResize.Width) && (img.Size.Height <= pendingResize.Height))
-                        szResize = img.Size;
-                    else if (arImg > arSizeRect)
-                        szResize = new Size(Math.Min(pendingResize.Width, img.Size.Width), (int)(Math.Min(pendingResize.Width, img.Size.Width) / arImg));
-                    else
-                        szResize = new Size((int)(Math.Min(pendingResize.Height, img.Size.Height) * arImg), Math.Min(pendingResize.Height, img.Size.Height));
-                    Bitmap finalImg = CIAT.ImageManager.RequestBitmap(ImageMediaType);
-                    if (finalImg == null)
-                        finalImg = new Bitmap(ImageMediaType.ImageSize.Width, ImageMediaType.ImageSize.Height, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
-                    Brush backBr = new SolidBrush(CIAT.SaveFile.Layout.BackColor);
-                    Rectangle destRect = new Rectangle((finalImg.Width - szResize.Width) >> 1, (finalImg.Height - szResize.Height) >> 1, szResize.Width, szResize.Height);
-                    AbsoluteBounds = destRect;
-                    if (destRect.Size.Equals(img.Size))
-                    {
-                        base.Img = img;
-                        finalImg.Dispose();
-                    }
-                    else
-                    {
-                        using (Graphics gr = Graphics.FromImage(finalImg))
+            /*
+                        public Image(Uri u, System.Drawing.Image img, ImageFormat format, DIType diType)
                         {
-                            gr.FillRectangle(backBr, new Rectangle(0, 0, ImageMediaType.ImageSize.Width, ImageMediaType.ImageSize.Height));
-                            gr.SmoothingMode = SmoothingMode.HighQuality;
-                            gr.InterpolationMode = InterpolationMode.HighQualityBicubic;
-                            gr.PixelOffsetMode = PixelOffsetMode.HighQuality;
-                            gr.DrawImage(img, destRect);
+                            ImageMediaType = ImageMediaType.FromDIType(diType);
+                            DIType = diType;
+                            ImageFormat = ImageFormat.Png;
+                            URI = CIAT.SaveFile.CreatePart(u, MimeType);
+                            this.Size = img.Size;
+                            _OriginalImage = new ImageMedia(img.Clone() as System.Drawing.Image, format, ImageMediaType.VariableSize);
+                            if (ImageMediaType == ImageMediaType.VariableSize)
+                            {
+                                img.Tag = ImageMediaType;
+                                base.Img = img.Clone() as System.Drawing.Image;
+                                AbsoluteBounds = new Rectangle(new Point(0, 0), img.Size);
+                                img.Dispose();
+                            }
+                            else if ((ImageMediaType.ImageSize.Width >= img.Width) || (ImageMediaType.ImageSize.Height >= img.Height))
+                            {
+                                Bitmap bmp = CIAT.ImageManager.RequestBitmap(ImageMediaType);
+                                AbsoluteBounds = new Rectangle(new Point((bmp.Width - img.Width) >> 1, (bmp.Height - img.Height) >> 1), img.Size);
+                                using (Graphics g = Graphics.FromImage(bmp))
+                                {
+                                    Brush backBrush = new SolidBrush(CIAT.SaveFile.Layout.BackColor);
+                                    g.SmoothingMode = SmoothingMode.HighQuality;
+                                    g.InterpolationMode = InterpolationMode.HighQualityBicubic;
+                                    g.PixelOffsetMode = PixelOffsetMode.HighQuality;
+                                    g.FillRectangle(backBrush, new Rectangle(0, 0, bmp.Width, bmp.Height));
+                                    g.DrawImage(img, AbsoluteBounds);
+                                    backBrush.Dispose();
+                                }
+                                bmp.MakeTransparent(CIAT.SaveFile.Layout.BackColor);
+                                bmp.Tag = ImageMediaType;
+                                base.Img = bmp;
+                                img.Dispose();
+                            }
+                            else if (!ImageMediaType.ImageSize.Equals(img.Size))
+                            {
+                                Size szResize, pendingResize = ImageMediaType.ImageSize;
+                                double arImg = (double)img.Size.Width / (double)img.Size.Height;
+                                double arSizeRect = (double)Math.Min(pendingResize.Width, img.Size.Width) / (double)Math.Min(pendingResize.Height, img.Size.Height);
+                                if ((img.Size.Width <= pendingResize.Width) && (img.Size.Height <= pendingResize.Height))
+                                    szResize = img.Size;
+                                else if (arImg > arSizeRect)
+                                    szResize = new Size(Math.Min(pendingResize.Width, img.Size.Width), (int)(Math.Min(pendingResize.Width, img.Size.Width) / arImg));
+                                else
+                                    szResize = new Size((int)(Math.Min(pendingResize.Height, img.Size.Height) * arImg), Math.Min(pendingResize.Height, img.Size.Height));
+                                Bitmap finalImg = CIAT.ImageManager.RequestBitmap(ImageMediaType);
+                                if (finalImg == null)
+                                    finalImg = new Bitmap(ImageMediaType.ImageSize.Width, ImageMediaType.ImageSize.Height, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
+                                Brush backBr = new SolidBrush(CIAT.SaveFile.Layout.BackColor);
+                                Rectangle destRect = new Rectangle((finalImg.Width - szResize.Width) >> 1, (finalImg.Height - szResize.Height) >> 1, szResize.Width, szResize.Height);
+                                AbsoluteBounds = destRect;
+                                if (destRect.Size.Equals(img.Size))
+                                {
+                                    base.Img = img;
+                                    finalImg.Dispose();
+                                }
+                                else
+                                {
+                                    using (Graphics gr = Graphics.FromImage(finalImg))
+                                    {
+                                        gr.FillRectangle(backBr, new Rectangle(0, 0, ImageMediaType.ImageSize.Width, ImageMediaType.ImageSize.Height));
+                                        gr.SmoothingMode = SmoothingMode.HighQuality;
+                                        gr.InterpolationMode = InterpolationMode.HighQualityBicubic;
+                                        gr.PixelOffsetMode = PixelOffsetMode.HighQuality;
+                                        gr.DrawImage(img, destRect);
+                                    }
+                                    backBr.Dispose();
+                                    finalImg.MakeTransparent(CIAT.SaveFile.Layout.BackColor);
+                                    img.Dispose();
+                                    base.Img = finalImg;
+                                }
+                            }
+                            else
+                            {
+                                double arImg = (double)img.Width / (double)img.Height;
+                                Size szResize;
+                                double arSizeRect = (double)Math.Min(ImageMediaType.ImageSize.Width, img.Size.Width) / (double)Math.Min(ImageMediaType.ImageSize.Height, img.Size.Height);
+                                if (arImg > arSizeRect)
+                                    szResize = new Size(Math.Min(ImageMediaType.ImageSize.Width, img.Size.Width), (int)(Math.Min(ImageMediaType.ImageSize.Width, img.Size.Width) / arImg));
+                                else
+                                    szResize = new Size((int)(Math.Min(ImageMediaType.ImageSize.Height, img.Size.Height) * arImg), Math.Min(ImageMediaType.ImageSize.Height, img.Size.Height));
+                                Bitmap bmp = CIAT.ImageManager.RequestBitmap(ImageMediaType);
+                                Rectangle destRect = new Rectangle((img.Width - szResize.Width) >> 1, (img.Height - szResize.Height) >> 1, szResize.Width, szResize.Height);
+                                Brush backBr = new SolidBrush(CIAT.SaveFile.Layout.BackColor);
+                                destRect = new Rectangle(new Point((bmp.Width - img.Width) >> 1, (bmp.Height - img.Height) >> 1), img.Size);
+                                AbsoluteBounds = destRect;
+                                using (Graphics g = Graphics.FromImage(bmp))
+                                {
+                                    g.SmoothingMode = SmoothingMode.HighQuality;
+                                    g.InterpolationMode = InterpolationMode.HighQualityBicubic;
+                                    g.PixelOffsetMode = PixelOffsetMode.HighQuality;
+                                    g.FillRectangle(backBr, new Rectangle(0, 0, bmp.Width, bmp.Height));
+                                    g.DrawImage(img, destRect);
+                                }
+                                backBr.Dispose();
+                                bmp.MakeTransparent(CIAT.SaveFile.Layout.BackColor);
+                                bmp.Tag = ImageMediaType;
+                                base.Img = bmp;
+                                img.Dispose();
+                            }
+                            this.URI = u;
+                            CIAT.SaveFile.Register(this);
                         }
-                        backBr.Dispose();
-                        finalImg.MakeTransparent(CIAT.SaveFile.Layout.BackColor);
-                        img.Dispose();
-                        base.Img = finalImg;
-                    }
-                }
-                else
-                {
-                    double arImg = (double)img.Width / (double)img.Height;
-                    Size szResize;
-                    double arSizeRect = (double)Math.Min(ImageMediaType.ImageSize.Width, img.Size.Width) / (double)Math.Min(ImageMediaType.ImageSize.Height, img.Size.Height);
-                    if (arImg > arSizeRect)
-                        szResize = new Size(Math.Min(ImageMediaType.ImageSize.Width, img.Size.Width), (int)(Math.Min(ImageMediaType.ImageSize.Width, img.Size.Width) / arImg));
-                    else
-                        szResize = new Size((int)(Math.Min(ImageMediaType.ImageSize.Height, img.Size.Height) * arImg), Math.Min(ImageMediaType.ImageSize.Height, img.Size.Height));
-                    Bitmap bmp = CIAT.ImageManager.RequestBitmap(ImageMediaType);
-                    Rectangle destRect = new Rectangle((img.Width - szResize.Width) >> 1, (img.Height - szResize.Height) >> 1, szResize.Width, szResize.Height);
-                    Brush backBr = new SolidBrush(CIAT.SaveFile.Layout.BackColor);
-                    destRect = new Rectangle(new Point((bmp.Width - img.Width) >> 1, (bmp.Height - img.Height) >> 1), img.Size);
-                    AbsoluteBounds = destRect;
-                    using (Graphics g = Graphics.FromImage(bmp))
-                    {
-                        g.SmoothingMode = SmoothingMode.HighQuality;
-                        g.InterpolationMode = InterpolationMode.HighQualityBicubic;
-                        g.PixelOffsetMode = PixelOffsetMode.HighQuality;
-                        g.FillRectangle(backBr, new Rectangle(0, 0, bmp.Width, bmp.Height));
-                        g.DrawImage(img, destRect);
-                    }
-                    backBr.Dispose();
-                    bmp.MakeTransparent(CIAT.SaveFile.Layout.BackColor);
-                    bmp.Tag = ImageMediaType;
-                    base.Img = bmp;
-                    img.Dispose();
-                }
-                this.URI = u;
-                CIAT.SaveFile.Register(this);
-            }
-*/
+            */
             public void Resize(Size sz)
             {
                 CIAT.ImageManager.AddToResizer(this, sz);
@@ -473,7 +469,8 @@ namespace IATClient.Images
                         gr.PixelOffsetMode = PixelOffsetMode.HighQuality;
                         gr.DrawImage(origImage, destRect, srcRect, GraphicsUnit.Pixel);
                     }
-                } else
+                }
+                else
                 {
                     using (Graphics gr = Graphics.FromImage(img))
                     {
@@ -509,12 +506,12 @@ namespace IATClient.Images
                 double arImg = (double)origBounds.Width / (double)origBounds.Height;
                 Size szResize;
                 double arSizeRect = (double)Math.Min(ThumbnailSize.Width, origBounds.Width) / (double)Math.Min(ThumbnailSize.Height, origBounds.Height);
-                    if ((origBounds.Width <= ThumbnailSize.Width) && (origBounds.Height <= ThumbnailSize.Height))
-                        szResize = AbsoluteBounds.Size;
-                    else if (arImg > arSizeRect)
-                        szResize = new Size(ThumbnailSize.Width, (int)(ThumbnailSize.Width / arImg));
-                    else
-                        szResize = new Size((int)(ThumbnailSize.Height * arImg), ThumbnailSize.Height);
+                if ((origBounds.Width <= ThumbnailSize.Width) && (origBounds.Height <= ThumbnailSize.Height))
+                    szResize = AbsoluteBounds.Size;
+                else if (arImg > arSizeRect)
+                    szResize = new Size(ThumbnailSize.Width, (int)(ThumbnailSize.Width / arImg));
+                else
+                    szResize = new Size((int)(ThumbnailSize.Height * arImg), ThumbnailSize.Height);
                 Bitmap thumb = CIAT.SaveFile.ImageManager.RequestBitmap(ImageMediaType.Thumbnail);
                 Graphics g;
                 try

@@ -1,11 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.IO;
-using System.Text;
-using System.Xml;
-using System.Drawing;
-using System.Windows.Forms;
+using System.Linq;
 using System.Xml.Linq;
 
 namespace IATClient
@@ -74,7 +70,7 @@ namespace IATClient
                     dic.SuspendLayout();
                 if (ResponseKeyUri != null)
                 {
-                    CIATKey oldKey =  CIAT.SaveFile.GetIATKey(ResponseKeyUri);
+                    CIATKey oldKey = CIAT.SaveFile.GetIATKey(ResponseKeyUri);
                     dic.RemoveComponent(LayoutItem.LeftResponseKey, false);
                     dic.RemoveComponent(LayoutItem.RightResponseKey, false);
                     CIAT.SaveFile.DeleteRelationship(this.URI, ResponseKeyUri);
@@ -125,7 +121,8 @@ namespace IATClient
                     DIBase newInstr = CIAT.SaveFile.GetDI(value);
                     CIAT.SaveFile.CreateRelationship(BaseType, typeof(DIBase), this.URI, value);
                     dic.AddComponent(newInstr.IUri, LayoutItem.MockItemInstructions);
-                } else
+                }
+                else
                     throw new ArgumentException("Cannot null a display item component of an instruction screen.");
 
             }
@@ -162,7 +159,7 @@ namespace IATClient
                     CheckKeyOutline();
             }
         }
-        
+
         public bool InvalidResponseFlag
         {
             get
@@ -229,7 +226,8 @@ namespace IATClient
                     dic.AddComponent(CIATLayout.ILeftKeyValueOutlineUri, LayoutItem.LeftResponseKeyOutline);
                 if (KeyedDirection == KeyedDirection.Right)
                     dic.AddComponent(CIATLayout.IRightKeyValueOutlineUri, LayoutItem.RightResponseKeyOutline);
-            } else
+            }
+            else
                 KeyOutlined = false;
         }
 
@@ -262,7 +260,7 @@ namespace IATClient
             if (ResponseKeyUri != null)
                 rResponseKeyId = CIAT.SaveFile.GetRelationshipsByType(this.URI, BaseType, typeof(CIATKey)).First().Id;
             xDoc.Document.Add(new XElement("InstructionScreen", new XAttribute("Type", InstructionScreenType.MockItem.ToString()), new XElement("rParentBlockId", rParentBlockId),
-                new XElement("rContinueInstructionsId", rContinueInstructionsId), new XElement("rInstructionsId", rInstructionsId), 
+                new XElement("rContinueInstructionsId", rContinueInstructionsId), new XElement("rInstructionsId", rInstructionsId),
                 new XElement("rPreviewId", rPreviewId)));
             if (ResponseKeyUri != null)
                 xDoc.Root.Add(new XElement("rResponseKeyId", rResponseKeyId));

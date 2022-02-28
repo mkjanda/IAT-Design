@@ -1,10 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Drawing;
-using System.Data;
-
-using System.Text;
 using System.Windows.Forms;
 
 namespace IATClient
@@ -21,7 +15,7 @@ namespace IATClient
 
         public Action<DialogResult> OnControlComplete;
         private CIAT IAT;
-       
+
 
         public int[] NumPresentations
         {
@@ -57,7 +51,7 @@ namespace IATClient
             IATBlockColumn.ReadOnly = true;
             IATBlockColumn.Resizable = DataGridViewTriState.False;
             IATBlockColumn.AutoSizeMode = DataGridViewAutoSizeColumnMode.None;
-            IATBlockColumn.Width = NumPresentationsGrid.Width - TextRenderer.MeasureText("# of Presentations", System.Drawing.SystemFonts.DialogFont).Width - 20 - 
+            IATBlockColumn.Width = NumPresentationsGrid.Width - TextRenderer.MeasureText("# of Presentations", System.Drawing.SystemFonts.DialogFont).Width - 20 -
                 IATBlockColumn.DividerWidth;
             NumPresentationsGrid.Columns.Add(IATBlockColumn);
             DataGridViewColumn NumPresentationsColumn = new DataGridViewColumn();
@@ -71,20 +65,20 @@ namespace IATClient
             NumPresentationsGrid.Columns.Add(NumPresentationsColumn);
             for (int ctr = 0; ctr < IAT.Blocks.Count; ctr++)
             {
-                    DataGridViewRow gridRow = new DataGridViewRow();
-                    gridRow.Cells.Add(new DataGridViewTextBoxCell());
-                    gridRow.Cells.Add(new DataGridViewTextBoxCell());
-                    ((DataGridViewTextBoxCell)gridRow.Cells[0]).Value = IAT.Blocks[ctr].Name;
-                    if (true)  // Is7Block
-                    {
-                        if ((ctr == 3) || (ctr == 6))
-                            ((DataGridViewTextBoxCell)gridRow.Cells[1]).Value = "20";
-                        else
-                            ((DataGridViewTextBoxCell)gridRow.Cells[1]).Value = "10";
-                    }
+                DataGridViewRow gridRow = new DataGridViewRow();
+                gridRow.Cells.Add(new DataGridViewTextBoxCell());
+                gridRow.Cells.Add(new DataGridViewTextBoxCell());
+                ((DataGridViewTextBoxCell)gridRow.Cells[0]).Value = IAT.Blocks[ctr].Name;
+                if (true)  // Is7Block
+                {
+                    if ((ctr == 3) || (ctr == 6))
+                        ((DataGridViewTextBoxCell)gridRow.Cells[1]).Value = "20";
                     else
-                        ((DataGridViewTextBoxCell)gridRow.Cells[1]).Value = IAT.Blocks[ctr].NumItems.ToString();
-                    NumPresentationsGrid.Rows.Add(gridRow);
+                        ((DataGridViewTextBoxCell)gridRow.Cells[1]).Value = "10";
+                }
+                else
+                    ((DataGridViewTextBoxCell)gridRow.Cells[1]).Value = IAT.Blocks[ctr].NumItems.ToString();
+                NumPresentationsGrid.Rows.Add(gridRow);
             }
 
         }

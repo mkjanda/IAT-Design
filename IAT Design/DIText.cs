@@ -1,14 +1,11 @@
-﻿using System;
+﻿using IATClient.Images;
+using System;
 using System.Collections.Generic;
-using System.Collections.Concurrent;
 using System.Drawing;
 using System.IO;
-using System.IO.Packaging;
 using System.Linq;
 using System.Threading;
-using System.Threading.Tasks;
 using System.Xml.Linq;
-using IATClient.Images;
 
 namespace IATClient
 {
@@ -19,7 +16,7 @@ namespace IATClient
         public static readonly FontPreference ResponseKey = new FontPreference(3, "ResponseKey", DIText.UsedAs.ResponseKey, 22);
         public static readonly FontPreference Conjunction = new FontPreference(4, "Conjunction", DIText.UsedAs.Conjunction, 12);
         public static readonly FontPreference IatBlockInstructions = new FontPreference(5, "IatBlockInstructions", DIText.UsedAs.IatBlockInstructions, 14);
-        public static readonly FontPreference TextInstructionsScreen = new FontPreference(6, "TextInstructionsScreen", DIText.UsedAs.TextInstructionsScreen, 18 );
+        public static readonly FontPreference TextInstructionsScreen = new FontPreference(6, "TextInstructionsScreen", DIText.UsedAs.TextInstructionsScreen, 18);
 
         private FontPreference(int value, String name, DIText.UsedAs usedAs, float fontSize) : base(value, name)
         {
@@ -453,7 +450,7 @@ namespace IATClient
                 String subPhrase;
                 if (ndx == 1)
                     subPhrase = phrase.Substring(offset, phrase.Length - offset);
-                else  
+                else
                     subPhrase = phrase.Substring(offset, ndx - offset);
 
                 while (count <= subPhrase.Length)
@@ -471,7 +468,7 @@ namespace IATClient
                         if (count == 0)
                             break;
                         lines.Add(subPhrase.Substring(0, count).Trim());
-                            break;
+                        break;
                         //                            offset += count - 1;
                     }
                     /*                    else if (subPhrase.Substring(offset).Length > 1 + count)
@@ -681,7 +678,7 @@ namespace IATClient
                 {
                     if (_PreviewPanel.IsHandleCreated)
                         _PreviewPanel.ClearImage();
-                } 
+                }
                 _PreviewPanel = value;
                 if (value == null)
                     return;
@@ -736,7 +733,7 @@ namespace IATClient
         }
         protected override void OnImageEvent(Images.ImageEvent evt, Images.IImageMedia img, object arg)
         {
-             base.OnImageEvent(evt, img, arg);
+            base.OnImageEvent(evt, img, arg);
             if ((evt == Images.ImageEvent.Updated) || (evt == ImageEvent.Initialized))
             {
                 if (PreviewPanel != null)
@@ -761,7 +758,7 @@ namespace IATClient
             di.IImage = IImage.Clone() as IImage;
             di.rImageId = CIAT.SaveFile.GetRelationship(CIAT.SaveFile.ImageMetaDataDocument, di.IImage.URI);
             di.IImage.Changed += (evt, img, arg) => di.OnImageEvent(evt, img, arg);
-            di.SuspendLayout(); 
+            di.SuspendLayout();
             di.Justification = this.Justification;
             di.SetKeyOwners(KeyOwners);
             di.LineSpacing = this.LineSpacing;
@@ -808,12 +805,14 @@ namespace IATClient
             }
         }
         public Action ValidateData { get; set; }
-        public DIConjunction() : base(DIText.UsedAs.Conjunction) {
+        public DIConjunction() : base(DIText.UsedAs.Conjunction)
+        {
             ValidateData = null;
             PreviewPanel = null;
             Phrase = "or";
         }
-        public DIConjunction(Uri uri) : base(uri, DIText.UsedAs.Conjunction) {
+        public DIConjunction(Uri uri) : base(uri, DIText.UsedAs.Conjunction)
+        {
             ValidateData = null;
             PreviewPanel = null;
         }
@@ -833,7 +832,7 @@ namespace IATClient
             BoundsEvent.Reset();
             return base.Generate();
         }
-        
+
         public List<CIATKey> KeyOwners
         {
             get
@@ -882,7 +881,7 @@ namespace IATClient
         }
         public override void Replace(DIBase target)
         {
-            if (target.Type != DIType.Conjunction) 
+            if (target.Type != DIType.Conjunction)
                 throw new ArgumentException("A DIConjunction object can only be replaced by another object of the same type.");
             IResponseKeyDI rkDi = target as IResponseKeyDI;
             this.PreviewPanel = rkDi.PreviewPanel;
@@ -964,7 +963,7 @@ namespace IATClient
     }
     public class DITextInstructionsScreen : DIMultiLineText
     {
-        public DITextInstructionsScreen() : base(DIText.UsedAs.TextInstructionsScreen) {  }
+        public DITextInstructionsScreen() : base(DIText.UsedAs.TextInstructionsScreen) { }
         public DITextInstructionsScreen(Uri uri) : base(uri, DIText.UsedAs.TextInstructionsScreen) { }
         public override object Clone()
         {

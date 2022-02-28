@@ -61,7 +61,7 @@
   </PropertyGroup>
   <PropertyGroup />
   <PropertyGroup>
-    <SignAssembly>true</SignAssembly>
+    <SignAssembly>false</SignAssembly>
   </PropertyGroup>
   <PropertyGroup>
     <AssemblyOriginatorKeyFile>IAT Design.pfx</AssemblyOriginatorKeyFile>
@@ -84,14 +84,39 @@
   <PropertyGroup>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
   </PropertyGroup>
+  <PropertyGroup />
   <ItemGroup>
+    <Reference Include="IKVM.OpenJDK.Charsets, Version=8.1.5717.0, Culture=neutral, PublicKeyToken=13235d27fcbfff58, processorArchitecture=MSIL">
+      <HintPath>..\packages\Saxon-HE.10.6.0\lib\net35\IKVM.OpenJDK.Charsets.dll</HintPath>
+    </Reference>
+    <Reference Include="IKVM.OpenJDK.Core, Version=8.1.5717.0, Culture=neutral, PublicKeyToken=13235d27fcbfff58, processorArchitecture=MSIL">
+      <HintPath>..\packages\Saxon-HE.10.6.0\lib\net35\IKVM.OpenJDK.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="IKVM.OpenJDK.Localedata, Version=8.1.5717.0, Culture=neutral, PublicKeyToken=13235d27fcbfff58, processorArchitecture=MSIL">
+      <HintPath>..\packages\Saxon-HE.10.6.0\lib\net35\IKVM.OpenJDK.Localedata.dll</HintPath>
+    </Reference>
+    <Reference Include="IKVM.OpenJDK.Text, Version=8.1.5717.0, Culture=neutral, PublicKeyToken=13235d27fcbfff58, processorArchitecture=MSIL">
+      <HintPath>..\packages\Saxon-HE.10.6.0\lib\net35\IKVM.OpenJDK.Text.dll</HintPath>
+    </Reference>
+    <Reference Include="IKVM.OpenJDK.Util, Version=8.1.5717.0, Culture=neutral, PublicKeyToken=13235d27fcbfff58, processorArchitecture=MSIL">
+      <HintPath>..\packages\Saxon-HE.10.6.0\lib\net35\IKVM.OpenJDK.Util.dll</HintPath>
+    </Reference>
+    <Reference Include="IKVM.OpenJDK.XML.API, Version=8.1.5717.0, Culture=neutral, PublicKeyToken=13235d27fcbfff58, processorArchitecture=MSIL">
+      <HintPath>..\packages\Saxon-HE.10.6.0\lib\net35\IKVM.OpenJDK.XML.API.dll</HintPath>
+    </Reference>
+    <Reference Include="IKVM.Runtime, Version=8.1.5717.0, Culture=neutral, PublicKeyToken=13235d27fcbfff58, processorArchitecture=MSIL">
+      <HintPath>..\packages\Saxon-HE.10.6.0\lib\net35\IKVM.Runtime.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.mshtml, Version=7.0.3300.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
       <EmbedInteropTypes>True</EmbedInteropTypes>
     </Reference>
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
-    <Reference Include="saxon-he-api-10.5.1, Version=10.5.1.0, Culture=neutral, PublicKeyToken=e1fdd002d5083fe6, processorArchitecture=MSIL">
-      <HintPath>..\packages\Saxon-HE.10.5.1\lib\net35\saxon-he-api-10.5.1.dll</HintPath>
+    <Reference Include="saxon-he-10.6, Version=10.6.0.0, Culture=neutral, PublicKeyToken=e1fdd002d5083fe6, processorArchitecture=MSIL">
+      <HintPath>..\packages\Saxon-HE.10.6.0\lib\net35\saxon-he-10.6.dll</HintPath>
+    </Reference>
+    <Reference Include="saxon-he-api-10.6, Version=10.6.0.0, Culture=neutral, PublicKeyToken=e1fdd002d5083fe6, processorArchitecture=MSIL">
+      <HintPath>..\packages\Saxon-HE.10.6.0\lib\net35\saxon-he-api-10.6.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -723,13 +748,8 @@
       <SubType>Designer</SubType>
     </None>
     <None Include="IAT Design.pfx" />
-    <None Include="IATClientBinaries_TemporaryKey.pfx" />
     <None Include="IATConfigFile.xsd">
       <SubType>Designer</SubType>
-    </None>
-    <None Include="IATDesign.pfx" />
-    <None Include="ARLRDBD.TTF">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="ITCKRIST.TTF">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -906,17 +926,17 @@
     </COMReference>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\ConsoleApplication1\Launcher.csproj">
-      <Project>{26ee9b12-27ca-4adb-8c6d-31b0869fd346}</Project>
-      <Name>Launcher</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
       <Visible>False</Visible>
       <ProductName>.NET Framework 3.5 SP1</ProductName>
       <Install>false</Install>
     </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Launcher\Launcher.csproj">
+      <Project>{4cea79a3-62ab-430f-a619-59eb97e1f9ea}</Project>
+      <Name>Launcher</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

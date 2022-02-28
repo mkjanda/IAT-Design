@@ -1,17 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
-using System.Text;
 using System.Reflection;
 using System.Xml;
 using System.Xml.Schema;
-using System.Xml.Serialization;
 
 namespace IATClient
 {
     class TransactionRequest : INamedXmlSerializable
     {
-        public enum ETransaction { Unset, RetrieveResults, RetrieveItemSlides, RequestTransmission, AbortTransaction, 
+        public enum ETransaction
+        {
+            Unset, RetrieveResults, RetrieveItemSlides, RequestTransmission, AbortTransaction,
             DoIATDeploy, VerifyIATDeployment, DeleteIAT, DeleteIATData, TransactionSuccess, TransactionFail, IATExists,
             RequestPacket, RequestEncryptionKey, RequestRetrievalReady, EstablishEncryption, RequestAdminPasswordVerification, RequestDataPasswordVerification,
             VerifyPassword, NoSuchIAT, ClientFrozen, ClientDeleted, RequestIATList, RequestItemSlideManifest, TransactionRequest,
@@ -77,15 +77,18 @@ namespace IATClient
                 if ((ActivationKey != LocalStorage.Activation[LocalStorage.Field.ActivationKey]) && (ActivationKey != String.Empty))
                     LocalStorage.Activation[LocalStorage.Field.ActivationKey] = ActivationKey;
             }
-            while (reader.Name == "IntValue") {
+            while (reader.Name == "IntValue")
+            {
                 String name = reader["name"];
                 IntValues[name] = Convert.ToInt32(reader.ReadElementString());
             }
-            while (reader.Name == "LongValue") {
-                String name= reader["name"];
+            while (reader.Name == "LongValue")
+            {
+                String name = reader["name"];
                 LongValues[name] = Convert.ToInt64(reader.ReadElementString());
             }
-            while (reader.Name == "StringValue") {
+            while (reader.Name == "StringValue")
+            {
                 String name = reader["name"];
                 StringValues[name] = reader.ReadElementString();
             }

@@ -1,7 +1,6 @@
-﻿using System;
+﻿using IATClient.IATConfig;
+using System;
 using System.Collections.Generic;
-using IATClient.IATConfig;
-using System.Text;
 
 namespace IATClient
 {

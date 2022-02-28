@@ -1,14 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Windows.Forms;
-using System.Drawing;
 using System.Collections;
-using System.Threading;
-using System.Threading.Tasks;
+using System.Collections.Generic;
+using System.Drawing;
 using System.IO;
 using System.Runtime.Remoting.Messaging;
+using System.Threading;
+using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace IATClient
 {
@@ -25,14 +23,14 @@ namespace IATClient
             private Dictionary<String, Label> ClientLabels = new Dictionary<String, Label>();
             private Dictionary<String, Label> TestLabels = new Dictionary<String, Label>();
             private List<Label> IATNameLabels = new List<Label>();
-            private String[] ClientLabelNames = { "Registered to", "Organization", "# of IATs alotted", "Total administrations", "Administrations remaining", "Disk alottment(MB)", 
+            private String[] ClientLabelNames = { "Registered to", "Organization", "# of IATs alotted", "Total administrations", "Administrations remaining", "Disk alottment(MB)",
                                                 "Disk space remaining(MB)" };
             private String[] TestLabelNames = { "IAT Name", "Author", "Author eMail", "Last data retrieval", "Test size(KB)", "Administrations", "# of result sets" };
             private Padding PanelPadding = new Padding(20, 30, 20, 10);
             public readonly CIATManager IATManager;
             private static int ControlWidth = 250;
             public enum EControls { exportButton = 1, testLabels = 2, retrieveButton = 4, deleteButtons = 8 };
-            public SynchronizationContext SyncCtx { get; private set; } = WindowsFormsSynchronizationContext.Current; 
+            public SynchronizationContext SyncCtx { get; private set; } = WindowsFormsSynchronizationContext.Current;
 
             public Label SelectedIATLabel { get; private set; }
 

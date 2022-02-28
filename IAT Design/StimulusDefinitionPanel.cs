@@ -1,12 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
 using System.Drawing;
-using System.Data;
-
-using System.Text;
-using System.Windows.Forms;
 using System.IO;
+using System.Windows.Forms;
 
 namespace IATClient
 {
@@ -21,7 +16,7 @@ namespace IATClient
         private Uri ParentBlockUri;
         public KeyedDirection KeyedDir { get; set; } = KeyedDirection.None;
         public IATBlockPanel.IsDynamicallyKeyedCallback BlockDynamicallyKeyed;
-        
+
 
         private const int MaxImageSize = 1 << 22;
 
@@ -93,7 +88,7 @@ namespace IATClient
                     TextRadio.Checked = false;
                 }
                 else
-                {   
+                {
                     ImageRadio.Checked = false;
                     TextRadio.Checked = true;
                     StimulusImage.Enabled = false;
@@ -111,7 +106,7 @@ namespace IATClient
         public StimulusDefinitionPanel(Uri parentBlockUri)
         {
             ParentBlockUri = parentBlockUri;
-//            this.AutoScaleMode = AutoScaleMode.Dpi;
+            //            this.AutoScaleMode = AutoScaleMode.Dpi;
             InitializeComponent();
             StimulusText = new TextEditControl(StimulusTextWidth, DIText.UsedAs.Stimulus, true);
             StimulusText.Location = new Point(StimulusTextPos.X, StimulusTextPos.Y);
@@ -198,7 +193,7 @@ namespace IATClient
         {
             if (IgnoreEvents)
                 return;
-            if (KeyedRight.Checked) 
+            if (KeyedRight.Checked)
             {
                 DefinedItem.SetKeyedDirection(ParentBlockUri, KeyedDirection.Right);
             }

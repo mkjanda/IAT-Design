@@ -1,18 +1,16 @@
-﻿using System;
+﻿using IATClient.Messages;
+using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Net.Sockets;
-using System.Text;
-using System.Xml;
-using System.Xml.Linq;
-using System.Threading;
-using System.Security.Cryptography;
-using System.Windows.Forms;
+using System.Linq;
 using System.Net;
 using System.Net.WebSockets;
+using System.Security.Cryptography;
+using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
-using System.Linq;
-using IATClient.Messages;
+using System.Windows.Forms;
+using System.Xml.Linq;
 
 namespace IATClient.ResultData
 {
@@ -209,7 +207,7 @@ namespace IATClient.ResultData
                     case TransactionRequest.ETransaction.ResultsReady:
                         SetStatusMessage("Retrieving results");
                         HttpWebRequest request = WebRequest.CreateHttp(Properties.Resources.sRetrieveResultsURL);
-                        String requestBody = String.Format("{{ \"clientId\" : {0}, \"testName\" : \"{1}\", \"authToken\" : \"{2}\" }}", 
+                        String requestBody = String.Format("{{ \"clientId\" : {0}, \"testName\" : \"{1}\", \"authToken\" : \"{2}\" }}",
                             trans.LongValues["ClientId"], IATName, trans.StringValues["AuthToken"]);
                         request.ContentType = "text/json";
                         request.ContentLength = requestBody.Length;

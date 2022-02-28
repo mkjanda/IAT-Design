@@ -1,9 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using IATClient.ResultData;
+using System;
 using System.Xml;
 using System.Xml.Linq;
-using IATClient.ResultData;
 
 namespace IATClient
 {
@@ -33,7 +31,7 @@ namespace IATClient
         protected const string sTypeMultiple = "Multiple Choice";
         protected const string sTypeRegEx = "Regular Expression";
         protected const string sTypeWeightedMultiple = "Weighted Multiple Choice";
-        
+
         /// <summary>
         /// An enumeration of the available response types
         /// </summary>
@@ -53,7 +51,7 @@ namespace IATClient
         /// </summary>
         public EResponseType ResponseType
         {
-            get 
+            get
             {
                 return _ResponseType;
             }
@@ -100,7 +98,7 @@ namespace IATClient
         public abstract void Load(XElement elem);
 
         public abstract void WriteXml(XmlWriter writer);
-       
+
         /// <summary>
         /// Test's the response's data members to ensure they are valid
         /// </summary>
@@ -130,12 +128,12 @@ namespace IATClient
                 case EResponseType.BoundedLength: return new CBoundedLengthResponse();
                 case EResponseType.BoundedNum: return new CBoundedNumResponse();
                 case EResponseType.Date: return new CDateResponse();
-//                case EResponseType.ExistsInFile: return new CExistsInFileResponse();
+                //                case EResponseType.ExistsInFile: return new CExistsInFileResponse();
                 case EResponseType.FixedDig: return new CFixedDigResponse();
-   //             case EResponseType.FixedLength: return new CFixedLengthResponse();
+                //             case EResponseType.FixedLength: return new CFixedLengthResponse();
                 case EResponseType.Instruction: return new CInstruction();
                 case EResponseType.Likert: return new CLikertResponse();
-   //             case EResponseType.MaxLength: return new CMaxLengthResponse();
+                //             case EResponseType.MaxLength: return new CMaxLengthResponse();
                 case EResponseType.MultiBoolean: return new CMultiBooleanResponse();
                 case EResponseType.Multiple: return new CMultipleResponse();
                 case EResponseType.RegEx: return new CRegExResponse();
@@ -143,81 +141,81 @@ namespace IATClient
             }
             return null;
         }
-/*        
-        /// <summary>
-        /// Creates a new response from the data contained in an XmlNode
-        /// </summary>
-        /// <param name="node">The XmlNode to the contains the data for the response</param>
-        /// <returns>A CResponse-derives object initialized with data in the supplied XmlNode.  Returns "null" on failure</returns>
-        static public CResponse CreateFromXml(XmlNode node)
-        {
-            // ensure the node defines a response
-            if (node.Name != "Response")
-                return null;
-            CResponse r = null;
+        /*        
+                /// <summary>
+                /// Creates a new response from the data contained in an XmlNode
+                /// </summary>
+                /// <param name="node">The XmlNode to the contains the data for the response</param>
+                /// <returns>A CResponse-derives object initialized with data in the supplied XmlNode.  Returns "null" on failure</returns>
+                static public CResponse CreateFromXml(XmlNode node)
+                {
+                    // ensure the node defines a response
+                    if (node.Name != "Response")
+                        return null;
+                    CResponse r = null;
 
-            // instantiate the appropriate CResponse-derived object based on the "Type" attribute of the root element of node
-            switch (node.Attributes["Type"].InnerText)
-            {
-                case sTypeBool:
-                    r = new CBoolResponse();
-                    break;
+                    // instantiate the appropriate CResponse-derived object based on the "Type" attribute of the root element of node
+                    switch (node.Attributes["Type"].InnerText)
+                    {
+                        case sTypeBool:
+                            r = new CBoolResponse();
+                            break;
 
-                case sTypeBoundedLength:
-                    r = new CBoundedLengthResponse();
-                    break;
+                        case sTypeBoundedLength:
+                            r = new CBoundedLengthResponse();
+                            break;
 
-                case sTypeBoundedNum:
-                    r = new CBoundedNumResponse();
-                    break;
+                        case sTypeBoundedNum:
+                            r = new CBoundedNumResponse();
+                            break;
 
-                case sTypeDate:
-                    r = new CDateResponse();
-                    break;
+                        case sTypeDate:
+                            r = new CDateResponse();
+                            break;
 
-                case sTypeFixedDig:
-                    r = new CFixedDigResponse();
-                    break;
+                        case sTypeFixedDig:
+                            r = new CFixedDigResponse();
+                            break;
 
-                case sTypeInstruction:
-                    r = new CInstruction();
-                    break;
+                        case sTypeInstruction:
+                            r = new CInstruction();
+                            break;
 
-                case sTypeLikert:
-                    r = new CLikertResponse();
-                    break;
+                        case sTypeLikert:
+                            r = new CLikertResponse();
+                            break;
 
-                case sTypeMultiBoolean:
-                    r = new CMultiBooleanResponse();
-                    break;
+                        case sTypeMultiBoolean:
+                            r = new CMultiBooleanResponse();
+                            break;
 
-                case sTypeMultiple:
-                    r = new CMultipleResponse();
-                    break;
+                        case sTypeMultiple:
+                            r = new CMultipleResponse();
+                            break;
 
-                case sTypeRegEx:
-                    r = new CRegExResponse();
-                    break;
+                        case sTypeRegEx:
+                            r = new CRegExResponse();
+                            break;
 
-                case sTypeWeightedMultiple:
-                    r = new CWeightedMultipleResponse();
-                    break;
+                        case sTypeWeightedMultiple:
+                            r = new CWeightedMultipleResponse();
+                            break;
 
-                default:
-                    return null;
-            }
+                        default:
+                            return null;
+                    }
 
-            // attempt to load the response, returning null on failure
-            if (r.LoadFromXml(node) == false)
-                return null;
-            if (CVersion.Compare(CIAT.SaveFile.SaveFileVersion, new CVersion("1.0.1.1")) < 0)
-                if (r.ResponseType != EResponseType.Instruction)
-                    r.Format.LoadFromXml(node.SelectSingleNode("./SurveyItemFormat"));
+                    // attempt to load the response, returning null on failure
+                    if (r.LoadFromXml(node) == false)
+                        return null;
+                    if (CVersion.Compare(CIAT.SaveFile.SaveFileVersion, new CVersion("1.0.1.1")) < 0)
+                        if (r.ResponseType != EResponseType.Instruction)
+                            r.Format.LoadFromXml(node.SelectSingleNode("./SurveyItemFormat"));
 
-            // return the response
-            return r;
-        }
-        */
+                    // return the response
+                    return r;
+                }
+                */
         /*
         private CResponseObject _DefinedResponse;
 

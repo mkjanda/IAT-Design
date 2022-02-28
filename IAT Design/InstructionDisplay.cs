@@ -1,10 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Threading;
-using System.Text;
-using System.Windows.Forms;
 using System.Drawing;
+using System.Threading;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace IATClient
 {
@@ -50,7 +48,7 @@ namespace IATClient
         }
 
 
-        public InstructionDisplay() 
+        public InstructionDisplay()
         {
             LabelFont = new Font(FontFamily.GenericSerif, 11.7F, FontStyle.Regular);
             Label = "Instructions";

@@ -1,9 +1,7 @@
 ﻿using System;
-using System.Drawing;
 using System.Collections.Concurrent;
-using System.Collections.Generic;
+using System.Drawing;
 using System.Threading;
-using System.Threading.Tasks;
 
 namespace IATClient
 {
@@ -12,7 +10,7 @@ namespace IATClient
         private Uri _Key1Uri, _Key2Uri = null, _ConjunctionUri;
         private readonly object lockObj = new object();
         public int VertPadding { get; set; } = (int)((double)CIAT.SaveFile.Layout.KeyValueSize.Height / 10F);
-        private readonly DIDualKey LeftValue; 
+        private readonly DIDualKey LeftValue;
         private readonly DIDualKey RightValue;
 
         public Uri Key1Uri
@@ -29,7 +27,8 @@ namespace IATClient
                     LeftValue[oldKey.LeftValueUri] = null;
                     RightValue[oldKey.RightValueUri] = null;
                 }
-                if ((value != null) && !value.Equals(_Key1Uri)) { 
+                if ((value != null) && !value.Equals(_Key1Uri))
+                {
                     CIATKey newKey = CIAT.SaveFile.GetIATKey(value);
                     LeftValue[newKey.LeftValueUri] = Rectangle.Empty;
                     RightValue[newKey.RightValueUri] = Rectangle.Empty;
@@ -61,7 +60,7 @@ namespace IATClient
                     RightValue[newKey.RightValueUri] = Rectangle.Empty;
                     _Key2Uri = value;
                 }
-           }
+            }
         }
 
         public Uri ConjunctionUri
@@ -127,7 +126,7 @@ namespace IATClient
             }
         }
 
- 
+
         public CDualKeyLayout(DIDualKey leftDisplay, DIDualKey rightDisplay)
         {
             LeftValue = leftDisplay;
@@ -149,20 +148,20 @@ namespace IATClient
         {
             if (ValidationLocks.TryRemove(u, out _))
                 if (--CompositeCounter == 0)
-            {
-                CompositeValidationEvent.Set();
-                CompositeCancellationTokenSource.Cancel();
-            }
+                {
+                    CompositeValidationEvent.Set();
+                    CompositeCancellationTokenSource.Cancel();
+                }
         }
 
         public void ComponentValidated(Uri u)
         {
             if (ValidationLocks.TryRemove(u, out _))
                 if (--ComponentCounter == 0)
-            {
-                ComponentValidationEvent.Set();
-       //         ComponentCancellationTokenSource.Cancel();
-            }
+                {
+                    ComponentValidationEvent.Set();
+                    //         ComponentCancellationTokenSource.Cancel();
+                }
         }
 
         public void PerformLayout()
@@ -449,7 +448,7 @@ namespace IATClient
                     {
                         int bottomHeight = Math.Max(LLSize.Height, LRSize.Height);
                         ptConjunction = new Point((bounds.Width - conjunction.AbsoluteBounds.Width) >> 1, bounds.Height - (VertPadding + bottomHeight));
-                        LV2Rect = new Rectangle(new Point((bounds.Width - LLSize.Width) >> 1, 
+                        LV2Rect = new Rectangle(new Point((bounds.Width - LLSize.Width) >> 1,
                             ptConjunction.Y + (VertPadding >> 1) + conjunction.AbsoluteBounds.Height), LLSize);
                         RV2Rect = new Rectangle(new Point((bounds.Width - LRSize.Width) >> 1,
                             ptConjunction.Y + (VertPadding >> 1) + conjunction.AbsoluteBounds.Height), LRSize);
@@ -468,7 +467,7 @@ namespace IATClient
                             szLRKey = new Size(bounds.Width, (int)((double)bounds.Width / arKey));
                         LV1Rect = new Rectangle(new Point((bounds.Width - szLLKey.Width) >> 1, (VertPadding + upperHeight - szLLKey.Height) >> 1), szLLKey);
                         RV1Rect = new Rectangle(new Point((bounds.Width - szLRKey.Width) >> 1, (VertPadding + upperHeight - szLRKey.Height) >> 1), szLRKey);
-                        
+
                         /*                      Size szLLKey;
                                                 double lScale;
                                                 arKey = (double)URSize.Width / (double)URSize.Height;
@@ -533,7 +532,7 @@ namespace IATClient
                             diLowerLeft.AbsoluteBounds.Width, diLowerLeft.AbsoluteBounds.Height);
                         RV1Rect = new Rectangle((bounds.Width - diUpperRight.AbsoluteBounds.Width) >> 1, (bounds.Height - (upperHeight + cHeight + lowerHeight)) >> 1,
                             diUpperRight.AbsoluteBounds.Width, diUpperRight.AbsoluteBounds.Height);
-                        RV2Rect = new Rectangle((bounds.Width - diLowerRight.AbsoluteBounds.Width) >> 1, (bounds.Height - lowerHeight + upperHeight + cHeight) >> 1,                            
+                        RV2Rect = new Rectangle((bounds.Width - diLowerRight.AbsoluteBounds.Width) >> 1, (bounds.Height - lowerHeight + upperHeight + cHeight) >> 1,
                             diLowerRight.AbsoluteBounds.Width, diLowerRight.AbsoluteBounds.Height);
                         ptConjunction = new Point((bounds.Width - conjunction.AbsoluteBounds.Width) >> 1, Math.Max(LV1Rect.Value.Bottom, RV1Rect.Value.Bottom) + VertPadding / 2);
                         /*
@@ -738,7 +737,7 @@ namespace IATClient
                     RightValue[ConjunctionUri] = ConjunctionRect;
                     try
                     {
-                        ValidationLock validationLock = new ValidationLock(new DIBase[] { UL as DIBase, UR as DIBase, LL as DIBase, 
+                        ValidationLock validationLock = new ValidationLock(new DIBase[] { UL as DIBase, UR as DIBase, LL as DIBase,
                             LR as DIBase, C as DIBase });
                         validationLock.InvalidationEvent.Reset();
                         UL.ResumeLayout(false);
@@ -772,7 +771,8 @@ namespace IATClient
                 }
 
             }
-            catch (Exception ex) {
+            catch (Exception ex)
+            {
                 LayoutBusy.Set();
                 throw ex;
             }

@@ -1,9 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Windows.Forms;
-using System.Drawing;
 
 namespace IATClient
 {
@@ -19,14 +15,15 @@ namespace IATClient
             StartPanel = startPanel;
             this.SplitterMoved += new SplitterEventHandler(ResultDetailsContainer_SplitterMoved);
         }
-        
-        private void ResultDetailsContainer_SplitterMoved(Object sender, SplitterEventArgs e) {
+
+        private void ResultDetailsContainer_SplitterMoved(Object sender, SplitterEventArgs e)
+        {
             if (!Panel1Collapsed)
                 Panel1.Invalidate();
             if (!Panel2Collapsed)
                 Panel2.Invalidate();
         }
-        
+
         public void PanelClose(Panel p)
         {
             SuspendLayout();

@@ -1,13 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.IO;
-using System.IO.Packaging;
-using System.Text;
-using System.Windows.Forms;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Xml.Linq;
-using System.Drawing;
-using System.Linq;
 
 namespace IATClient
 {
@@ -35,9 +32,9 @@ namespace IATClient
     public class IATKeyType : Enumeration
     {
         public readonly static IATKeyType None = new IATKeyType(0, "None", typeof(Nullable), new Func<Uri, CIATKey>((u) => null));
-        public readonly static IATKeyType SimpleKey = new IATKeyType(1, "SimpleKey", typeof(CIATKey), new Func<Uri, CIATKey>((u) => new CIATKey(u) ));
-        public readonly static IATKeyType ReversedKey = new IATKeyType(2, "ReversedKey", typeof(CIATReversedKey), new Func<Uri, CIATKey>((u) => new CIATReversedKey(u) ));
-        public readonly static IATKeyType DualKey = new IATKeyType(3, "DualKey", typeof(CIATDualKey), new Func<Uri, CIATKey>((u) => new CIATDualKey(u) ));
+        public readonly static IATKeyType SimpleKey = new IATKeyType(1, "SimpleKey", typeof(CIATKey), new Func<Uri, CIATKey>((u) => new CIATKey(u)));
+        public readonly static IATKeyType ReversedKey = new IATKeyType(2, "ReversedKey", typeof(CIATReversedKey), new Func<Uri, CIATKey>((u) => new CIATReversedKey(u)));
+        public readonly static IATKeyType DualKey = new IATKeyType(3, "DualKey", typeof(CIATDualKey), new Func<Uri, CIATKey>((u) => new CIATDualKey(u)));
 
         public Type Type { get; private set; }
         public Func<Uri, CIATKey> Create { get; private set; }
@@ -67,14 +64,14 @@ namespace IATClient
         }
 
     }
-    
+
     public class CIATKey : IPackagePart, IDisposable
     {
         public Uri URI { get; set; }
         public Type BaseType { get { return typeof(CIATKey); } }
         public String MimeType { get { return "text/xml+" + this.GetType().ToString(); } }
         public long Expiration { get; set; }
-        public CIATKey() 
+        public CIATKey()
         {
             this.URI = CIAT.SaveFile.Register(this);
             this.Name = String.Empty;
@@ -110,8 +107,8 @@ namespace IATClient
         }
 
         public String Name { get; set; }
-        
-        public virtual Size GetDISize(DIBase di) 
+
+        public virtual Size GetDISize(DIBase di)
         {
             if (di.IImage.OriginalImage == null)
                 return di.IImage.AbsoluteBounds.Size;
@@ -182,7 +179,7 @@ namespace IATClient
                     return null;
                 DIBase di = CIAT.SaveFile.GetDI(RightValueUri);
                 if (di.Type == DIType.Null)
-                    return null;                       
+                    return null;
                 return di;
             }
         }
@@ -262,7 +259,7 @@ namespace IATClient
         public virtual void Save()
         {
             XDocument xDoc = new XDocument();
-            xDoc.Document.Add(new XElement("IATKey", new XAttribute("Type", KeyType.ToString()), new XElement("Name", Name), 
+            xDoc.Document.Add(new XElement("IATKey", new XAttribute("Type", KeyType.ToString()), new XElement("Name", Name),
                 new XElement("LeftRId", CIAT.SaveFile.GetRelationship(this, _LeftValueUri)), new XElement("RightRId", CIAT.SaveFile.GetRelationship(this, _RightValueUri))));
             Task.Run(() =>
             {
@@ -296,7 +293,7 @@ namespace IATClient
             CIAT.SaveFile.DeleteRelationship(CIAT.SaveFile.IAT.URI, this.URI);
             CIAT.SaveFile.ActivityLog.LogEvent(ActivityLog.EventType.Delete, URI);
         }
-        
+
         public static List<CFontFile.FontItem> UtilizedFontFamilies
         {
             get
@@ -339,13 +336,13 @@ namespace IATClient
                 return resultList;
             }
         }
-        
+
 
         public static Uri GetKeyUriByName(String Name)
         {
             try
             {
-                return CIAT.SaveFile.GetAllIATKeyUris().Select(u => new { u, n = CIAT.SaveFile.GetIATKey(u).Name }).Where(tup => tup.n == Name).Select(tup => tup.u).First(); 
+                return CIAT.SaveFile.GetAllIATKeyUris().Select(u => new { u, n = CIAT.SaveFile.GetIATKey(u).Name }).Where(tup => tup.n == Name).Select(tup => tup.u).First();
             }
             catch (InvalidOperationException)
             {

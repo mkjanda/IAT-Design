@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.IO;
 using System.IO.Packaging;
-using System.Linq;
 using System.Xml.Linq;
 
 namespace IATClient
@@ -114,27 +113,27 @@ namespace IATClient
             observer.OnNext(Value);
             return new Subscription(this, observer);
         }
-/*
-        public void Consume(ObservableUri o)
-        {
-            CIAT.SaveFile.TransferRelationships(o.Value, Value);
-            _Value = o.Value;
-            List<Uri> owningUris = CIAT.SaveFile.GetRelationships(o.URI).Where(pr => pr.RelationshipType.EndsWith("owned-by")).Select(pr => pr.TargetUri).ToList();
-            foreach (var u in owningUris)
-            {
-                CIAT.SaveFile.CreateRelationship(BaseType, typeof(DIBase), URI, u, "owned-by");
-                CIAT.SaveFile.DeleteRelationship(o.URI, u);
-                CIAT.SaveFile.CreateRelationship(typeof(DIBase), BaseType, u, URI, "owns");
-                CIAT.SaveFile.DeleteRelationship(u, o.URI);
-            }
-            foreach (var observer in o.Observers)
-            {
-                observer.OnNext(Value);
-            }
-            Observers.AddRange(o.Observers);
-            o.Observers.Clear();
-        }
-*/
+        /*
+                public void Consume(ObservableUri o)
+                {
+                    CIAT.SaveFile.TransferRelationships(o.Value, Value);
+                    _Value = o.Value;
+                    List<Uri> owningUris = CIAT.SaveFile.GetRelationships(o.URI).Where(pr => pr.RelationshipType.EndsWith("owned-by")).Select(pr => pr.TargetUri).ToList();
+                    foreach (var u in owningUris)
+                    {
+                        CIAT.SaveFile.CreateRelationship(BaseType, typeof(DIBase), URI, u, "owned-by");
+                        CIAT.SaveFile.DeleteRelationship(o.URI, u);
+                        CIAT.SaveFile.CreateRelationship(typeof(DIBase), BaseType, u, URI, "owns");
+                        CIAT.SaveFile.DeleteRelationship(u, o.URI);
+                    }
+                    foreach (var observer in o.Observers)
+                    {
+                        observer.OnNext(Value);
+                    }
+                    Observers.AddRange(o.Observers);
+                    o.Observers.Clear();
+                }
+        */
         public void CancelSubscription(IObserver<Uri> o)
         {
             Observers.Remove(o);

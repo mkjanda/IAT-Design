@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing.Imaging;
+using System.Linq;
 using System.Security.Cryptography;
 using System.Xml;
-using System.Linq;
 
 namespace IATClient.IATConfig
 {
@@ -11,7 +11,7 @@ namespace IATClient.IATConfig
     {
         public List<Uri> SourceUris { get; private set; } = new List<Uri>();
         public List<int> Indexes { get; private set; } = new List<int>();
-        private String sha = String.Empty; 
+        private String sha = String.Empty;
         public int Id { get; set; }
         public String SHA
         {

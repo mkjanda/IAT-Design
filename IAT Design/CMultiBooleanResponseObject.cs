@@ -1,11 +1,9 @@
-﻿using System;
-using System.Collections;
+﻿using IATClient.ResultData;
+using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Windows.Forms;
 using System.Drawing;
-using IATClient.ResultData;
+using System.Linq;
+using System.Windows.Forms;
 
 namespace IATClient
 {
@@ -335,7 +333,7 @@ namespace IATClient
                     choiceNdx = ctr;
                     break;
                 }
-            
+
             if (this[choiceNdx] == ActiveAnswerSpec)
                 return;
             this[choiceNdx] = ActiveAnswerSpec;

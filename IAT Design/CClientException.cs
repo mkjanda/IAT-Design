@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.IO;
+using System.Text;
 using System.Xml.Schema;
 using System.Xml.Serialization;
 
@@ -13,7 +11,7 @@ namespace IATClient
     [XmlRoot(ElementName = "ClientException")]
     [XmlInclude(typeof(CReportableException))]
     [XmlInclude(typeof(CServerException))]
-    public class CClientException 
+    public class CClientException
     {
         [XmlElement(ElementName = "ClientMessage", Form = XmlSchemaForm.Unqualified, IsNullable = false)]
         public String Message { get; set; }
@@ -64,7 +62,8 @@ namespace IATClient
                     return "No file open";
                 else
                     return CIAT.SaveFile.Version.ToString();
-            } set { }
+            }
+            set { }
         }
 
         [XmlElement(ElementName = "TimeOpened", Form = XmlSchemaForm.Unqualified)]

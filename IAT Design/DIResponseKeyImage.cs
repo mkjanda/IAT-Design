@@ -1,15 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using IATClient.Images;
+using System;
 using System.Collections.Concurrent;
+using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
-using System.IO.Packaging;
 using System.Linq;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Xml.Linq;
-using IATClient.Images;
 
 namespace IATClient
 {
@@ -34,13 +32,13 @@ namespace IATClient
         {
         }
 
-        public DIResponseKeyImage(Uri uri) : base(uri) 
+        public DIResponseKeyImage(Uri uri) : base(uri)
         {
-            
+
         }
 
         private IImageDisplay _PreviewPanel = null;
-        public override IImageDisplay PreviewPanel 
+        public override IImageDisplay PreviewPanel
         {
             get
             {
@@ -295,20 +293,24 @@ namespace IATClient
                     if (AbsoluteBounds == Rectangle.Empty)
                     {
                         if ((this.IImage.OriginalImage.Size.Width <= CIAT.SaveFile.Layout.KeyValueSize.Width) &&
-                            (this.IImage.OriginalImage.Size.Height <= CIAT.SaveFile.Layout.KeyValueSize.Height)) {
+                            (this.IImage.OriginalImage.Size.Height <= CIAT.SaveFile.Layout.KeyValueSize.Height))
+                        {
                             AbsoluteBounds = new Rectangle((CIAT.SaveFile.Layout.KeyValueSize.Width - this.IImage.OriginalImage.Size.Width) >> 1,
                                 (CIAT.SaveFile.Layout.KeyValueSize.Height - this.IImage.OriginalImage.Size.Height) >> 1,
                                 this.IImage.OriginalImage.Size.Width, this.IImage.OriginalImage.Size.Height);
-                        } else
+                        }
+                        else
                         {
                             double arImg = (double)this.IImage.OriginalImage.Size.Width / (double)this.IImage.OriginalImage.Size.Height;
                             double arFrame = CIAT.SaveFile.Layout.KeyValueSize.Width / (double)CIAT.SaveFile.Layout.KeyValueSize.Height;
                             Size sz;
-                            if (arImg < arFrame) { 
+                            if (arImg < arFrame)
+                            {
                                 sz = new Size((int)((double)CIAT.SaveFile.Layout.KeyValueSize.Height * arImg), CIAT.SaveFile.Layout.KeyValueSize.Height);
                                 AbsoluteBounds = new Rectangle((CIAT.SaveFile.Layout.KeyValueSize.Width - sz.Width) >> 1,
                                     (CIAT.SaveFile.Layout.KeyValueSize.Height - sz.Height) >> 1, sz.Width, sz.Height);
-                            } else
+                            }
+                            else
                             {
                                 sz = new Size(CIAT.SaveFile.Layout.KeyValueSize.Width, (int)((double)CIAT.SaveFile.Layout.KeyValueSize.Width / arImg));
                                 AbsoluteBounds = new Rectangle((CIAT.SaveFile.Layout.KeyValueSize.Width - sz.Width) >> 1,

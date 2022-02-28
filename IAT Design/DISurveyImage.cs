@@ -1,11 +1,10 @@
-﻿using System;
+﻿using IATClient.Images;
+using System;
 using System.Drawing;
 using System.IO;
 using System.Text.RegularExpressions;
 using System.Xml;
 using System.Xml.Linq;
-using System.Threading;
-using IATClient.Images;
 
 namespace IATClient
 {
@@ -14,7 +13,7 @@ namespace IATClient
         public String Description { get; private set; }
         private readonly object lockObj = new object();
         private DISurveyImage()
-        {}
+        { }
         private IImageDisplay _PreviewPanel = null;
 
         public DISurveyImage(String filename)
@@ -34,7 +33,7 @@ namespace IATClient
         {
             Resize();
         }
-    
+
 
         protected override void OnImageEvent(ImageEvent evt, IImageMedia img, object arg)
         {
@@ -43,7 +42,8 @@ namespace IATClient
             base.OnImageEvent(evt, img, arg);
             if (evt == ImageEvent.Resized)
                 AbsoluteBounds = (Rectangle)arg;
-            if (evt == ImageEvent.Updated) {
+            if (evt == ImageEvent.Updated)
+            {
                 PreviewPanel.SetImage(IImage);
             }
             Validate();
@@ -88,7 +88,7 @@ namespace IATClient
             if (rImageId != null)
             {
                 xDoc.Add(new XElement("DISurveyImage", new XAttribute("rImageId", rImageId), new XAttribute("InvalidationState", InvalidationState.ToString()),
-                    new XElement("AbsoluteBounds", new XElement("X", "0"), new XElement("Y", "0"), new XElement("Width", IImage.AbsoluteBounds.Width), 
+                    new XElement("AbsoluteBounds", new XElement("X", "0"), new XElement("Y", "0"), new XElement("Width", IImage.AbsoluteBounds.Width),
                     new XElement("Height", IImage.AbsoluteBounds.Height.ToString()))));
             }
             Stream s = CIAT.SaveFile.GetWriteStream(this);

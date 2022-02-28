@@ -1,15 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-
-using System.Text;
-using System.Windows.Forms;
 using System.Drawing.Printing;
 using System.Security.Permissions;
+using System.Windows.Forms;
 
-[assembly:PermissionSetAttribute(SecurityAction.RequestMinimum, Name="FullTrust")]
+[assembly: PermissionSetAttribute(SecurityAction.RequestMinimum, Name = "FullTrust")]
 
 namespace IATClient
 {

@@ -1,11 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Xml;
-using System.Windows.Forms;
-using System.Xml.Linq;
+﻿using IATClient.IATConfig;
 using IATClient.ResultData;
-using IATClient.IATConfig; 
+using System;
+using System.Windows.Forms;
+using System.Xml;
+using System.Xml.Linq;
 
 namespace IATClient
 {
@@ -65,7 +63,7 @@ namespace IATClient
         private TextBox TrueStatementBox = null, FalseStatementBox = null;
         private RadioButton TrueRadio = null, FalseRadio = null;
         private CheckBox TrueCheck = null, FalseCheck = null;
-        
+
 
         /// <summary>
         /// The default constructor. 
@@ -139,7 +137,7 @@ namespace IATClient
             writer.WriteEndElement();
         }
 
-        
+
 
         public override string GetResponseDesc()
         {

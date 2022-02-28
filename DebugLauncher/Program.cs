@@ -15,7 +15,7 @@ namespace DebugLauncher
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-           new Launcher().Launch();
+            new Launcher().Launch();
         }
     }
 }

@@ -1,10 +1,9 @@
-﻿using System;
+﻿using IATClient.ResultData;
+using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Windows.Forms;
 using System.Drawing;
-using IATClient.ResultData;
+using System.Linq;
+using System.Windows.Forms;
 
 namespace IATClient
 {
@@ -300,7 +299,8 @@ namespace IATClient
         {
             double[] trims = null;
             Dictionary<String, List<int>> boundedLengthItemNums = GetBoundedLengthItems();
-            if (this.ResultData.Descriptor.TokenType == ETokenType.BASE64_UTF8) {
+            if (this.ResultData.Descriptor.TokenType == ETokenType.BASE64_UTF8)
+            {
                 boundedLengthItemNums[this.ResultData.Descriptor.TokenName] = new List<int>();
                 boundedLengthItemNums[this.ResultData.Descriptor.TokenName].Add(0);
             }
@@ -311,11 +311,12 @@ namespace IATClient
                 List<double> scaleWeights = new List<double>();
                 if (this.ResultData.Descriptor.TokenType == ETokenType.BASE64_UTF8)
                 {
-                    for (int ctr2 = 0; ctr2 < this.ResultData.IATResults.NumResultSets; ctr2++) 
+                    for (int ctr2 = 0; ctr2 < this.ResultData.IATResults.NumResultSets; ctr2++)
                         tokenSizes.Add(TextRenderer.MeasureText(this.ResultData.IATResults[ctr2].Token, ResultFont, new Size(this.Width >> 2, 0), TextFormatFlags.WordBreak | TextFormatFlags.TextBoxControl) + new Size(CellPadding.Horizontal, CellPadding.Vertical));
                     int nWeights = 0;
                     double sWeight = 0;
-                    for (int ctr3 = 0; ctr3 < tokenSizes.Count; ctr3++) {
+                    for (int ctr3 = 0; ctr3 < tokenSizes.Count; ctr3++)
+                    {
                         sWeight += tokenSizes[ctr3].Width;
                         if (tokenSizes[ctr3].Width > 0)
                             nWeights++;
@@ -364,17 +365,21 @@ namespace IATClient
                 int xOffset = 0;
                 CellRects.Add(new List<Rectangle>());
                 Results.Add(new List<String>());
-                if (this.ResultData.Descriptor.TokenType != ETokenType.NONE)  {
+                if (this.ResultData.Descriptor.TokenType != ETokenType.NONE)
+                {
                     xOffset += LabelColWidth + RowPadding.Left;
                     Results[ctr].Add(ResultData.IATResults[ctr].Token);
-                    if ((trimAmount == 0) || (this.ResultData.Descriptor.TokenType != ETokenType.BASE64_UTF8)) {
+                    if ((trimAmount == 0) || (this.ResultData.Descriptor.TokenType != ETokenType.BASE64_UTF8))
+                    {
                         CellRects[ctr].Add(new Rectangle(new Point(xOffset, 0), TextRenderer.MeasureText(this.ResultData.IATResults[ctr].Token, ResultFont) + new Size(CellPadding.Horizontal, CellPadding.Vertical)));
                         if (ctr == 0)
                             MaxColWidths[CellRects[ctr].Count - 1] = CellRects[ctr].Last().Width;
                         else if (CellRects[ctr].Last().Width > MaxColWidths[CellRects[ctr].Count - 1])
                             MaxColWidths[CellRects[ctr].Count - 1] = CellRects[ctr].Last().Width;
                         xOffset += CellRects[ctr].Last().Width;
-                    } else if ((trimAmount != 0) && (this.ResultData.Descriptor.TokenType == ETokenType.BASE64_UTF8)) {
+                    }
+                    else if ((trimAmount != 0) && (this.ResultData.Descriptor.TokenType == ETokenType.BASE64_UTF8))
+                    {
                         CellRects[ctr].Add(new Rectangle(new Point(xOffset, 0), TextRenderer.MeasureText(ResultData.IATResults[ctr].Token, ResultFont, new Size(this.Width >> 2, 0), TextFormatFlags.WordBreak | TextFormatFlags.TextBoxControl) + new Size(CellPadding.Horizontal, CellPadding.Vertical)));
                         xOffset += CellRects[ctr].Last().Width;
                         if (ctr == 0)

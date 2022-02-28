@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.IO.Packaging;
-using System.Text;
 using System.Linq;
 using System.Xml.Linq;
 
@@ -15,8 +13,10 @@ namespace IATClient
     {
         private Uri BaseKeyUri = null;
 
-        public CIATKey BaseKey {
-            get {
+        public CIATKey BaseKey
+        {
+            get
+            {
                 if (BaseKeyUri == null)
                     return null;
                 return CIAT.SaveFile.GetIATKey(BaseKeyUri);
@@ -25,15 +25,22 @@ namespace IATClient
             {
                 if ((BaseKeyUri == null) && (value == null))
                     return;
-                else if (BaseKeyUri == null) {
+                else if (BaseKeyUri == null)
+                {
                     BaseKeyUri = value.URI;
                     value.AddOwner(this);
-                } else if (value == null) {
+                }
+                else if (value == null)
+                {
                     CIAT.SaveFile.GetIATKey(BaseKeyUri).ReleaseOwner(this);
                     BaseKeyUri = null;
-                } else if (BaseKeyUri.Equals(value.URI)) {
+                }
+                else if (BaseKeyUri.Equals(value.URI))
+                {
                     return;
-                } else {
+                }
+                else
+                {
                     CIAT.SaveFile.GetIATKey(BaseKeyUri).ReleaseOwner(this);
                     BaseKeyUri = value.URI;
                     CIATKey key = CIAT.SaveFile.GetIATKey(BaseKeyUri);
@@ -100,7 +107,7 @@ namespace IATClient
             BaseKeyUri = null;
         }
 
-        public CIATReversedKey(Uri u) : base(u) 
+        public CIATReversedKey(Uri u) : base(u)
         {
         }
 

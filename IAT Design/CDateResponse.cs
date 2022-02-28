@@ -1,10 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using IATClient.IATConfig;
+using IATClient.ResultData;
+using System;
 using System.Xml;
 using System.Xml.Linq;
-using IATClient.ResultData;
-using IATClient.IATConfig;
 
 namespace IATClient
 {

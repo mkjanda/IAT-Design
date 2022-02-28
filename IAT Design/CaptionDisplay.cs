@@ -1,16 +1,12 @@
 ﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using System.Windows.Forms;
 using System.Drawing;
 using System.IO;
-using System.Threading;
+using System.Linq;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 using System.Xml;
 using System.Xml.Linq;
 using Saxon.Api;
-
 namespace IATClient
 {
     class CaptionDisplay : SurveyItemDisplay
@@ -359,7 +355,7 @@ namespace IATClient
             FontFamilyDrop = new ToolStripDropDownButton();
             FontFamilyDrop.DropDownItems.AddRange(PrivateFont.Fonts.Select(f => new ToolStripMenuItem(f.DisplayName, null, (sender, args) =>
             {
-                FontFamilyDrop.Text = (sender as ToolStripMenuItem).Text; 
+                FontFamilyDrop.Text = (sender as ToolStripMenuItem).Text;
                 RecalcSize(false);
             }, f.FamilyName)).ToArray());
             FontFamilyDrop.Text = PrivateFont.JosefinSans.DisplayName;

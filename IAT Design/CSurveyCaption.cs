@@ -1,11 +1,10 @@
-﻿using System;
+﻿using IATClient.ResultData;
+using System;
 using System.Drawing;
+using System.IO;
+using System.Linq;
 using System.Windows.Forms;
 using System.Xml.Linq;
-using System.Linq;
-using System.IO;
-using IATClient.ResultData;
-using IATClient.IATConfig; 
 namespace IATClient
 {
     class CSurveyCaption : CSurveyItem
@@ -69,7 +68,7 @@ namespace IATClient
             Font f = null;
             if (fam == null)
                 fam = PrivateFont.Fonts[1].FontFamily;
-                f = new Font(fam, FontSize, FontStyle.Regular, GraphicsUnit.Pixel);
+            f = new Font(fam, FontSize, FontStyle.Regular, GraphicsUnit.Pixel);
 
             writer.WriteElementString("TextWidth", TextRenderer.MeasureText(Text, f).Width.ToString());
             writer.WriteElementString("BorderWidth", BorderWidth.ToString());
@@ -86,7 +85,7 @@ namespace IATClient
             writer.WriteElementString("BorderColorR", BorderColor.R.ToString("X2"));
             writer.WriteElementString("BorderColorG", BorderColor.G.ToString("X2"));
             writer.WriteElementString("BorderColorB", BorderColor.B.ToString("X2"));
-            writer.WriteEndElement(); 
+            writer.WriteEndElement();
         }
 
         public override void Save()
@@ -100,11 +99,11 @@ namespace IATClient
             CIAT.SaveFile.ReleaseWriteStreamLock();
         }
 
-        public override XElement AsXElement() => new XElement(GetType().ToString(), new XAttribute("rSurveyId", rSurveyId), new XElement("Text", Text), 
-            new XElement("FontSize", FontSize.ToString()), new XElement("FontName", FontName), new XElement("BorderWidth", BorderWidth.ToString()), 
-            new XElement("FontColor", new XAttribute("r", FontColor.R.ToString()), 
-            new XAttribute("g", FontColor.G.ToString()), new XAttribute("b", FontColor.B.ToString())), new XElement("BackgroundColor", 
-            new XAttribute("r", BackColor.R.ToString()), new XAttribute("g", BackColor.G.ToString()), new XAttribute("b", BackColor.B.ToString())), 
+        public override XElement AsXElement() => new XElement(GetType().ToString(), new XAttribute("rSurveyId", rSurveyId), new XElement("Text", Text),
+            new XElement("FontSize", FontSize.ToString()), new XElement("FontName", FontName), new XElement("BorderWidth", BorderWidth.ToString()),
+            new XElement("FontColor", new XAttribute("r", FontColor.R.ToString()),
+            new XAttribute("g", FontColor.G.ToString()), new XAttribute("b", FontColor.B.ToString())), new XElement("BackgroundColor",
+            new XAttribute("r", BackColor.R.ToString()), new XAttribute("g", BackColor.G.ToString()), new XAttribute("b", BackColor.B.ToString())),
             new XElement("BorderColor", new XAttribute("r", BorderColor.R.ToString()), new XAttribute("g", BorderColor.G.ToString()),
             new XAttribute("b", BorderColor.B.ToString())));
 

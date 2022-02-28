@@ -24,7 +24,8 @@ namespace IATClient
         event EventHandler Resize;
     }
 
-    public interface ISurveyImageDisplay : IImageDisplay {
+    public interface ISurveyImageDisplay : IImageDisplay
+    {
         new int Height { get; set; }
     }
 }

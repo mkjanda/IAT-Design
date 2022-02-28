@@ -1,11 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.IO;
-using System.Text;
-using System.Xml;
-using System.Drawing;
-using System.Windows.Forms;
+using System.Linq;
 using System.Xml.Linq;
 
 namespace IATClient
@@ -19,7 +15,7 @@ namespace IATClient
                 return "text/xml+" + typeof(CTextInstructionScreen).ToString();
             }
         }
-    
+
 
         public override InstructionScreenType Type { get { return InstructionScreenType.Text; } }
 
@@ -71,44 +67,44 @@ namespace IATClient
             base.Validate(itemNdx);
             DIText tdi = CIAT.SaveFile.GetDI(InstructionsUri) as DIText;
             if (tdi.Phrase.Trim() == String.Empty)
-                throw new CValidationException(EValidationException.TextInstructionsBlank, 
+                throw new CValidationException(EValidationException.TextInstructionsBlank,
                     new CInstructionLocationDescriptor(CIAT.SaveFile.GetInstructionBlock(ParentBlockUri), this));
         }
-/*
-        /// <summary>
-        /// Writes the CTextInstructionScreen object to an XmlTextWriter
-        /// </summary>
-        /// <param name="writer">The XmlTextWriter object to use for output</param>
-        public override void WriteToXml(XmlTextWriter writer)
-        {
-            if (!IsValid())
-                throw new Exception();
+        /*
+                /// <summary>
+                /// Writes the CTextInstructionScreen object to an XmlTextWriter
+                /// </summary>
+                /// <param name="writer">The XmlTextWriter object to use for output</param>
+                public override void WriteToXml(XmlTextWriter writer)
+                {
+                    if (!IsValid())
+                        throw new Exception();
 
-            writer.WriteStartElement("InstructionScreen");
-            writer.WriteAttributeString("Type", sText);
-            Instructions.WriteToXml(writer);
-            ContinueInstructions.WriteToXml(writer);
-            writer.WriteElementString("ContinueKey", ContinueKey);
-            writer.WriteEndElement();
-        }
+                    writer.WriteStartElement("InstructionScreen");
+                    writer.WriteAttributeString("Type", sText);
+                    Instructions.WriteToXml(writer);
+                    ContinueInstructions.WriteToXml(writer);
+                    writer.WriteElementString("ContinueKey", ContinueKey);
+                    writer.WriteEndElement();
+                }
 
-        /// <summary>
-        /// Loads a CTextInstructionScreen object from the passed XmlNode
-        /// </summary>
-        /// <param name="node">The XmlNode object to use for input</param>
-        /// <returns></returns>
-        public override bool LoadFromXml(XmlNode node)
-        {
-            if (node.ChildNodes.Count != 3)
-                return false;
-            if (!Instructions.LoadFromXml(node.ChildNodes[0]))
-                return false;
-            if (!ContinueInstructions.LoadFromXml(node.ChildNodes[1]))
-                return false;
-            ContinueKey = node.ChildNodes[2].InnerText;
-            return true;
-        }
-*/
+                /// <summary>
+                /// Loads a CTextInstructionScreen object from the passed XmlNode
+                /// </summary>
+                /// <param name="node">The XmlNode object to use for input</param>
+                /// <returns></returns>
+                public override bool LoadFromXml(XmlNode node)
+                {
+                    if (node.ChildNodes.Count != 3)
+                        return false;
+                    if (!Instructions.LoadFromXml(node.ChildNodes[0]))
+                        return false;
+                    if (!ContinueInstructions.LoadFromXml(node.ChildNodes[1]))
+                        return false;
+                    ContinueKey = node.ChildNodes[2].InnerText;
+                    return true;
+                }
+        */
         public override void Save()
         {
             XDocument xDoc = new XDocument();
@@ -117,7 +113,7 @@ namespace IATClient
             String rPreviewId = CIAT.SaveFile.GetRelationshipsByType(this.URI, BaseType, typeof(DIBase)).Where(pr => pr.TargetUri.Equals(PreviewUri)).First().Id;
             String rParentBlockId = CIAT.SaveFile.GetRelationshipsByType(this.URI, BaseType, typeof(CInstructionBlock)).Where(pr => pr.TargetUri.Equals(ParentBlockUri)).First().Id;
             xDoc.Document.Add(new XElement("InstructionScreen", new XAttribute("Type", InstructionScreenType.Text.ToString()), new XElement("rParentBlockId", rParentBlockId),
-                new XElement("rInstructionsId", rInstructionsId), new XElement("rContinueInstructionsId", rContinueId), new XElement("rPreviewId", rPreviewId), 
+                new XElement("rInstructionsId", rInstructionsId), new XElement("rContinueInstructionsId", rContinueId), new XElement("rPreviewId", rPreviewId),
                 new XElement("ContinueKey", ContinueKey)));
             Stream s = CIAT.SaveFile.GetWriteStream(this);
             xDoc.Save(s);
@@ -138,7 +134,7 @@ namespace IATClient
             ParentBlockUri = CIAT.SaveFile.GetRelationship(this, xDoc.Root.Element("rParentBlockId").Value).TargetUri;
         }
 
-  
+
         public override void Dispose()
         {
             if (IsDisposed)

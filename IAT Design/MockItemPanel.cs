@@ -1,8 +1,7 @@
 ﻿using System;
-using System.IO;
 using System.Drawing;
+using System.IO;
 using System.Windows.Forms;
-using System.Linq;
 
 namespace IATClient
 {
@@ -172,7 +171,7 @@ namespace IATClient
                 return;
             if (KeyedDirDrop.SelectedIndex != -1)
                 MockItemScreen.KeyedDirection = KeyedDirection.FromString(KeyedDirDrop.SelectedItem.ToString());
-            else 
+            else
                 MockItemScreen.KeyedDirection = KeyedDirection.None;
             ParentControl.ValidateInput();
         }
@@ -241,7 +240,7 @@ namespace IATClient
                 MockItemScreen.StimulusUri = MockItemTextStimulus.TextDisplayItemUri;
                 TextStimulusGroup.Enabled = true;
             }
-            else 
+            else
             {
                 MockItemScreen.StimulusUri = null;
                 TextStimulusGroup.Enabled = false;
@@ -257,7 +256,7 @@ namespace IATClient
                 ImageStimulusGroup.Enabled = true;
                 MockItemScreen.StimulusUri = new DIStimulusImage().URI;
             }
-            else 
+            else
             {
                 DIBase stim = (MockItemScreen.StimulusUri != null) ? CIAT.SaveFile.GetDI(MockItemScreen.StimulusUri) : null;
                 MockItemScreen.StimulusUri = null;
@@ -279,8 +278,8 @@ namespace IATClient
             if (IsDisposed)
                 return;
             IsDisposed = true;
-     //       if (MockItemScreen != null)
-       //         MockItemScreen.Dispose();
+            //       if (MockItemScreen != null)
+            //         MockItemScreen.Dispose();
             base.Dispose();
         }
     }
