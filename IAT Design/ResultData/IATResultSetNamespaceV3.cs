@@ -1,9 +1,5 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Xml;
 
 namespace IATClient.ResultData
@@ -19,9 +15,10 @@ namespace IATClient.ResultData
 
                 private static readonly Dictionary<String, RawAnswerState> instance;
                 static readonly public RawAnswerState Unanswered;
-                static readonly public RawAnswerState ForceSubmittedUnanswered; 
-                
-                static RawAnswerState() {
+                static readonly public RawAnswerState ForceSubmittedUnanswered;
+
+                static RawAnswerState()
+                {
                     instance = new Dictionary<String, RawAnswerState>();
                     Unanswered = new RawAnswerState(1, "__Unanswered__");
                     ForceSubmittedUnanswered = new RawAnswerState(2, "__ForceSubmittedUnanswered__");
@@ -54,7 +51,7 @@ namespace IATClient.ResultData
             private IATResultSetNamespaceV1.AnswerState AnswerState = IATResultSetNamespaceV1.AnswerState.Unanswered;
             private String Answer;
 
-            public SurveyItemResponse() 
+            public SurveyItemResponse()
             {
                 Answer = "N/A";
             }
@@ -133,7 +130,7 @@ namespace IATClient.ResultData
             public String _Token = String.Empty;
             public override String Token
             {
-                get 
+                get
                 {
                     return _Token;
                 }

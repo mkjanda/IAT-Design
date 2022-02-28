@@ -1,9 +1,8 @@
-﻿using System;
-using System.IO;
-using System.Xml.Linq;
+﻿using System.IO;
 using System.Net;
 using System.Text;
 using System.Windows.Forms;
+using System.Xml.Linq;
 
 namespace IATClient
 {

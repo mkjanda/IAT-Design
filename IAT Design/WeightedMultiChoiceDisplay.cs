@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using System.Drawing;
 
 namespace IATClient
 {
@@ -60,7 +60,7 @@ namespace IATClient
         {
             for (int ctr = 0; ctr < Weights.Count; ctr++)
             {
-                bool Visible = Weights[ctr].Visible; 
+                bool Visible = Weights[ctr].Visible;
                 if (Weights[ctr].Bounds.Contains(e.Location))
                     Weights[ctr].Visible = true;
                 else if (!Weights[ctr].Focused)
@@ -179,7 +179,7 @@ namespace IATClient
                 if (!Weights[ctr].Visible)
                 {
                     String str = Weights[ctr].Value.ToString();
-                    e.Graphics.DrawString(str, DisplayFont, br, 
+                    e.Graphics.DrawString(str, DisplayFont, br,
                         new Point(Weights[ctr].Location.X + Weights[ctr].Size.Width - TextRenderer.MeasureText(str, DisplayFont).Width, Weights[ctr].Location.Y));
                 }
             }

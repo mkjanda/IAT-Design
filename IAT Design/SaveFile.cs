@@ -1,13 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Collections.Concurrent;
+using System.Collections.Generic;
 using System.IO;
 using System.IO.Packaging;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Security.Cryptography;
 using System.Xml.Linq;
 using System.Xml.Schema;
 using System.Xml.Serialization;
@@ -286,17 +285,17 @@ namespace IATClient
             }
             catch (Exception ex)
             {
-//                if (File.Exists(WorkingSaveFilename))
-  //                  File.Delete(WorkingSaveFilename);
-    //            File.Copy(fileName, WorkingSaveFilename);
-      //          SavePackage = Package.Open(WorkingSaveFilename, FileMode.Open, FileAccess.ReadWrite);
-        //        InvalidSaveFileReport.Report();
+                //                if (File.Exists(WorkingSaveFilename))
+                //                  File.Delete(WorkingSaveFilename);
+                //            File.Copy(fileName, WorkingSaveFilename);
+                //          SavePackage = Package.Open(WorkingSaveFilename, FileMode.Open, FileAccess.ReadWrite);
+                //        InvalidSaveFileReport.Report();
             }
             MetaData = new SaveFileMetaData(this, GetPackageLevelRelationship(typeof(SaveFileMetaData)).TargetUri);
             if (CVersion.Compare(new CVersion("1.1.1.13"), Version) < 0)
                 RebuildSaveFileUris();
         }
-    
+
 
 
         public SaveFile()
@@ -307,47 +306,47 @@ namespace IATClient
             SavePackage = Package.Open(PackageStream, FileMode.Create, FileAccess.ReadWrite);
             MetaData = new SaveFileMetaData(this);
         }
-/*
-        private String _WorkingSaveFilename = null;
-        public String WorkingSaveFilename
-        {
-            get
-            {
-                if (_WorkingSaveFilename != null)
-                    return _WorkingSaveFilename;
-                int ctr = 0;
-                String appDataDir = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData, Environment.SpecialFolderOption.Create) + Path.DirectorySeparatorChar + "IATSoftware" + Path.DirectorySeparatorChar;
-                while (File.Exists(String.Format(appDataDir + Properties.Resources.sWorkingSaveFileName, ++ctr)))
+        /*
+                private String _WorkingSaveFilename = null;
+                public String WorkingSaveFilename
                 {
-                    try
+                    get
                     {
-                        File.Delete(String.Format(Properties.Resources.sWorkingSaveFileName, ctr));
+                        if (_WorkingSaveFilename != null)
+                            return _WorkingSaveFilename;
+                        int ctr = 0;
+                        String appDataDir = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData, Environment.SpecialFolderOption.Create) + Path.DirectorySeparatorChar + "IATSoftware" + Path.DirectorySeparatorChar;
+                        while (File.Exists(String.Format(appDataDir + Properties.Resources.sWorkingSaveFileName, ++ctr)))
+                        {
+                            try
+                            {
+                                File.Delete(String.Format(Properties.Resources.sWorkingSaveFileName, ctr));
+                            }
+                            catch (Exception) { }
+                        }
+                        ctr = 0;
+                        FileStream fs = null;
+                        while (_WorkingSaveFilename == null)
+                        {
+                            try
+                            {
+                                _WorkingSaveFilename = String.Format(String.Format(appDataDir + Properties.Resources.sWorkingSaveFileName, ++ctr));
+                                fs = File.Open(_WorkingSaveFilename, FileMode.OpenOrCreate, FileAccess.Read);
+                            }
+                            catch (Exception ex)
+                            {
+                                _WorkingSaveFilename = null;
+                            }
+                            finally
+                            {
+                                if (fs != null)
+                                    fs.Close();
+                            }
+                        }
+                        return _WorkingSaveFilename;
                     }
-                    catch (Exception) { }
                 }
-                ctr = 0;
-                FileStream fs = null;
-                while (_WorkingSaveFilename == null)
-                {
-                    try
-                    {
-                        _WorkingSaveFilename = String.Format(String.Format(appDataDir + Properties.Resources.sWorkingSaveFileName, ++ctr));
-                        fs = File.Open(_WorkingSaveFilename, FileMode.OpenOrCreate, FileAccess.Read);
-                    }
-                    catch (Exception ex)
-                    {
-                        _WorkingSaveFilename = null;
-                    }
-                    finally
-                    {
-                        if (fs != null)
-                            fs.Close();
-                    }
-                }
-                return _WorkingSaveFilename;
-            }
-        }
-*/
+        */
         private void RebuildSaveFileUris()
         {
             ioLock.EnterUpgradeableReadLock();
@@ -499,10 +498,11 @@ namespace IATClient
                         CIAT.SaveFile.DeletePart(_Layout.URI);
                         _Layout = value;
                         CreatePackageLevelRelationship(value.URI, typeof(CIATLayout));
-                        Task.Run(() => {
+                        Task.Run(() =>
+                        {
                             Monitor.Enter(layoutLock);
                             Monitor.Exit(layoutLock);
-                            ResizeToNewLayout(); 
+                            ResizeToNewLayout();
                         });
                     }
                     else
@@ -1261,19 +1261,23 @@ namespace IATClient
                 foreach (var di in simpleKeyValueUris.Distinct().Select(u => CIAT.SaveFile.GetDI(u)))
                     di.ScheduleInvalidationSync();
                 WaitHandle.WaitAll(waits);
-                foreach (var dk in dualKeys) {
+                foreach (var dk in dualKeys)
+                {
                     dk.ResumeLayout(false);
                     dk.GenerateKeyValues();
                     dk.SuspendLayout();
                 }
                 var dualKeyUris = keys.Where(k => k.KeyType != IATKeyType.DualKey).Select(k => k.LeftValueUri).ToList();
                 dualKeyUris.AddRange(keys.Where(k => k.KeyType != IATKeyType.DualKey).Select(k => k.LeftValueUri).ToList());
-                foreach (var di in dis.Where(di => !simpleKeyValueUris.Contains(di.URI) && !dualKeyUris.Contains(di.URI)).ToList()) {
+                foreach (var di in dis.Where(di => !simpleKeyValueUris.Contains(di.URI) && !dualKeyUris.Contains(di.URI)).ToList())
+                {
                     if (di.IsGenerated)
                         di.ResumeLayout(false);
                     di.ScheduleInvalidation();
                 }
-            } else {
+            }
+            else
+            {
                 foreach (var di in dis)
                 {
                     if (di.IsGenerated)
@@ -1471,31 +1475,31 @@ namespace IATClient
                 try
                 {
                     SavePackage.Close();
-//                    if ((WorkingSaveFilename != filename) && (File.Exists(filename)))
-                        File.Delete(filename);
-                using (var stream = File.Open(filename, FileMode.OpenOrCreate))
-                    PackageStream.WriteTo(stream);
+                    //                    if ((WorkingSaveFilename != filename) && (File.Exists(filename)))
+                    File.Delete(filename);
+                    using (var stream = File.Open(filename, FileMode.OpenOrCreate))
+                        PackageStream.WriteTo(stream);
                     SavePackage = Package.Open(PackageStream, FileMode.Open, FileAccess.ReadWrite);
-                    
-/*                    File.Copy(WorkingSaveFilename, filename);
-                    SavePackage = Package.Open(PackageStream, FileMode.Open, FileAccess.ReadWrite);
-                    package = Package.Open(filename, FileMode.Open, FileAccess.ReadWrite);
-                    byte[] data = new byte[32];
-                    Stream s = pPart.GetStream(FileMode.Create, FileAccess.ReadWrite);
-                    s.Write(data, 0, 32);
-                    package.DeletePart(pPart.Uri);
-                    package.Close();
-                    
-                    RSACryptoServiceProvider rsaCrypt = new RSACryptoServiceProvider();
-                    rsaCrypt.ImportCspBlob(Convert.FromBase64String(Properties.Resources.sig));
-                    SHA256 sha = SHA256.Create();
-                    byte[] hash = null;
-                    using (FileStream fs = new FileStream(filename, FileMode.Open, FileAccess.Read))
-                        hash = sha.ComputeHash(fs);
-                    byte[] signedHash = rsaCrypt.SignHash(hash, CryptoConfig.MapNameToOID("SHA256"));
-                    using (FileStream fs = new FileStream(filename, FileMode.Append, FileAccess.Write))
-                        fs.Write(signedHash, 0, signedHash.Length);
-  */                  
+
+                    /*                    File.Copy(WorkingSaveFilename, filename);
+                                        SavePackage = Package.Open(PackageStream, FileMode.Open, FileAccess.ReadWrite);
+                                        package = Package.Open(filename, FileMode.Open, FileAccess.ReadWrite);
+                                        byte[] data = new byte[32];
+                                        Stream s = pPart.GetStream(FileMode.Create, FileAccess.ReadWrite);
+                                        s.Write(data, 0, 32);
+                                        package.DeletePart(pPart.Uri);
+                                        package.Close();
+
+                                        RSACryptoServiceProvider rsaCrypt = new RSACryptoServiceProvider();
+                                        rsaCrypt.ImportCspBlob(Convert.FromBase64String(Properties.Resources.sig));
+                                        SHA256 sha = SHA256.Create();
+                                        byte[] hash = null;
+                                        using (FileStream fs = new FileStream(filename, FileMode.Open, FileAccess.Read))
+                                            hash = sha.ComputeHash(fs);
+                                        byte[] signedHash = rsaCrypt.SignHash(hash, CryptoConfig.MapNameToOID("SHA256"));
+                                        using (FileStream fs = new FileStream(filename, FileMode.Append, FileAccess.Write))
+                                            fs.Write(signedHash, 0, signedHash.Length);
+                      */
                 }
                 finally
                 {
@@ -1566,12 +1570,12 @@ namespace IATClient
                 GetObservableUri(u).Save();
             }
             FontPreferences.Save();
-            
+
             ImageMetaDataDocument.Save();
             Layout.Save();
             iat.Save();
             MetaData.Save();
-//            ImageManager.FlushCache();
+            //            ImageManager.FlushCache();
             FrozenForSave = false;
             return true;
         }
@@ -1592,48 +1596,19 @@ namespace IATClient
             Task.Run(() =>
             {
                 IsDisposing = true;
-                ioLock.EnterWriteLock();
-                try
+                Task.Run(() =>
                 {
-                    //                ActivityLog.LogEvent(ActivityLog.EventType.Delete, IAT.URI);
-                    ImageManager.Dispose();
-                    Layout?.Dispose();
-                    /*              lock (saveLock)
-                                  {
-                                      foreach (var k in Keys.Values.Where(key => key is CIATDualKey))
-                                          k.Dispose();
-                                      foreach (var k in Keys.Values.Where(key => key is CIATReversedKey))
-                                          k.Dispose();
-                                      foreach (var k in Keys.Values.Where(key => key is CIATKey))
-                                          k.Dispose();
-                                      foreach (var b in IATBlocks.Values)
-                                          b.Dispose();
-                                      foreach (var item in IATItems.Values)
-                                          item.Dispose();
-                                      foreach (var ib in InstructionBlocks.Values)
-                                          ib.Dispose();
-                                      foreach (var s in Surveys.Values)
-                                          s.Dispose();
-                                      foreach (var i in IImages.Values)
-                                          i.Dispose();
-                                      foreach (var ou in ObservableUris.Values)
-                                          ou.Dispose();
-                                  }
-                                  DisposingEvent.Reset();*/
-                }
-                finally
-                {
-                    IsDisposed = true;
-                    SavePackage.Close();
-                    try
-                    {
-                        PackageStream.Dispose();
-                    }
-                    catch (Exception ex)
-                    {
-                    }
-                    ioLock.ExitWriteLock();
-                }
+                    var im = ImageManager;
+                    var il = ioLock; ;
+                    var sp = SavePackage;
+                    var ps = PackageStream;
+                    il.EnterWriteLock();
+                    sp.Close();
+                    ps.Dispose();
+                    il.ExitWriteLock();
+                    Task.Run(() => im.Dispose()).Wait(5000);
+                });
+                IsDisposed = true;
                 DisposingEvent.Set();
             });
         }

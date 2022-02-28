@@ -1,10 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Drawing;
-using System.Data;
-
-using System.Text;
 using System.Windows.Forms;
 
 namespace IATClient
@@ -37,7 +31,7 @@ namespace IATClient
         }
         public ResponseKeyDialog MainForm
         {
-            get 
+            get
             {
                 return ParentControl.Parent as ResponseKeyDialog;
             }
@@ -72,7 +66,8 @@ namespace IATClient
         {
             if (ReversibleKeyDropList.SelectedItem == null)
             {
-                MainForm.BeginInvoke(new Action(() => {
+                MainForm.BeginInvoke(new Action(() =>
+                {
                     MainForm.ErrorMsg = Properties.Resources.sUndefinedReversedKeyException;
                 }));
                 return false;

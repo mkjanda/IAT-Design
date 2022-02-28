@@ -1,7 +1,5 @@
-﻿using System;
-using System.Drawing;
-using System.Collections.Generic;
-using IATClient.Images;
+﻿using IATClient.Images;
+using System;
 
 namespace IATClient
 {
@@ -33,7 +31,8 @@ namespace IATClient
             }
         }
 
-        public DIComposite() : base() {
+        public DIComposite() : base()
+        {
             SuspendLayout();
         }
 

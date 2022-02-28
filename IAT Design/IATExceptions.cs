@@ -27,7 +27,7 @@ namespace IATClient
 
         public ServerExceptionType Type
         {
-            get 
+            get
             {
                 return _Type;
             }
@@ -61,5 +61,5 @@ namespace IATClient
         {
             _Type = type;
         }
-    }       
+    }
 }

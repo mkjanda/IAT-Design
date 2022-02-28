@@ -1,15 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
+﻿using IATClient.Messages;
+using System;
+using System.Linq;
 using System.Net;
-using System.Windows.Forms;
+using System.Net.WebSockets;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Xml;
-using System.Net.WebSockets;
-using System.Linq;
-using IATClient.Messages;
+using System.Windows.Forms;
 
 namespace IATClient
 {
@@ -25,7 +22,7 @@ namespace IATClient
         public enum EConfirmResult { failed, emailMismatch, noSuchClient, success };
         private EConfirmResult Result = EConfirmResult.failed;
         public TransactionRequest FinalTransaction { get; private set; }
-        
+
         private void ReportError(String caption, CReportableException rex)
         {
             try
@@ -69,7 +66,7 @@ namespace IATClient
             trans.Transaction = TransactionRequest.ETransaction.RequestConnection;
             Envelope env = new Envelope(trans);
             env.SendMessage(EMailUtilityWebSocket, AbortToken);
-            int nTrigger = WaitHandle.WaitAny(new WaitHandle[] { OpComplete, OpFailed} );
+            int nTrigger = WaitHandle.WaitAny(new WaitHandle[] { OpComplete, OpFailed });
             return Result;
         }
 
@@ -128,11 +125,12 @@ namespace IATClient
                     receiveTask.ContinueWith(new Action<Task<WebSocketReceiveResult>>(ReceiveMessage), AbortToken);
                 }
             }
-            catch (Exception ex) {
+            catch (Exception ex)
+            {
                 OpFailed.Set();
             }
         }
-        
+
 
         public void ResendEMailVerification()
         {

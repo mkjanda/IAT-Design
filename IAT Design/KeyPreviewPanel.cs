@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Drawing;
-using System.Data;
-
-using System.Text;
+﻿using System.Drawing;
 using System.Windows.Forms;
 
 namespace IATClient
@@ -54,62 +48,62 @@ namespace IATClient
             RightResponsePreview.BackColor = CIAT.SaveFile.Layout.BackColor;
             RightResponsePreview.Image = new Bitmap(RightResponsePreview.ClientRectangle.Width, RightResponsePreview.ClientRectangle.Height, System.Drawing.Imaging.PixelFormat.Format32bppRgb);
         }
-  /*      
-        public void UpdateLeftPane(CDisplayItem di)
-        {
-            LDI = di;
-            LDIChanged = true;
-        }
+        /*      
+              public void UpdateLeftPane(CDisplayItem di)
+              {
+                  LDI = di;
+                  LDIChanged = true;
+              }
 
 
-        
-        public void UpdateRightPane(CDisplayItem di)
-        {
-            RDI = di;
-            RDIChanged = true;
-        }
-        
+
+              public void UpdateRightPane(CDisplayItem di)
+              {
+                  RDI = di;
+                  RDIChanged = true;
+              }
 
 
-        /// <summary>
-        /// Disposes of all graphics objects used by the control
-        /// </summary>
-        public void DisposeOfGraphics()
-        {
-            if (LeftBuffer != null)
-            {
-                LeftBuffer.Dispose();
-                LeftBuffer = null;
-                RightBuffer.Dispose();
-                RightBuffer = null;
-                LeftBufferGraphics.Dispose();
-                LeftBufferGraphics = null;
-                RightBufferGraphics.Dispose();
-                RightBufferGraphics = null;
-                EraseBrush.Dispose();
-                EraseBrush = null;
-                
-            }
-        }
-/*        
-        /// <summary>
-        /// Constructs graphics objects used by the control
-        /// </summary>
-        public void ConstructGraphics()
-        {
-            Graphics g = Graphics.FromHwnd(this.Handle);
-            LeftResponsePreview.BackColor = CIAT.SaveFile.Layout.BackColor;
-            LeftResponsePreview.Image = new Bitmap(LeftResponsePreview.ClientRectangle.Width, LeftResponsePreview.ClientRectangle.Height, g);
-            RightResponsePreview.BackColor = CIAT.SaveFile.Layout.BackColor;
-            RightResponsePreview.Image = new Bitmap(RightResponsePreview.ClientRectangle.Width, RightResponsePreview.ClientRectangle.Height, g);
-            LeftBufferGraphics = Graphics.FromImage(LeftResponsePreview.Image);
-            RightBufferGraphics = Graphics.FromImage(RightResponsePreview.Image);
-            EraseBrush = new SolidBrush(CIAT.SaveFile.Layout.BackColor);
-            g.Dispose();
-        }
 
-        System.Windows.Forms.Timer UpdateTimer;
-        */
+              /// <summary>
+              /// Disposes of all graphics objects used by the control
+              /// </summary>
+              public void DisposeOfGraphics()
+              {
+                  if (LeftBuffer != null)
+                  {
+                      LeftBuffer.Dispose();
+                      LeftBuffer = null;
+                      RightBuffer.Dispose();
+                      RightBuffer = null;
+                      LeftBufferGraphics.Dispose();
+                      LeftBufferGraphics = null;
+                      RightBufferGraphics.Dispose();
+                      RightBufferGraphics = null;
+                      EraseBrush.Dispose();
+                      EraseBrush = null;
+
+                  }
+              }
+      /*        
+              /// <summary>
+              /// Constructs graphics objects used by the control
+              /// </summary>
+              public void ConstructGraphics()
+              {
+                  Graphics g = Graphics.FromHwnd(this.Handle);
+                  LeftResponsePreview.BackColor = CIAT.SaveFile.Layout.BackColor;
+                  LeftResponsePreview.Image = new Bitmap(LeftResponsePreview.ClientRectangle.Width, LeftResponsePreview.ClientRectangle.Height, g);
+                  RightResponsePreview.BackColor = CIAT.SaveFile.Layout.BackColor;
+                  RightResponsePreview.Image = new Bitmap(RightResponsePreview.ClientRectangle.Width, RightResponsePreview.ClientRectangle.Height, g);
+                  LeftBufferGraphics = Graphics.FromImage(LeftResponsePreview.Image);
+                  RightBufferGraphics = Graphics.FromImage(RightResponsePreview.Image);
+                  EraseBrush = new SolidBrush(CIAT.SaveFile.Layout.BackColor);
+                  g.Dispose();
+              }
+
+              System.Windows.Forms.Timer UpdateTimer;
+              */
         public void UpdateLeftPreview(Image img)
         {
             Graphics g = Graphics.FromImage(LeftResponsePreview.Image);
@@ -140,83 +134,83 @@ namespace IATClient
             g.Dispose();
         }
 
-/*
-        public void UpdatePreview(object sender, EventArgs e)
-        {
-            if (LDIChanged && (LDI == null))
-            {
-                Brush eraseBrush = new SolidBrush(CIAT.SaveFile.Layout.BackColor);
-                LeftBufferGraphics.FillRectangle(eraseBrush, new Rectangle(0, 0, LeftResponsePreview.Image.Width, LeftResponsePreview.Image.Height));
-                eraseBrush.Dispose();
-                LeftResponsePreview.Invalidate();
-            }
-            else if (LDI == null) { }
-            else if (LDIChanged || !LDI.ComponentImageValid)
-            {
-                Brush eraseBrush = new SolidBrush(CIAT.SaveFile.Layout.BackColor);
-                LeftBufferGraphics.FillRectangle(eraseBrush, new Rectangle(0, 0, LeftResponsePreview.Image.Width, LeftResponsePreview.Image.Height));
-                LDI.IATImage.Lock();
-                double arImage = (double)LDI.IATImage.ImageSize.Width / (double)LDI.IATImage.ImageSize.Height;
-                double arWin = (double)LeftResponsePreview.Width / (double)LeftResponsePreview.Height;
-                double scale;
-                if (arImage > arWin)
-                    scale = (double)LeftResponsePreview.Width / (double)CIAT.SaveFile.Layout.KeyValueSize.Width;
-                else
-                    scale = (double)LeftResponsePreview.Height / (double)CIAT.SaveFile.Layout.KeyValueSize.Height;
-                Size sz = new Size((int)(LDI.IATImage.ImageSize.Width * scale), (int)(LDI.IATImage.ImageSize.Height * scale));
-                Point loc = new Point((LeftResponsePreview.Width - sz.Width) >> 1, (LeftResponsePreview.Height - sz.Height) >> 1);
-                LeftBufferGraphics.DrawImage(LDI.IATImage.theImage, new Rectangle(loc, sz));
-                LDI.IATImage.Unlock();
-                eraseBrush.Dispose();
-                LDI.ValidateComponentImage();
-                LeftResponsePreview.Invalidate();
-
-            }
-            if (RDIChanged && (RDI == null))
-            {
-                Brush eraseBrush = new SolidBrush(CIAT.SaveFile.Layout.BackColor);
-                RightBufferGraphics.FillRectangle(eraseBrush, new Rectangle(0, 0, RightResponsePreview.Image.Width, RightResponsePreview.Image.Height));
-                eraseBrush.Dispose();
-                RightResponsePreview.Invalidate();
-            }
-            else if (RDI == null) { }
-            else if (RDIChanged || !RDI.ComponentImageValid)
-            {
-                Brush eraseBrush = new SolidBrush(CIAT.SaveFile.Layout.BackColor);
-                RightBufferGraphics.FillRectangle(eraseBrush, new Rectangle(0, 0, RightResponsePreview.Image.Width, RightResponsePreview.Image.Height));
-                RDI.IATImage.Lock();
-                double arImage = (double)RDI.IATImage.ImageSize.Width / (double)RDI.IATImage.ImageSize.Height;
-                double arWin = (double)RightResponsePreview.Width / (double)RightResponsePreview.Height;
-                double scale;
-                if (arImage > arWin)
-                    scale = (double)RightResponsePreview.Width / (double)CIAT.SaveFile.Layout.KeyValueSize.Width;
-                else
-                    scale = (double)RightResponsePreview.Height / (double)CIAT.SaveFile.Layout.KeyValueSize.Height;
-                Size sz = new Size((int)(RDI.IATImage.ImageSize.Width * scale), (int)(RDI.IATImage.ImageSize.Height * scale));
-                Point loc = new Point((RightResponsePreview.Width - sz.Width) >> 1, (RightResponsePreview.Height - sz.Height) >> 1);
-                RightBufferGraphics.DrawImage(RDI.IATImage.theImage, new Rectangle(loc, sz));
-                RDI.IATImage.Unlock();
-                eraseBrush.Dispose();
-                RDI.ValidateComponentImage();
-                RightResponsePreview.Invalidate();
-            }
-            LDIChanged = false;
-            RDIChanged = false;
-        }
         /*
-        public void StartUpdateTimer()
-        {
-            UpdateTimer = new System.Windows.Forms.Timer();
-            UpdateTimer.Tick += new EventHandler(UpdatePreview);
-            UpdateTimer.Interval = 10;
-            UpdateTimer.Start();
-        }
+                public void UpdatePreview(object sender, EventArgs e)
+                {
+                    if (LDIChanged && (LDI == null))
+                    {
+                        Brush eraseBrush = new SolidBrush(CIAT.SaveFile.Layout.BackColor);
+                        LeftBufferGraphics.FillRectangle(eraseBrush, new Rectangle(0, 0, LeftResponsePreview.Image.Width, LeftResponsePreview.Image.Height));
+                        eraseBrush.Dispose();
+                        LeftResponsePreview.Invalidate();
+                    }
+                    else if (LDI == null) { }
+                    else if (LDIChanged || !LDI.ComponentImageValid)
+                    {
+                        Brush eraseBrush = new SolidBrush(CIAT.SaveFile.Layout.BackColor);
+                        LeftBufferGraphics.FillRectangle(eraseBrush, new Rectangle(0, 0, LeftResponsePreview.Image.Width, LeftResponsePreview.Image.Height));
+                        LDI.IATImage.Lock();
+                        double arImage = (double)LDI.IATImage.ImageSize.Width / (double)LDI.IATImage.ImageSize.Height;
+                        double arWin = (double)LeftResponsePreview.Width / (double)LeftResponsePreview.Height;
+                        double scale;
+                        if (arImage > arWin)
+                            scale = (double)LeftResponsePreview.Width / (double)CIAT.SaveFile.Layout.KeyValueSize.Width;
+                        else
+                            scale = (double)LeftResponsePreview.Height / (double)CIAT.SaveFile.Layout.KeyValueSize.Height;
+                        Size sz = new Size((int)(LDI.IATImage.ImageSize.Width * scale), (int)(LDI.IATImage.ImageSize.Height * scale));
+                        Point loc = new Point((LeftResponsePreview.Width - sz.Width) >> 1, (LeftResponsePreview.Height - sz.Height) >> 1);
+                        LeftBufferGraphics.DrawImage(LDI.IATImage.theImage, new Rectangle(loc, sz));
+                        LDI.IATImage.Unlock();
+                        eraseBrush.Dispose();
+                        LDI.ValidateComponentImage();
+                        LeftResponsePreview.Invalidate();
 
-        public void StopTimer()
-        {
-            UpdateTimer.Stop();
-        }
-         * */
+                    }
+                    if (RDIChanged && (RDI == null))
+                    {
+                        Brush eraseBrush = new SolidBrush(CIAT.SaveFile.Layout.BackColor);
+                        RightBufferGraphics.FillRectangle(eraseBrush, new Rectangle(0, 0, RightResponsePreview.Image.Width, RightResponsePreview.Image.Height));
+                        eraseBrush.Dispose();
+                        RightResponsePreview.Invalidate();
+                    }
+                    else if (RDI == null) { }
+                    else if (RDIChanged || !RDI.ComponentImageValid)
+                    {
+                        Brush eraseBrush = new SolidBrush(CIAT.SaveFile.Layout.BackColor);
+                        RightBufferGraphics.FillRectangle(eraseBrush, new Rectangle(0, 0, RightResponsePreview.Image.Width, RightResponsePreview.Image.Height));
+                        RDI.IATImage.Lock();
+                        double arImage = (double)RDI.IATImage.ImageSize.Width / (double)RDI.IATImage.ImageSize.Height;
+                        double arWin = (double)RightResponsePreview.Width / (double)RightResponsePreview.Height;
+                        double scale;
+                        if (arImage > arWin)
+                            scale = (double)RightResponsePreview.Width / (double)CIAT.SaveFile.Layout.KeyValueSize.Width;
+                        else
+                            scale = (double)RightResponsePreview.Height / (double)CIAT.SaveFile.Layout.KeyValueSize.Height;
+                        Size sz = new Size((int)(RDI.IATImage.ImageSize.Width * scale), (int)(RDI.IATImage.ImageSize.Height * scale));
+                        Point loc = new Point((RightResponsePreview.Width - sz.Width) >> 1, (RightResponsePreview.Height - sz.Height) >> 1);
+                        RightBufferGraphics.DrawImage(RDI.IATImage.theImage, new Rectangle(loc, sz));
+                        RDI.IATImage.Unlock();
+                        eraseBrush.Dispose();
+                        RDI.ValidateComponentImage();
+                        RightResponsePreview.Invalidate();
+                    }
+                    LDIChanged = false;
+                    RDIChanged = false;
+                }
+                /*
+                public void StartUpdateTimer()
+                {
+                    UpdateTimer = new System.Windows.Forms.Timer();
+                    UpdateTimer.Tick += new EventHandler(UpdatePreview);
+                    UpdateTimer.Interval = 10;
+                    UpdateTimer.Start();
+                }
+
+                public void StopTimer()
+                {
+                    UpdateTimer.Stop();
+                }
+                 * */
 
     }
 }

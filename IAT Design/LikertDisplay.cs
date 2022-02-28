@@ -1,10 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+using System.Drawing;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using System.Drawing;
 
 namespace IATClient
 {
@@ -128,7 +126,8 @@ namespace IATClient
                     e.Graphics.DrawString(String.Format("{0})", ctr + 1), DisplayFont, Brushes.Gray, ptText);
                 }
             else
-                for (int ctr = 0; ctr < ChoiceEdits.Count; ctr++) {
+                for (int ctr = 0; ctr < ChoiceEdits.Count; ctr++)
+                {
                     SizeF szText = e.Graphics.MeasureString(String.Format("{0})", ChoiceEdits.Count - ctr), DisplayFont);
                     PointF ptText = new PointF(ChoiceEdits[ctr].Location.X - szText.Width - (float)Math.Sqrt(DisplayFont.Size), ChoiceEdits[ctr].Location.Y + ((ChoiceEdits[ctr].Height - szText.Height) / 2));
                     e.Graphics.DrawString(String.Format("{0})", ChoiceEdits.Count - ctr), DisplayFont, Brushes.Gray, ptText);

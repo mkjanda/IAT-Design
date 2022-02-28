@@ -3,7 +3,7 @@ using System.Xml;
 
 namespace IATClient.IATConfig
 {
-    class MockItemInstructionScreen : KeyedInstructionScreen 
+    class MockItemInstructionScreen : KeyedInstructionScreen
     {
         private int _StimulusDisplayID = -1;
         private Nullable<bool> _ErrorMarkIsDisplayed = null, _OutlineLeftResponse = null, _OutlineRightResponse = null;

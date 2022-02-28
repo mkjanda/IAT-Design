@@ -1,9 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-
+using System.Drawing;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Drawing;
 using System.Windows.Forms;
 
 namespace IATClient
@@ -87,7 +85,7 @@ namespace IATClient
 
         protected override void ResponseDisplay_Load(object sender, EventArgs e)
         {
- 	        base.ResponseDisplay_Load(sender, e);
+            base.ResponseDisplay_Load(sender, e);
             if (ChoiceEdits.Count == 0)
             {
                 CreateChoiceEdit("True");
@@ -112,7 +110,7 @@ namespace IATClient
 
         protected override void ResponseDisplay_Paint(object sender, PaintEventArgs e)
         {
-            
+
         }
     }
 }

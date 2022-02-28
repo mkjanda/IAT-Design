@@ -1,11 +1,11 @@
-﻿using System;
+﻿using IATClient.IATConfig;
+using IATClient.ResultData;
+using System;
 using System.Xml;
 using System.Xml.Linq;
-using IATClient.ResultData;
-using IATClient.IATConfig;
 
 namespace IATClient
-{ 
+{
     /// <summary>
     /// CBoundedLengthResponse provides a class that represents a definition for a text response
     /// with a specified minimum and maximum length

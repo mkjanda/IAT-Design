@@ -1,11 +1,10 @@
-﻿using System;
+﻿using IATClient.ResultData;
+using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Windows.Forms;
 using System.Drawing;
-using IATClient.ResultData;
- 
+using System.Linq;
+using System.Windows.Forms;
+
 namespace IATClient
 {
     class CDateResponseObject : CResponseObject
@@ -102,79 +101,79 @@ namespace IATClient
         private Font ControlFont = null, SelectionFont = null;
         private Panel PreviewPanel = null;
         private System.Drawing.Color ControlBackColor, ControlForeColor;
-/*
-        public CBoundedLengthResponseObject DisplayedResponse
-        {
-            get
-            {
-                CResponseObject thisResp = (CResponseObject)DefinedResponse;
-                if (MonthCheck.Checked)
+        /*
+                public CBoundedLengthResponseObject DisplayedResponse
                 {
-                    if (!thisResp.ParseRange(MonthBox.Text, CResponseObject.ERangeType.month))
-                        return null;
-                }
-                else
-                    thisResp.MonthRange = String.Empty;
-                if (DayCheck.Checked)
-                {
-                    if (!thisResp.ParseRange(DayBox.Text, CResponseObject.ERangeType.day))
-                        return null;
-                }
-                else
-                    thisResp.DayRange = String.Empty;
-                if (YearCheck.Checked)
-                {
-                    if (!thisResp.ParseRange(YearBox.Text, CResponseObject.ERangeType.year))
-                        return null;
-                }
-                else
-                    thisResp.YearRange = String.Empty;
-                return DefinedResponse;
-            }
-            set
-            {
-                CResponseObject thisResp = (CResponseObject)DefinedResponse;
-                CResponseObject valResp = (CResponseObject)value;
-                if ((DisplayMode == EDisplayMode.correct) || (DisplayMode == EDisplayMode.search))
-                {
-                    thisResp.YearRange = valResp.YearRange;
-                    if (thisResp.YearRange == String.Empty)
-                        YearCheck.Checked = false;
-                    else
+                    get
                     {
-                        YearCheck.Checked = true;
-                        YearBox.Text = thisResp.YearRange;
+                        CResponseObject thisResp = (CResponseObject)DefinedResponse;
+                        if (MonthCheck.Checked)
+                        {
+                            if (!thisResp.ParseRange(MonthBox.Text, CResponseObject.ERangeType.month))
+                                return null;
+                        }
+                        else
+                            thisResp.MonthRange = String.Empty;
+                        if (DayCheck.Checked)
+                        {
+                            if (!thisResp.ParseRange(DayBox.Text, CResponseObject.ERangeType.day))
+                                return null;
+                        }
+                        else
+                            thisResp.DayRange = String.Empty;
+                        if (YearCheck.Checked)
+                        {
+                            if (!thisResp.ParseRange(YearBox.Text, CResponseObject.ERangeType.year))
+                                return null;
+                        }
+                        else
+                            thisResp.YearRange = String.Empty;
+                        return DefinedResponse;
                     }
+                    set
+                    {
+                        CResponseObject thisResp = (CResponseObject)DefinedResponse;
+                        CResponseObject valResp = (CResponseObject)value;
+                        if ((DisplayMode == EDisplayMode.correct) || (DisplayMode == EDisplayMode.search))
+                        {
+                            thisResp.YearRange = valResp.YearRange;
+                            if (thisResp.YearRange == String.Empty)
+                                YearCheck.Checked = false;
+                            else
+                            {
+                                YearCheck.Checked = true;
+                                YearBox.Text = thisResp.YearRange;
+                            }
 
-                    thisResp.MonthRange = valResp.MonthRange;
-                    if (thisResp.MonthRange == String.Empty)
-                        MonthCheck.Checked = false;
-                    else
-                    {
-                        MonthCheck.Checked = true;
-                        MonthBox.Text == thisResp.MonthRange;
-                    }
+                            thisResp.MonthRange = valResp.MonthRange;
+                            if (thisResp.MonthRange == String.Empty)
+                                MonthCheck.Checked = false;
+                            else
+                            {
+                                MonthCheck.Checked = true;
+                                MonthBox.Text == thisResp.MonthRange;
+                            }
 
-                    thisResp.DayRange = valResp.DayRange;
-                    if (thisResp.DayRange == String.Empty)
-                        DayCheck.Checked = false;
-                    else
-                    {
-                        DayCheck.Checked = true;
-                        DayBox.Text = thisResp.DayRange;
+                            thisResp.DayRange = valResp.DayRange;
+                            if (thisResp.DayRange == String.Empty)
+                                DayCheck.Checked = false;
+                            else
+                            {
+                                DayCheck.Checked = true;
+                                DayBox.Text = thisResp.DayRange;
+                            }
+                        }
+                        else if ((DisplayMode == EDisplayMode.display) || (DisplayMode == EDisplayMode.actual))
+                        {
+                            AnswerBox.Text = value.Value;
+                            if (DisplayMode == EDisplayMode.actual)
+                                thisResp.Answer = value.Value;
+                        }
+                        else if (DisplayMode == EDisplayMode.none)
+                            DefinedResponse = value;
                     }
                 }
-                else if ((DisplayMode == EDisplayMode.display) || (DisplayMode == EDisplayMode.actual))
-                {
-                    AnswerBox.Text = value.Value;
-                    if (DisplayMode == EDisplayMode.actual)
-                        thisResp.Answer = value.Value;
-                }
-                else if (DisplayMode == EDisplayMode.none)
-                    DefinedResponse = value;
-            }
-        }
-        */
+                */
         public override void DisposeOfControls()
         {
             if (PreviewPanel != null)
@@ -214,7 +213,7 @@ namespace IATClient
                 startNdx = 0;
             else
                 startNdx = DateEndNdxs[ctr - 1] + 1;
-            length= DateEndNdxs[ctr] - startNdx;
+            length = DateEndNdxs[ctr] - startNdx;
             SpecListBox.SuspendLayout();
             SpecListBox.SelectAll();
             SpecListBox.SelectionColor = ControlForeColor;
@@ -242,35 +241,37 @@ namespace IATClient
                 foreach (CResponseSpecifier spec in specList)
                 {
                     int ndx = 0;
-                    try {
-                    while (spec.FallsBefore(DateSpecList[ndx].Specifier))
-                        if (++ndx == DateSpecList.Count)
-                            break;
-                    if (ndx != 0)
+                    try
                     {
-                        if (DateSpecList[ndx].IsRange)
+                        while (spec.FallsBefore(DateSpecList[ndx].Specifier))
+                            if (++ndx == DateSpecList.Count)
+                                break;
+                        if (ndx != 0)
                         {
-                            if (spec.TestBetween(DateSpecList[ndx].Specifier.Substring(0, DateSpecList[ndx].Specifier.IndexOf('-')), DateSpecList[ndx].Specifier.Substring(DateSpecList[ndx].Specifier.IndexOf('-') + 1)))
+                            if (DateSpecList[ndx].IsRange)
+                            {
+                                if (spec.TestBetween(DateSpecList[ndx].Specifier.Substring(0, DateSpecList[ndx].Specifier.IndexOf('-')), DateSpecList[ndx].Specifier.Substring(DateSpecList[ndx].Specifier.IndexOf('-') + 1)))
+                                {
+                                    if (spec.IsRange)
+                                        throw new OverlapException(String.Format(Properties.Resources.sDateRangeOverlap, spec.Specifier, DateSpecList[ndx].Specifier));
+                                    else
+                                        throw new OverlapException(String.Format(Properties.Resources.sDateFallsBetween, spec.Specifier, DateSpecList[ndx].Specifier));
+                                }
+                            }
+                            else
                             {
                                 if (spec.IsRange)
-                                    throw new OverlapException(String.Format(Properties.Resources.sDateRangeOverlap, spec.Specifier, DateSpecList[ndx].Specifier));
-                                else 
-                                    throw new OverlapException(String.Format(Properties.Resources.sDateFallsBetween, spec.Specifier, DateSpecList[ndx].Specifier));
+                                {
+                                    if (DateSpecList[ndx].TestBetween(spec.Specifier.Substring(0, spec.Specifier.IndexOf('-')), spec.Specifier.Substring(spec.Specifier.IndexOf('-') + 1)))
+                                        throw new OverlapException(String.Format(Properties.Resources.sDateEncapsulates, spec.Specifier, DateSpecList[ndx].Specifier));
+                                }
+                                else
+                                {
+                                    if (DateSpecList[ndx].Specifier == DateSpecList[ndx].Specifier)
+                                        throw new OverlapException(String.Format(Properties.Resources.sDatesEqual, spec.Specifier));
+                                }
                             }
                         }
-                        else
-                        {
-                            if (spec.IsRange)
-                            {
-                                if (DateSpecList[ndx].TestBetween(spec.Specifier.Substring(0, spec.Specifier.IndexOf('-')), spec.Specifier.Substring(spec.Specifier.IndexOf('-') + 1)))
-                                    throw new OverlapException(String.Format(Properties.Resources.sDateEncapsulates, spec.Specifier, DateSpecList[ndx].Specifier));
-                            }
-                            else {
-                                if (DateSpecList[ndx].Specifier == DateSpecList[ndx].Specifier)
-                                    throw new OverlapException(String.Format(Properties.Resources.sDatesEqual, spec.Specifier));
-                            }
-                        }
-                    }
                     }
                     catch (OverlapException ex)
                     {
@@ -384,7 +385,7 @@ namespace IATClient
                 ClearSpecItemButton.ForeColor = foreColor;
                 ClearSpecItemButton.BackColor = backColor;
                 ClearSpecItemButton.Width = TextRenderer.MeasureText(ClearSpecItemButton.Text, ControlFont).Width + ElementPadding.Horizontal;
-                
+
                 AddDateRangeButton = new Button();
                 AddDateRangeButton.Text = "Add Dates";
                 AddDateRangeButton.Enabled = false;
@@ -422,7 +423,9 @@ namespace IATClient
                     SpecListBox.Location = new Point((int)(.15 * clientWidth + SpecListLabel.Width + ElementPadding.Horizontal), (SpecListBox.Height > SpecListLabel.Height) ? 0 : Math.Abs((SpecListLabel.Height - SpecListBox.Height) >> 1));
                     DeleteSpecItemButton.Location = new Point(SpecListBox.Right + ElementPadding.Horizontal, SpecListBox.Top + (nDiff / 3));
                     ClearSpecItemButton.Location = new Point(SpecListBox.Right + ElementPadding.Horizontal, SpecListBox.Bottom - (nDiff / 3));
-                } else {
+                }
+                else
+                {
                     SpecListBox.Location = new Point((int)(.15 * clientWidth + SpecListLabel.Width + ElementPadding.Horizontal), (int)((SpecListBox.Height > SpecListLabel.Height) ? 0 : Math.Abs((SpecListLabel.Height - SpecListBox.Height) >> 1) - nDiff));
                     DeleteSpecItemButton.Location = new Point(SpecListBox.Right + ElementPadding.Horizontal, SpecListBox.Top - (nDiff / 3));
                     ClearSpecItemButton.Location = new Point(SpecListBox.Right + ElementPadding.Horizontal, SpecListBox.Bottom + (nDiff / 3));

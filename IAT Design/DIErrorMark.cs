@@ -1,14 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using IATClient.Images;
+using System;
 using System.Drawing;
 using System.IO;
-using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
 using System.Xml.Linq;
-using IATClient.Images;
 
 namespace IATClient
 {
@@ -102,7 +96,8 @@ namespace IATClient
             szBounds = DIType.ErrorMark.GetBoundingSize();
             float fontSize = 36F;
             Brush br = new SolidBrush(CIAT.SaveFile.Layout.BackColor);
-            using (Bitmap bmp = new Bitmap(szBounds.Width + 50, szBounds.Height + 50, System.Drawing.Imaging.PixelFormat.Format32bppArgb)) {
+            using (Bitmap bmp = new Bitmap(szBounds.Width + 50, szBounds.Height + 50, System.Drawing.Imaging.PixelFormat.Format32bppArgb))
+            {
                 using (Graphics g = Graphics.FromImage(bmp))
                 {
                     using (Brush markBrush = new SolidBrush(MarkColor))

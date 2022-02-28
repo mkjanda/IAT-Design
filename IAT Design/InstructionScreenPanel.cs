@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
 using System.Drawing;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace IATClient
@@ -31,7 +28,7 @@ namespace IATClient
                 return CIAT.SaveFile.GetInstructionBlock(InstructionBlockUri);
             }
         }
-      
+
         public CInstructionScreen InstructionScreen
         {
             get
@@ -244,8 +241,10 @@ namespace IATClient
                 InstructionBlock.AddScreen(openingScreen);
                 ScrollingPreview.InsertPreview(0, openingScreen);
             }
-            this.HandleCreated += (sender, args) => this.BeginInvoke(new Action(() => { 
-                ScrollingPreview.ResumeRecalcLayout(); }));
+            this.HandleCreated += (sender, args) => this.BeginInvoke(new Action(() =>
+            {
+                ScrollingPreview.ResumeRecalcLayout();
+            }));
             Controls.Add(ScrollingPreview);
 
             // initialize continue instructions
@@ -254,7 +253,7 @@ namespace IATClient
             ContinueInstructions.Location = new Point((((Done.Left + PreviewGroup.Right) >> 1) - (ContinueInstructionsWidth >> 1)), ContinueKeyDrop.Bottom + (ContinueKeyDrop.Height >> 1));
             Controls.Add(ContinueInstructions);
 
-            
+
             ContinueKeyDrop.Left = 8 + ContinueKeyLabel.Right;
             ContinueKeyDrop.Items.AddRange(AvailableContinueKeys);
             ContinueKeyDrop.SelectedIndex = 0;

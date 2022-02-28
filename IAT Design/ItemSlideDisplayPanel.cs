@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Windows.Forms;
 using System.Drawing;
+using System.Linq;
+using System.Windows.Forms;
 
 namespace IATClient
 {
@@ -65,7 +64,7 @@ namespace IATClient
                 for (int ctr = 0; ctr < Latencies.Count - 1; ctr++)
                     str += String.Format("{0}, ", Latencies[ctr]);
                 str += Latencies.Last().ToString();
-            } 
+            }
             SizeF szF = g.MeasureString(str, System.Drawing.SystemFonts.DefaultFont);
             PointF ptF = new PointF((ClientRectangle.Width - szF.Width) / 2, ClientRectangle.Height - 3.5F * System.Drawing.SystemFonts.DefaultFont.Height - DisplayPadding.Bottom);
             g.DrawString(str, System.Drawing.SystemFonts.DefaultFont, Brushes.Black, ptF);

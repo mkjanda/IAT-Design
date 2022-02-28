@@ -2,8 +2,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace IATClient
 {
@@ -63,7 +61,8 @@ namespace IATClient
                 ItemUris.Remove(ItemUris.Where(tup => tup.Item2.Equals(ci.URI)).First());
                 return true;
             }
-            catch (ArgumentException) {
+            catch (ArgumentException)
+            {
                 return false;
 
             }

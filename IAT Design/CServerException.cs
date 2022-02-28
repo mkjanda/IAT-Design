@@ -1,11 +1,10 @@
 ﻿using System;
-using System.Xml.Serialization;
 using System.Xml;
 
 namespace IATClient
 {
     [Serializable]
-    public class CServerException : CReportableException, INamedXmlSerializable 
+    public class CServerException : CReportableException, INamedXmlSerializable
     {
         public CServerException()
         {

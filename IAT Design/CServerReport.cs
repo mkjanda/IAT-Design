@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Xml;
 
 namespace IATClient
@@ -129,7 +127,7 @@ namespace IATClient
         }
     }
 
-    class CServerReport : INamedXmlSerializable 
+    class CServerReport : INamedXmlSerializable
     {
         private String _ContactFName, _ContactLName, _Organization, _DiskAlottmentRemainingMB, _DiskAlottmentMB;
         private int _NumAdministrationsRemaining, _NumAdministrations, _NumIATsAlotted;

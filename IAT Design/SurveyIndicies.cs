@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Xml.Linq;
-using System.IO;
 
 namespace IATClient
 {
@@ -16,7 +16,8 @@ namespace IATClient
         public int GetAvailableIndex(CSurvey s)
         {
             CIAT.SaveFile.CreateRelationship(s.BaseType, BaseType, s.URI, URI);
-            if (UtilizedIndicies.Count == 0) {
+            if (UtilizedIndicies.Count == 0)
+            {
                 UtilizedIndicies[s.URI] = 1;
                 return 1;
             }
@@ -66,7 +67,8 @@ namespace IATClient
             foreach (XElement elem in xDoc.Root.Elements("UtilizedIndex"))
                 UtilizedIndicies[new Uri(elem.Element("SurveyUri").Value, UriKind.Relative)] = Convert.ToInt32(elem.Element("Index").Value);
         }
-        public void Dispose() {
+        public void Dispose()
+        {
             UtilizedIndicies.Clear();
             foreach (Uri u in UtilizedIndicies.Keys)
                 CIAT.SaveFile.DeleteRelationship(u, URI);

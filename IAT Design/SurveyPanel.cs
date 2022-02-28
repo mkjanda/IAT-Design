@@ -1,12 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Drawing;
-using System.IO;
 using System.Globalization;
+using System.IO;
 using System.Linq;
-using System.Windows.Forms;
 using System.Threading;
+using System.Windows.Forms;
 
 namespace IATClient
 {
@@ -52,7 +51,8 @@ namespace IATClient
                     return 0;
                 return Convert.ToDecimal(TimeoutText.Text);
             }
-            set {
+            set
+            {
                 if (value == 0)
                     TimeoutText.Text = String.Empty;
                 else
@@ -75,7 +75,8 @@ namespace IATClient
             {
                 Action<bool, bool> a = new Action<bool, bool>((a, b) => EnableInsert(a, b));
                 var t = this;
-                Action<CSurvey> action = new Action<CSurvey>((value) => {
+                Action<CSurvey> action = new Action<CSurvey>((value) =>
+                {
                     int ScrollBarWidth;
                     using (Graphics g = Graphics.FromHwnd(this.Handle))
                         ScrollBarWidth = System.Windows.Forms.ScrollBarRenderer.GetSizeBoxSize(g, System.Windows.Forms.VisualStyles.ScrollBarState.Normal).Width;
@@ -111,7 +112,7 @@ namespace IATClient
                             SurveyDisplayPanel.HorizontalScroll.Visible = false;
                             SurveyDisplayPanel.HorizontalScroll.Maximum = 0;
                             SurveyDisplayPanel.AutoScroll = true;
-//                            SurveyView.RecalcSize(true);
+                            //                            SurveyView.RecalcSize(true);
                             SurveyDisplayPanel.Invalidate();
                         };
                         OnResize();
@@ -149,7 +150,8 @@ namespace IATClient
             if (CIAT.SaveFile.IAT.UniqueResponse.ItemNum == -1)
             {
                 UniqueResponseButton.Text = "Designate Unique Resp";
-                foreach (CSurveyItem si in Survey.Items) {
+                foreach (CSurveyItem si in Survey.Items)
+                {
                     if (si == null)
                         continue;
                     if (CUniqueResponse.UniqueResponseTypes.Contains(si.Response.ResponseType))
@@ -174,7 +176,8 @@ namespace IATClient
                 UniqueResponseButton.Enabled = true;
                 int uNdx = CIAT.SaveFile.IAT.UniqueResponse.ItemNum;
                 int ctr = 0, itemNdx = 0;
-                while (itemNdx < uNdx) {
+                while (itemNdx < uNdx)
+                {
                     if (Survey.Items[ctr++].Response == null)
                         continue;
                     if (Survey.Items[ctr - 1].Response.ResponseType == CResponse.EResponseType.Instruction)
@@ -241,7 +244,7 @@ namespace IATClient
             EditUniqueResponseButton.Text = "Edit Unique Resp";
             EditUniqueResponseButton.Enabled = ContainsUniqueResponse;
             Controls.Add(EditUniqueResponseButton);
-            SurveyControls = new Control[] { this.EditPanel, this.ItemsPanel, this.AddInsertPanel, this.CaptionCheck, this.TimeoutLabel, this.TimeoutText, this.MinLabel, 
+            SurveyControls = new Control[] { this.EditPanel, this.ItemsPanel, this.AddInsertPanel, this.CaptionCheck, this.TimeoutLabel, this.TimeoutText, this.MinLabel,
                 this.ReturnButton, this.UniqueResponseButton, this.EditUniqueResponseButton };
             CIAT.Dispatcher.AddListener<IFormatSurveyItemText>(BeginFormatSurveyItemText);
             SurveyDisplayPanel.BackColor = Color.White;
@@ -272,11 +275,12 @@ namespace IATClient
             if (QuestionBeingFormatted != null)
                 QuestionBeingFormatted.EndSurveyItemTextFormat();
             QuestionBeingFormatted = e.Display;
-            TextFormatPanel.OnDone += (s, args) => { 
-                Controls.Remove(TextFormatPanel); 
-                Controls.AddRange(SurveyControls); 
-                QuestionBeingFormatted.EndSurveyItemTextFormat(); 
-                this.Invalidate(); 
+            TextFormatPanel.OnDone += (s, args) =>
+            {
+                Controls.Remove(TextFormatPanel);
+                Controls.AddRange(SurveyControls);
+                QuestionBeingFormatted.EndSurveyItemTextFormat();
+                this.Invalidate();
             };
             TextFormatPanel.ItemFormat = e.Display.Format;
             if (e.Display.ItemType != CResponse.EResponseType.Instruction)

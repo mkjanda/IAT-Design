@@ -1,16 +1,12 @@
-﻿using System;
-using System.Collections;
+﻿using IATClient.Messages;
+using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.IO;
-using System.Net;
 using System.Drawing;
 using System.Drawing.Drawing2D;
+using System.IO;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Windows.Forms;
-using IATClient.ResultData;
-using IATClient.Messages;
 
 namespace IATClient
 {

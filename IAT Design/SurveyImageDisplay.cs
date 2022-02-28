@@ -51,7 +51,8 @@ namespace IATClient
                 }
                 else
                 {
-                    this.BeginInvoke(new Action(() => {
+                    this.BeginInvoke(new Action(() =>
+                    {
                         if (base.Height == value)
                             return;
                         base.Height = value;
@@ -67,7 +68,8 @@ namespace IATClient
             {
                 return base.Width;
             }
-            set {
+            set
+            {
                 if (base.Width == value)
                     return;
                 base.Width = value;
@@ -109,7 +111,7 @@ namespace IATClient
             };
             this.BackColor = Color.White;
         }
-        
+
 
         public override void SetImage(Images.IImageMedia image)
         {
@@ -123,8 +125,8 @@ namespace IATClient
                     if ((img != null) && (ImageBox.Image != null))
                         bResize = (ImageBox.Image.Size.Height != img.Size.Height) ? true : false;
                     ImageBox.Image = img;
-    //                if (bResize)
-      //                  this.Size = img.Size;
+                    //                if (bResize)
+                    //                  this.Size = img.Size;
                 };
             }
             else
@@ -135,10 +137,10 @@ namespace IATClient
                     if ((img != null) && (ImageBox.Image != null))
                         bResize = (ImageBox.Image.Size.Height != img.Size.Height) ? true : false;
                     ImageBox.Image = img;
-//                    if (bResize)
-  //                      this.Size = img.Size;
+                    //                    if (bResize)
+                    //                      this.Size = img.Size;
                 }));
             }
-        } 
+        }
     }
 }

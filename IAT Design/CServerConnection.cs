@@ -1,12 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
 using System.Net;
 using System.Net.Sockets;
-using System.Text;
-using System.Xml;
-using System.Xml.Serialization;
 
 namespace IATClient
 {
@@ -15,7 +9,7 @@ namespace IATClient
         private const String DataConnectionServlet = "DataProvider";
         private String _Host, _IATName;
         private int _Port;
-        
+
         public String Host
         {
             get

@@ -1,16 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Drawing;
 using System.IO;
-using System.IO.Packaging;
-using System.Text;
-using System.Xml;
-using System.Xml.Linq;
-using System.Windows.Forms;
-using System.Threading;
 using System.Linq;
 using System.Threading.Tasks;
-using IATClient.IATConfig;
+using System.Windows.Forms;
+using System.Xml.Linq;
 
 namespace IATClient
 {
@@ -25,7 +19,7 @@ namespace IATClient
         public static readonly KeyedDirection DynamicNone = new KeyedDirection(6, "DynamicRight", new Func<KeyedDirection>(() => KeyedDirection.DynamicNone));
 
         protected Dictionary<String, KeyedDirection> ParseMap = new Dictionary<string, KeyedDirection>();
-        private Func<KeyedDirection> GetOpposite {get; set;} = null;
+        private Func<KeyedDirection> GetOpposite { get; set; } = null;
         public KeyedDirection Opposite
         {
             get
@@ -34,7 +28,7 @@ namespace IATClient
             }
         }
 
-        protected KeyedDirection(int val, String name, Func<KeyedDirection> getOpposite) : base(val, name) 
+        protected KeyedDirection(int val, String name, Func<KeyedDirection> getOpposite) : base(val, name)
         {
             ParseMap.Add(name, this);
             GetOpposite = getOpposite;
@@ -42,7 +36,8 @@ namespace IATClient
 
         private static IEnumerable<KeyedDirection> All = new KeyedDirection[] { Left, Right, None, DynamicLeft, DynamicRight, DynamicNone };
 
-        public static KeyedDirection FromString(String str) {
+        public static KeyedDirection FromString(String str)
+        {
             return All.Where(kd => kd.Name == str).FirstOrDefault();
         }
 
@@ -70,7 +65,8 @@ namespace IATClient
         }
         public bool IsSurvey { get { return false; } }
 
-        public CIATItemPreview(Uri parentBlockUri, Uri itemUri) {
+        public CIATItemPreview(Uri parentBlockUri, Uri itemUri)
+        {
             ParentBlockUri = parentBlockUri;
             ItemUri = itemUri;
         }
@@ -118,7 +114,7 @@ namespace IATClient
                 CIAT.SaveFile.GetIATItem(ItemUri).GUIButton = value;
             }
         }
-    }    
+    }
 
 
     public class CIATItem : IValidatedItem, IDisposable, IPackagePart, IThumbnailPreviewable
@@ -256,7 +252,7 @@ namespace IATClient
                         newKeyedDir = keyedDir;
                     if (ParentBlockUris[b.URI].Item1.Equals(newKeyedDir))
                         continue;
-//                    (CIAT.SaveFile.GetDI(ParentBlockUris[b.URI].Item2) as DIPreview).SuspendLayout();
+                    //                    (CIAT.SaveFile.GetDI(ParentBlockUris[b.URI].Item2) as DIPreview).SuspendLayout();
                     if (ParentBlockUris[b.URI].Item1 == KeyedDirection.Left)
                         (CIAT.SaveFile.GetDI(ParentBlockUris[b.URI].Item2) as DIPreview).RemoveComponent(LayoutItem.LeftResponseKeyOutline, false);
                     else if (ParentBlockUris[b.URI].Item1 == KeyedDirection.Right)
@@ -320,7 +316,7 @@ namespace IATClient
             if (ParentBlockUris.Count == 0)
                 Dispose();
         }
-        
+
         public CIATItem()
         {
             this.URI = CIAT.SaveFile.Register(this);
@@ -371,7 +367,8 @@ namespace IATClient
                 new XElement("KeySpecifierID", KeySpecifierID.ToString()),
                 new XElement("SpecifierArg", SpecifierArg));
             }
-            foreach (Uri u in ParentBlockUris.Keys) {
+            foreach (Uri u in ParentBlockUris.Keys)
+            {
                 String rParentId = CIAT.SaveFile.GetRelationshipsByType(this.URI, BaseType, typeof(CIATBlock)).Where(rel => rel.TargetUri.Equals(u)).Select(rel => rel.Id).First();
                 Uri previewUri = ParentBlockUris[u].Item2;
                 String rPreviewId = CIAT.SaveFile.GetRelationshipsByType(this.URI, BaseType, typeof(DIBase)).Where(rel => rel.TargetUri.Equals(previewUri)).Select(rel => rel.Id).First();
@@ -395,16 +392,19 @@ namespace IATClient
             else
                 StimulusUri = DINull.DINull.URI;
             _IsDisposed = Convert.ToBoolean(elem.Element("Disposed").Value);
-            if (elem.Element("KeySpecifierID") == null) {
+            if (elem.Element("KeySpecifierID") == null)
+            {
                 KeySpecifierID = -1;
                 SpecifierArg = String.Empty;
-            } else {
+            }
+            else
+            {
                 KeySpecifierID = Convert.ToInt32(elem.Element("KeySpecifierID").Value);
                 SpecifierArg = elem.Element("SpecifierArg").Value;
             }
             foreach (XElement e in xDoc.Root.Elements("ParentBlock"))
             {
-                Uri parentUri = CIAT.SaveFile.GetRelationship(this,  e.Attribute("rId").Value).TargetUri;
+                Uri parentUri = CIAT.SaveFile.GetRelationship(this, e.Attribute("rId").Value).TargetUri;
                 Uri previewUri = CIAT.SaveFile.GetRelationship(this, e.Element("rPreviewId").Value).TargetUri;
                 KeyedDirection keyedDir = KeyedDirection.FromString(e.Element("KeyedDirection").Value);
                 ParentBlockUris[parentUri] = new Tuple<KeyedDirection, Uri>(keyedDir, previewUri);
@@ -439,23 +439,29 @@ namespace IATClient
             CValidationException ex = null;
             CIATBlock parentBlock = CIAT.SaveFile.GetIATBlock(ParentBlockUris.Keys.First());
             CLocationDescriptor loc = new CItemLocationDescriptor(parentBlock, this);
-            if (Stimulus.Type == DIType.Null) {
+            if (Stimulus.Type == DIType.Null)
+            {
                 ErrorDictionary[this] = new CValidationException(EValidationException.ItemStimulusUndefined, loc);
                 return;
             }
-            if (Stimulus.Type == DIType.StimulusText) {
-                if ((Stimulus as DIStimulusText).Phrase.Trim() == String.Empty) {
+            if (Stimulus.Type == DIType.StimulusText)
+            {
+                if ((Stimulus as DIStimulusText).Phrase.Trim() == String.Empty)
+                {
                     ErrorDictionary[this] = new CValidationException(EValidationException.TextStimlusIncompletelyInitialized, loc);
                     return;
                 }
             }
-            if (Stimulus.Type == DIType.StimulusImage) {
-                if ((Stimulus as DIStimulusImage).Description == String.Empty) {
+            if (Stimulus.Type == DIType.StimulusImage)
+            {
+                if ((Stimulus as DIStimulusImage).Description == String.Empty)
+                {
                     ErrorDictionary[this] = new CValidationException(EValidationException.ImageStimulusIncompletelyInitialized, loc);
                     return;
                 }
             }
-            if (ParentBlockUris[parentBlock.URI].Item1 == KeyedDirection.None) {
+            if (ParentBlockUris[parentBlock.URI].Item1 == KeyedDirection.None)
+            {
                 ErrorDictionary[this] = new CValidationException(EValidationException.ItemKeyedDirUndefined, loc);
                 return;
             }
@@ -496,7 +502,7 @@ namespace IATClient
         }
 
         public Button GUIButton { get; set; }
-        
+
         public void Dispose()
         {
             if (IsDisposed)

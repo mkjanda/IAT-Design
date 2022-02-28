@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Xml;
-
-namespace IATClient
+﻿namespace IATClient
 {
     /// <summary>
     /// An abstract class that serves as a superclass for text responses

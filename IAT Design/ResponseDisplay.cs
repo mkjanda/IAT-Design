@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
 using System.Drawing;
-using System.Data;
 using System.Threading;
 using System.Windows.Forms;
 
@@ -30,9 +27,9 @@ namespace IATClient
         {
             get
             {
-                    if (_DisplayFont == null)
-                        _DisplayFont = new Font(Format.FontFamily, Format.FontSizeAsPixels * CIATLayout.yDpi / 96F, Format.FontStyle, GraphicsUnit.Pixel);
-                    return _DisplayFont;
+                if (_DisplayFont == null)
+                    _DisplayFont = new Font(Format.FontFamily, Format.FontSizeAsPixels * CIATLayout.yDpi / 96F, Format.FontStyle, GraphicsUnit.Pixel);
+                return _DisplayFont;
             }
             set
             {
@@ -42,7 +39,7 @@ namespace IATClient
                 {
                     var f = _DisplayFont;
                     _DisplayFont = value;
-                                ChangeResponseFont();
+                    ChangeResponseFont();
                     if (!_DisplayFont.Equals(f))
                         f?.Dispose();
                     Invalidate();
@@ -52,33 +49,33 @@ namespace IATClient
 
         private readonly object fontLockObj = new object();
 
-/*
- protected virtual Font ControlFont
-        {
-            get
-            {
-                if (_ControlFont == null)
-                    _ControlFont = new Font(Format.FontFamily, Format.FontSizeAsPixels * CIATLayout.yDpi / 96F, FontStyle.Regular, GraphicsUnit.Pixel);
-                return _ControlFont;
-            }
-            set
-            {
-                lock (lockObj)
+        /*
+         protected virtual Font ControlFont
                 {
+                    get
+                    {
+                        if (_ControlFont == null)
+                            _ControlFont = new Font(Format.FontFamily, Format.FontSizeAsPixels * CIATLayout.yDpi / 96F, FontStyle.Regular, GraphicsUnit.Pixel);
+                        return _ControlFont;
+                    }
+                    set
+                    {
+                        lock (lockObj)
+                        {
 
 
-                    if (_ControlFont == value)
-                        return;
-                    var f = _ControlFont;
-                    _ControlFont = value;
-                    if (IsHandleCreated)
-                                ChangeResponseFont();
-                    if (!ControlFont.Equals(f))
-                        f?.Dispose();
+                            if (_ControlFont == value)
+                                return;
+                            var f = _ControlFont;
+                            _ControlFont = value;
+                            if (IsHandleCreated)
+                                        ChangeResponseFont();
+                            if (!ControlFont.Equals(f))
+                                f?.Dispose();
+                        }
+                    }
                 }
-            }
-        }
-*/
+        */
         public SurveyItemFormat Format
         {
             get

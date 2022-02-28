@@ -4,13 +4,9 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
 using System.Reflection;
-using System.Runtime.InteropServices;
 using System.Reflection.Emit;
-using System.Windows.Forms;
-using System.Runtime.InteropServices.WindowsRuntime;
+using System.Threading;
 
 namespace IATClient.Images
 {
@@ -177,7 +173,7 @@ namespace IATClient.Images
             {
                 double arPreview = (double)CIAT.SaveFile.Layout.InteriorSize.Width / (double)CIAT.SaveFile.Layout.InteriorSize.Height;
                 if (arPreview > 1)
-                    return new Size(500, (int)((double)500/ (double)arPreview));
+                    return new Size(500, (int)((double)500 / (double)arPreview));
                 else
                     return new Size((int)(500.0 * arPreview), 500);
             },
@@ -278,7 +274,7 @@ namespace IATClient.Images
                     return ((image != null) && (CacheEntryTime != DateTime.MaxValue));
                 }
             }
-            
+
             public bool CacheExpired
             {
                 get
@@ -327,7 +323,7 @@ namespace IATClient.Images
             public readonly object cacheLock = new object();
             public ManualResetEventSlim pendingFetchEvent = new ManualResetEventSlim(true), pendingWriteEvent = new ManualResetEventSlim(true);
             public ManualResetEventSlim CachedEvent { get; private set; } = new ManualResetEventSlim(false);
-            public String MimeType { get { return ImageFormat.MimeType; } } 
+            public String MimeType { get { return ImageFormat.MimeType; } }
             public event Action<ImageEvent, IImageMedia, object> Changed = null;
             public DateTime CacheEntryTime { get; set; } = DateTime.MaxValue;
             protected static Action<IntPtr, byte, int> Memset;
@@ -345,7 +341,8 @@ namespace IATClient.Images
                 Memset = dynMethod.CreateDelegate(typeof(Action<IntPtr, byte, int>)) as Action<IntPtr, byte, int>;
             }
 
-            protected ImageMedia() {
+            protected ImageMedia()
+            {
             }
 
             public ImageMedia(Uri uri, Size sz, ImageFormat format, ImageMediaType type)
@@ -406,7 +403,8 @@ namespace IATClient.Images
 
             protected virtual System.Drawing.Image CreateCopy(System.Drawing.Image img)
             {
-                lock (imageLock) {
+                lock (imageLock)
+                {
                     if (img == null)
                         return null;
                     CacheEntryTime = DateTime.Now;
@@ -425,7 +423,6 @@ namespace IATClient.Images
                         //WriteImage();
                         CIAT.ImageManager.ReleaseImage(Img);
                         CacheEntryTime = DateTime.MaxValue;
-                        DisposeOfImage();
                     }
                 }
             }
@@ -479,19 +476,20 @@ namespace IATClient.Images
                         if (img == null)
                             return null;
                         img.Tag = ImageMediaType;
-                 //       retVal = CreateCopy(image);
+                        //       retVal = CreateCopy(image);
                     }
                     return img;
                 }
                 set
                 {
-                    lock (imageLock) {
-                            value.Tag = ImageMediaType;
+                    lock (imageLock)
+                    {
+                        value.Tag = ImageMediaType;
                         this.Size = value.Size;
                         WriteImage(value);
-  //                      this.Size = value.Size;
-//                        CIAT.SaveFile.ImageManager.AddImageToCache(this);
-    //                    CacheEntryTime = DateTime.Now;
+                        //                      this.Size = value.Size;
+                        //                        CIAT.SaveFile.ImageManager.AddImageToCache(this);
+                        //                    CacheEntryTime = DateTime.Now;
                     }
                     FireChanged(ImageEvent.Updated);
                     CIAT.ImageManager.ReleaseImage(value);

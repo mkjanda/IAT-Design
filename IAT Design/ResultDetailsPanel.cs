@@ -1,11 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using IATClient.ResultData;
+using System;
+using System.Drawing;
 using System.Windows.Forms;
-using System.Drawing;
-using IATClient.ResultData;
-using System.Drawing;
 
 namespace IATClient
 {
@@ -18,8 +14,8 @@ namespace IATClient
         private int _CurrResultSet;
         private ResultData.ResultData ResultData;
         private CItemSlideContainer ItemSlideContainer;
-        private Survey []BeforeSurveys;
-        private Survey []AfterSurveys;
+        private Survey[] BeforeSurveys;
+        private Survey[] AfterSurveys;
         private int _ResultPartNdx = -1;
         private Panel ContainerPanel = null, PreviewPanel = null;
         private Action<Panel> OnClose;
@@ -203,7 +199,7 @@ namespace IATClient
         void PreviewPanel_Scroll(object sender, ScrollEventArgs e)
         {
             PreviewPanel.Location = new Point(0, -e.NewValue);
-//            Invalidate();
+            //            Invalidate();
         }
 
         private void PreviousButton_Click(object sender, EventArgs e)

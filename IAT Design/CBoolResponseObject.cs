@@ -1,10 +1,8 @@
-﻿using System;
+﻿using IATClient.ResultData;
+using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Drawing;
 using System.Windows.Forms;
-using IATClient.ResultData;
 
 namespace IATClient
 {
@@ -35,7 +33,7 @@ namespace IATClient
             GetTrueStatement = new Func<String>(resp.GetTrueStatement);
             GetFalseStatement = new Func<String>(resp.GetFalseStatement);
             _Answer = obj._Answer;
-       }
+        }
 
         public CBoolResponseObject(EType type, CSurveyItem csi)
             : base(type, csi)
@@ -199,7 +197,7 @@ namespace IATClient
             TrueStatementBox.Font = ControlFont;
             TrueStatementBox.BorderStyle = BorderStyle.None;
             TrueStatementBox.Text = GetTrueStatement();
-            Size szChoice = System.Windows.Forms.TextRenderer.MeasureText(TrueStatementBox.Text, ControlFont, new Size(clientWidth - RadioSize.Width - RadioPadding.Right, 0), 
+            Size szChoice = System.Windows.Forms.TextRenderer.MeasureText(TrueStatementBox.Text, ControlFont, new Size(clientWidth - RadioSize.Width - RadioPadding.Right, 0),
                 TextFormatFlags.WordBreak | TextFormatFlags.TextBoxControl);
             Point choiceLoc, radioLoc;
             if (szChoice.Height > RadioSize.Height)
@@ -230,11 +228,11 @@ namespace IATClient
             {
                 TrueCheck = new CheckBox();
                 selector = TrueCheck;
-                    if ((Answer == EAnswer.Both) || (Answer == EAnswer.True))
-                        TrueCheck.Checked = true;
-                    else
-                        TrueCheck.Checked = false;
-                
+                if ((Answer == EAnswer.Both) || (Answer == EAnswer.True))
+                    TrueCheck.Checked = true;
+                else
+                    TrueCheck.Checked = false;
+
                 TrueCheck.CheckedChanged += new EventHandler(TrueState_CheckedChanged);
                 selector = TrueCheck;
             }

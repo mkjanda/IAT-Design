@@ -1,12 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-
+using System.Drawing;
+using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Drawing;
-using System.Drawing.Text;
 using System.Windows.Forms;
-using System.Text.RegularExpressions;
 
 namespace IATClient
 {
@@ -26,7 +23,7 @@ namespace IATClient
         private const int TestBoxLeftMargin = 25;
         private const int InvalidLabelLeftMargin = 550;
         private const int TestResultLeftLabelMargin = 550;
-        
+
 
         protected override CResponse GetResponse()
         {
@@ -47,7 +44,7 @@ namespace IATClient
             RegEx.Text = RegExDefaultText;
             TestBox = new TextBox();
             TestBox.Text = TestDefaultText;
-            foreach (var box in new TextBox[]{ RegEx, TestBox})
+            foreach (var box in new TextBox[] { RegEx, TestBox })
             {
                 box.FontChanged += (sender, args) =>
                 {
@@ -147,7 +144,7 @@ namespace IATClient
             };
             await Task.Run(a);
         }
-        
+
 
 
         protected void LayoutBox(TextBox box)
@@ -166,7 +163,7 @@ namespace IATClient
             box.Height = TextRenderer.MeasureText((box.Text == String.Empty) ? "Q" : box.Text, DisplayFont, new Size(box.Width, 0),
                 TextFormatFlags.WordBreak | TextFormatFlags.TextBoxControl).Height + Padding.Vertical;
         }
-        
+
 
         private void TextBox_MouseEnter(object sender, EventArgs e)
         {
@@ -237,7 +234,8 @@ namespace IATClient
 
         protected bool RegExIsValid(String regEx)
         {
-            try {
+            try
+            {
                 new Regex(regEx);
             }
             catch (ArgumentException)
@@ -262,7 +260,7 @@ namespace IATClient
 
         protected override void ResponseDisplay_Paint(object sender, PaintEventArgs e)
         {
-    //        e.Graphics.FillRectangle(Brushes.White, new Rectangle(new Point(RegEx.Right, RegEx.Top), new Size(this.Size.Width - RegEx.Right, this.Size.Height - TestBox.Bottom)));
+            //        e.Graphics.FillRectangle(Brushes.White, new Rectangle(new Point(RegEx.Right, RegEx.Top), new Size(this.Size.Width - RegEx.Right, this.Size.Height - TestBox.Bottom)));
             e.Graphics.DrawString(Label, DisplayFont, Brushes.Gray, LabelRect);
             if ((RegEx.Text != RegExDefaultText) || ((RegEx.Text != String.Empty) && (TestBox.Text != String.Empty)))
             {

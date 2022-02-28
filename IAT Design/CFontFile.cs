@@ -2,15 +2,10 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
-using System.IO.Packaging;
-using System.Text;
-using System.Threading;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Xml.Linq;
-using System.Linq;
-using System.Drawing.Text;
-using System.Runtime.InteropServices;
 
 namespace IATClient
 {
@@ -205,7 +200,7 @@ namespace IATClient
                 {
                     DIText fontItem = fontItem = CIAT.SaveFile.GetDI(u) as DIText;
                     fontItem.PhraseFontFamily = newFam;
-                    fontItem.Save(fontItem.URI);                   
+                    fontItem.Save(fontItem.URI);
                 }
             }
 
@@ -350,7 +345,7 @@ namespace IATClient
             while ((bmpBytes[ctr] == 0xFF) && (bmpBytes[ctr + 1] == 0xFF) && (bmpBytes[ctr + 2] == 0xFF) && (bmpBytes[ctr + 3] == 0xFF) && (right >= left))
             {
                 ctr += bmpData.Stride;
-                if (ctr > bmpData.Height * bmpData.Stride) 
+                if (ctr > bmpData.Height * bmpData.Stride)
                     ctr = --right << 2;
             }
             img.UnlockBits(bmpData);

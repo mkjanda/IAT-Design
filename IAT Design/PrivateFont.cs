@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Drawing;
-using System.IO;
 using System.Drawing.Text;
+using System.IO;
+using System.Linq;
 using System.Runtime.InteropServices;
 
 namespace IATClient
@@ -11,8 +11,8 @@ namespace IATClient
     class PrivateFont
     {
         private static PrivateFontCollection PFC = new PrivateFontCollection();
-        public static readonly PrivateFont Okashi= new PrivateFont("Okashi", "Okashi^", Properties.Resources.font1);
-        public static readonly PrivateFont Amagro= new PrivateFont("Amagro", "Amagro bold", Properties.Resources.font2);
+        public static readonly PrivateFont Okashi = new PrivateFont("Okashi", "Okashi^", Properties.Resources.font1);
+        public static readonly PrivateFont Amagro = new PrivateFont("Amagro", "Amagro bold", Properties.Resources.font2);
         public static readonly PrivateFont Disney = new PrivateFont("Disney", "New Walt Disney Font", Properties.Resources.font5);
         public static readonly PrivateFont Chiseled = new PrivateFont("Chiseled", "RACE1 Brannt Chiseled NCV", Properties.Resources.font4);
         public static readonly PrivateFont Kaushan = new PrivateFont("Kaushan", "Kaushan Script", Properties.Resources.font6);
@@ -21,7 +21,7 @@ namespace IATClient
         public static readonly PrivateFont Lora = new PrivateFont("Lora", "Lora", Properties.Resources.font8);
         public static readonly PrivateFont Typewriter = new PrivateFont("Typewriter", "Another Typewriter", Properties.Resources.font9);
         public static readonly PrivateFont Bree = new PrivateFont("Lobster", "Lobster Two", Properties.Resources.font10);
-        public String FamilyName { get; private set;  }
+        public String FamilyName { get; private set; }
         public String DisplayName { get; private set; }
         public FontFamily FontFamily { get; private set; }
 

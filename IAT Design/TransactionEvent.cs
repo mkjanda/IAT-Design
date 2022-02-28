@@ -1,8 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Drawing;
+using System.Linq;
 
 namespace IATClient
 {
@@ -25,8 +24,10 @@ namespace IATClient
             }
         }
 
-        public List<TransactionEvent> ChildEvents {
-            get {
+        public List<TransactionEvent> ChildEvents
+        {
+            get
+            {
                 return _ChildEvents;
             }
         }
@@ -104,7 +105,7 @@ namespace IATClient
 
         private List<TransactionEvent> TransactionEvents = new List<TransactionEvent>();
 
-        public TransactionEvent CurrentEvent 
+        public TransactionEvent CurrentEvent
         {
             get
             {

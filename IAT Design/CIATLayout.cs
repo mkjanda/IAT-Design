@@ -1,15 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Drawing;
+using System.IO;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Windows.Forms;
 using System.Xml;
 using System.Xml.Linq;
-using System.IO;
-using System.IO.Packaging;
-using System.Security.Cryptography;
-using System.Threading.Tasks;
-using System.Security.Policy;
 
 namespace IATClient
 {
@@ -46,7 +42,7 @@ namespace IATClient
             GetBoundingRectangle = bRect;
         }
 
-        private readonly static LayoutItem[] All = new LayoutItem[] { Lambda, Stimulus, LeftResponseKey, RightResponseKey, BlockInstructions, ErrorMark, ContinueInstructions, 
+        private readonly static LayoutItem[] All = new LayoutItem[] { Lambda, Stimulus, LeftResponseKey, RightResponseKey, BlockInstructions, ErrorMark, ContinueInstructions,
             TextInstructionScreen, KeyedInstructionScreen, MockItemInstructions, LeftResponseKeyOutline, RightResponseKeyOutline };
         public static LayoutItem FromString(String str)
         {
@@ -69,7 +65,7 @@ namespace IATClient
         };
 
         public static float xDpi { get; private set; }
-        public static float yDpi { get; private set; } 
+        public static float yDpi { get; private set; }
 
         static CIATLayout()
         {
@@ -80,7 +76,8 @@ namespace IATClient
                     xDpi = g.DpiX;
                     yDpi = g.DpiY;
                 }
-            } else
+            }
+            else
             {
                 Application.OpenForms[Properties.Resources.sMainFormName].HandleCreated += (sender, args) =>
                 {
@@ -109,7 +106,7 @@ namespace IATClient
                 if (_ErrorMarkObservableUri == null)
                     _ErrorMarkObservableUri = new ObservableUri();
                 return _ErrorMarkObservableUri;
-            } 
+            }
             private set
             {
                 if (_ErrorMarkObservableUri != null)
@@ -125,7 +122,7 @@ namespace IATClient
                 if (_LeftKeyValueOutlineObservableUri == null)
                     _LeftKeyValueOutlineObservableUri = new ObservableUri();
                 return _LeftKeyValueOutlineObservableUri;
-            } 
+            }
             private set
             {
                 if (_LeftKeyValueOutlineObservableUri != null)
@@ -378,7 +375,7 @@ namespace IATClient
                     return;
                 if (_ErrorMarkUri != null)
                     CIAT.SaveFile.GetDI(_ErrorMarkUri).Dispose();
-                
+
                 if ((value != null) && (ErrorMarkObservableUri.Value.Equals(_ErrorMarkUri)))
                     ErrorMarkObservableUri.Value = value;
                 _ErrorMarkUri = value;
@@ -389,7 +386,7 @@ namespace IATClient
             get
             {
                 return CIAT.SaveFile.GetDI(ErrorMarkUri) as DIErrorMark;
-            } 
+            }
         }
 
         private Uri _LeftKeyValueOutlineUri = null;
@@ -400,7 +397,8 @@ namespace IATClient
                 if (_LeftKeyValueOutlineUri == null)
                     _LeftKeyValueOutlineUri = new DIKeyValueOutline(KeyedDirection.Left).URI;
                 return _LeftKeyValueOutlineUri;
-            } set
+            }
+            set
             {
                 if ((value == null) && (_LeftKeyValueOutlineUri != null))
                 {
@@ -409,7 +407,7 @@ namespace IATClient
                     _LeftKeyValueOutlineUri = null;
                     return;
                 }
-                    LeftKeyValueOutlineObservableUri.Value  = value; 
+                LeftKeyValueOutlineObservableUri.Value = value;
                 _LeftKeyValueOutlineUri = value;
             }
         }
@@ -1308,7 +1306,8 @@ namespace IATClient
                 ErrorMarkUri = new DIErrorMark().URI;
                 ErrorMarkObservableUri = new ObservableUri();
                 ErrorMarkObservableUri.Value = ErrorMarkUri;
-            } else
+            }
+            else
             {
                 ErrorMarkObservableUri = CIAT.SaveFile.GetObservableUri(new Uri(xDoc.Root.Attribute("ErrorMarkObservable").Value, UriKind.Relative));
                 ErrorMarkUri = ErrorMarkObservableUri.Value;
@@ -1318,7 +1317,8 @@ namespace IATClient
                 LeftKeyValueOutlineUri = new DIKeyValueOutline(KeyedDirection.Left).URI;
                 LeftKeyValueOutlineObservableUri = new ObservableUri();
                 LeftKeyValueOutlineObservableUri.Value = LeftKeyValueOutlineUri;
-            } else
+            }
+            else
             {
                 LeftKeyValueOutlineObservableUri = CIAT.SaveFile.GetObservableUri(new Uri(xDoc.Root.Attribute("LeftKeyValueOutlineObservable").Value, UriKind.Relative));
                 LeftKeyValueOutlineUri = LeftKeyValueOutlineObservableUri.Value;
@@ -1348,7 +1348,8 @@ namespace IATClient
                 _StimulusSize = new Size(Convert.ToInt32(sizeElem.Element("Width").Value), Convert.ToInt32(sizeElem.Element("Height").Value));
                 sizeElem = xDoc.Root.Element("ContinueInstructions");
                 _ContinueInstructionsSize = new Size(Convert.ToInt32(sizeElem.Element("Width").Value), Convert.ToInt32(sizeElem.Element("Height").Value));
-            } else
+            }
+            else
             {
                 XElement sizeElem = xDoc.Root.Element("Interior");
                 _InteriorSize = new Size(Convert.ToInt32(sizeElem.Element("Width").Value), Convert.ToInt32(sizeElem.Element("Height").Value));
@@ -1383,13 +1384,13 @@ namespace IATClient
             xDoc.Document.Add(new XElement("Layout", new XElement("Interior", new XElement("Width", _InteriorSize.Width.ToString()), new XElement("Height", _InteriorSize.Height.ToString())),
                 new XElement("Instructions", new XElement("X", InstructionsRectangle.Location.X.ToString()), new XElement("Y", InstructionsRectangle.Location.Y.ToString()),
                     new XElement("Width", _InstructionsSize.Width.ToString()), new XElement("Height", _InstructionsSize.Height.ToString())),
-                new XElement("LeftKeyValueRectangle", new XElement("X", LeftKeyValueRectangle.Location.X.ToString()), new XElement("Y", LeftKeyValueRectangle.Location.Y.ToString()), 
+                new XElement("LeftKeyValueRectangle", new XElement("X", LeftKeyValueRectangle.Location.X.ToString()), new XElement("Y", LeftKeyValueRectangle.Location.Y.ToString()),
                     new XElement("Width", _KeyValueSize.Width.ToString()), new XElement("Height", _KeyValueSize.Height.ToString())),
                 new XElement("RightKeyValueRectangle", new XElement("X", RightKeyValueRectangle.Location.X.ToString()), new XElement("Y", RightKeyValueRectangle.Location.Y.ToString()),
                     new XElement("Width", _KeyValueSize.Width.ToString()), new XElement("Height", _KeyValueSize.Height.ToString())),
-                new XElement("ErrorMark", new XElement("X", ErrorRectangle.Location.X.ToString()), new XElement("Y", ErrorRectangle.Location.Y.ToString()), 
+                new XElement("ErrorMark", new XElement("X", ErrorRectangle.Location.X.ToString()), new XElement("Y", ErrorRectangle.Location.Y.ToString()),
                     new XElement("Width", _ErrorSize.Width.ToString()), new XElement("Height", _ErrorSize.Height.ToString())),
-                new XElement("Stimulus", new XElement("X", StimulusRectangle.Location.X.ToString()), new XElement("Y", StimulusRectangle.Location.Y.ToString()), 
+                new XElement("Stimulus", new XElement("X", StimulusRectangle.Location.X.ToString()), new XElement("Y", StimulusRectangle.Location.Y.ToString()),
                     new XElement("Width", _StimulusSize.Width.ToString()), new XElement("Height", _StimulusSize.Height.ToString())),
                 new XElement("ContinueInstructions", new XElement("Width", _ContinueInstructionsSize.Width.ToString()), new XElement("Height", _ContinueInstructionsSize.Height.ToString())),
                 new XElement("BackColor", _BackColor.Name), new XElement("BorderColor", _BorderColor.Name), new XElement("BorderWidth", _BorderWidth.ToString()),

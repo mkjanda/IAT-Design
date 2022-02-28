@@ -1,10 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Drawing;
-using System.Data;
 using System.Linq;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace IATClient
@@ -12,7 +9,7 @@ namespace IATClient
     public partial class MainPanel : UserControl
     {
         // the size of the main panel
- //       public static Size MainPanelSize = new Size(1010, 645);
+        //       public static Size MainPanelSize = new Size(1010, 645);
         private Panel ContentsPanel = new Panel();
         private Dictionary<IContentsItem, CollapsableTreeButton> ContentsDictionary = new Dictionary<IContentsItem, CollapsableTreeButton>();
         private ImageDisplay PreviewPanel = new ImageDisplay();
@@ -178,17 +175,17 @@ namespace IATClient
                 if (IsDisposed)
                     return;
                 if (IsHandleCreated)
-                this.BeginInvoke(new Action(() =>
-                {
-                    ValidateTest();
-                    if (CItemValidator.HasErrors)
-                        Generate7BlockButton.Enabled = false;
-                    else if (CIAT.SaveFile.IAT.Blocks.Count == 2)
-                        Generate7BlockButton.Enabled = true;
-                    else
-                        Generate7BlockButton.Enabled = false;
-                    IATConfigMainForm.FirstValidation = false;
-                }));
+                    this.BeginInvoke(new Action(() =>
+                    {
+                        ValidateTest();
+                        if (CItemValidator.HasErrors)
+                            Generate7BlockButton.Enabled = false;
+                        else if (CIAT.SaveFile.IAT.Blocks.Count == 2)
+                            Generate7BlockButton.Enabled = true;
+                        else
+                            Generate7BlockButton.Enabled = false;
+                        IATConfigMainForm.FirstValidation = false;
+                    }));
             }
         }
 
@@ -366,7 +363,7 @@ namespace IATClient
                 }
                 else
                     SelectedItem.GUIButton.BackColor = CollapsableTreeButton.ChildBaseColor;
-            } 
+            }
             SelectedItem = UpdatingItem;
             if (SelectedItem != null)
             {
@@ -537,12 +534,13 @@ namespace IATClient
             CIAT.SaveFile.IAT.MoveContentsItem(item, 1);
             ContentsPanel.SuspendLayout();
             int upshift = ContentsDictionary[item].Height, downshift = 0;
-            for (int ctr = pos; ctr <= item.IndexInContents; ctr++) {
+            for (int ctr = pos; ctr <= item.IndexInContents; ctr++)
+            {
                 downshift += ContentsDictionary[CIAT.SaveFile.IAT.Contents[ctr]].Height;
-                ContentsDictionary[CIAT.SaveFile.IAT.Contents[ctr]].Location = 
+                ContentsDictionary[CIAT.SaveFile.IAT.Contents[ctr]].Location =
                     new Point(ContentsDictionary[CIAT.SaveFile.IAT.Contents[ctr]].Location.X, ContentsDictionary[CIAT.SaveFile.IAT.Contents[ctr]].Location.Y - upshift);
             }
-            ContentsDictionary[item].Location = ContentsDictionary[item].Location + new Size(0, downshift); 
+            ContentsDictionary[item].Location = ContentsDictionary[item].Location + new Size(0, downshift);
             ContentsPanel.ResumeLayout();
         }
 

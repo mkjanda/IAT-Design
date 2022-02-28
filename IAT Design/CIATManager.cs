@@ -1,18 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.IO;
-using System.Threading;
-using System.Net;
+﻿using IATClient.Messages;
 using Microsoft.Win32;
-using System.Security.Cryptography;
-using System.Drawing;
-using System.Windows.Forms;
-using System.Threading.Tasks;
+using System;
+using System.Collections.Generic;
 using System.Collections.Specialized;
+using System.IO;
+using System.Linq;
+using System.Net;
 using System.Net.WebSockets;
-using IATClient.Messages;
-using IATClient.ResultData;
+using System.Security.Cryptography;
+using System.Threading;
+using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace IATClient
 {

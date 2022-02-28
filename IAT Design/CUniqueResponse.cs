@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Xml.Linq;
 
 namespace IATClient
@@ -16,9 +15,14 @@ namespace IATClient
         public Type BaseType { get { return typeof(CUniqueResponse); } }
         public String MimeType { get { return "text/xml+" + typeof(CUniqueResponse).ToString(); } }
 
-        public static IEnumerable<CResponse.EResponseType> UniqueResponseTypes { get {
+        public static IEnumerable<CResponse.EResponseType> UniqueResponseTypes
+        {
+            get
+            {
                 return new CResponse.EResponseType[] { CResponse.EResponseType.BoundedLength,
-            CResponse.EResponseType.BoundedNum, CResponse.EResponseType.FixedDig, CResponse.EResponseType.RegEx }; } }
+            CResponse.EResponseType.BoundedNum, CResponse.EResponseType.FixedDig, CResponse.EResponseType.RegEx };
+            }
+        }
 
 
 
@@ -131,11 +135,13 @@ namespace IATClient
                     rSurveyId = xSurvey.Value;
                 if (rSurveyId != String.Empty)
                     _SurveyUri = CIAT.SaveFile.GetRelationship(this, rSurveyId).TargetUri;
-                if (CVersion.Compare(CIAT.SaveFile.Version, new CVersion("1.1.0.14")) >= 0) {
+                if (CVersion.Compare(CIAT.SaveFile.Version, new CVersion("1.1.0.14")) >= 0)
+                {
                     int itemNum = Convert.ToInt32(xDoc.Root.Element("ItemNum").Value);
                     if (itemNum != -1)
                         SurveyItemUri = CIAT.SaveFile.GetSurvey(_SurveyUri).GetItemNumbered(itemNum).URI;
-                } else
+                }
+                else
                 {
                     XAttribute xItemNum = xDoc.Root.Attribute("rSurveyItemId");
                     if (xItemNum != null)

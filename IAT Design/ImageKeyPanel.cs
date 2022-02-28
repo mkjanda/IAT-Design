@@ -76,7 +76,7 @@ namespace IATClient
             dialog.AddExtension = false;
             if (dialog.ShowDialog() != DialogResult.OK)
                 return;
-            if  (new FileInfo(dialog.FileName).Length > DIImage.MaxFileSize)
+            if (new FileInfo(dialog.FileName).Length > DIImage.MaxFileSize)
             {
                 MessageBox.Show("Only pictures of 4MB or smaller are allowed.", "File Too Large");
                 return;
@@ -84,9 +84,9 @@ namespace IATClient
             if (ImageUri != DIBase.DINull.URI)
                 CIAT.SaveFile.GetDI(ImageUri).Dispose();
             var rki = new DIResponseKeyImage()
-                {
-                    PreviewPanel = Preview
-                };
+            {
+                PreviewPanel = Preview
+            };
             rki.Description = dialog.FileName;
             rki.LoadImageFromFile(dialog.FileName);
             ImageFileName = dialog.FileName;

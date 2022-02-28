@@ -1,11 +1,11 @@
-﻿using System;
-using System.Threading.Tasks;
-using System.Text;
-using System.Windows.Forms;
-using System.Net;
-using System.Text.RegularExpressions;
+﻿using IATClient.Messages;
+using System;
 using System.Drawing;
-using IATClient.Messages;
+using System.Net;
+using System.Text;
+using System.Text.RegularExpressions;
+using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace IATClient
 {
@@ -164,7 +164,7 @@ namespace IATClient
             HaveVerifiedButton.Enabled = false;
             ActivateButton.Enabled = false;
             ActivationObject actObj = new ActivationObject(this);
-                String fName = FName.Text, lName = LName.Text, email = EMail.Text, title = TitleBox.Text, productKey = ProductKey.Text;
+            String fName = FName.Text, lName = LName.Text, email = EMail.Text, title = TitleBox.Text, productKey = ProductKey.Text;
             Task.Run(() =>
             {
                 actObj.Activate(fName, lName, email, title, productKey);
@@ -317,7 +317,8 @@ namespace IATClient
                 LocalStorage.Activation[LocalStorage.Field.UserEmail] = EMail.Text;
                 Task.Run(() => { resendConfirm.ResendEMailVerification(); }).Wait();
                 EMail.Enabled = true;
-                if (resendConfirm.FinalTransaction == null) {
+                if (resendConfirm.FinalTransaction == null)
+                {
                     LocalStorage.Activation[LocalStorage.Field.UserEmail] = String.Empty;
                     return;
                 }

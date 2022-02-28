@@ -1,17 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using IATClient.Images;
+using System;
 using System.Collections.Concurrent;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Drawing2D;
-using System.Linq;
 using System.IO;
-using System.IO.Packaging;
-using System.Text;
+using System.Linq;
 using System.Threading;
-using System.Threading.Tasks;
 using System.Xml.Linq;
-using System.Windows.Forms;
-using IATClient.Images;
 
 namespace IATClient
 {
@@ -90,7 +86,7 @@ namespace IATClient
             {
                 PreviewComponents[tup.Item2] = tup.Item1;
                 CIAT.SaveFile.GetDI(tup.Item1.Value).AddOwner(URI);
-                if (tup.Item1.IsObservable) 
+                if (tup.Item1.IsObservable)
                     CIAT.SaveFile.CreateRelationship(BaseType, typeof(ObservableUri), URI, tup.Item1.URI);
             }
         }
@@ -195,17 +191,17 @@ namespace IATClient
             var img = Generate();
             ForcedOneShot = false;
             var jpg = new Bitmap(ImageMediaType.FullPreview.ImageSize.Width, ImageMediaType.FullPreview.ImageSize.Height, System.Drawing.Imaging.PixelFormat.Format32bppRgb);
-                var backBr = new SolidBrush(CIAT.SaveFile.Layout.BackColor);
-                using (Graphics gr = Graphics.FromImage(jpg))
-                {
-                    gr.FillRectangle(backBr, new Rectangle(0, 0, ImageMediaType.FullPreview.ImageSize.Width, ImageMediaType.FullPreview.ImageSize.Height));
-                    gr.SmoothingMode = SmoothingMode.HighQuality;
-                    gr.InterpolationMode = InterpolationMode.HighQualityBicubic;
-                    gr.PixelOffsetMode = PixelOffsetMode.HighQuality;
+            var backBr = new SolidBrush(CIAT.SaveFile.Layout.BackColor);
+            using (Graphics gr = Graphics.FromImage(jpg))
+            {
+                gr.FillRectangle(backBr, new Rectangle(0, 0, ImageMediaType.FullPreview.ImageSize.Width, ImageMediaType.FullPreview.ImageSize.Height));
+                gr.SmoothingMode = SmoothingMode.HighQuality;
+                gr.InterpolationMode = InterpolationMode.HighQualityBicubic;
+                gr.PixelOffsetMode = PixelOffsetMode.HighQuality;
 
-                    gr.DrawImage(img, new Rectangle(0, 0, jpg.Width, jpg.Height));
-                }
-                img.Dispose();
+                gr.DrawImage(img, new Rectangle(0, 0, jpg.Width, jpg.Height));
+            }
+            img.Dispose();
             return jpg;
         }
 
@@ -214,7 +210,8 @@ namespace IATClient
             XDocument xDoc = new XDocument();
             xDoc.Add(new XElement("DIPreview", new XAttribute("Type", Type.ToString())));
             var components = PreviewComponents.Select(kv => new Tuple<IUri, LayoutItem>(kv.Value, kv.Key)).ToList();
-            foreach (var component in components) {
+            foreach (var component in components)
+            {
                 DIBase di = CIAT.SaveFile.GetDI(component.Item1.Value);
                 if (di.Type != DIType.LambdaGenerated)
                 {
@@ -244,13 +241,13 @@ namespace IATClient
         {
             this.URI = uri;
             Stream s = CIAT.SaveFile.GetReadStream(this);
-            XDocument xDoc = XDocument.Load(s);         
+            XDocument xDoc = XDocument.Load(s);
 
             s.Dispose();
             CIAT.SaveFile.ReleaseReadStreamLock();
             foreach (XElement elem in xDoc.Document.Root.Elements("ComponentDI"))
             {
-                
+
                 Uri diUri = CIAT.SaveFile.GetRelationship(this, elem.Attribute("rId").Value).TargetUri;
                 var li = LayoutItem.FromString(elem.Value);
                 if (Convert.ToBoolean(elem.Attribute("Observed").Value))

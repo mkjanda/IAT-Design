@@ -1,16 +1,14 @@
-﻿using System;
+﻿using IATClient.ResultData;
+using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Windows.Forms;
 using System.Drawing;
-using IATClient.ResultData;
+using System.Windows.Forms;
 
 namespace IATClient
 {
     class CLikertResponseObject : CResponseObject
     {
-        private bool []Responses = null;
+        private bool[] Responses = null;
         private CheckBox[] ChoiceChecks = null;
         private RadioButton[] ChoiceRadios = null;
         private TextBox[] ChoiceBoxes = null;
@@ -125,7 +123,7 @@ namespace IATClient
                         else
                             specList.Add(new CSingleton((minNdx + 1).ToString()));
                     }
-                    else 
+                    else
                     {
                         if (bReverseScored)
                             specList.Add(new CRange((nChoices - minNdx + 1).ToString(), (nChoices - maxNdx + 1).ToString()));

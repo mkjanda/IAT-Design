@@ -1,10 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
 using System.Drawing;
-using System.Data;
-
-using System.Text;
 using System.Windows.Forms;
 
 namespace IATClient
@@ -22,15 +17,15 @@ namespace IATClient
         // a flag to indicate if a multiple update is being performed
         protected bool PerformingMultipleUpdate;
         private object lockObject = new object();
-/*
-        public Image InstructionScreenImage
-        {
-            get
-            {
-                return Buffer;
-            }
-        }
-        */
+        /*
+                public Image InstructionScreenImage
+                {
+                    get
+                    {
+                        return Buffer;
+                    }
+                }
+                */
         public InstructionScreenPreview()
         {
             InitializeComponent();
@@ -78,146 +73,146 @@ namespace IATClient
             Buffer.Dispose();
             Buffer = null;
         }
-/*
-        public void InvalidateAll(CInstructionScreen Screen)
-        {
-            PerformingMultipleUpdate = true;
-
-            BufferGraphics.FillRectangle(EraseBrush, new Rectangle(new Point(0, 0), CIAT.SaveFile.Layout.InteriorSize));
-            if (Screen != null)
-            {
-                InvalidateContinueInstructions(Screen.ContinueInstructions);
-                if (Mode == EMode.Text)
+        /*
+                public void InvalidateAll(CInstructionScreen Screen)
                 {
-                    InvalidateTextInstructions(((CTextInstructionScreen)Screen).Instructions);
+                    PerformingMultipleUpdate = true;
+
+                    BufferGraphics.FillRectangle(EraseBrush, new Rectangle(new Point(0, 0), CIAT.SaveFile.Layout.InteriorSize));
+                    if (Screen != null)
+                    {
+                        InvalidateContinueInstructions(Screen.ContinueInstructions);
+                        if (Mode == EMode.Text)
+                        {
+                            InvalidateTextInstructions(((CTextInstructionScreen)Screen).Instructions);
+                        }
+                        else if (Mode == EMode.MockItem)
+                        {
+                            InvalidateMockItemStimulus((IStimulus)((CMockItemScreen)Screen).MockItem.Stimulus);
+                            InvalidateMockItemInstructions(((CMockItemScreen)Screen).BriefInstructions);
+                            CIATKey ResponseKey = null;
+                            if (((CMockItemScreen)Screen).ResponseKeyName != String.Empty)
+                                ResponseKey = CIATKey.KeyDictionary[((CMockItemScreen)Screen).ResponseKeyName];
+                            InvalidateResponseKey(ResponseKey);
+                            InvalidateMockItemKeyedDirOutline(((CMockItemScreen)Screen).MockItem.KeyedDir, ((CMockItemScreen)Screen).KeyedDirOutlined);
+                            InvalidateMockItemInvalidResponse(((CMockItemScreen)Screen).InvalidResponseFlag);
+                        }
+                        else if (Mode == EMode.Keyed)
+                        {
+                            CIATKey ResponseKey = null;
+                            if (((CKeyInstructionScreen)Screen).ResponseKeyName != String.Empty)
+                                ResponseKey = CIATKey.KeyDictionary[((CKeyInstructionScreen)Screen).ResponseKeyName];
+                            InvalidateResponseKey(ResponseKey);
+                            InvalidateTextInstructions(((CKeyInstructionScreen)Screen).Instructions);
+                        }
+                    }
+                    UpdatePreviewPane();
+                    PerformingMultipleUpdate = false;
                 }
-                else if (Mode == EMode.MockItem)
+
+                public void InvalidateContinueInstructions(CTextDisplayItem di)
                 {
-                    InvalidateMockItemStimulus((IStimulus)((CMockItemScreen)Screen).MockItem.Stimulus);
-                    InvalidateMockItemInstructions(((CMockItemScreen)Screen).BriefInstructions);
-                    CIATKey ResponseKey = null;
-                    if (((CMockItemScreen)Screen).ResponseKeyName != String.Empty)
-                        ResponseKey = CIATKey.KeyDictionary[((CMockItemScreen)Screen).ResponseKeyName];
-                    InvalidateResponseKey(ResponseKey);
-                    InvalidateMockItemKeyedDirOutline(((CMockItemScreen)Screen).MockItem.KeyedDir, ((CMockItemScreen)Screen).KeyedDirOutlined);
-                    InvalidateMockItemInvalidResponse(((CMockItemScreen)Screen).InvalidResponseFlag);
+                    if (!PerformingMultipleUpdate)
+                        BufferGraphics.FillRectangle(EraseBrush, CIAT.SaveFile.Layout.ContinueInstructionsRectangle);
+
+                    if (di != null)
+                    {
+                        Size ItemSize = di.IATImage.ImageSize;
+                        BufferGraphics.Clip = new Region(CIAT.SaveFile.Layout.ContinueInstructionsRectangle);
+                        BufferGraphics.DrawImage(di.IATImage.theImage, CIAT.SaveFile.Layout.ContinueInstructionsRectangle.Location +
+                            new Size((CIAT.SaveFile.Layout.ContinueInstructionsRectangle.Width - ItemSize.Width) >> 1, (CIAT.SaveFile.Layout.ContinueInstructionsRectangle.Height - ItemSize.Height) >> 1));
+                        BufferGraphics.ResetClip();
+                    }
+
+                    if (!PerformingMultipleUpdate)
+                        UpdatePreviewPane();
+
                 }
-                else if (Mode == EMode.Keyed)
+
+                public void InvalidateTextInstructions(CMultiLineTextDisplayItem di)
                 {
-                    CIATKey ResponseKey = null;
-                    if (((CKeyInstructionScreen)Screen).ResponseKeyName != String.Empty)
-                        ResponseKey = CIATKey.KeyDictionary[((CKeyInstructionScreen)Screen).ResponseKeyName];
-                    InvalidateResponseKey(ResponseKey);
-                    InvalidateTextInstructions(((CKeyInstructionScreen)Screen).Instructions);
+                    if (!PerformingMultipleUpdate)
+                        BufferGraphics.FillRectangle(EraseBrush, di.GetBoundingRectangle());
+
+                    if (di != null)
+                    {
+                        BufferGraphics.Clip = new Region(di.GetBoundingRectangle());
+                        BufferGraphics.DrawImage(di.IATImage.theImage, CIAT.SaveFile.Layout.InstructionScreenTextAreaRectangle.Location);
+                        BufferGraphics.ResetClip();
+                    }
+
+                    if (!PerformingMultipleUpdate)
+                        UpdatePreviewPane();
                 }
-            }
-            UpdatePreviewPane();
-            PerformingMultipleUpdate = false;
-        }
 
-        public void InvalidateContinueInstructions(CTextDisplayItem di)
-        {
-            if (!PerformingMultipleUpdate)
-                BufferGraphics.FillRectangle(EraseBrush, CIAT.SaveFile.Layout.ContinueInstructionsRectangle);
+                public void Clear()
+                {
+                    BufferGraphics.FillRectangle(EraseBrush, new Rectangle(new Point(0, 0), Buffer.Size));
+                }
 
-            if (di != null)
-            {
-                Size ItemSize = di.IATImage.ImageSize;
-                BufferGraphics.Clip = new Region(CIAT.SaveFile.Layout.ContinueInstructionsRectangle);
-                BufferGraphics.DrawImage(di.IATImage.theImage, CIAT.SaveFile.Layout.ContinueInstructionsRectangle.Location +
-                    new Size((CIAT.SaveFile.Layout.ContinueInstructionsRectangle.Width - ItemSize.Width) >> 1, (CIAT.SaveFile.Layout.ContinueInstructionsRectangle.Height - ItemSize.Height) >> 1));
-                BufferGraphics.ResetClip();
-            }
+                public void InvalidateMockItemStimulus(IStimulus di)
+                {
+                    if (!PerformingMultipleUpdate)
+                        BufferGraphics.FillRectangle(EraseBrush, CIAT.SaveFile.Layout.StimulusRectangle);
 
-            if (!PerformingMultipleUpdate)
-                UpdatePreviewPane();
-            
-        }
+                    if (di != null)
+                    {
+                        BufferGraphics.Clip = new Region(CIAT.SaveFile.Layout.StimulusRectangle);
+                        BufferGraphics.DrawImage(di.IATImage.theImage, CIAT.SaveFile.Layout.StimulusRectangle.Location +
+                            new Size((CIAT.SaveFile.Layout.StimulusRectangle.Width - di.IATImage.ImageSize.Width) >> 1,
+                                (CIAT.SaveFile.Layout.StimulusRectangle.Height - di.IATImage.ImageSize.Height) >> 1));
+                        BufferGraphics.ResetClip();
+                    }
 
-        public void InvalidateTextInstructions(CMultiLineTextDisplayItem di)
-        {
-            if (!PerformingMultipleUpdate)
-                BufferGraphics.FillRectangle(EraseBrush, di.GetBoundingRectangle());
+                    if (!PerformingMultipleUpdate)
+                        UpdatePreviewPane();
+                }
 
-            if (di != null)
-            {
-                BufferGraphics.Clip = new Region(di.GetBoundingRectangle());
-                BufferGraphics.DrawImage(di.IATImage.theImage, CIAT.SaveFile.Layout.InstructionScreenTextAreaRectangle.Location);
-                BufferGraphics.ResetClip();
-            }
+                public void InvalidateMockItemInstructions(CMultiLineTextDisplayItem di)
+                {
+                    if (!PerformingMultipleUpdate)
+                        BufferGraphics.FillRectangle(EraseBrush, CIAT.SaveFile.Layout.MockItemInstructionsRectangle);
 
-            if (!PerformingMultipleUpdate)
-                UpdatePreviewPane();
-        }
+                    if (di != null)
+                    {
+                        BufferGraphics.Clip = new Region(CIAT.SaveFile.Layout.MockItemInstructionsRectangle);
+                        BufferGraphics.DrawImage(di.IATImage.theImage, CIAT.SaveFile.Layout.MockItemInstructionsRectangle.Location +
+                            new Size((CIAT.SaveFile.Layout.MockItemInstructionsRectangle.Width - di.IATImage.ImageSize.Width) >> 1,
+                                (CIAT.SaveFile.Layout.MockItemInstructionsRectangle.Height - di.IATImage.ImageSize.Height) >> 1));
+                        BufferGraphics.ResetClip();
+                    }
 
-        public void Clear()
-        {
-            BufferGraphics.FillRectangle(EraseBrush, new Rectangle(new Point(0, 0), Buffer.Size));
-        }
+                    if (!PerformingMultipleUpdate)
+                        UpdatePreviewPane();
+                }
 
-        public void InvalidateMockItemStimulus(IStimulus di)
-        {
-            if (!PerformingMultipleUpdate)
-                BufferGraphics.FillRectangle(EraseBrush, CIAT.SaveFile.Layout.StimulusRectangle);
+                public void InvalidateResponseKey(CIATKey Key)
+                {
+                    if (!PerformingMultipleUpdate)
+                    {
+                        BufferGraphics.FillRectangle(EraseBrush, CIAT.SaveFile.Layout.LeftKeyValueRectangle);
+                        BufferGraphics.FillRectangle(EraseBrush, CIAT.SaveFile.Layout.RightKeyValueRectangle);
+                    }
 
-            if (di != null)
-            {
-                BufferGraphics.Clip = new Region(CIAT.SaveFile.Layout.StimulusRectangle);
-                BufferGraphics.DrawImage(di.IATImage.theImage, CIAT.SaveFile.Layout.StimulusRectangle.Location +
-                    new Size((CIAT.SaveFile.Layout.StimulusRectangle.Width - di.IATImage.ImageSize.Width) >> 1,
-                        (CIAT.SaveFile.Layout.StimulusRectangle.Height - di.IATImage.ImageSize.Height) >> 1));
-                BufferGraphics.ResetClip();
-            }
+                    // if key is non-null, draw it
+                    if (Key != null)
+                    {
+                        BufferGraphics.Clip = new Region(CIAT.SaveFile.Layout.LeftKeyValueRectangle);
+                        BufferGraphics.DrawImage(Key.LeftValue.IATImage.theImage, CIAT.SaveFile.Layout.LeftKeyValueRectangle.Location +
+                            new Size((CIAT.SaveFile.Layout.LeftKeyValueRectangle.Width - Key.LeftValue.IATImage.ImageSize.Width) >> 1,
+                                (CIAT.SaveFile.Layout.LeftKeyValueRectangle.Height - Key.LeftValue.IATImage.ImageSize.Height) >> 1));
+                        BufferGraphics.Clip = new Region(CIAT.SaveFile.Layout.RightKeyValueRectangle);
+                        BufferGraphics.DrawImage(Key.RightValue.IATImage.theImage, CIAT.SaveFile.Layout.RightKeyValueRectangle.Location +
+                            new Size((CIAT.SaveFile.Layout.RightKeyValueRectangle.Width - Key.RightValue.IATImage.ImageSize.Width) >> 1,
+                                (CIAT.SaveFile.Layout.RightKeyValueRectangle.Height - Key.RightValue.IATImage.ImageSize.Height) >> 1));
+                        BufferGraphics.ResetClip();
+                    }
 
-            if (!PerformingMultipleUpdate)
-                UpdatePreviewPane();
-        }
-
-        public void InvalidateMockItemInstructions(CMultiLineTextDisplayItem di)
-        {
-            if (!PerformingMultipleUpdate)
-                BufferGraphics.FillRectangle(EraseBrush, CIAT.SaveFile.Layout.MockItemInstructionsRectangle);
-
-            if (di != null)
-            {
-                BufferGraphics.Clip = new Region(CIAT.SaveFile.Layout.MockItemInstructionsRectangle);
-                BufferGraphics.DrawImage(di.IATImage.theImage, CIAT.SaveFile.Layout.MockItemInstructionsRectangle.Location +
-                    new Size((CIAT.SaveFile.Layout.MockItemInstructionsRectangle.Width - di.IATImage.ImageSize.Width) >> 1,
-                        (CIAT.SaveFile.Layout.MockItemInstructionsRectangle.Height - di.IATImage.ImageSize.Height) >> 1));
-                BufferGraphics.ResetClip();
-            }
-
-            if (!PerformingMultipleUpdate)
-                UpdatePreviewPane();
-        }
-
-        public void InvalidateResponseKey(CIATKey Key)
-        {
-            if (!PerformingMultipleUpdate)
-            {
-                BufferGraphics.FillRectangle(EraseBrush, CIAT.SaveFile.Layout.LeftKeyValueRectangle);
-                BufferGraphics.FillRectangle(EraseBrush, CIAT.SaveFile.Layout.RightKeyValueRectangle);
-            }
-
-            // if key is non-null, draw it
-            if (Key != null)
-            {
-                BufferGraphics.Clip = new Region(CIAT.SaveFile.Layout.LeftKeyValueRectangle);
-                BufferGraphics.DrawImage(Key.LeftValue.IATImage.theImage, CIAT.SaveFile.Layout.LeftKeyValueRectangle.Location +
-                    new Size((CIAT.SaveFile.Layout.LeftKeyValueRectangle.Width - Key.LeftValue.IATImage.ImageSize.Width) >> 1,
-                        (CIAT.SaveFile.Layout.LeftKeyValueRectangle.Height - Key.LeftValue.IATImage.ImageSize.Height) >> 1));
-                BufferGraphics.Clip = new Region(CIAT.SaveFile.Layout.RightKeyValueRectangle);
-                BufferGraphics.DrawImage(Key.RightValue.IATImage.theImage, CIAT.SaveFile.Layout.RightKeyValueRectangle.Location +
-                    new Size((CIAT.SaveFile.Layout.RightKeyValueRectangle.Width - Key.RightValue.IATImage.ImageSize.Width) >> 1,
-                        (CIAT.SaveFile.Layout.RightKeyValueRectangle.Height - Key.RightValue.IATImage.ImageSize.Height) >> 1));
-                BufferGraphics.ResetClip();
-            }
-
-            // if not performing a multiple invalidation, updatte the preview image
-            if (!PerformingMultipleUpdate)
-                UpdatePreviewPane();
-        }
-        */
+                    // if not performing a multiple invalidation, updatte the preview image
+                    if (!PerformingMultipleUpdate)
+                        UpdatePreviewPane();
+                }
+                */
         public void InvalidateMockItemKeyedDirOutline(KeyedDirection keyedDir, bool dispOutline)
         {
             lock (lockObject)
@@ -310,14 +305,14 @@ namespace IATClient
                     InvalidateMockItemKeyedDirOutline(mockKeyedDir, true);
             }
         }
-/*
-        private void UpdatePreviewPane()
-        {
-            PreviewGraphics.DrawImage(Buffer, PreviewRectangle);
-            PreviewPane.Invalidate();
-            if (OnPreviewUpdate != null)
-                OnPreviewUpdate();
-        }
- * */
+        /*
+                private void UpdatePreviewPane()
+                {
+                    PreviewGraphics.DrawImage(Buffer, PreviewRectangle);
+                    PreviewPane.Invalidate();
+                    if (OnPreviewUpdate != null)
+                        OnPreviewUpdate();
+                }
+         * */
     }
 }

@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Drawing;
 using System.Data;
+using System.Drawing;
 using System.Linq;
-using System.Text;
 using System.Windows.Forms;
 
 namespace IATClient
@@ -74,13 +72,15 @@ namespace IATClient
                     ImageRadio.Checked = false;
                     TextPanel.TextDisplayItemUri = di.URI;
                     di.PreviewPanel = KeyPreview;
-                } else if (di.Type == DIType.ResponseKeyImage)
+                }
+                else if (di.Type == DIType.ResponseKeyImage)
                 {
                     _DisplayItemUri = value;
                     ImageRadio.Checked = true;
                     TextRadio.Checked = false;
                     di.PreviewPanel = KeyPreview;
-                } else
+                }
+                else
                 {
                     _DisplayItemUri = value;
                     ImageRadio.Checked = false;
@@ -93,7 +93,7 @@ namespace IATClient
 
         public ResponseKeyDialog MainForm
         {
-            get 
+            get
             {
                 return ParentControl.Parent as ResponseKeyDialog;
             }
@@ -236,7 +236,8 @@ namespace IATClient
             }
             else if (DisplayItem.Type == DIType.ResponseKeyText)
             {
-                if ((CIAT.SaveFile.GetDI(TextPanel.TextDisplayItemUri) as DIResponseKeyText).Phrase == String.Empty) {
+                if ((CIAT.SaveFile.GetDI(TextPanel.TextDisplayItemUri) as DIResponseKeyText).Phrase == String.Empty)
+                {
                     if (Side == ResponseKeySide.Left)
                     {
                         MainForm.BeginInvoke(new Action(() =>
@@ -305,7 +306,7 @@ namespace IATClient
                 HideImagePanel();
                 ShowTextPanel();
                 _DisplayItemUri = TextPanel.TextDisplayItemUri;
-            } 
+            }
         }
 
         private void ImageRadio_CheckedChanged(object sender, EventArgs e)
@@ -317,7 +318,7 @@ namespace IATClient
                 ImagePanel.DisplayItemUri = _DisplayItemUri;
                 if ((Parent != null) && (_DisplayItemUri != DIBase.DINull.URI))
                     (CIAT.SaveFile.GetDI(_DisplayItemUri) as DIResponseKeyImage).ValidateData = ParentControl.ValidateInput;
-           }
+            }
         }
 
         public new void Dispose()

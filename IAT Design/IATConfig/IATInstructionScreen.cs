@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Text;
 
 namespace IATClient.IATConfig
 {
@@ -11,14 +7,15 @@ namespace IATClient.IATConfig
     {
         public ConfigFile ConfigFile { get; set; }
         int _ContinueInstructionsDisplayID = -1;
-        public int ContinueInstructionsDisplayID {
+        public int ContinueInstructionsDisplayID
+        {
             get
             {
                 if (_ContinueInstructionsDisplayID != -1)
                     return _ContinueInstructionsDisplayID;
                 _ContinueInstructionsDisplayID = ConfigFile.GetIATImage(InstructionScreen.ContinueInstructionsUri).Id;
                 return _ContinueInstructionsDisplayID;
-            }    
+            }
             set
             {
                 _ContinueInstructionsDisplayID = value;

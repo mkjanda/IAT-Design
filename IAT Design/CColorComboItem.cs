@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-
-using System.Text;
-using System.Drawing;
+﻿using System.Drawing;
 using System.Windows.Forms;
 
 namespace IATClient
@@ -25,7 +21,7 @@ namespace IATClient
 
         public System.Drawing.Color ItemColor
         {
-            get 
+            get
             {
                 return _ItemColor;
             }

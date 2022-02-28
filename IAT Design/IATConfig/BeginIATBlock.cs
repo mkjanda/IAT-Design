@@ -42,7 +42,7 @@ namespace IATClient.IATConfig
             {
                 if (_NumPresentations != -1)
                     return _NumPresentations;
-                _NumPresentations= CIAT.SaveFile.GetIATBlock(BlockUri).NumPresentations;
+                _NumPresentations = CIAT.SaveFile.GetIATBlock(BlockUri).NumPresentations;
                 return _NumPresentations;
             }
             set

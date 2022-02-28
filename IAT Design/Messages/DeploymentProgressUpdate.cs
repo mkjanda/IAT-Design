@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Xml;
 
 namespace IATClient.Messages
@@ -16,14 +14,14 @@ namespace IATClient.Messages
             generatingAES, timerExpired, comparingDescriptors, xsltFailure, generatingIAT, generatingSurvey, backingUpIAT, mismatchedDeploymentDescriptors, success, failed
         };
 
-        private static String[] StageMessages =  
+        private static String[] StageMessages =
             { String.Empty, Properties.Resources.sPreparingDeploymentResources, Properties.Resources.sEncryptingCode, Properties.Resources.sMungingCode,
                 Properties.Resources.sProcessingFileManifest, Properties.Resources.sCreatingBackup,
                 Properties.Resources.sRestoringBackup, Properties.Resources.sInitializingDeployment, Properties.Resources.sFinalizingDeployment, Properties.Resources.sGeneratingIATHTML,
                 Properties.Resources.sGeneratingSurveyHTML, Properties.Resources.sGeneratingIATDescriptor, Properties.Resources.sGeneratingSurveyDescriptor,
-                Properties.Resources.sGeneratingIATScript, Properties.Resources.sGeneratingSurveyScript, Properties.Resources.sGeneratingIATHeaderScript, 
+                Properties.Resources.sGeneratingIATScript, Properties.Resources.sGeneratingSurveyScript, Properties.Resources.sGeneratingIATHeaderScript,
                 Properties.Resources.sGeneratingSurveyHeaderScript, Properties.Resources.sProcessingUniqueSurveyResponses, Properties.Resources.sRecordingProcessedJS,
-                Properties.Resources.sProcessingAES, Properties.Resources.sDeploymentTimerExpired, Properties.Resources.sDeploymentComparingDescriptors, 
+                Properties.Resources.sProcessingAES, Properties.Resources.sDeploymentTimerExpired, Properties.Resources.sDeploymentComparingDescriptors,
                 Properties.Resources.sDeploymentXsltFailure, Properties.Resources.sDeploymentGeneratingIAT, Properties.Resources.sDeploymentGeneratingSurvey,
                 Properties.Resources.sBackingUpIAT, String.Empty, String.Empty, String.Empty
             };
@@ -79,7 +77,8 @@ namespace IATClient.Messages
 
         public String ActiveItem
         {
-            get {
+            get
+            {
                 return _ActiveItem;
             }
         }

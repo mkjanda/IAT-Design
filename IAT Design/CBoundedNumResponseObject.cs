@@ -1,11 +1,8 @@
-﻿using System;
+﻿using IATClient.ResultData;
+using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Windows.Forms;
-using System.Xml;
 using System.Drawing;
-using IATClient.ResultData;
+using System.Windows.Forms;
 
 namespace IATClient
 {
@@ -220,7 +217,7 @@ namespace IATClient
 
         public void AnswerBox_LostFocus(object sender, EventArgs e)
         {
-            
+
         }
 
         public override Panel GenerateResponseObjectPanel(System.Drawing.Color backColor, System.Drawing.Color foreColor, string fontFamily, float fontSize, int clientWidth)
@@ -231,7 +228,7 @@ namespace IATClient
             UpdateResponseObject();
             PreviewPanel = new Panel();
             AnswerBox = new TextBox();
-            Font PreviewFont = new Font(fontFamily, fontSize); 
+            Font PreviewFont = new Font(fontFamily, fontSize);
             AnswerBox.LostFocus += new EventHandler(AnswerBox_LostFocus);
             AnswerBox.BackColor = backColor;
             AnswerBox.ForeColor = foreColor;

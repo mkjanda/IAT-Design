@@ -1,10 +1,9 @@
-﻿using System;
+﻿using IATClient.ResultData;
+using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Windows.Forms;
 using System.Drawing;
-using IATClient.ResultData;
+using System.Linq;
+using System.Windows.Forms;
 
 namespace IATClient
 {
@@ -124,7 +123,7 @@ namespace IATClient
             ResultGrid.AllowUserToResizeColumns = true;
             ResultGrid.AllowUserToResizeRows = false;
             ResultGrid.CellClick += new DataGridViewCellEventHandler(ResultGrid_CellClick);
-//            ResultGrid.CellDoubleClick += new DataGridViewCellEventHandler(ResultGrid_CellDoubleClick);
+            //            ResultGrid.CellDoubleClick += new DataGridViewCellEventHandler(ResultGrid_CellDoubleClick);
             ResultGrid.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
         }
 

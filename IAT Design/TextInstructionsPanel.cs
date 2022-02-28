@@ -1,10 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
 using System.Drawing;
-using System.Data;
-
-using System.Text;
 using System.Windows.Forms;
 
 namespace IATClient
@@ -64,7 +59,7 @@ namespace IATClient
 
         public InstructionScreenPanel ParentControl
         {
-            get 
+            get
             {
                 return (InstructionScreenPanel)Parent;
             }
@@ -139,8 +134,8 @@ namespace IATClient
             if (IsDisposed)
                 return;
             IsDisposed = true;
-//            if (TextInstructionScreen != null)
-  //              TextInstructionScreen.Dispose();
+            //            if (TextInstructionScreen != null)
+            //              TextInstructionScreen.Dispose();
             base.Dispose();
 
         }

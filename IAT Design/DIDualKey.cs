@@ -1,15 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Collections.Concurrent;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.IO;
-using System.IO.Packaging;
 using System.Linq;
-using System.Xml.Linq;
 using System.Threading;
-using System.Threading.Tasks;
-using System.Windows.Forms;
+using System.Xml.Linq;
 
 namespace IATClient
 {
@@ -83,7 +80,7 @@ namespace IATClient
                     if ((value == null) || (value.Value == Rectangle.Empty))
                     {
                         if (DIDictionary.TryRemove(u, out r))
-                                di.ReleaseOwner(URI);
+                            di.ReleaseOwner(URI);
                         return;
                     }
                     if (!DIDictionary.TryGetValue(u, out r))
@@ -267,7 +264,7 @@ namespace IATClient
                 ValidateData?.Invoke();
                 if (PreviewPanel != null)
                     PreviewPanel.SetImage(img);
-            } 
+            }
         }
 
         protected override void Validate()
@@ -318,7 +315,7 @@ namespace IATClient
             root.Add(new XAttribute("InvalidationState", InvalidationState.ToString()));
             foreach (Uri u in DIDictionary.Keys)
             {
-                
+
                 String rId = CIAT.SaveFile.GetRelationshipsByType(URI, BaseType, typeof(DIBase), "owns").Where(pr => pr.TargetUri.Equals(u)).Select(pr => pr.Id).First();
                 Rectangle rect = DIDictionary[u];
                 root.Add(new XElement("Component", new XAttribute("rId", rId), new XElement("Top", rect.Top.ToString()), new XElement("Left", rect.Left.ToString()),
@@ -349,7 +346,8 @@ namespace IATClient
             if (xDoc.Root.Attribute("InvalidationState") != null)
             {
                 InvalidationState = InvalidationStates.Parse(xDoc.Root.Attribute("InvalidationState").Value);
-            } else
+            }
+            else
             {
                 InvalidationState = InvalidationStates.InvalidationReady;
             }

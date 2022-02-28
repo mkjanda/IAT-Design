@@ -1,16 +1,16 @@
-﻿using System;
+﻿using IATClient.ResultData;
+using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Windows.Forms;
 using System.Drawing;
-using System.Xml;
+using System.Linq;
 using System.Text.RegularExpressions;
-using IATClient.ResultData;
+using System.Windows.Forms;
+using System.Xml;
 
 namespace IATClient
 {
-    class CResponseObjectCollection {
+    class CResponseObjectCollection
+    {
         private List<CResponseObject> ResponseObjects = new List<CResponseObject>();
 
         public CResponseObject this[int n]
@@ -56,9 +56,9 @@ namespace IATClient
         protected static Size RadioSize = new Size(16, 16);
         protected static Size CheckSize = new Size(16, 16);
         protected static Padding RadioPadding = new Padding(6, 6, 6, 6);
-        protected static Padding CheckPadding = new Padding(6, 6, 6, 6); 
-        protected static Padding ElementPadding = new Padding(5, 5, 5, 5); 
-        protected static Padding PanelPadding = new Padding(25, 25, 25, 25); 
+        protected static Padding CheckPadding = new Padding(6, 6, 6, 6);
+        protected static Padding ElementPadding = new Padding(5, 5, 5, 5);
+        protected static Padding PanelPadding = new Padding(25, 25, 25, 25);
 
         public class OverlapException : Exception
         {
@@ -122,8 +122,8 @@ namespace IATClient
         }
 
         //public abstract void ReadXml(XmlReader reader);
-//        public abstract void WriteXml(XmlWriter writer);
-            
+        //        public abstract void WriteXml(XmlWriter writer);
+
         public abstract class CResponseSpecifier : INamedXmlSerializable, IStoredInXml
         {
             public String GetName()
@@ -236,7 +236,8 @@ namespace IATClient
 
             protected override EType Type
             {
-                get {
+                get
+                {
                     return EType.singleton;
                 }
             }
@@ -408,13 +409,13 @@ namespace IATClient
                 return false;
             }
 
-            public override bool  Contains(String respVal)
-{
+            public override bool Contains(String respVal)
+            {
                 decimal dResp = Convert.ToDecimal(respVal);
                 if ((dResp >= Min) && (dResp <= Max))
                     return true;
                 return false;
-}
+            }
 
             public override void WriteXml(XmlWriter writer)
             {
@@ -834,7 +835,7 @@ namespace IATClient
         protected CResponseObject(EType type, ResultSetDescriptor rsd)
         {
             _Type = type;
-            _RSD = rsd;    
+            _RSD = rsd;
         }
 
         protected CResponseObject(EType type, CSurveyItem csi)
@@ -915,7 +916,7 @@ namespace IATClient
             return "ResponseObject";
         }
         protected bool bIsNew = true;
-        public virtual void UpdateResponseObject() {}
+        public virtual void UpdateResponseObject() { }
         protected virtual void CopyResponseObject(CResponseObject original) { }
     }
 }

@@ -1,12 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Drawing;
 using System.Data;
-using System.Text;
+using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
-using System.Threading.Tasks;
 namespace IATClient
 {
     public partial class IATBlockPanel : UserControl
@@ -64,7 +61,7 @@ namespace IATClient
         }
 
         public delegate bool IsDynamicallyKeyedCallback();
-        
+
         public static Point IATInstructionsPanelPosition = new Point(530, 400);
         public static Size IATInstructionsPanelSize = new Size(375, 120);
 
@@ -72,7 +69,7 @@ namespace IATClient
         private TextEditControl InstructionsEdit;
 
         public Uri BlockUri { get; private set; }
-        
+
         /// <summary>
         /// gets the currently active IAT item
         /// </summary>
@@ -125,7 +122,7 @@ namespace IATClient
             ScrollingPreview.AutoScaleMode = AutoScaleMode.Font;
             ScrollingPreview.PreviewSize = Images.ImageManager.ThumbnailSize;
             ScrollingPreview.PreviewClickCallback = new Action<int>((newNdx) => { SelectedItemNdx = newNdx; });
-            
+
             ScrollingPreview.OnMoveContainerItem = new Action<int, int>((startNdx, endNdx) =>
             {
                 CIATBlock b = CIAT.SaveFile.GetIATBlock(BlockUri);
@@ -137,14 +134,14 @@ namespace IATClient
             block.SuspendPreviewLayouts();
             for (int ctr = 0; ctr < block.NumItems; ctr++)
                 ScrollingPreview.InsertPreview(ctr, block[ctr]);
-//            CIAT.ImageManager.ForceFetch();
+            //            CIAT.ImageManager.ForceFetch();
             for (int ctr = 0; ctr < block.NumItems; ctr++)
                 block[ctr].GetPreview(BlockUri).SuspendLayout();
             if (block.NumItems == 0)
             {
                 CIATItem newItem = new CIATItem();
                 block.AddItem(newItem, KeyedDirection.None);
-  //              SelectedItemNdx = 0;
+                //              SelectedItemNdx = 0;
                 ScrollingPreview.InsertPreview(0, newItem);
             }
             if (CIAT.SaveFile.IAT.Is7Block && (block.IndexInContainer >= 2))
@@ -314,7 +311,7 @@ namespace IATClient
                 if (MessageBox.Show(this, ex.Message + "\n" + Properties.Resources.sErrorsExistProceed, Properties.Resources.sErrorsExistCaption,
                     MessageBoxButtons.YesNo) == DialogResult.Yes)
                     return true;
-                else 
+                else
                     return false;
             }
             return true;

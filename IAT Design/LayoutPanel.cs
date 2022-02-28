@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
@@ -51,11 +50,11 @@ namespace IATClient
 
             public bool IsSelectable
             {
-                get 
+                get
                 {
                     return _IsSelectable;
                 }
-                set 
+                set
                 {
                     _IsSelectable = value;
                 }
@@ -112,7 +111,7 @@ namespace IATClient
                     Brush BackBrush = new SolidBrush(BackColor);
                     Brush ForeBrush = new SolidBrush(ForeColor);
                     g.FillRectangle(BackBrush, BoundingRect);
-                    g.DrawString(Text, ItemFont, ForeBrush, BoundingRect.Location 
+                    g.DrawString(Text, ItemFont, ForeBrush, BoundingRect.Location
                         + new Size(ItemFont.Height >> 1, ItemFont.Height >> 3));
                     BackBrush.Dispose();
                     ForeBrush.Dispose();
@@ -196,7 +195,7 @@ namespace IATClient
             {
                 if (ItemFont == null)
                     return;
-                ColorRect = new Bitmap((int)(ItemFont.Height * ColorRectAspectRatio), ItemFont.Height, 
+                ColorRect = new Bitmap((int)(ItemFont.Height * ColorRectAspectRatio), ItemFont.Height,
                     System.Drawing.Imaging.PixelFormat.Format32bppRgb);
                 Graphics g = Graphics.FromImage(ColorRect);
                 Rectangle BoundaryRect = new Rectangle(new Point(0, 0), new Size((int)(ItemFont.Height * ColorRectAspectRatio), ItemFont.Height));
@@ -554,7 +553,8 @@ namespace IATClient
         private Size GetMaxKeySize()
         {
             List<Size> keySizes = new List<Size>();
-            foreach (CIATKey key in CIAT.SaveFile.GetAllIATKeyUris().Select(u => CIAT.SaveFile.GetIATKey(u))) {
+            foreach (CIATKey key in CIAT.SaveFile.GetAllIATKeyUris().Select(u => CIAT.SaveFile.GetIATKey(u)))
+            {
                 keySizes.Add(AbsoluteSize(key.LeftValue));
                 keySizes.Add(AbsoluteSize(key.RightValue));
             }
@@ -663,7 +663,7 @@ namespace IATClient
                 ticker += TickGap;
             }
             Size szText = System.Windows.Forms.TextRenderer.MeasureText(label, System.Drawing.SystemFonts.DialogFont);
-            OutlineGraphics.DrawString(label, System.Drawing.SystemFonts.DialogFont, pen.Brush, 
+            OutlineGraphics.DrawString(label, System.Drawing.SystemFonts.DialogFont, pen.Brush,
                 new PointF(transformedRect.X + ((int)(transformedRect.Width - szText.Width) >> 1), transformedRect.Y + ((int)(transformedRect.Height - szText.Height) >> 1)));
             pen.Dispose();
             br.Dispose();

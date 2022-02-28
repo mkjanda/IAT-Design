@@ -1,9 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Drawing;
+using System.Linq;
 using System.Windows.Forms;
 
 namespace IATClient
@@ -66,13 +63,13 @@ namespace IATClient
         }
 
 
-        public SurveyTextFormatControl(SurveyItemFormat.EFor f) 
+        public SurveyTextFormatControl(SurveyItemFormat.EFor f)
         {
             this.For = f;
             this.Dock = DockStyle.Fill;
             this.Load += new EventHandler(SurveyTextFormatControl_Load);
 
-            
+
             int maxFontSizeWidth = FontSizes.Select(fSizes => TextRenderer.MeasureText(fSizes, System.Drawing.SystemFonts.DialogFont).Width).Max();
             FontSize = new ComboBox();
             FontSize.Items.AddRange(FontSizes);
@@ -86,7 +83,7 @@ namespace IATClient
             FontName.DropDownStyle = ComboBoxStyle.DropDownList;
             FontName.Size = new Size(TextRenderer.MeasureText("sans-serif", System.Drawing.SystemFonts.DialogFont).Width + 25, FontName.Font.Height + 4);
             int maxWidth = PrivateFont.Fonts.Select(f => f.DisplayName).Aggregate(0, (max, val) =>
-                (max < TextRenderer.MeasureText(val, System.Drawing.SystemFonts.DialogFont).Width ? 
+                (max < TextRenderer.MeasureText(val, System.Drawing.SystemFonts.DialogFont).Width ?
                 TextRenderer.MeasureText(val, System.Drawing.SystemFonts.DialogFont).Width : max));
             FontName.Location = new Point(ComponentPadding.Left, FontSize.Bottom + ComponentPadding.Vertical);
             FontName.SelectedIndex = 0;
@@ -118,20 +115,21 @@ namespace IATClient
             FadeTimer.Interval = 10;
             FadeTimer.Tick += (s, args) =>
             {
-                if (FontColorBox.Checked) {
+                if (FontColorBox.Checked)
+                {
                     ColorBrightness = 0;
                     ColorAlpha += 5;
                     ColorAlpha = ColorAlpha % 256;
                 }
-                else 
+                else
                     ColorBrightness = 255;
-                FontColorBox.ForeColor= Color.FromArgb(ColorBrightness, ColorBrightness, ColorBrightness);
+                FontColorBox.ForeColor = Color.FromArgb(ColorBrightness, ColorBrightness, ColorBrightness);
                 FontColorBox.BackColor = Color.FromArgb(FontColorBox.Checked ? ColorAlpha : 255, FontColor);
                 FontColorBox.Invalidate();
             };
             FadeTimer.Start();
 
-            FontName.SelectedIndexChanged += (s, args) => { if (DispatchEvents)CIAT.Dispatcher.Dispatch<ISurveyItemFormatChanged>(new CSurveyItemFormatChanged(ItemFormat)); };
+            FontName.SelectedIndexChanged += (s, args) => { if (DispatchEvents) CIAT.Dispatcher.Dispatch<ISurveyItemFormatChanged>(new CSurveyItemFormatChanged(ItemFormat)); };
             FontColorBox.CheckedChanged += (sender, args) =>
             {
                 if (FontColorBox.Checked)

@@ -34,14 +34,15 @@ namespace IATClient
                 get
                 {
                     return _StackTrace;
-                } set { }
+                }
+                set { }
             }
         }
 
         [XmlIgnore]
         public String Caption { get; protected set; } = String.Empty;
 
-        
+
         [XmlElement(ElementName = "ExceptionMessage", Form = XmlSchemaForm.Unqualified, IsNullable = false)]
         public String ExceptionMessage { get; set; } = String.Empty;
         protected List<String> _StackTrace = new List<String>();
@@ -64,7 +65,8 @@ namespace IATClient
             get
             {
                 return this._InnerExceptions;
-            } set { }
+            }
+            set { }
         }
 
         public CReportableException()
@@ -76,17 +78,18 @@ namespace IATClient
             ExceptionMessage = ex.Message;
             if (ex.StackTrace != null)
                 _StackTrace.AddRange(ex.StackTrace.Split(new char[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries));
-            while (ex.InnerException != null) {
+            while (ex.InnerException != null)
+            {
                 CInnerException innerEx = new CInnerException();
                 innerEx.ExceptionMessage = ex.InnerException.Message;
                 if (ex.InnerException.StackTrace != null)
-                    innerEx.StackTrace.AddRange(ex.InnerException.StackTrace.Split(new char[]{ '\r', '\n'}, StringSplitOptions.RemoveEmptyEntries));
+                    innerEx.StackTrace.AddRange(ex.InnerException.StackTrace.Split(new char[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries));
                 _InnerExceptions.Add(innerEx);
                 ex = ex.InnerException;
             }
         }
 
-       
+
         public Size MeasureText(Graphics g, Font f)
         {
             float height = 0F;

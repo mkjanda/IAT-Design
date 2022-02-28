@@ -1,20 +1,19 @@
-﻿using System;
-using System.ComponentModel;
+﻿using IATClient.Messages;
+using IATClient.ResultData;
+using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Net;
+using System.Net.WebSockets;
 using System.Security.Cryptography;
 using System.Text;
 using System.Text.RegularExpressions;
-using System.Windows.Forms;
 using System.Threading;
 using System.Threading.Tasks;
-using System.IO;
+using System.Windows.Forms;
 using System.Xml;
 using System.Xml.Serialization;
-using System.Net;
-using System.Net.WebSockets;
-using IATClient.Messages;
-using IATClient.ResultData;
 
 namespace IATClient
 {
@@ -742,7 +741,8 @@ namespace IATClient
                     ErrorReporter.ReportError(new CReportableException("Error on test upload", ex));
                 return false;
             }
-            if (!connectTask.IsCompleted) {
+            if (!connectTask.IsCompleted)
+            {
                 ErrorReporter.ReportError(new CReportableException("Timeout connecting to server for test upload", new TimeoutException()));
                 return false;
             }

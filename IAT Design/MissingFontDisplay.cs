@@ -1,12 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Drawing;
 using System.Data;
+using System.Drawing;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace IATClient
@@ -45,30 +42,30 @@ namespace IATClient
             {
                 this._TextSize = TextRenderer.MeasureText(this.DisplayedText, this.TextBox.Font, new Size(width, 1), TextFormatFlags.WordBreak | TextFormatFlags.TextBoxControl);
             }
-/*
-            public DisplayText(String fontFamilyName, String text, float fontSize)
-            {
-                this.DisplayedText = text;
-                this.Dock = DockStyle.Fill;
-                this.TextBox = new TextBox();
-                this.TextBox.ReadOnly = true;
-                this.TextBox.Multiline = false;
-                this.TextBox.BorderStyle = BorderStyle.None;
-                this.TextBox.Dock = DockStyle.Left;
-                this.TextBox.Padding = Padding;
-                this.FontSize = fontSize;
-                this.TextBox.Font = new Font(fontFamilyName, FontSize);
-                this.TextBox.Margin = Padding;
-                this.Multiline = false;
-                this._Width = -1;
-                this.TextBox.Text = DisplayedText;
-                CalcTextSize(-1);
-                this.TextBox.Size = _TextSize;
-                this.Size = this.TextBox.Size + new Size(TextPadding.Horizontal, TextPadding.Vertical);
-                Controls.Add(this.TextBox);
-                this.SizeChanged += new EventHandler(DisplayText_SizeChanged);
-            }
-*/
+            /*
+                        public DisplayText(String fontFamilyName, String text, float fontSize)
+                        {
+                            this.DisplayedText = text;
+                            this.Dock = DockStyle.Fill;
+                            this.TextBox = new TextBox();
+                            this.TextBox.ReadOnly = true;
+                            this.TextBox.Multiline = false;
+                            this.TextBox.BorderStyle = BorderStyle.None;
+                            this.TextBox.Dock = DockStyle.Left;
+                            this.TextBox.Padding = Padding;
+                            this.FontSize = fontSize;
+                            this.TextBox.Font = new Font(fontFamilyName, FontSize);
+                            this.TextBox.Margin = Padding;
+                            this.Multiline = false;
+                            this._Width = -1;
+                            this.TextBox.Text = DisplayedText;
+                            CalcTextSize(-1);
+                            this.TextBox.Size = _TextSize;
+                            this.Size = this.TextBox.Size + new Size(TextPadding.Horizontal, TextPadding.Vertical);
+                            Controls.Add(this.TextBox);
+                            this.SizeChanged += new EventHandler(DisplayText_SizeChanged);
+                        }
+            */
             public DisplayText(String fontFamilyName, String text, float fontSize, int desiredWidth)
             {
                 this.DesiredWidth = desiredWidth;
@@ -94,7 +91,7 @@ namespace IATClient
                 this.TextBox.Location = new Point(TextPadding.Left, 0);
                 this.Size = _TextSize + new Size(TextPadding.Horizontal, 0);
                 Controls.Add(this.TextBox);
-         //       this.SizeChanged += new EventHandler(DisplayText_SizeChanged);
+                //       this.SizeChanged += new EventHandler(DisplayText_SizeChanged);
             }
 
             private void DisplayText_SizeChanged(object sender, EventArgs e)

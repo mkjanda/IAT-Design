@@ -1,24 +1,22 @@
-﻿using System;
+﻿using IATClient.ResultData;
+using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Drawing;
 using System.Windows.Forms;
-using IATClient.ResultData;
 
 namespace IATClient
 {
     class CMultipleResponseObject : CResponseObject
     {
         protected bool[] Responses = null;
-        private TextBox []ChoiceBoxList = null;
+        private TextBox[] ChoiceBoxList = null;
         private CheckBox[] ChoiceCheckList = null;
-        private RadioButton []ChoiceRadioList = null;
+        private RadioButton[] ChoiceRadioList = null;
         private Func<int> GetNumStatements = null;
         private Func<int, String> GetStatement = null;
-        
+
         public CMultipleResponseObject(EType type, Response theResp)
-            : base (type, theResp)
+            : base(type, theResp)
         {
             Multiple resp = (Multiple)theResp;
             GetNumStatements = new Func<int>(resp.GetNumStatements);

@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Windows.Forms;
 using System.Drawing;
+using System.Windows.Forms;
 
 namespace IATClient
 {
@@ -35,7 +33,7 @@ namespace IATClient
                 else if (_Selected && !value)
                 {
                     SuspendLayout();
-                    foreach (TextBox tb in ResultLabels) 
+                    foreach (TextBox tb in ResultLabels)
                     {
                         tb.Font = NormalFont;
                     }
@@ -79,7 +77,7 @@ namespace IATClient
             e.Graphics.DrawLine(Pens.Black, new Point(0, this.Height - 1), new Point(this.Width - 1, this.Height - 1));
             for (int ctr = 0; ctr < ResultLabels.Count - 1; ctr++)
                 e.Graphics.DrawLine(Pens.Black, new Point(ResultLabels[ctr].Right, 0), new Point(ResultLabels[ctr].Right, this.Height - 1));
-           
+
         }
 
         private void Row_Click(object sender, EventArgs e)

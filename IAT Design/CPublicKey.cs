@@ -1,18 +1,14 @@
 ﻿using System;
-using System.Collections.Generic;
-
-using System.Text;
 using System.Xml;
-using System.Xml.Serialization;
 using System.Xml.Schema;
 
 namespace IATClient
 {
     class CPublicKey : INamedXmlSerializable
     {
-        private byte []_Modulus, _Exponent;
+        private byte[] _Modulus, _Exponent;
 
-        public byte []Modulus
+        public byte[] Modulus
         {
             get
             {
@@ -20,7 +16,7 @@ namespace IATClient
             }
         }
 
-        public byte []Exponent
+        public byte[] Exponent
         {
             get
             {
@@ -28,7 +24,7 @@ namespace IATClient
             }
         }
 
-        public CPublicKey(byte []modulus, byte []exponent)
+        public CPublicKey(byte[] modulus, byte[] exponent)
         {
             _Modulus = (byte[])modulus.Clone();
             _Exponent = (byte[])exponent.Clone();

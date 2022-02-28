@@ -1,12 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
-using System.Windows.Forms;
 using System.Drawing;
+using System.Windows.Forms;
 
 namespace IATClient
 {
-    public interface IPreviewableItem 
+    public interface IPreviewableItem
     {
         void Preview(IImageDisplay previewPanel);
         void EndPreview(IImageDisplay previewPanel);
@@ -22,9 +21,9 @@ namespace IATClient
     {
         public delegate IImageDisplay RetrievePreviewPanelCallback(IPreviewableItem UpdatingItem);
         public delegate void RecalcLayoutHandler(IContentsItem sender, Size szControl);
-        
+
         public RetrievePreviewPanelCallback OnRetrievePreviewPanel = null;
-        public RecalcLayoutHandler RecalcLayout= null;
+        public RecalcLayoutHandler RecalcLayout = null;
         public static System.Drawing.Color HeaderBaseColor = System.Drawing.Color.FromArgb(100, System.Drawing.Color.DeepSkyBlue);
         public static System.Drawing.Color HeaderHighlightColor = System.Drawing.Color.FromArgb(200, System.Drawing.Color.DeepSkyBlue);
         public static System.Drawing.Color ChildBaseColor = System.Drawing.Color.FromArgb(120, System.Drawing.Color.LimeGreen);
@@ -38,9 +37,10 @@ namespace IATClient
 
 
         private bool _Expanded = false;
-        private int ChildButtonMargin 
+        private int ChildButtonMargin
         {
-            get {
+            get
+            {
                 return this.Width / 20;
             }
         }
@@ -52,7 +52,8 @@ namespace IATClient
 
         public IATConfigMainForm MainForm
         {
-            get {
+            get
+            {
                 return _MainForm;
             }
         }
@@ -106,7 +107,7 @@ namespace IATClient
             foreach (Button b in ChildItems.Keys)
                 Controls.Remove(b);
             ChildItems.Clear();
-            Point loc = new Point(ChildButtonMargin, HeaderButton.Bottom);            
+            Point loc = new Point(ChildButtonMargin, HeaderButton.Bottom);
             for (int ctr = 0; ctr < childItems.Count; ctr++)
             {
                 Button childButton = new Button();
@@ -141,7 +142,7 @@ namespace IATClient
                 ChildItems[(Button)sender].Preview(OnRetrievePreviewPanel(ChildItems[(Button)sender]));
         }
 
-        private void ChildButton_DoubleClick(object sender, EventArgs e) 
+        private void ChildButton_DoubleClick(object sender, EventArgs e)
         {
             ChildItems[(Button)sender].OpenItem(MainForm);
         }

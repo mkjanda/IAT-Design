@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace IATClient
+﻿namespace IATClient
 {
     interface IFormatSurveyItemText : EventDispatcher.IApplicationEvent
     {
@@ -32,7 +26,7 @@ namespace IATClient
     {
         SurveyItemFormat SurveyItemFormat { get; }
     }
-    class CSurveyItemFormatChanged : ISurveyItemFormatChanged 
+    class CSurveyItemFormatChanged : ISurveyItemFormatChanged
     {
         SurveyItemFormat _Format;
 

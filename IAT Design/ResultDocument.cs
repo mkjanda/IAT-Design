@@ -1,10 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Xml;
 using System.Xml.Serialization;
-using System.Threading.Tasks;
 
 
 namespace IATClient.ResultDocument
@@ -98,7 +94,7 @@ namespace IATClient.ResultDocument
             get
             {
                 XmlDocument doc = new XmlDocument();
-                return new XmlNode[]{doc.CreateCDataSection(Content)};
+                return new XmlNode[] { doc.CreateCDataSection(Content) };
             }
             set
             {

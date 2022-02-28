@@ -1,15 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.Drawing;
 using System.IO;
+using System.Net;
 using System.Security.Cryptography;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Net;
-using System.Drawing;
 using System.Windows.Forms;
 using System.Xml.Serialization;
-using System.Linq;
-using System.Management;
 
 namespace IATClient
 {
@@ -131,14 +128,17 @@ namespace IATClient
                         report.ProductKey = requestForm.ProductKey;
                         report.Email = requestForm.Email;
                     }
-                    else if (verifyResult == "ProductKey") {
+                    else if (verifyResult == "ProductKey")
+                    {
                         report.ProductKey = requestForm.ProductKey;
                         report.Email = null;
                     }
-                    else if (verifyResult == "Email") {
+                    else if (verifyResult == "Email")
+                    {
                         report.Email = requestForm.Email;
                         report.ProductKey = null;
-                    } else
+                    }
+                    else
                     {
                         report.Email = null;
                         report.ProductKey = null;

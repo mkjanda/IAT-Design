@@ -1,13 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using IATClient.Images;
+using System;
 using System.Collections.Concurrent;
+using System.Collections.Generic;
 using System.Drawing;
-using System.Linq;
-using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
-using System.Timers;
-using IATClient.Images;
 
 namespace IATClient
 {
@@ -112,8 +108,8 @@ namespace IATClient
         private readonly ManualResetEvent invalidationEntryEvt = new ManualResetEvent(true);
         protected override void Invalidate()
         {
-                if (!Monitor.TryEnter(this))
-                    return;
+            if (!Monitor.TryEnter(this))
+                return;
             try
             {
                 try
@@ -153,7 +149,7 @@ namespace IATClient
             }
         }
 
-        
+
         public DIGenerated()
         {
             lock (GeneratedItemsLock)
@@ -170,7 +166,7 @@ namespace IATClient
             }
         }
 
-        public DIGenerated(Images.IImage img) 
+        public DIGenerated(Images.IImage img)
             : base(img)
         {
             lock (GeneratedItemsLock)

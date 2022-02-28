@@ -1,15 +1,11 @@
 ﻿using System;
-using System.Collections.Concurrent;
 using System.Collections.Generic;
-using System.Linq;
 using System.Drawing;
-using System.IO;
 using System.IO.Packaging;
+using System.Linq;
+using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Text.RegularExpressions;
-using mshtml;
-using System.Runtime.InteropServices.WindowsRuntime;
 
 namespace IATClient
 {
@@ -381,12 +377,12 @@ namespace IATClient
             }
             protected set
             {
-                    if (rImageId != null)
-                    {
-                        CIAT.SaveFile.DeleteRelationship(URI, rImageId);
-                        IImage?.Dispose();
-                    }
-                    _IImage = value;
+                if (rImageId != null)
+                {
+                    CIAT.SaveFile.DeleteRelationship(URI, rImageId);
+                    IImage?.Dispose();
+                }
+                _IImage = value;
                 if (value == null)
                     return;
                 var pr = CIAT.SaveFile.GetRelationship(MetaDataDoc, value);
@@ -507,7 +503,7 @@ namespace IATClient
             LayoutSuspended = false;
             if (immediate)
                 ScheduleInvalidation();
-               
+
         }
 
         public void ScheduleInvalidationSync()
@@ -617,7 +613,7 @@ namespace IATClient
                 {
                     if (this.IImage.MetaData.ImageRelId != rImageId)
                     {
-//                        CIAT.SaveFile.DeleteRelationship(URI, IImage.URI);
+                        //                        CIAT.SaveFile.DeleteRelationship(URI, IImage.URI);
                         this.IImage.Dispose();
                     }
                     else
@@ -647,10 +643,10 @@ namespace IATClient
             {
                 Uri oldUri = URI;
                 CIAT.SaveFile.Replace(this, target);
-  //              Save();
+                //              Save();
                 target.Replaced = true;
                 target.Dispose();
-//                CIAT.SaveFile.DeletePart(oldUri);
+                //                CIAT.SaveFile.DeletePart(oldUri);
             }
         }
 
@@ -699,7 +695,8 @@ namespace IATClient
         }
 
 
-        public void AddOwner(Uri ownerUri) {
+        public void AddOwner(Uri ownerUri)
+        {
             foreach (PackageRelationship pr in CIAT.SaveFile.GetRelationshipsByType(URI, BaseType, typeof(DIBase), "owned-by").ToList())
                 if (pr.TargetUri.Equals(ownerUri))
                     return;
@@ -765,7 +762,9 @@ namespace IATClient
         }
 
         private static DIBase diNull = null;
-        public static DIBase DINull { get
+        public static DIBase DINull
+        {
+            get
             {
                 if (diNull == null)
                     diNull = new DINull();

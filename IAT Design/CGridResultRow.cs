@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Drawing;
 using System.Windows.Forms;
 
@@ -16,7 +14,8 @@ namespace IATClient
 
         public CGridResultRow(List<Rectangle> cellRects, List<String> results, Padding rowPadding, Padding cellPadding)
         {
-            foreach (Rectangle r in cellRects) {
+            foreach (Rectangle r in cellRects)
+            {
                 r.Offset(new Point(rowPadding.Top, rowPadding.Left));
                 _CellRects.Add(r);
             }
@@ -82,8 +81,9 @@ namespace IATClient
             }
         }
 
-        public bool InClipRect(Rectangle clipRect) {
-            if ((clipRect.Right <= _Dimensions.Left) || (clipRect.Left >= _Dimensions.Right) || (clipRect.Bottom <= _Dimensions.Top) || (clipRect.Top  >= _Dimensions.Bottom))
+        public bool InClipRect(Rectangle clipRect)
+        {
+            if ((clipRect.Right <= _Dimensions.Left) || (clipRect.Left >= _Dimensions.Right) || (clipRect.Bottom <= _Dimensions.Top) || (clipRect.Top >= _Dimensions.Bottom))
                 return false;
             return true;
         }
@@ -108,10 +108,12 @@ namespace IATClient
                 String resultStr = _Results[ctr];
                 SizeF lineSize = g.MeasureString(resultStr.Trim(), resultFont);
                 int nLines = 0;
-                while (lineSize.Width > _CellRects[ctr].Width) {
+                while (lineSize.Width > _CellRects[ctr].Width)
+                {
                     String str = resultStr.Substring(0, resultStr.Trim().LastIndexOf(' ')).Trim();
                     lineSize = g.MeasureString(str, resultFont);
-                    while (lineSize.Width > _CellRects[ctr].Width) {
+                    while (lineSize.Width > _CellRects[ctr].Width)
+                    {
                         str = str.Substring(0, str.LastIndexOf(' '));
                         lineSize = g.MeasureString(str, resultFont);
                     }
@@ -121,7 +123,7 @@ namespace IATClient
                 }
                 g.DrawString(resultStr, resultFont, Brushes.Black, new PointF(_CellRects[ctr].Left + _RowPadding.Left + _CellPadding.Left, _Dimensions.Top + _CellRects[ctr].Top + _RowPadding.Top + (nLines * resultFont.Height)));
                 if (ctr == _CellRects.Count - 1)
-                   g.DrawLine(Pens.Black, new Point(_Dimensions.Right + _RowPadding.Right, _Dimensions.Top - _RowPadding.Top), new Point(_Dimensions.Right + _RowPadding.Right, _Dimensions.Bottom + _RowPadding.Vertical));
+                    g.DrawLine(Pens.Black, new Point(_Dimensions.Right + _RowPadding.Right, _Dimensions.Top - _RowPadding.Top), new Point(_Dimensions.Right + _RowPadding.Right, _Dimensions.Bottom + _RowPadding.Vertical));
                 else
                     g.DrawLine(Pens.Black, new Point(_CellRects[ctr].Right, _Dimensions.Top - _RowPadding.Top), new Point(_CellRects[ctr].Right, _Dimensions.Bottom + _RowPadding.Vertical));
             }

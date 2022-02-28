@@ -1,13 +1,11 @@
-﻿using System;
+﻿using IATClient.ResultData;
+using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Xml;
 using System.Drawing;
-using System.Windows.Forms;
-using System.Text.RegularExpressions;
 using System.IO;
-using IATClient.ResultData;
+using System.Text.RegularExpressions;
+using System.Windows.Forms;
+using System.Xml;
 
 namespace IATClient
 {
@@ -241,7 +239,7 @@ namespace IATClient
                     else
                         strList.Add(str.Trim());
                 }
-                else 
+                else
                 {
                     strList.Add(str.Substring(0, str.IndexOf("-")).Trim());
                     strList.Add(str.Substring(str.IndexOf("-") + 1).Trim());
@@ -453,7 +451,7 @@ namespace IATClient
             get { throw new NotImplementedException(); }
         }
 
-        abstract class CFixedSpecifier : IStoredInXml, INamedXmlSerializable        
+        abstract class CFixedSpecifier : IStoredInXml, INamedXmlSerializable
         {
             public enum EType { singleton, range, wildcard };
             protected int _NumDigs;
@@ -541,13 +539,13 @@ namespace IATClient
                 return n * fact(n - 1);
             }
 
-            private static bool []GetWildSlots(int nDigits, int nCards, int nPermutation)
+            private static bool[] GetWildSlots(int nDigits, int nCards, int nPermutation)
             {
-                bool []wildAry = new bool[nDigits];
+                bool[] wildAry = new bool[nDigits];
                 System.Array.Clear(wildAry, 0, nDigits);
                 for (int ctr = 0; ctr < nCards; ctr++)
                     wildAry[ctr] = true;
-                int []posAry = new int[nCards];
+                int[] posAry = new int[nCards];
                 for (int ctr = 0; ctr < nCards; ctr++)
                     posAry[ctr] = ctr;
                 int movingBit = nCards - 1;
@@ -567,7 +565,8 @@ namespace IATClient
                         }
                         else
                             posAry[movingBit]++;
-                    } else
+                    }
+                    else
                     {
                         bMovedBit = false;
                         if (posAry[movingBit] == 1 + posAry[movingBit + 1])
@@ -596,21 +595,21 @@ namespace IATClient
                             bMovedBit = true;
                         }
                     }
-                        if (!bMovedBit)
-                        {
-                            int ctr = 1;
-                            while (posAry[movingBit - ctr] == posAry[movingBit - ctr - 1] + 1)
-                                ctr++;
-                            movingBit -= ctr;
-                            posAry[movingBit]++;
-                            for (int ctr1 = movingBit + 1; ctr1 < nCards - 1; ctr1++)
-                                posAry[ctr1] = posAry[movingBit] + ctr - movingBit;
-                        }
+                    if (!bMovedBit)
+                    {
+                        int ctr = 1;
+                        while (posAry[movingBit - ctr] == posAry[movingBit - ctr - 1] + 1)
+                            ctr++;
+                        movingBit -= ctr;
+                        posAry[movingBit]++;
+                        for (int ctr1 = movingBit + 1; ctr1 < nCards - 1; ctr1++)
+                            posAry[ctr1] = posAry[movingBit] + ctr - movingBit;
+                    }
                     permNum++;
                 }
                 return wildAry;
             }
-            
+
             private static String GetDigits(String val, int[] digs)
             {
                 String result = String.Empty;
@@ -624,7 +623,7 @@ namespace IATClient
                 int nBitsRead = 0;
                 int ctr = 0;
                 List<int> wildIndicies = new List<int>();
-                 while (nBitsRead < nStart)
+                while (nBitsRead < nStart)
                 {
                     if (bWildSlots[ctr])
                         nBitsRead++;
@@ -641,7 +640,7 @@ namespace IATClient
             }
 
 
-            private static int GetZeroValSet(List<String> values, List<int>[] foundVals, int []wildIndexes, int[] digitIndexes)
+            private static int GetZeroValSet(List<String> values, List<int>[] foundVals, int[] wildIndexes, int[] digitIndexes)
             {
                 int valSet = 0;
                 String val = "-1";
@@ -975,12 +974,12 @@ namespace IATClient
                     }
                 }
                 return results;
-             }
+            }
 
             public static List<CFixedSpecifier> GenerateCompressionSpecifiers(List<String> values, List<CFixedRange> ranges, List<CFixedWildcard> wildcards)
             {
                 List<List<CFixedRange>> Ranges = new List<List<CFixedRange>>();
-                List<List<CFixedWildcard>> Wildcards = new List<List<CFixedWildcard>>(); 
+                List<List<CFixedWildcard>> Wildcards = new List<List<CFixedWildcard>>();
                 List<CFixedSpecifier> results = new List<CFixedSpecifier>();
 
 
@@ -1080,7 +1079,7 @@ namespace IATClient
                         if (!results[ctr2].Contains(values[ctr1]))
                             singletons.Add(new CFixedSingleton(values[ctr1].Length, values[ctr1]));
                 results.AddRange(singletons.ToArray());
-                
+
                 return results;
             }
 

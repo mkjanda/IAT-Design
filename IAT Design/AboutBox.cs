@@ -1,14 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Drawing;
-using System.Linq;
-using System.Reflection;
-using System.Threading.Tasks;
-using System.Windows.Forms;
-using System.Net;
 using System.IO;
+using System.Net;
 using System.Threading;
+using System.Windows.Forms;
 
 namespace IATClient
 {
@@ -90,7 +86,7 @@ namespace IATClient
         private PictureBox ProgressImageBox = new PictureBox();
         private Label DownloadLabel = new Label();
         private List<Image> ProgressWheelImages = new List<Image>();
-        private int nProgressImage = 0;        
+        private int nProgressImage = 0;
         public AboutBox()
         {
             InitializeComponent();
@@ -151,7 +147,7 @@ namespace IATClient
             if (nProgressImage >= ProgressWheelImages.Count)
                 nProgressImage = 0;
             ProgressImageBox.Image = ProgressWheelImages[nProgressImage++];
-            DownloadLabel.Text = String.Format("Downloading Manual {0} {1} {2}", (nProgressImage < (ProgressWheelImages.Count >> 2)) ? String.Empty : ".", 
+            DownloadLabel.Text = String.Format("Downloading Manual {0} {1} {2}", (nProgressImage < (ProgressWheelImages.Count >> 2)) ? String.Empty : ".",
                 (nProgressImage < (ProgressWheelImages.Count >> 1)) ? String.Empty : ".", (nProgressImage < (3 * ProgressWheelImages.Count >> 2)) ? String.Empty : ".");
         }
 
@@ -255,87 +251,87 @@ namespace IATClient
             Application.OpenForms[Properties.Resources.sMainFormName].Close();
         }
 
-        
+
         #region Assembly Attribute Accessors
-/*
-        public string AssemblyTitle
-        {
-            get
-            {
-                object[] attributes = Assembly.GetExecutingAssembly().GetCustomAttributes(typeof(AssemblyTitleAttribute), false);
-                if (attributes.Length > 0)
+        /*
+                public string AssemblyTitle
                 {
-                    AssemblyTitleAttribute titleAttribute = (AssemblyTitleAttribute)attributes[0];
-                    if (titleAttribute.Title != "")
+                    get
                     {
-                        return titleAttribute.Title;
+                        object[] attributes = Assembly.GetExecutingAssembly().GetCustomAttributes(typeof(AssemblyTitleAttribute), false);
+                        if (attributes.Length > 0)
+                        {
+                            AssemblyTitleAttribute titleAttribute = (AssemblyTitleAttribute)attributes[0];
+                            if (titleAttribute.Title != "")
+                            {
+                                return titleAttribute.Title;
+                            }
+                        }
+                        return System.IO.Path.GetFileNameWithoutExtension(Assembly.GetExecutingAssembly().CodeBase);
                     }
                 }
-                return System.IO.Path.GetFileNameWithoutExtension(Assembly.GetExecutingAssembly().CodeBase);
-            }
-        }
 
-        public string AssemblyVersion
-        {
-            get
-            {
-                return Assembly.GetExecutingAssembly().GetName().Version.ToString();
-            }
-        }
-
-        public string AssemblyDescription
-        {
-            get
-            {
-                object[] attributes = Assembly.GetExecutingAssembly().GetCustomAttributes(typeof(AssemblyDescriptionAttribute), false);
-                if (attributes.Length == 0)
+                public string AssemblyVersion
                 {
-                    return "";
+                    get
+                    {
+                        return Assembly.GetExecutingAssembly().GetName().Version.ToString();
+                    }
                 }
-                return ((AssemblyDescriptionAttribute)attributes[0]).Description;
-            }
-        }
 
-        public string AssemblyProduct
-        {
-            get
-            {
-                object[] attributes = Assembly.GetExecutingAssembly().GetCustomAttributes(typeof(AssemblyProductAttribute), false);
-                if (attributes.Length == 0)
+                public string AssemblyDescription
                 {
-                    return "";
+                    get
+                    {
+                        object[] attributes = Assembly.GetExecutingAssembly().GetCustomAttributes(typeof(AssemblyDescriptionAttribute), false);
+                        if (attributes.Length == 0)
+                        {
+                            return "";
+                        }
+                        return ((AssemblyDescriptionAttribute)attributes[0]).Description;
+                    }
                 }
-                return ((AssemblyProductAttribute)attributes[0]).Product;
-            }
-        }
 
-        public string AssemblyCopyright
-        {
-            get
-            {
-                object[] attributes = Assembly.GetExecutingAssembly().GetCustomAttributes(typeof(AssemblyCopyrightAttribute), false);
-                if (attributes.Length == 0)
+                public string AssemblyProduct
                 {
-                    return "";
+                    get
+                    {
+                        object[] attributes = Assembly.GetExecutingAssembly().GetCustomAttributes(typeof(AssemblyProductAttribute), false);
+                        if (attributes.Length == 0)
+                        {
+                            return "";
+                        }
+                        return ((AssemblyProductAttribute)attributes[0]).Product;
+                    }
                 }
-                return ((AssemblyCopyrightAttribute)attributes[0]).Copyright;
-            }
-        }
 
-        public string AssemblyCompany
-        {
-            get
-            {
-                object[] attributes = Assembly.GetExecutingAssembly().GetCustomAttributes(typeof(AssemblyCompanyAttribute), false);
-                if (attributes.Length == 0)
+                public string AssemblyCopyright
                 {
-                    return "";
+                    get
+                    {
+                        object[] attributes = Assembly.GetExecutingAssembly().GetCustomAttributes(typeof(AssemblyCopyrightAttribute), false);
+                        if (attributes.Length == 0)
+                        {
+                            return "";
+                        }
+                        return ((AssemblyCopyrightAttribute)attributes[0]).Copyright;
+                    }
                 }
-                return ((AssemblyCompanyAttribute)attributes[0]).Company;
-            }
-        }
-  */
-      #endregion
+
+                public string AssemblyCompany
+                {
+                    get
+                    {
+                        object[] attributes = Assembly.GetExecutingAssembly().GetCustomAttributes(typeof(AssemblyCompanyAttribute), false);
+                        if (attributes.Length == 0)
+                        {
+                            return "";
+                        }
+                        return ((AssemblyCompanyAttribute)attributes[0]).Company;
+                    }
+                }
+          */
+        #endregion
 
     }
 }

@@ -1,19 +1,17 @@
-﻿using System;
+﻿using IATClient.ResultData;
+using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Windows.Forms;
 using System.Drawing;
-using IATClient.ResultData; 
+using System.Windows.Forms;
 
 namespace IATClient
 {
     class CWeightedMultipleResponseObject : CResponseObject
     {
         private CheckBox[] AnswerChecks = null;
-        private RadioButton []AnswerRadios = null;
-        private TextBox []AnswerBoxes = null;
-        private bool []Responses = null;
+        private RadioButton[] AnswerRadios = null;
+        private TextBox[] AnswerBoxes = null;
+        private bool[] Responses = null;
         private Func<int> GetNumChoices = null;
         private Func<int, String> GetChoice = null;
         private Func<int, int> GetWeight = null;

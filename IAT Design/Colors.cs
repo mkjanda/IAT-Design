@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Drawing;
+using System.Linq;
 
 namespace IATClient
 {
@@ -102,13 +102,15 @@ namespace IATClient
             Name = "Blackened Pearl",
             Color = Color.FromArgb(77, 75, 80)
         };
-        public static readonly NamedColor Citrus = new NamedColor() { 
-            Name = "Pale Gold", 
-            Color = Color.FromArgb(189, 152, 101) 
+        public static readonly NamedColor Citrus = new NamedColor()
+        {
+            Name = "Pale Gold",
+            Color = Color.FromArgb(189, 152, 101)
         };
-        public static readonly NamedColor Raspberry = new NamedColor() { 
-            Name = "Raspberry", 
-            Color = Color.FromArgb(211, 46, 94) 
+        public static readonly NamedColor Raspberry = new NamedColor()
+        {
+            Name = "Raspberry",
+            Color = Color.FromArgb(211, 46, 94)
         };
         public static readonly NamedColor Oriole = new NamedColor()
         {

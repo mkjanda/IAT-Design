@@ -1,6 +1,6 @@
 ﻿using System;
-using System.Xml;
 using System.Collections;
+using System.Xml;
 
 namespace IATClient.IATConfig
 {
@@ -114,7 +114,7 @@ namespace IATClient.IATConfig
         {
             return CIAT.SaveFile.GetIATItem(ItemUri);
         }
- 
+
         public override void WriteXml(XmlWriter writer)
         {
             writer.WriteStartElement("IATItem");
@@ -123,8 +123,8 @@ namespace IATClient.IATConfig
             writer.WriteElementString("StimulusDisplayID", StimulusDisplayID.ToString());
             writer.WriteElementString("OriginatingBlock", OriginatingBlock.ToString());
             writer.WriteElementString("KeyedDir", KeyedDir.ToString());
-    //        writer.WriteElementString("SpecifierID", SpecifierID.ToString());
-      //      writer.WriteElementString("SpecifierArg", SpecifierArg);
+            //        writer.WriteElementString("SpecifierID", SpecifierID.ToString());
+            //      writer.WriteElementString("SpecifierArg", SpecifierArg);
             writer.WriteEndElement();
         }
 
@@ -138,8 +138,8 @@ namespace IATClient.IATConfig
             StimulusDisplayID = Convert.ToInt32(reader.ReadElementString());
             OriginatingBlock = Convert.ToInt32(reader.ReadElementString());
             KeyedDir = KeyedDirection.FromString(reader.ReadElementString());
-  //          SpecifierID = Convert.ToInt32(reader.ReadElementString());
-//            SpecifierArg = reader.ReadElementString();
+            //          SpecifierID = Convert.ToInt32(reader.ReadElementString());
+            //            SpecifierArg = reader.ReadElementString();
             reader.ReadEndElement();
         }
     }

@@ -1,12 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
 using System.IO;
-using System.Xml;
-using System.Drawing;
-using System.Windows.Forms;
-using System.Threading;
 using System.Linq;
+using System.Windows.Forms;
 using System.Xml.Linq;
 
 namespace IATClient
@@ -18,19 +14,20 @@ namespace IATClient
         public static readonly InstructionScreenType ResponseKey = new InstructionScreenType(3, "ResponseKey", typeof(CKeyInstructionScreen), new Func<Uri, CInstructionScreen>((uri) => new CKeyInstructionScreen(uri)));
         public static readonly InstructionScreenType MockItem = new InstructionScreenType(4, "MockItem", typeof(CMockItemScreen), new Func<Uri, CInstructionScreen>((uri) => new CMockItemScreen(uri)));
 
-        private InstructionScreenType(int value, String name, Type t, Func<Uri, CInstructionScreen> c) : base(value, name) 
-        { 
+        private InstructionScreenType(int value, String name, Type t, Func<Uri, CInstructionScreen> c) : base(value, name)
+        {
             Type = t;
             Create = c;
         }
-        private Type Type {get; set;}
-        public Func<Uri, CInstructionScreen> Create {get; private set;}
+        private Type Type { get; set; }
+        public Func<Uri, CInstructionScreen> Create { get; private set; }
         private readonly IEnumerable<InstructionScreenType> All = new InstructionScreenType[] { Blank, Text, ResponseKey, MockItem };
         public InstructionScreenType FromString(String name)
         {
             return All.Where(ist => ist.Name == name).First();
         }
-        public static InstructionScreenType FromTypeName(String tName) {
+        public static InstructionScreenType FromTypeName(String tName)
+        {
             if (tName == typeof(CInstructionScreen).ToString())
                 return Blank;
             if (tName == typeof(CTextInstructionScreen).ToString())
@@ -127,7 +124,7 @@ namespace IATClient
                 return CIAT.SaveFile.GetDI(PreviewUri) as DIPreview;
             }
         }
-            
+
 
         public IImageDisplay PreviewPane
         {
@@ -199,7 +196,8 @@ namespace IATClient
             CIAT.SaveFile.ReleaseWriteStreamLock();
         }
 
-        public virtual void Load() {
+        public virtual void Load()
+        {
             Stream s = CIAT.SaveFile.GetReadStream(this);
             XDocument xDoc = XDocument.Load(s);
             s.Dispose();
@@ -231,7 +229,7 @@ namespace IATClient
             if (tdi.Phrase.Trim() == String.Empty)
                 errorDictionary[this] = new CValidationException(EValidationException.ContinueInstructionsBlank, loc);
         }
-        
+
         public virtual void Dispose()
         {
             if (IsDisposed)

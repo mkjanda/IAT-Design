@@ -1,10 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Drawing;
-using System.Data;
-
-using System.Text;
 using System.Windows.Forms;
 
 namespace IATClient
@@ -33,7 +28,7 @@ namespace IATClient
                 return IATConfigMainForm.AvailableFonts;
             }
         }
-       private static String[] FontSizes = { "6", "8", "10", "12", "14", "16", "18", "20", "22", "24", "26", "28", "30", "32", "34", "36", "38", "40", 
+        private static String[] FontSizes = { "6", "8", "10", "12", "14", "16", "18", "20", "22", "24", "26", "28", "30", "32", "34", "36", "38", "40",
             "42", "44", "46", "48", "52", "54", "56", "60", "62", "66", "68", "70", "72", "76", "80", "84", "88", "92" };
 
         private const double ColorRectAspectRatio = 4.0 / 3.0;
@@ -116,44 +111,44 @@ namespace IATClient
                 {
                     _TextDisplayItemUri = null;
                 }
-                    /*
-                    DIText tdi = null;
-                    if (UsedFor == DIText.UsedAs.Conjunction)
-                        tdi = new DIConjunction();
-                    else if (UsedFor == DIText.UsedAs.ContinueInstructions)
-                        tdi = new DIContinueInstructions();
-                    else if (UsedFor == DIText.UsedAs.Stimulus)
-                        tdi = new DIStimulusText();
-                    else if (UsedFor == DIText.UsedAs.IatBlockInstructions)
-                        tdi = new DIIatBlockInstructions();
-                    else if (UsedFor == DIText.UsedAs.MockItemInstructions)
-                        tdi = new DIMockItemInstructions();
-                    else if (UsedFor == DIText.UsedAs.TextInstructionsScreen)
-                        tdi = new DITextInstructionsScreen();
-                    else if (UsedFor == DIText.UsedAs.KeyedInstructionsScreen)
-                        tdi = new DIKeyedInstructionsScreen();
-                    else if (UsedFor == DIText.UsedAs.ResponseKey)
-                        tdi = new DIResponseKeyText();
-                    try
-                    {
-                        tdi.PhraseFontFamily = CIAT.SaveFile.FontPreferences[UsedFor].FontFamily;
-                        tdi.Phrase = String.Empty;
-                        tdi.PhraseFontColor = CIAT.SaveFile.FontPreferences[UsedFor].FontColor;
-                        tdi.PhraseFontSize = CIAT.SaveFile.FontPreferences[UsedFor].FontSize;
-                        FontFamilyDropDown.FamilyName = tdi.PhraseFontFamily;
-                        FontSizeDropDown.Text = String.Format("{0}pt", tdi.PhraseFontSize.ToString("F00"));
-                    }
-                    catch (Exception ex)
-                    {
-                        tdi.Phrase = String.Empty;
-                        tdi.PhraseFontColor = System.Drawing.Color.FromName(ColorDropDown.Text);
-                        tdi.PhraseFontSize = FontSize;
-                        tdi.PhraseFontFamily = System.Drawing.SystemFonts.DefaultFont.FontFamily.Name;
-                        FontFamilyDropDown.FamilyName = tdi.PhraseFontFamily;
-                    }
-                    TextEdit.Text = String.Empty;
-                    _TextDisplayItemUri = tdi.URI;
-                }*/
+                /*
+                DIText tdi = null;
+                if (UsedFor == DIText.UsedAs.Conjunction)
+                    tdi = new DIConjunction();
+                else if (UsedFor == DIText.UsedAs.ContinueInstructions)
+                    tdi = new DIContinueInstructions();
+                else if (UsedFor == DIText.UsedAs.Stimulus)
+                    tdi = new DIStimulusText();
+                else if (UsedFor == DIText.UsedAs.IatBlockInstructions)
+                    tdi = new DIIatBlockInstructions();
+                else if (UsedFor == DIText.UsedAs.MockItemInstructions)
+                    tdi = new DIMockItemInstructions();
+                else if (UsedFor == DIText.UsedAs.TextInstructionsScreen)
+                    tdi = new DITextInstructionsScreen();
+                else if (UsedFor == DIText.UsedAs.KeyedInstructionsScreen)
+                    tdi = new DIKeyedInstructionsScreen();
+                else if (UsedFor == DIText.UsedAs.ResponseKey)
+                    tdi = new DIResponseKeyText();
+                try
+                {
+                    tdi.PhraseFontFamily = CIAT.SaveFile.FontPreferences[UsedFor].FontFamily;
+                    tdi.Phrase = String.Empty;
+                    tdi.PhraseFontColor = CIAT.SaveFile.FontPreferences[UsedFor].FontColor;
+                    tdi.PhraseFontSize = CIAT.SaveFile.FontPreferences[UsedFor].FontSize;
+                    FontFamilyDropDown.FamilyName = tdi.PhraseFontFamily;
+                    FontSizeDropDown.Text = String.Format("{0}pt", tdi.PhraseFontSize.ToString("F00"));
+                }
+                catch (Exception ex)
+                {
+                    tdi.Phrase = String.Empty;
+                    tdi.PhraseFontColor = System.Drawing.Color.FromName(ColorDropDown.Text);
+                    tdi.PhraseFontSize = FontSize;
+                    tdi.PhraseFontFamily = System.Drawing.SystemFonts.DefaultFont.FontFamily.Name;
+                    FontFamilyDropDown.FamilyName = tdi.PhraseFontFamily;
+                }
+                TextEdit.Text = String.Empty;
+                _TextDisplayItemUri = tdi.URI;
+            }*/
                 bUpdatingInternally = false;
             }
         }
@@ -189,7 +184,7 @@ namespace IATClient
             {
                 return Convert.ToSingle(FontSizeDropDown.Text.Substring(0, FontSizeDropDown.Text.Length - 2));
             }
-            set 
+            set
             {
                 FontSizeDropDown.Text = String.Format("{0}pt", value.ToString("F00"));
             }
@@ -307,7 +302,8 @@ namespace IATClient
                 br = new SolidBrush(nc.Color);
                 bmpGraph.FillRectangle(br, FillRect);
                 br.Dispose();
-                ColorDropDown.DropDownItems.Add(new ToolStripMenuItem(nc.Name, ColorRect, (sender, args) => {
+                ColorDropDown.DropDownItems.Add(new ToolStripMenuItem(nc.Name, ColorRect, (sender, args) =>
+                {
                     if (bUpdatingInternally)
                         return;
                     var namedColor = NamedColor.GetNamedColor((sender as ToolStripDropDownItem).Name);

@@ -1,16 +1,12 @@
 ﻿using System;
-using System.Reflection;
 using System.Collections.Generic;
-using System.Drawing;
 using System.IO;
 using System.IO.Packaging;
-using System.Text;
-using System.Xml;
-using System.Xml.Linq;
-using System.Threading;
-using System.Windows.Forms;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
+using System.Windows.Forms;
+using System.Xml.Linq;
 
 namespace IATClient
 {
@@ -54,7 +50,7 @@ namespace IATClient
                             for (int ctr = 0; ctr < missingFonts.Length; ctr++)
                             {
                                 missingFonts[ctr].SetReplacementFontFamily(replacementFamilies[ctr]);
-                   //             missingFonts[ctr].Dispose();
+                                //             missingFonts[ctr].Dispose();
                             }
                         });
                     }
@@ -102,7 +98,7 @@ namespace IATClient
         public String RightResponseChar { get; set; }
         public String RedirectionURL { get; set; }
         private Uri FixationCrossURI { get; set; } = null;
-        
+
         public enum ESelfAlternationType { none, prepended, postpended, rotated };
         public ESelfAlternationType AlternationType { get; set; }
         static public EventDispatcher.ApplicationEventDispatcher Dispatcher = new EventDispatcher.ApplicationEventDispatcher();
@@ -133,7 +129,7 @@ namespace IATClient
             {
                 return _InstructionBlocks.Select(u => CIAT.SaveFile.GetInstructionBlock(u)).ToList().AsReadOnly();
             }
-        }        
+        }
         public IList<CSurvey> BeforeSurvey
         {
             get
@@ -174,7 +170,7 @@ namespace IATClient
                     }
                     return _UniqueResponse;
                 }
-            } 
+            }
             set
             {
                 lock (UniqueResponseLock)
@@ -199,7 +195,8 @@ namespace IATClient
                 return;
             if (ndx + diff >= Contents.Count)
                 return;
-            if ((ci.Type == ContentsItemType.BeforeSurvey) && (ndx + diff >= BeforeSurvey.Count)) {
+            if ((ci.Type == ContentsItemType.BeforeSurvey) && (ndx + diff >= BeforeSurvey.Count))
+            {
                 (ci as CSurvey).Ordinality = CSurvey.EOrdinality.After;
                 int newNdx = (_AfterSurvey.Count == 0) ? (Contents.Count) : (ndx + diff + (AfterSurvey[0].IndexInContents - 1));
                 _AfterSurvey.Insert((ndx + diff) - BeforeSurvey.Count, ci.URI);
@@ -207,7 +204,8 @@ namespace IATClient
                 Contents.Remove(ci);
                 Contents.Insert(newNdx - 1, ci);
             }
-            else if ((ci.Type == ContentsItemType.AfterSurvey) && (ndx + diff - AfterSurvey[0].IndexInContents < 0)) {
+            else if ((ci.Type == ContentsItemType.AfterSurvey) && (ndx + diff - AfterSurvey[0].IndexInContents < 0))
+            {
                 (ci as CSurvey).Ordinality = CSurvey.EOrdinality.Before;
                 int newNdx = (_BeforeSurvey.Count == 0) ? 0 : (ndx + diff - AfterSurvey[0].IndexInContents + BeforeSurvey.Count + 1);
                 _BeforeSurvey.Insert((ndx + diff) - AfterSurvey[0].IndexInContents + BeforeSurvey.Count + 1, ci.URI);
@@ -215,7 +213,7 @@ namespace IATClient
                 Contents.Remove(ci);
                 Contents.Insert(newNdx, ci);
             }
-            else if (((ci.Type != ContentsItemType.IATBlock) && (ci.Type != ContentsItemType.InstructionBlock)) || 
+            else if (((ci.Type != ContentsItemType.IATBlock) && (ci.Type != ContentsItemType.InstructionBlock)) ||
                 ((diff + ndx <= Contents.Where(c => (c.Type == ContentsItemType.InstructionBlock) ||
                 (c.Type == ContentsItemType.IATBlock)).Select(c => c.IndexInContents).Max())
                 && (diff + ndx >= _BeforeSurvey.Count)))
@@ -452,7 +450,7 @@ namespace IATClient
             _AfterSurvey.Clear();
             _Blocks.Clear();
             _InstructionBlocks.Clear();
-//            DynamicSpecifier.ClearSpecifierDictionary();
+            //            DynamicSpecifier.ClearSpecifierDictionary();
             Contents.Clear();
             Name = String.Empty;
             CIAT.SaveFile.ActivityLog.LogEvent(ActivityLog.EventType.Delete, URI);
@@ -513,7 +511,7 @@ namespace IATClient
             {
                 String rId = xElem.Value;
                 Uri itemUri = SaveFile.GetRelationship(this, xElem.Value).TargetUri;
-               
+
                 if (ContentsItemType.Parse(xElem.Name.LocalName) == ContentsItemType.BeforeSurvey)
                 {
                     _BeforeSurvey.Add(itemUri);
@@ -524,7 +522,7 @@ namespace IATClient
                     _AfterSurvey.Add(itemUri);
                     Contents.Add(ContentsItemType.AfterSurvey, itemUri);
                 }
-                
+
                 if (ContentsItemType.Parse(xElem.Name.LocalName) == ContentsItemType.IATBlock)
                 {
                     _Blocks.Add(itemUri);
@@ -592,41 +590,41 @@ namespace IATClient
             s.Ordinality = CSurvey.EOrdinality.Before;
             _BeforeSurvey.Add(s.URI);
         }
-/*
-        public int GetBlockIndex(CIATBlock block)
-        {
-            int ctr = 0;
-            int nBlockCtr = 0;
-            while (ctr < Contents.Count)
-            {
-                IContentsItem cItem = Contents[ctr++];
-                if (cItem.Type == ContentsItemType.IATBlock)
+        /*
+                public int GetBlockIndex(CIATBlock block)
                 {
-                    nBlockCtr++;
-                    if (block == (CIATBlock)cItem)
-                        return nBlockCtr;
+                    int ctr = 0;
+                    int nBlockCtr = 0;
+                    while (ctr < Contents.Count)
+                    {
+                        IContentsItem cItem = Contents[ctr++];
+                        if (cItem.Type == ContentsItemType.IATBlock)
+                        {
+                            nBlockCtr++;
+                            if (block == (CIATBlock)cItem)
+                                return nBlockCtr;
+                        }
+                    }
+                    return -1;
                 }
-            }
-            return -1;
-        }
 
-        public int GetInstructionBlockIndex(CInstructionBlock block)
-        {
-            int ctr = 0;
-            int nBlockCtr = 0;
-            while (ctr < Contents.Count)
-            {
-                IContentsItem cItem = Contents[ctr++];
-                if (cItem.Type == ContentsItemType.InstructionBlock)
+                public int GetInstructionBlockIndex(CInstructionBlock block)
                 {
-                    nBlockCtr++;
-                    if (block == (CInstructionBlock)cItem)
-                        return nBlockCtr;
+                    int ctr = 0;
+                    int nBlockCtr = 0;
+                    while (ctr < Contents.Count)
+                    {
+                        IContentsItem cItem = Contents[ctr++];
+                        if (cItem.Type == ContentsItemType.InstructionBlock)
+                        {
+                            nBlockCtr++;
+                            if (block == (CInstructionBlock)cItem)
+                                return nBlockCtr;
+                        }
+                    }
+                    return -1;
                 }
-            }
-            return -1;
-        }
-*/
+        */
 
         public List<CFontFile.FontItem> UtilizedFonts
         {

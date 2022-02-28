@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 
 namespace IATClient
 {
@@ -104,7 +102,7 @@ namespace IATClient
                     dest.AddItem(src[ctr], KeyedDirection.DynamicNone);
             }
         }
-       
+
 
         public bool Generate(bool bAlternate)
         {

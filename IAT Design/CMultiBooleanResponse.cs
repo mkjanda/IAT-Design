@@ -1,12 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Xml;
-using System.Windows.Forms;
-using IATClient.IATConfig;
-using System.Drawing;
-using System.Xml.Linq;
+﻿using IATClient.IATConfig;
 using IATClient.ResultData;
+using System;
+using System.Collections.Generic;
+using System.Drawing;
+using System.Xml;
+using System.Xml.Linq;
 
 namespace IATClient
 {

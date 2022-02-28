@@ -1,13 +1,11 @@
-﻿using System;
+﻿using IATClient.Messages;
+using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
-using System.IO;
 using System.Security.Cryptography;
 using System.Threading;
 using System.Xml;
-using System.Collections.Concurrent;
-using IATClient.Messages;
-using System.Drawing;
 
 namespace IATClient.IATConfig
 {
@@ -24,7 +22,7 @@ namespace IATClient.IATConfig
         private List<IATImage> ImageList = new List<IATImage>();
         private SHA512Managed SHA512 = new SHA512Managed();
         private readonly object ImageListLock = new object();
-      
+
         public ImageContainer(Func<DIBase, IATImage> generateImage, ManualResetEvent imagesProcessed)
         {
             for (int ctr = 0; ctr < NUM_WORKER_THREADS; ctr++)

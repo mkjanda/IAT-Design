@@ -1,12 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Xml;
-using System.Windows.Forms;
-using System.Drawing;
-using System.Xml.Linq;
+﻿using IATClient.IATConfig;
 using IATClient.ResultData;
-using IATClient.IATConfig;
+using System;
+using System.Collections.Generic;
+using System.Xml;
+using System.Xml.Linq;
 
 namespace IATClient
 {
@@ -20,7 +17,7 @@ namespace IATClient
         // and the list of choices 
         public List<String> ChoiceDescriptions { get; private set; } = new List<String>();
 
-        public static string[] DefaultResponses = { Properties.Resources.sLikertDefaultResponse1, Properties.Resources.sLikertDefaultResponse2, 
+        public static string[] DefaultResponses = { Properties.Resources.sLikertDefaultResponse1, Properties.Resources.sLikertDefaultResponse2,
                                                       Properties.Resources.sLikertDefaultResponse3, Properties.Resources.sLikertDefaultResponse4,
                                                       Properties.Resources.sLikertDefaultResponse5, Properties.Resources.sLikertDefaultResponse6,
                                                       Properties.Resources.sLikertDefaultResponse7 };
@@ -41,7 +38,7 @@ namespace IATClient
         {
             return ReverseScored;
         }
-        
+
         public int GetNumStatements()
         {
             return ChoiceDescriptions.Count;

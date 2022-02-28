@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-
-using System.Text;
-using System.Net;
 
 namespace IATClient
 {
@@ -47,7 +43,7 @@ namespace IATClient
             if (URL.Substring(0, 7).ToLower() != "http://")
                 URL = "http://" + URL;
             else if (!URL.StartsWith("http://"))
-                    URL = "http://" + URL.Substring(7, URL.Length - 7);
+                URL = "http://" + URL.Substring(7, URL.Length - 7);
             bool dotFound = false;
             int ctr;
             for (ctr = 7; ctr < URL.Length; ctr++)

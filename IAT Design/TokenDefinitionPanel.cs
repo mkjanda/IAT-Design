@@ -1,9 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Drawing;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace IATClient
@@ -77,25 +73,25 @@ namespace IATClient
             ValueRadio.Checked = true;
             ValueRadio.Width = TextRenderer.MeasureText(ValueRadio.Text, System.Drawing.SystemFonts.DialogFont).Width + 30;
             TokenDefinitionGroup.Controls.Add(ValueRadio);
-/*
-            HexRadio = new RadioButton();
-            HexRadio.Text = "Hexadecimal";
-            HexRadio.Location = new Point(18, ValueRadio.Bottom + 5);
-            HexRadio.Width = TextRenderer.MeasureText(HexRadio.Text, System.Drawing.SystemFonts.DialogFont).Width + 30;
-            TokenDefinitionGroup.Controls.Add(HexRadio);
-*/
+            /*
+                        HexRadio = new RadioButton();
+                        HexRadio.Text = "Hexadecimal";
+                        HexRadio.Location = new Point(18, ValueRadio.Bottom + 5);
+                        HexRadio.Width = TextRenderer.MeasureText(HexRadio.Text, System.Drawing.SystemFonts.DialogFont).Width + 30;
+                        TokenDefinitionGroup.Controls.Add(HexRadio);
+            */
             Base64Radio = new RadioButton();
             Base64Radio.Text = "Base 64";
             Base64Radio.Location = new Point(18, ValueRadio.Bottom + 5);
             Base64Radio.Width = TextRenderer.MeasureText(Base64Radio.Text, System.Drawing.SystemFonts.DialogFont).Width + 30;
             TokenDefinitionGroup.Controls.Add(Base64Radio);
-/*
-            Base64Utf8Radio = new RadioButton();
-            Base64Utf8Radio.Text = "Base 64 encoded UTF-8 text";
-            Base64Utf8Radio.Location = new Point(18, Base64Radio.Bottom + 5);
-            Base64Utf8Radio.Width = TextRenderer.MeasureText(Base64Utf8Radio.Text, System.Drawing.SystemFonts.DialogFont).Width + 30;
-            TokenDefinitionGroup.Controls.Add(Base64Utf8Radio);
-*/            
+            /*
+                        Base64Utf8Radio = new RadioButton();
+                        Base64Utf8Radio.Text = "Base 64 encoded UTF-8 text";
+                        Base64Utf8Radio.Location = new Point(18, Base64Radio.Bottom + 5);
+                        Base64Utf8Radio.Width = TextRenderer.MeasureText(Base64Utf8Radio.Text, System.Drawing.SystemFonts.DialogFont).Width + 30;
+                        TokenDefinitionGroup.Controls.Add(Base64Utf8Radio);
+            */
             TokenDefinitionGroup.Size = new Size(TokenDefinitionGroup.Width, Base64Radio.Bottom + 3);
             this.Size = new Size(PanelSize.Width, TokenDefinitionGroup.Bottom + 5);
             TokenDefinitionGroup.Enabled = false;

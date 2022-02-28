@@ -1,15 +1,11 @@
-﻿using System;
-using System.Windows.Forms;
+﻿using IATClient.ResultData;
+using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Xml;
-using System.Xml.Linq;
 using System.IO;
-using System.Threading;
-using System.Threading.Tasks;
 using System.Net.WebSockets;
-using IATClient.ResultData;
+using System.Threading;
+using System.Windows.Forms;
+using System.Xml;
 
 namespace IATClient.Messages
 {

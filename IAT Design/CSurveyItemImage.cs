@@ -1,9 +1,9 @@
 ﻿using System;
-using System.Xml.Linq;
-using System.Windows.Forms;
 using System.Drawing;
-using System.Xml;
 using System.IO;
+using System.Windows.Forms;
+using System.Xml;
+using System.Xml.Linq;
 
 namespace IATClient
 {
@@ -150,7 +150,7 @@ namespace IATClient
             writer.WriteElementString("Id", "survey-image-" + GetItemIndex().ToString());
             writer.WriteEndElement();
         }
-        
+
         public override object Clone()
         {
             CSurveyItemImage si = new CSurveyItemImage();
@@ -159,7 +159,7 @@ namespace IATClient
             CIAT.SaveFile.Register(si);
             return si;
         }
-        
+
         public override void Dispose()
         {
             if (IsDisposed)

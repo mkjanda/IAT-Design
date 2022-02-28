@@ -1,10 +1,8 @@
-﻿using System;
+﻿using IATClient.Messages;
+using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Xml;
 using System.Drawing;
-using IATClient.Messages;
+using System.Xml;
 
 namespace IATClient
 {
@@ -50,7 +48,7 @@ namespace IATClient
                 return _Caption;
             }
         }
-        
+
         public TransactionProgress TransProgress
         {
             get
@@ -130,7 +128,7 @@ namespace IATClient
                 ptDraw.Y += height;
             }
 
-              
+
             return ptDraw.Y;
         }
 
@@ -172,7 +170,7 @@ namespace IATClient
             }
             reader.ReadEndElement();
             reader.ReadEndElement();
-         //   _TransProgress = MySOAP.TerminateTransaction(_Message);
+            //   _TransProgress = MySOAP.TerminateTransaction(_Message);
         }
 
         public CXmlSerializationException(String caption, String message, Exception innerException) : base(message, innerException)
@@ -181,7 +179,7 @@ namespace IATClient
             string[] stackTrace = InnerException.StackTrace.Split('\n');
             for (int ctr = 0; ctr < stackTrace.Length; ctr++)
                 StackTrace.Add(stackTrace[ctr]);
-//            _TransProgress = MySOAP.TerminateTransaction(message);
+            //            _TransProgress = MySOAP.TerminateTransaction(message);
             _Message = message;
             _Caption = caption;
             _ErrorType = EErrorType.exception;
@@ -194,7 +192,7 @@ namespace IATClient
             string[] stackTrace = InnerException.StackTrace.Split('\n');
             for (int ctr = 0; ctr < stackTrace.Length; ctr++)
                 StackTrace.Add(stackTrace[ctr]);
-  //          _TransProgress = MySOAP.TerminateTransaction(message);
+            //          _TransProgress = MySOAP.TerminateTransaction(message);
             _Message = message;
             _Caption = caption;
             _ErrorType = errorType;

@@ -3,18 +3,17 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace IATClient
 {
     class FontFamilyToolstripCombo : ToolStripControlHost
     {
-        class FontDropDownItem {
+        class FontDropDownItem
+        {
             public CFontFile.FontData FontData { get; set; }
             private String _FamilyName;
-            
+
             public FontDropDownItem(CFontFile.FontData fd)
             {
                 FontData = fd;
@@ -107,14 +106,14 @@ namespace IATClient
             if (e.Index < 0)
                 return;
             FontDropDownItem fd = FontDataItems[e.Index];
-            if ((FontCombo.DroppedDown == false) || (e.State == DrawItemState.ComboBoxEdit)) 
+            if ((FontCombo.DroppedDown == false) || (e.State == DrawItemState.ComboBoxEdit))
             {
                 double imgAr = fd.FontData.FontImage.Width / fd.FontData.FontImage.Height;
                 double arBounds = e.Bounds.Width / e.Bounds.Height;
                 e.Graphics.SmoothingMode = SmoothingMode.HighQuality;
                 e.Graphics.InterpolationMode = InterpolationMode.HighQualityBicubic;
                 e.Graphics.PixelOffsetMode = PixelOffsetMode.HighQuality;
-                if (imgAr < arBounds) 
+                if (imgAr < arBounds)
                     e.Graphics.DrawImage(fd.FontData.FontImage, new RectangleF(e.Bounds.X, e.Bounds.Y, (float)((double)e.Bounds.Height / (double)fd.FontData.FontImage.Height) * fd.FontData.FontImage.Width, e.Bounds.Height));
                 else
                     e.Graphics.DrawImage(fd.FontData.FontImage, new RectangleF(e.Bounds.X, e.Bounds.Y, e.Bounds.Width, (float)((double)e.Bounds.Width / (double)fd.FontData.FontImage.Width) * fd.FontData.FontImage.Height));

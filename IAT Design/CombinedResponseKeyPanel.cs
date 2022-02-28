@@ -1,15 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Drawing;
-using System.Data;
-using System.Text;
 using System.Windows.Forms;
 
 namespace IATClient
 {
     public partial class CombinedResponseKeyPanel : UserControl, IDisposable
-    { 
+    {
         private TextEditControl ConjunctionEdit;
         private Uri LeftKeyValueUri { get; set; } = null;
         private Uri RightKeyValueUri { get; set; } = null;
@@ -141,7 +138,8 @@ namespace IATClient
             }
         }
 
-        static public void LayoutDisplayItems(DIDualKey diLeftKey, DIDualKey diRightKey, Uri key1Uri, Uri key2Uri) {
+        static public void LayoutDisplayItems(DIDualKey diLeftKey, DIDualKey diRightKey, Uri key1Uri, Uri key2Uri)
+        {
         }
 
 
@@ -242,7 +240,7 @@ namespace IATClient
                 }
             }
         }
-        
+
 
         private void FirstCombinedKey_SelectedIndexChanged(object sender, EventArgs e)
         {

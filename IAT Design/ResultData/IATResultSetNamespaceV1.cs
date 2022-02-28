@@ -1,15 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
-using System.IO;
-using System.Security.Permissions;
-using System.Text;
-using System.Xml;
-using System.Xml.Schema;
-using System.Xml.Serialization;
 using System.Windows.Forms;
-using IATClient.ResultData;
+using System.Xml;
 
 namespace IATClient.ResultData
 {
@@ -23,7 +17,8 @@ namespace IATClient.ResultData
             private static readonly Dictionary<String, AnswerState> instance = new Dictionary<String, AnswerState>();
             public static readonly AnswerState Answered, Unanswered, ForceSubmitted;
 
-            static AnswerState() {
+            static AnswerState()
+            {
                 Answered = new AnswerState(1, "__Answered__");
                 Unanswered = new AnswerState(2, "Unanswered");
                 ForceSubmitted = new AnswerState(3, "NULL");
@@ -53,8 +48,8 @@ namespace IATClient.ResultData
         {
             private AnswerState AnswerState = AnswerState.Unanswered;
             private String Answer;
-            
-            public SurveyItemResponse() 
+
+            public SurveyItemResponse()
             {
                 Answer = "N/A";
             }
@@ -123,7 +118,8 @@ namespace IATClient.ResultData
             private int ndx = -1;
             private List<IIATItemResponse> elements = new List<IIATItemResponse>();
 
-            public IATResultSetElementListEnumerator(List<IIATItemResponse> elements) {
+            public IATResultSetElementListEnumerator(List<IIATItemResponse> elements)
+            {
                 this.elements.AddRange(elements);
             }
 
@@ -383,7 +379,7 @@ namespace IATClient.ResultData
                 return SurveyResults.ToList().GetEnumerator();
             }
 
-            public SurveyResponseSet(IResultElemFactory factory) 
+            public SurveyResponseSet(IResultElemFactory factory)
             {
                 Factory = factory;
             }
@@ -434,14 +430,14 @@ namespace IATClient.ResultData
             }
         }
 
-        
+
 
         public class IATResultSetEnumerator : IEnumerator<IResultSetElem>
         {
             private int ndx = -1;
             public List<IResultSetElem> Elements = new List<IResultSetElem>();
 
-            public IATResultSetEnumerator(ISurveyResponse []beforeSurveys, IIATResponse iatResponse, ISurveyResponse []afterSurveys)
+            public IATResultSetEnumerator(ISurveyResponse[] beforeSurveys, IIATResponse iatResponse, ISurveyResponse[] afterSurveys)
             {
                 Elements.AddRange(beforeSurveys);
                 Elements.Add(iatResponse);
@@ -678,7 +674,7 @@ namespace IATClient.ResultData
 
                 double mean3 = Block3.Select(r => r.ResponseTime).Average();
                 double mean4 = Block4.Select(r => r.ResponseTime).Average();
-                double mean6 = Block6.Select(r => r.ResponseTime).Average(); 
+                double mean6 = Block6.Select(r => r.ResponseTime).Average();
                 double mean7 = Block7.Select(r => r.ResponseTime).Average();
 
                 _IATScore = (((mean6 - mean3) / sd3_6) + ((mean7 - mean4) / sd4_7)) / 2;
@@ -689,7 +685,7 @@ namespace IATClient.ResultData
                 List<IIATItemResponse> ResultList = new List<IIATItemResponse>();
                 return IATResponse.Where(r => r.ItemNumber == ItemNum).ToList();
             }
- 
+
             public IATResultSet(ResultSetDescriptor rsd)
             {
                 ElemFactory = rsd;
@@ -818,7 +814,7 @@ namespace IATClient.ResultData
                 }
             }
 
-            public int NumResultSets 
+            public int NumResultSets
             {
                 get
                 {

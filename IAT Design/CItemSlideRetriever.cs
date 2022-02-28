@@ -1,17 +1,14 @@
-﻿using System;
+﻿using IATClient.Messages;
+using System;
 using System.Collections.Generic;
-using System.Text;
-using System.Net;
 using System.IO;
-using System.Net.Sockets;
-using System.Threading;
-using System.Windows.Forms;
-using System.Xml.Serialization;
-using System.Security.Cryptography;
-using System.Threading.Tasks;
-using System.Net.WebSockets;
 using System.Linq;
-using IATClient.Messages;
+using System.Net;
+using System.Net.WebSockets;
+using System.Security.Cryptography;
+using System.Threading;
+using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace IATClient
 {
@@ -329,7 +326,7 @@ namespace IATClient
             int nTrigger = WaitHandle.WaitAny(new WaitHandle[] { TransactionComplete, TransactionFailed });
             if (nTrigger == 1)
                 AbortEvent.Set();
-            else 
+            else
                 DownloadItemSlides();
         }
 

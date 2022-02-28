@@ -1,11 +1,10 @@
-﻿using System;
+﻿using IATClient.Messages;
+using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Threading;
 using System.Windows.Forms;
-using System.Drawing;
-using IATClient.ResultData;
-using IATClient.Messages;
 
 namespace IATClient
 {
@@ -161,7 +160,7 @@ namespace IATClient
                 int nNewRow = ndx / nRowsWithSlide;
                 ThumbPanel.Width = CollapsedPanelWidth;
                 LayoutThumbPanel(nColsWithSlide, nRowsWithSlide);
-//                ThumbPanel.VerticalScroll.Value = thumbPanel.Top - yPos;
+                //                ThumbPanel.VerticalScroll.Value = thumbPanel.Top - yPos;
                 Controls.Add(FullSizedSlide);
             }
             FullSizedSlide.SetResultData(ItemSlideContainer.GetSlideLatencies(ndx + 1), ItemSlideContainer.GetMeanSlideLatency(ndx + 1), ItemSlideContainer.GetMeanNumErrors(ndx + 1), ResultSet + 1);

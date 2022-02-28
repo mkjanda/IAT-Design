@@ -1,11 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Drawing;
-using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace IATClient
@@ -66,7 +59,7 @@ namespace IATClient
             int adminPrice = (AdministrationsDrop.SelectedIndex < 1) ? 0 : _Pricing.AdministrationPrices[AdministrationsDrop.SelectedIndex - 1].Price;
             int diskPrice = (DiskSpaceDrop.SelectedIndex < 1) ? 0 : _Pricing.DiskSpacePrices[DiskSpaceDrop.SelectedIndex - 1].Price;
             int iatPrice = (IATsDrop.SelectedIndex < 1) ? 0 : _Pricing.IATPrices[IATsDrop.SelectedIndex - 1].Price;
-            pOrder.Total = adminPrice + diskPrice + iatPrice; 
+            pOrder.Total = adminPrice + diskPrice + iatPrice;
             ((PurchasePanel)Parent).SendPurchase(pOrder);
         }
 

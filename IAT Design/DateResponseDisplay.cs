@@ -1,9 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-
+using System.Drawing;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Drawing;
 using System.Windows.Forms;
 
 namespace IATClient
@@ -57,7 +55,7 @@ namespace IATClient
                 EndDate.SelectionEnd = DateTime.Now;
             }
         }
-       
+
         protected override void ChangeResponseFont()
         {
             EnableStartDate.Font = DisplayFont;

@@ -4,7 +4,8 @@ using System.Linq;
 
 namespace IATClient
 {
-    public class ContentsItemType {
+    public class ContentsItemType
+    {
         public static readonly ContentsItemType BeforeSurvey = new ContentsItemType("BeforeSurvey", new Func<Uri, IContentsItem>(u => CIAT.SaveFile.GetSurvey(u)));
         public static readonly ContentsItemType AfterSurvey = new ContentsItemType("AfterSurvey", new Func<Uri, IContentsItem>(u => CIAT.SaveFile.GetSurvey(u)));
         public static readonly ContentsItemType IATBlock = new ContentsItemType("IATBlock", new Func<Uri, IContentsItem>(u => CIAT.SaveFile.GetIATBlock(u)));
@@ -12,7 +13,7 @@ namespace IATClient
 
         private static IEnumerable<ContentsItemType> All = new ContentsItemType[] { BeforeSurvey, AfterSurvey, IATBlock, InstructionBlock };
         private String Name { get; set; }
-        public Func<Uri, IContentsItem> Fetch{ get; private set; }
+        public Func<Uri, IContentsItem> Fetch { get; private set; }
         private ContentsItemType(String name, Func<Uri, IContentsItem> create)
         {
             Name = name;

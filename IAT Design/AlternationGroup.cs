@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.IO;
+using System.Linq;
 using System.Xml.Linq;
 
 namespace IATClient
@@ -35,7 +35,7 @@ namespace IATClient
             CIAT.SaveFile.Register(this);
             CIAT.SaveFile.CreateRelationship(typeof(CIAT), BaseType, CIAT.SaveFile.IAT.URI, URI);
             GroupID = 0;
-            while (GroupIds.Contains(GroupID)) 
+            while (GroupIds.Contains(GroupID))
                 GroupID++;
             GroupIds.Add(GroupID);
             GroupMembers.AddRange(groupMembers);
@@ -143,60 +143,60 @@ namespace IATClient
                 GroupMembers.Add(item);
             }
         }
-/*
-        static public void WriteToXml(XmlTextWriter writer)
-        {
-            writer.WriteStartElement("AlternationGroups");
-            writer.WriteAttributeString("NumAlternationGroups", AlternationGroups.Keys.Count.ToString());
-            writer.WriteElementString("PrefixSelfAlternatingSurveys", PrefixSelfAlternatingSurveys.ToString());
-            foreach (AlternationGroup g in AlternationGroups.Values)
-            {
-                writer.WriteStartElement("AlternationGroup");
-                writer.WriteElementString("GroupID", g.GroupID.ToString());
-                writer.WriteStartElement("GroupMembers");
-                writer.WriteAttributeString("NumGroupMembers", g.GroupMembers.Count.ToString());
-                foreach (IContentsItem i in g.GroupMembers)
-                    writer.WriteElementString("GroupMember", i.Name);
-                writer.WriteEndElement();
-                writer.WriteEndElement();
-            }
-            writer.WriteEndElement();
-        }
-
-        public static void CreateFromXml(XmlNode node, CIAT iat)
-        {
-            int nGroups = Convert.ToInt32(node.Attributes["NumAlternationGroups"].Value);
-            PrefixSelfAlternatingSurveys = Convert.ToBoolean(node.ChildNodes[0].InnerText);
-            List<IContentsItem> items = new List<IContentsItem>();
-            for (int ctr1 = 0; ctr1 < nGroups; ctr1++)
-            {
-                int nID = Convert.ToInt32(node.ChildNodes[ctr1 + 1].ChildNodes[0].InnerText);
-                int nMembers = Convert.ToInt32(node.ChildNodes[ctr1 + 1].ChildNodes[1].Attributes["NumGroupMembers"].Value);
-                for (int ctr2 = 0; ctr2 < nMembers; ctr2++)
+        /*
+                static public void WriteToXml(XmlTextWriter writer)
                 {
-                    String name = node.ChildNodes[ctr1 + 1].ChildNodes[1].ChildNodes[ctr2].InnerText;
-                    foreach (IContentsItem ci in iat.Contents)
+                    writer.WriteStartElement("AlternationGroups");
+                    writer.WriteAttributeString("NumAlternationGroups", AlternationGroups.Keys.Count.ToString());
+                    writer.WriteElementString("PrefixSelfAlternatingSurveys", PrefixSelfAlternatingSurveys.ToString());
+                    foreach (AlternationGroup g in AlternationGroups.Values)
                     {
-                        if (ci.Name == name)
+                        writer.WriteStartElement("AlternationGroup");
+                        writer.WriteElementString("GroupID", g.GroupID.ToString());
+                        writer.WriteStartElement("GroupMembers");
+                        writer.WriteAttributeString("NumGroupMembers", g.GroupMembers.Count.ToString());
+                        foreach (IContentsItem i in g.GroupMembers)
+                            writer.WriteElementString("GroupMember", i.Name);
+                        writer.WriteEndElement();
+                        writer.WriteEndElement();
+                    }
+                    writer.WriteEndElement();
+                }
+
+                public static void CreateFromXml(XmlNode node, CIAT iat)
+                {
+                    int nGroups = Convert.ToInt32(node.Attributes["NumAlternationGroups"].Value);
+                    PrefixSelfAlternatingSurveys = Convert.ToBoolean(node.ChildNodes[0].InnerText);
+                    List<IContentsItem> items = new List<IContentsItem>();
+                    for (int ctr1 = 0; ctr1 < nGroups; ctr1++)
+                    {
+                        int nID = Convert.ToInt32(node.ChildNodes[ctr1 + 1].ChildNodes[0].InnerText);
+                        int nMembers = Convert.ToInt32(node.ChildNodes[ctr1 + 1].ChildNodes[1].Attributes["NumGroupMembers"].Value);
+                        for (int ctr2 = 0; ctr2 < nMembers; ctr2++)
                         {
-                            items.Add(ci);
-                            break;
+                            String name = node.ChildNodes[ctr1 + 1].ChildNodes[1].ChildNodes[ctr2].InnerText;
+                            foreach (IContentsItem ci in iat.Contents)
+                            {
+                                if (ci.Name == name)
+                                {
+                                    items.Add(ci);
+                                    break;
+                                }
+                            }
                         }
+                        AlternationGroup g = new AlternationGroup(items.ToArray());
+                        g._GroupID = nID;
+                        items.Clear();
                     }
                 }
-                AlternationGroup g = new AlternationGroup(items.ToArray());
-                g._GroupID = nID;
-                items.Clear();
-            }
-        }
 
-        static public ICollection<AlternationGroup> Groups
-        {
-            get
-            {
-                return AlternationGroups.Values;
-            }
-        }
-        */
+                static public ICollection<AlternationGroup> Groups
+                {
+                    get
+                    {
+                        return AlternationGroups.Values;
+                    }
+                }
+                */
     }
 }

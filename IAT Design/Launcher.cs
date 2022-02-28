@@ -1,20 +1,16 @@
-﻿using Launcher;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Reflection;
-using System.Threading;
+﻿using System;
 using System.IO;
+using System.Net;
+using System.Text;
+using System.Threading;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Xml.Linq;
-using System.Net;
-
+using Launcher;
 
 namespace IATClient
 {
-    public class Launcher 
+    public class Launcher : ILauncher
     {
         private static readonly object errorReportLock = new object();
         private static void OnException(Exception ex)
@@ -62,7 +58,8 @@ namespace IATClient
         public void Launch()
         {
             Application.EnableVisualStyles();
-            Application.ThreadException += new ThreadExceptionEventHandler((o, tExArgs) => {
+            Application.ThreadException += new ThreadExceptionEventHandler((o, tExArgs) =>
+            {
                 OnException(tExArgs.Exception);
             });
             AppDomain.CurrentDomain.UnhandledException += new UnhandledExceptionEventHandler((o, uhExArgs) =>

@@ -1,15 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
 using System.IO;
+using System.Security.Cryptography;
+using System.Text;
 using System.Xml;
 using System.Xml.Linq;
-using System.Xml.Schema;
-using System.Security.Cryptography;
 
 namespace IATClient
 {
-    class CResultSet 
+    class CResultSet
     {
         private List<long> KeyOffsets, IVOffsets, DataOffsets;
         private List<int> KeyLengths, IVLengths, DataLengths;
@@ -90,7 +89,7 @@ namespace IATClient
             memStream.Seek(0, SeekOrigin.Begin);
             return memStream;
         }
-        
+
 
         public IResultSet GenerateResultSet(PartiallyEncryptedRSAData key)
         {

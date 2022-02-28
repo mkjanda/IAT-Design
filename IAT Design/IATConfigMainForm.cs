@@ -1,14 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
 using System.IO;
-using System.Text;
-using System.Windows.Forms;
 using System.Security.Cryptography;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 namespace IATClient
 {
 
@@ -84,7 +81,7 @@ namespace IATClient
                             QuickPanel.Enabled = false;
                             Controls.Remove(QuickPanel);
                             m_MainPanel.Dispose();
-                         //   QuickPanel.Dispose();
+                            //   QuickPanel.Dispose();
                             m_MainPanel = null;
                             break;
 
@@ -881,7 +878,7 @@ namespace IATClient
             this.FileCloseMenuItem.Name = sFileCloseMenuItemName;
             this.FileCloseMenuItem.Size = new System.Drawing.Size(132, 22);
             this.FileCloseMenuItem.Text = "&Close";
-            this.FileCloseMenuItem.Click += new System.EventHandler(this.FileCloseMenuItem_Click);
+            this.FileCloseMenuItem.Click += (s, a) => CloseFile(true);
             this.FileCloseMenuItem.Enabled = false;
             //
             // FileExitMenuItem
@@ -1355,11 +1352,9 @@ namespace IATClient
 
         private void FileCloseMenuItem_Click(object sender, EventArgs e)
         {
-            // the File->Close menu item has been clicked so close the file
-            CIAT.Create();
             FormContents = EFormContents.Main;
-            
-            ShowMainPanel();
+            CIAT.Create();
+
         }
 
         private void FileExitMenuItem_Click(object sender, EventArgs e)
@@ -1548,22 +1543,34 @@ namespace IATClient
         /// </summary>
         public void CloseFile(bool bCreateNew)
         {
-            if (Modified)
-            {
-                DialogResult saveResult = PromptForSave();
-                if (saveResult == DialogResult.Yes)
-                    Save();
-                else if (saveResult == DialogResult.Cancel)
-                    return;
-            }
+            DialogResult saveResult = PromptForSave();
+            if (saveResult == DialogResult.Yes)
+                Save();
+            else if (saveResult == DialogResult.Cancel)
+                return;
+            FormContents = EFormContents.Main;
             if (bCreateNew)
             {
                 CIAT.SaveFile.Dispose();
                 CIAT.Create();
             }
-            ConstructViewMenu(true);
-            Modified = false;
-            CurrentFilename = String.Empty;
+            m_IATBlockPanel?.Dispose();
+            m_IATBlockPanel = null;
+            m_InstructionPanel?.Dispose();
+            m_InstructionPanel = null;
+            m_ItemSlidePanel?.Dispose();
+            m_ItemSlidePanel = null;
+            m_LayoutPanel?.Dispose();
+            m_LayoutPanel = null;
+            m_SurveyPanel?.Dispose();
+            m_SurveyPanel = null;
+
+            m_MainPanel?.Dispose();
+            m_MainPanel = new MainPanel(this);
+            m_MainPanel.Location = new Point(0, HeaderMenu.Height);
+            if (!CFontFile.Loaded)
+                m_MainPanel.Enabled = false;
+            Controls.Add(m_MainPanel);
         }
 
         static private bool _IsInShutdown = false;
@@ -1623,7 +1630,7 @@ namespace IATClient
                         {
                             e.Cancel = true;
                             return;
-                        } 
+                        }
                     }
                 }
                 CIAT.CancelToken();
