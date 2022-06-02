@@ -48,8 +48,6 @@ namespace IATClient
             }
             set
             {
-                if ((value < -1) || (value >= PreviewPanels.Count))
-                    throw new Exception("Index out of bounds");
                 for (int ctr = 0; ctr < PreviewPanels.Count; ctr++)
                     if (ctr == value)
                         PreviewPanels[ctr].Selected = true;
@@ -901,7 +899,7 @@ namespace IATClient
             PreviewClickCallback(destNdx);
         }
 
-        public void DeletePreview(int ndx)
+        public void DeletePreview(int ndx, bool selectNew = true)
         {
             SuspendLayout();
             if ((ndx < 0) || (ndx >= PreviewPanels.Count))
@@ -909,13 +907,19 @@ namespace IATClient
             ScrollingPreviewPanelPane p = PreviewPanels[ndx];
             try
             {
-                p.PreviewedItem.ThumbnailPreviewPanel = null;
+                if (p.PreviewedItem.ThumbnailPreviewPanel != null)
+                    p.PreviewedItem.ThumbnailPreviewPanel = null;
             }
             catch (KeyNotFoundException) { }
             PreviewPanelBackground.Controls.Remove(p);
             PreviewPanels.Remove(p);
-            if ((ndx >= PreviewPanels.Count) && (ndx != 0))
-                SelectedPreview = PreviewPanels.Count - 1;
+            if (selectNew)
+            {
+                if (ndx == 0)
+                    SelectedPreview = 0;
+                else
+                    SelectedPreview = ndx - 1;
+            }
             if (Orientation == EOrientation.horizontal)
             {
                 for (int ctr = ndx; ctr < PreviewPanels.Count; ctr++)

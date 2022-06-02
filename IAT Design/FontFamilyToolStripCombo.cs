@@ -74,6 +74,8 @@ namespace IATClient
         {
             get
             {
+                if (FontCombo.SelectedIndex < 0)
+                    return String.Empty;
                 return FontDataItems[FontCombo.SelectedIndex].FamilyName;
             }
             set

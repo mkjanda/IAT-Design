@@ -142,6 +142,8 @@ namespace IATClient
                 _ResponseKeyUri = CIAT.SaveFile.GetRelationship(this, xDoc.Root.Element("rResponseKeyId").Value).TargetUri;
                 if (CIAT.SaveFile.GetRelationship(CIAT.SaveFile.GetIATKey(ResponseKeyUri), this) == null)
                     CIAT.SaveFile.CreateRelationship(typeof(CIATKey), BaseType, ResponseKeyUri, URI);
+                if (CIAT.SaveFile.GetRelationship(this, CIAT.SaveFile.GetIATKey(ResponseKeyUri)) == null)
+                    CIAT.SaveFile.CreateRelationship(BaseType, typeof(CIATKey), URI, ResponseKeyUri);
             }
             else
                 _ResponseKeyUri = null;
@@ -158,11 +160,6 @@ namespace IATClient
             CIAT.SaveFile.GetDI(ContinueInstructionsUri).Dispose();
             CIAT.SaveFile.DeletePart(this.URI);
             CIAT.SaveFile.ActivityLog.LogEvent(ActivityLog.EventType.Delete, URI);
-            if (ResponseKeyUri != null)
-            {
-                CIAT.SaveFile.DeleteRelationship(this.URI, ResponseKeyUri);
-                CIAT.SaveFile.DeleteRelationship(ResponseKeyUri, this.URI);
-            }
         }
 
         public override void ValidateItem(Dictionary<IValidatedItem, CValidationException> ErrorDictionary)

@@ -122,7 +122,12 @@ namespace IATClient
 
         public String GetXml()
         {
-            XmlSerializer ser = new XmlSerializer(typeof(CClientException));
+            XmlSerializer ser = null;
+            try
+            {
+                ser = new XmlSerializer(typeof(CClientException));
+            }
+            catch (FileNotFoundException ex) { }
             TextWriter writer = new StringWriter();
             XmlSerializerNamespaces ns = new XmlSerializerNamespaces();
             ns.Add("", "");
