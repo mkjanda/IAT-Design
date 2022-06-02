@@ -295,6 +295,8 @@ namespace IATClient
                 _ResponseKeyUri = CIAT.SaveFile.GetRelationship(this, xDoc.Root.Element("rResponseKeyId").Value).TargetUri;
                 if (CIAT.SaveFile.GetRelationship(CIAT.SaveFile.GetIATKey(ResponseKeyUri), this) == null)
                     CIAT.SaveFile.CreateRelationship(typeof(CIATKey), BaseType, ResponseKeyUri, URI);
+                if (CIAT.SaveFile.GetRelationship(this, CIAT.SaveFile.GetIATKey(ResponseKeyUri)) == null)
+                    CIAT.SaveFile.CreateRelationship(BaseType, typeof(CIATKey), URI, ResponseKeyUri);
             }
             ContinueKey = xDoc.Root.Element("ContinueKey").Value;
             InvalidResponseFlag = Convert.ToBoolean(xDoc.Root.Element("ErrorMarkDisplayed").Value);
@@ -322,7 +324,7 @@ namespace IATClient
         }
 
 
-        public new void Dispose()
+        public override void Dispose()
         {
             if (IsDisposed)
                 return;

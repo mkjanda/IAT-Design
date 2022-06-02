@@ -143,7 +143,7 @@ namespace IATClient
         {
             get
             {
-                return (CIAT.SaveFile.GetDI(PreviewUri) as DIPreview).ThumbnailPreviewPane;
+                return (CIAT.SaveFile.GetDI(PreviewUri) as DIPreview)?.ThumbnailPreviewPane;
             }
             set
             {

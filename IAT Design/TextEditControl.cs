@@ -100,7 +100,8 @@ namespace IATClient
                 if (value != null)
                 {
                     DIText tdi = CIAT.SaveFile.GetDI(value) as DIText;
-                    FontFamilyDropDown.FamilyName = tdi.PhraseFontFamily;
+                    if (tdi.PhraseFontFamily != FontFamilyDropDown.FamilyName)
+                        FontFamilyDropDown.FamilyName = tdi.PhraseFontFamily;
                     FontSizeDropDown.Text = String.Format("{0}pt", tdi.PhraseFontSize.ToString("F00"));
                     ColorDropDown.Image = ColorDropDown.DropDownItems[tdi.PhraseFontColor.Name].Image;
                     ColorDropDown.Text = ColorDropDown.DropDownItems[tdi.PhraseFontColor.Name].Text;

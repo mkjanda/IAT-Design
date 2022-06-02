@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Drawing;
 using System.Windows.Forms;
+using System.Threading;
 
 namespace IATClient
 {
@@ -37,6 +38,7 @@ namespace IATClient
             }
         }
 
+        private bool screenIndexChanging = false;
         public int CurrentInstructionScreenNdx
         {
             get
@@ -45,11 +47,12 @@ namespace IATClient
             }
             set
             {
+                if (screenIndexChanging)
+                    return;
+                screenIndexChanging = true;
                 try
                 {
-                    if (CurrentScreenNdx == value)
-                        return;
-                    if (CurrentScreenNdx != -1)
+                    if ((CurrentScreenNdx != -1) && (InstructionBlock.NumScreens > 0) && (CurrentScreenNdx < InstructionBlock.NumScreens))
                         InstructionBlock[CurrentScreenNdx].PreviewPane = null;
                     CurrentScreenNdx = value;
                     TextRadio.Checked = false;
@@ -82,7 +85,6 @@ namespace IATClient
                     else if (scrn.Type == InstructionScreenType.MockItem)
                     {
                         ShowMockItemPanel(scrn);
-                        MockItem.MockItemScreen = scrn as CMockItemScreen;
                         MockItemRadio.Checked = true;
                     }
                     ValidateInput();
@@ -90,6 +92,7 @@ namespace IATClient
                 finally
                 {
                     this.Enabled = true;
+                    screenIndexChanging = false;
                 }
             }
         }
@@ -448,25 +451,23 @@ namespace IATClient
             HideTextInstructionsPanel();
             HideMockItemPanel();
             HideKeyInstructionsPanel();
-            if (InstructionBlock.NumScreens == 1)
+            deletedScrn.Dispose();
+            if (InstructionBlock.NumScreens == 0)
             {
-                CInstructionScreen scrn = new CInstructionScreen(InstructionBlock);
-                scrn.PreviewPane = ScreenPreview;
+                var scrn = new CInstructionScreen(InstructionBlock);
                 InstructionBlock.InsertScreen(scrn, 0);
-                ScrollingPreview.InsertPreview(0, scrn);
-                ScrollingPreview.DeletePreview(1);
+                ScrollingPreview.InsertPreview(1, scrn);
+            }
+            if (ScrollingPreview.SelectedPreview == 0)
+            {
+                ScrollingPreview.DeletePreview(0);
                 ScrollingPreview.SelectedPreview = 0;
-                UpdateScreenDefPanel(scrn);
             }
             else
             {
-                ScrollingPreview.DeletePreview(CurrentInstructionScreenNdx);
-                if (CurrentInstructionScreenNdx < InstructionBlock.NumScreens - 1)
-                    ScrollingPreview.SelectedPreview = CurrentInstructionScreenNdx;
-                else
-                    ScrollingPreview.SelectedPreview = CurrentInstructionScreenNdx - 1;
+                ScrollingPreview.DeletePreview(ScrollingPreview.SelectedPreview, false);
+                ScrollingPreview.SelectedPreview = ScrollingPreview.SelectedPreview - 1;
             }
-            deletedScrn.Dispose();
             ResumeLayout(false);
         }
 
