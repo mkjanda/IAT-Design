@@ -24,7 +24,7 @@ namespace IATClient
             public DeploymentProcessException() { }
         }
 
-
+        private CancellationTokenSource cancellationTokenSource { get; set; }
         private Action<int, int> SetProgressRange;
         private Func<String, String, DialogResult> DisplayYesNoMessageBox;
         private Action<CIATSummary> OperationComplete;
@@ -44,7 +44,7 @@ namespace IATClient
         private enum EDeploymentStage { requestingConnection = 0, shakingHands = 1, queryingDuplicateIAT = 2, requestingDeployment = 3, performingDeployment = 4 };
         private EDeploymentStage deploymentStage;
         private Manifest Manifest;
-        private int ClientID;
+        private int ClientID { get; set; } = -1;
         private IATConfig.ConfigFile CF;
         private ManualResetEvent UploadSuccess = new ManualResetEvent(false), UploadFailed = new ManualResetEvent(false), UploadCancelled = new ManualResetEvent(false);
         private bool bAwaitingUpdates = false;
@@ -70,18 +70,21 @@ namespace IATClient
         {
             try
             {
-                UploadCancelled.Set();
-                ConnectCancel = true;
-                TransactionRequest trans = new TransactionRequest();
-                if (DeploymentSessionID != -1)
+                if (UploadTestWebSocket.State == WebSocketState.Open)
                 {
-                    trans.Transaction = TransactionRequest.ETransaction.HaltTestDeployment;
-                    trans.LongValues["DeploymentId"] = DeploymentSessionID;
-                }
-                else
-                    trans.Transaction = TransactionRequest.ETransaction.AbortTransaction;
-                Envelope env = new Envelope(trans);
-                env.SendMessage(UploadTestWebSocket, AbortToken);
+                    ConnectCancel = true;
+                    TransactionRequest trans = new TransactionRequest();
+                    if (DeploymentSessionID != -1)
+                    {
+                        trans.Transaction = TransactionRequest.ETransaction.HaltTestDeployment;
+                        trans.LongValues["DeploymentId"] = DeploymentSessionID;
+                    }
+                    else
+                        trans.Transaction = TransactionRequest.ETransaction.AbortTransaction;
+                    Envelope env = new Envelope(trans);
+                    env.SendMessage(UploadTestWebSocket, AbortToken);
+                } else
+                    UploadCancelled.Set();
             }
             catch (Exception) { }
         }
@@ -242,6 +245,7 @@ namespace IATClient
         private void BuildFileManifest()
         {
             Manifest = new Manifest();
+            Manifest.ClientId = ClientID;
             CF.UploadTimeMillis = UploadTimeMillis;
             CF.ClientID = ClientID;
             ConfigFileXML = new MemoryStream();
@@ -250,7 +254,7 @@ namespace IATClient
             CF.WriteXml(xWriter);
             xWriter.WriteEndDocument();
             xWriter.Flush();
-            Manifest.AddFile(new ManifestFile(IATName + ".xml", ConfigFileXML.Length)
+            Manifest.AddFile(new ManifestFile(IATName, ConfigFileXML.Length)
             {
                 ResourceType = ManifestFile.EResourceType.DeploymentFile,
                 ResourceId = 1
@@ -264,13 +268,13 @@ namespace IATClient
                     surveyFNameBase = IAT.BeforeSurvey[ctr2].Name;
                 else
                     surveyFNameBase = IAT.AfterSurvey[ctr2 - IAT.BeforeSurvey.Count].Name;
-                surveyFNameBase = r.Replace(surveyFNameBase, "");
-                Manifest.AddFile(new ManifestFile(String.Format("{0}", surveyFNameBase), Surveys[ctr2].Length)
+//                surveyFNameBase = r.Replace(surveyFNameBase, "");
+                Manifest.AddFile(new ManifestFile(surveyFNameBase, Surveys[ctr2].Length)
                 {
                     ResourceType = ManifestFile.EResourceType.DeploymentFile,
                     ResourceId = 2 * ctr2 + 2
                 });
-                Manifest.AddFile(new ManifestFile(String.Format("{0}-DataRetrieval.xml", surveyFNameBase), SASurveys[ctr2].Length)
+                Manifest.AddFile(new ManifestFile(String.Format("{0} Data Retrieval", surveyFNameBase), SASurveys[ctr2].Length)
                 {
                     ResourceType = ManifestFile.EResourceType.DeploymentFile,
                     ResourceId = 2 * ctr2 + 3
@@ -278,7 +282,7 @@ namespace IATClient
             }
             if (UniqueRespXML != null)
             {
-                ManifestFile urf = new ManifestFile("UniqueResponse.xml", UniqueRespXML.Length)
+                ManifestFile urf = new ManifestFile("UniqueResponse", UniqueRespXML.Length)
                 {
                     ResourceType = ManifestFile.EResourceType.DeploymentFile,
                     ResourceId = Surveys.Count * 2 + 2
@@ -477,12 +481,7 @@ namespace IATClient
                         break;
 
                     case TransactionRequest.ETransaction.DeploymentHalted:
-                        outTrans = new TransactionRequest();
-                        outTrans.IATName = IAT.Name;
-                        outTrans.Transaction = TransactionRequest.ETransaction.QueryRemainingIATS;
-                        deploymentStage++;
-                        transmission = new Envelope(outTrans);
-                        transmission.SendMessage(UploadTestWebSocket, AbortToken);
+                        UploadCancelled.Set();
                         break;
 
                     case TransactionRequest.ETransaction.VerifyPassword:
@@ -589,6 +588,7 @@ namespace IATClient
                         break;
 
                     case TransactionRequest.ETransaction.DeploymentFileManifestReceived:
+                        SetStatusMessage("Uploading test data");
                         SendDeploymentFiles(trans.LongValues["DeploymentId"], trans.StringValues["SessionId"]);
                         SendItemSlides(trans.LongValues["DeploymentId"], trans.StringValues["SessionId"]);
                         break;
@@ -693,12 +693,9 @@ namespace IATClient
             UploadFailed.Set();
         }
 
-        private CancellationToken WebSocketCancellationToken { get; set; }
-
         public bool Upload(String iatName, String password)
         {
-            var CancellationSource = new CancellationTokenSource();
-            WebSocketCancellationToken = CancellationSource.Token;
+            cancellationTokenSource = new CancellationTokenSource();
             ConnectCancel = false;
             IncomingMessage = null;
             UploadSuccess.Reset();
@@ -732,7 +729,7 @@ namespace IATClient
             Task connectTask = null;
             try
             {
-                connectTask = UploadTestWebSocket.ConnectAsync(new Uri(Properties.Resources.sDataTransactionWebsocketURI), WebSocketCancellationToken);
+                connectTask = UploadTestWebSocket.ConnectAsync(new Uri(Properties.Resources.sDataTransactionWebsocketURI), cancellationTokenSource.Token);
                 connectTask.Wait(10000);
             }
             catch (AggregateException aggEx)
@@ -740,13 +737,17 @@ namespace IATClient
                 foreach (var ex in aggEx.InnerExceptions)
                     ErrorReporter.ReportError(new CReportableException("Error on test upload", ex));
                 return false;
+                if (UploadTestWebSocket.State == WebSocketState.Connecting)
+                    cancellationTokenSource.Cancel();
             }
             if (!connectTask.IsCompleted)
             {
+                if (UploadTestWebSocket.State == WebSocketState.Connecting)
+                    cancellationTokenSource.Cancel();
                 ErrorReporter.ReportError(new CReportableException("Timeout connecting to server for test upload", new TimeoutException()));
                 return false;
             }
-            StartMessageReceiver();
+            Receive();
             TransactionRequest trans = new TransactionRequest();
             trans.Transaction = TransactionRequest.ETransaction.RequestConnection;
             trans.IATName = IATName;
@@ -758,7 +759,7 @@ namespace IATClient
                 {
                     return WaitHandle.WaitAny(new WaitHandle[] { UploadSuccess, UploadFailed, UploadCancelled });
                 }
-                catch (TaskCanceledException) { return 1; }
+                catch (TaskCanceledException) { return 2; }
             }), CIAT.GetCancellationToken()).Result;
             Envelope.Shutdown();
             MainForm.Invoke(new Action(MainForm.EndProgressBarUse));
@@ -777,26 +778,27 @@ namespace IATClient
                     closeReason = "Test Upload Cancelled";
                     break;
             }
+            if (UploadTestWebSocket.State == WebSocketState.Open)
+            {
+                if (!UploadTestWebSocket.CloseAsync(WebSocketCloseStatus.InternalServerError, String.Empty, cancellationTokenSource.Token).Wait(1000))
+                    UploadTestWebSocket.Dispose();
+                else
+                    cancellationTokenSource.Cancel();
+            }
             return (nTrigger == 0);
         }
-        private void StartMessageReceiver()
+        private void Receive()
         {
-            UploadTestWebSocket.ReceiveAsync(ReceiveBuffer, WebSocketCancellationToken).ContinueWith(new Action<Task<WebSocketReceiveResult>>(ReceiveMessage), WebSocketCancellationToken);
+            UploadTestWebSocket.ReceiveAsync(ReceiveBuffer, cancellationTokenSource.Token).ContinueWith(t => ReceiveMessage(t.Result), cancellationTokenSource.Token);
         }
 
-        private void ReceiveMessage(Task<WebSocketReceiveResult> t)
+        private void ReceiveMessage(WebSocketReceiveResult receipt)
         {
             try
             {
-                if (t.IsCanceled)
-                    return;
-                if (t.IsFaulted)
-                    return;
-                WebSocketReceiveResult receipt = t.Result;
-                if (receipt.MessageType == WebSocketMessageType.Close)
-                    UploadTestWebSocket.CloseAsync(WebSocketCloseStatus.NormalClosure, "Close Requested by server", WebSocketCancellationToken);
-
-                if (t.Result.Count != 0)
+                if ((receipt.MessageType == WebSocketMessageType.Close) && (UploadTestWebSocket.State == WebSocketState.Open))
+                    UploadTestWebSocket.CloseAsync(WebSocketCloseStatus.NormalClosure, "Close Requested by server", cancellationTokenSource.Token);
+                if (receipt.Count != 0)
                 {
                     lock (transmissionLock)
                     {
@@ -816,17 +818,15 @@ namespace IATClient
                     }
                 }
                 if (UploadTestWebSocket.State == WebSocketState.Open)
-                    UploadTestWebSocket.ReceiveAsync(ReceiveBuffer, WebSocketCancellationToken).ContinueWith(new Action<Task<WebSocketReceiveResult>>(ReceiveMessage), CIAT.GetCancellationToken());
+                    Receive();
             }
             catch (WebSocketException ex)
             {
-                UploadTestWebSocket.Dispose();
                 UploadFailed.Set();
                 return;
             }
             catch (System.Net.Sockets.SocketException)
             {
-                UploadTestWebSocket.Dispose();
                 UploadFailed.Set();
                 return;
             }
@@ -837,23 +837,7 @@ namespace IATClient
             catch (Exception ex)
             {
                 ErrorReporter.ReportError(new CReportableException("Communication Error", ex));
-                try
-                {
-                    TransactionRequest trans = new TransactionRequest();
-                    if (DeploymentSessionID != -1)
-                    {
-                        trans.Transaction = TransactionRequest.ETransaction.AbortDeployment;
-                        trans.LongValues["DeploymentId"] = DeploymentSessionID;
-                    }
-                    else
-                        trans.Transaction = TransactionRequest.ETransaction.AbortTransaction;
-                    Envelope env = new Envelope(trans);
-                    env.SendMessage(UploadTestWebSocket, AbortToken);
-                }
-                finally
-                {
-                    UploadFailed.Set();
-                }
+                UploadFailed.Set();
             }
         }
     }
