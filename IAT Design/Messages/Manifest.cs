@@ -8,6 +8,8 @@ namespace IATClient.Messages
     public class Manifest : INamedXmlSerializable
     {
         private String _IATName = String.Empty;
+        public long ClientId { get; set; } = 0;
+        
         public List<FileEntity> Contents { get; private set; } = new List<FileEntity>();
 
         public void AddFile(ManifestFile f)
@@ -125,6 +127,8 @@ namespace IATClient.Messages
             foreach (FileEntity fe in Contents)
                 if (fe.FileEntityType == FileEntity.EFileEntityType.File)
                     fe.WriteXml(writer);
+            writer.WriteElementString("ClientId", ClientId.ToString());
+            writer.WriteElementString("ProductKey", LocalStorage.Activation[LocalStorage.Field.ProductKey]);
             writer.WriteEndElement();
         }
 
@@ -146,6 +150,8 @@ namespace IATClient.Messages
                 mf.ReadXml(reader);
                 Contents.Add(mf);
             }
+            ClientId = Convert.ToInt64(reader.ReadElementString("ClientId"));
+            reader.ReadElementString("ProductKey");
             reader.ReadEndElement();
         }
 
