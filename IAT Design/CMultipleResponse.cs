@@ -141,7 +141,7 @@ namespace IATClient
         public override void WriteXml(XmlWriter writer)
         {
             // write the start of the "Response" element to signify a new response type
-            writer.WriteStartElement("Response");
+            writer.WriteStartElement("MultipleResponse");
 
             // write the type of the response as an attribute of the "Response" element
             writer.WriteStartAttribute("Type");

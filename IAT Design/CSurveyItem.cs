@@ -185,27 +185,7 @@ namespace IATClient
                 return false;
             return Response.IsValid();
         }
-        /*
-                /// <summary>
-                /// Writes the object to an XmlTextWriter
-                /// </summary>
-                /// <param name="writer">The XmlTextWriter object to write data to</param>
-                public virtual void WriteToXml(XmlTextWriter writer)
-                {
-                    // write the start of a "SurveyItem" element to signify a survey item definition
-                    writer.WriteStartElement(sSurveyItem);
-                    writer.WriteAttributeString("Optional", Optional.ToString());
 
-
-                    // write the question text and the response
-                    writer.WriteElementString("Text", Text);
-                    Response.WriteToXml(writer);
-                    Format.WriteToXml(writer);
-
-                    // write the close of the "SurveyItem" element
-                    writer.WriteEndElement();
-                }
-        */
         public virtual void Save()
         {
             XDocument xDoc = new XDocument();
@@ -276,58 +256,7 @@ namespace IATClient
             Format.WriteXml(writer);
             writer.WriteEndElement();
         }
-        /*
-                /// <summary>
-                /// Creates a CSurveyItem object from the data in an XmlNode
-                /// </summary>
-                /// <param name="node">The XmlNode to load the data from</param>
-                /// <returns>A new CSurveyItem object with the data contained in the provided node.  Returns "null" on failure</returns>
-                static public CSurveyItem CreateFromXml(XmlNode node, CSurvey parentSurvey)
-                {
-                    // check for a caption
-                    if (node.Name == sCaption)
-                    {
-                        CSurveyCaption sc = new CSurveyCaption(parentSurvey);
-                        sc.LoadFromXml(node);
-                        return sc;
-                    }
 
-                    // ensure the node defines a survey item
-                    if (node.Name != sSurveyItem)
-                        return null;
-                    bool Optional;
-                    if (node.Attributes["Optional"] == null)
-                        Optional = false;
-                    else
-                        Optional = Convert.ToBoolean(node.Attributes["Optional"].Value);
-                    // ensure the appropriate child node count
-
-                    // load the question text
-                    String text = node.FirstChild.InnerText;
-
-                    // load the response definition
-                    CResponse response = CResponse.CreateFromXml(node.SelectSingleNode("./Response"));
-                    if (response == null)  // return null if the response failed to load
-                        return null;
-                    SurveyItemFormat format = new SurveyItemFormat(SurveyItemFormat.EFor.Item);
-                    if (CVersion.Compare(CIAT.SaveFileVersion, new CVersion("1.0.1.1")) < 0)
-                        format.LoadFromXml(node.SelectSingleNode("./SurveyItemFormat"));
-
-                    // create the survey item and assign it the question text and response definition
-                    CSurveyItem item = new CSurveyItem(parentSurvey);
-                    item.Text = text;
-                    item.Response = response;
-                    item.Optional = Optional;
-                    item.Format = format;
-                    // return the survey item
-                    return item;
-                }
-
-                public virtual bool LoadFromXml(XmlNode node)
-                {
-                    throw new NotImplementedException();
-                }
-        */
         protected bool _IsScored = false;
 
         public bool IsScored

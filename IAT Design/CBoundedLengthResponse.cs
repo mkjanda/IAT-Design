@@ -130,7 +130,7 @@ namespace IATClient
 
         public override void WriteXml(XmlWriter writer)
         {
-            writer.WriteStartElement("Response");
+            writer.WriteStartElement("BoundedLength");
             writer.WriteAttributeString("Type", sTypeBoundedLength);
             Format.WriteXml(writer);
             writer.WriteElementString("MinLength", MinLength.ToString());
