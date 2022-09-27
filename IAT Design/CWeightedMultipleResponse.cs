@@ -192,7 +192,7 @@ namespace IATClient
 
         public override void WriteXml(XmlWriter writer)
         {
-            writer.WriteStartElement("Response");
+            writer.WriteStartElement("WeightedMultiple");
             writer.WriteAttributeString("Type", sTypeWeightedMultiple);
             writer.WriteAttributeString("NumChoices", NumChoices.ToString());
             writer.WriteAttributeString("Scored", false.ToString());

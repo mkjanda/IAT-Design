@@ -79,7 +79,7 @@ namespace IATClient
 
         public override void WriteXml(XmlWriter writer)
         {
-            writer.WriteStartElement("Response");
+            writer.WriteStartElement("FixedDigit");
             writer.WriteAttributeString("Type", sTypeFixedDig);
             Format.WriteXml(writer);
             writer.WriteElementString("NumDigs", NumDigs.ToString());

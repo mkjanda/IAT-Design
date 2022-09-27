@@ -33,7 +33,7 @@
             this.StatusImage = new System.Windows.Forms.ToolStripStatusLabel();
             this.StatusText = new System.Windows.Forms.ToolStripStatusLabel();
             this.Progress = new System.Windows.Forms.ToolStripProgressBar();
-            this.StatusMessage = new System.Windows.Forms.ToolStripStatusLabel();
+            this.StatusLabel = new System.Windows.Forms.ToolStripStatusLabel();
             this.QuickPanel = new System.Windows.Forms.Panel();
             this.UploadButton = new System.Windows.Forms.Button();
             this.IATPasswordBox = new System.Windows.Forms.TextBox();
@@ -58,7 +58,7 @@
             this.StatusImage,
             this.StatusText,
             this.Progress,
-            this.StatusMessage});
+            this.StatusLabel});
             this.MessageBar.Location = new System.Drawing.Point(0, 672);
             this.MessageBar.Name = "MessageBar";
             this.MessageBar.Size = new System.Drawing.Size(1008, 22);
@@ -87,11 +87,11 @@
             this.Progress.Name = "Progress";
             this.Progress.Size = new System.Drawing.Size(500, 16);
             // 
-            // StatusMessage
+            // StatusLabel
             // 
-            this.StatusMessage.Margin = new System.Windows.Forms.Padding(10, 3, 10, 2);
-            this.StatusMessage.Name = "StatusMessage";
-            this.StatusMessage.Size = new System.Drawing.Size(0, 17);
+            this.StatusLabel.Margin = new System.Windows.Forms.Padding(10, 3, 10, 2);
+            this.StatusLabel.Name = "StatusLabel";
+            this.StatusLabel.Size = new System.Drawing.Size(0, 17);
             // 
             // QuickPanel
             // 
@@ -185,7 +185,7 @@
         private System.Windows.Forms.TextBox IATPasswordBox;
         private System.Windows.Forms.Label DataRetrievalPasswordLabel;
         private System.Windows.Forms.Button UploadButton;
-        private System.Windows.Forms.ToolStripStatusLabel StatusMessage;
+        private System.Windows.Forms.ToolStripStatusLabel StatusLabel;
     }
 }
 

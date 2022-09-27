@@ -123,7 +123,7 @@ namespace IATClient
 
         public override void WriteXml(XmlWriter writer)
         {
-            writer.WriteStartElement("Response");
+            writer.WriteStartElement("BoundedNumber");
             writer.WriteAttributeString("Type", sTypeBoundedNum);
             Format.WriteXml(writer);
             writer.WriteElementString("MinValue", MinValue.ToString());

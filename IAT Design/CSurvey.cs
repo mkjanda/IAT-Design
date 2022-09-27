@@ -450,42 +450,6 @@ namespace IATClient
             String html = SurveyPreviewHTML;
             SurveyPreview.DocumentCompleted += (sender, args) =>
             {
-                /*    int nImageHeight = 0;
-                    foreach (var si in Items)
-                        if (si.ItemType == SurveyItemType.SurveyImage)
-                        {
-                            HtmlElement imgTag = SurveyPreview.Document.GetElementById("survey-image-" + si.GetItemIndex().ToString());
-                            if (imgTag != null)
-                            {
-                                MemoryStream imgStream = new MemoryStream();
-                                Image img = (si as CSurveyItemImage).SurveyImage.IImage.Image;
-                                if (img.Width > 500 - scrollWidth)
-                                {
-                                    Bitmap bmp = new Bitmap(img, new Size(500 - scrollWidth, img.Height * 500 / img.Width));
-                                    using (Graphics gr = Graphics.FromImage(bmp))
-                                    {
-                                        gr.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.HighQuality;
-                                        gr.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.HighQualityBicubic;
-                                        gr.PixelOffsetMode = System.Drawing.Drawing2D.PixelOffsetMode.HighQuality;
-                                        gr.DrawImage(img, new Rectangle(0, 0, bmp.Width, bmp.Height));
-                                    }
-                                    bmp.Save(imgStream, (si as CSurveyItemImage).SurveyImage.IImage.Format);
-                                    nImageHeight += bmp.Height;
-                                    bmp.Dispose();
-                                }
-                                else
-                                {
-                                    img.Save(imgStream, (si as CSurveyItemImage).SurveyImage.IImage.Format);
-                                    nImageHeight += img.Height;
-                                }
-                                img.Dispose();
-                                imgTag.SetAttribute("src", "data:" + (si as CSurveyItemImage).SurveyImage.IImage.ImageMimeType + ";base64," + Convert.ToBase64String(imgStream.ToArray()));
-                                imgStream.Dispose();
-                            }
-                        }
-                    SurveyPreview.Size = new Size((SurveyPreview.Document.Body.ScrollRectangle.Height > preview.Height) ? (preview.Width - scrollWidth) : preview.Width,
-                        (SurveyPreview.Document.Body.ScrollRectangle.Height + nImageHeight < preview.Height) ? preview.Height : (SurveyPreview.Document.Body.ScrollRectangle.Height + nImageHeight));
-                        */
                 SurveyPreview.Size = new Size((SurveyPreview.Document.Body.ScrollRectangle.Height > preview.Height) ? (preview.Width - scrollWidth) : preview.Width,
                     (SurveyPreview.Document.Body.ScrollRectangle.Height < preview.Height) ? preview.Height : (SurveyPreview.Document.Body.ScrollRectangle.Height));
                 preview.AutoScroll = true;

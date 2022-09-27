@@ -11,7 +11,9 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Forms;
+using System.Windows.Interop;
 using System.Xml;
 using System.Xml.Serialization;
 
@@ -19,23 +21,8 @@ namespace IATClient
 {
     class CWebSocketUploader
     {
-        class DeploymentProcessException : Exception
-        {
-            public DeploymentProcessException() { }
-        }
-
         private CancellationTokenSource cancellationTokenSource { get; set; }
-        private Action<int, int> SetProgressRange;
-        private Func<String, String, DialogResult> DisplayYesNoMessageBox;
-        private Action<CIATSummary> OperationComplete;
-        private Action<int> ProgressIncrement;
-        private Action ResetProgress;
-        private Action<EventHandler, IATConfigMainForm.EProgressBarUses> BeginProgressBarUse;
-        private Action EndProgressBarUse;
-        private Action<String, String> DisplayMessageBox;
-        private Action<int> OnSetProgressValue;
         private IATConfigMainForm MainForm;
-        private object lockObject = new object();
         private String DataPassword, AdminPassword, _IATName;
         private CIAT IAT;
         private List<MemoryStream> Surveys = new List<MemoryStream>(), SASurveys = new List<MemoryStream>();
@@ -47,14 +34,11 @@ namespace IATClient
         private int ClientID { get; set; } = -1;
         private IATConfig.ConfigFile CF;
         private ManualResetEvent UploadSuccess = new ManualResetEvent(false), UploadFailed = new ManualResetEvent(false), UploadCancelled = new ManualResetEvent(false);
-        private bool bAwaitingUpdates = false;
         private CRSAKeyPair keyPair = null;
         private object transmissionLock = new object();
-        private String multipartBoundry = "===" + DateTime.Now.ToBinary().ToString() + "===";
         private CancellationToken AbortToken = new CancellationToken();
         private ArraySegment<byte> ReceiveBuffer = new ArraySegment<byte>(new byte[8192]);
         private Envelope IncomingMessage;
-        private bool ConnectCancel = false;
         private long UploadTimeMillis = -1, DeploymentSessionID = -1;
         private List<Tuple<String, MemoryStream>> SurveyImages = new List<Tuple<String, MemoryStream>>();
 
@@ -72,7 +56,6 @@ namespace IATClient
             {
                 if (UploadTestWebSocket.State == WebSocketState.Open)
                 {
-                    ConnectCancel = true;
                     TransactionRequest trans = new TransactionRequest();
                     if (DeploymentSessionID != -1)
                     {
@@ -95,24 +78,10 @@ namespace IATClient
             UploadFailed.Set();
         }
 
-        private void SetStatusMessage(String msg)
-        {
-            MainForm.BeginInvoke(new Action<String>(MainForm.SetStatusMessage), msg);
-        }
-
         public CWebSocketUploader(CIAT iat, IATConfigMainForm mainForm)
         {
             IAT = iat;
             MainForm = mainForm;
-            SetProgressRange = new Action<int, int>(mainForm.SetProgressRange);
-            DisplayYesNoMessageBox = new Func<String, String, DialogResult>(mainForm.OnDisplayYesNoMessageBox);
-            OperationComplete = new Action<CIATSummary>(mainForm.OperationComplete);
-            ProgressIncrement = new Action<int>(mainForm.ProgressIncrement);
-            ResetProgress = new Action(mainForm.ResetProgress);
-            BeginProgressBarUse = new Action<EventHandler, IATConfigMainForm.EProgressBarUses>(mainForm.BeginProgressBarUse);
-            EndProgressBarUse = new Action(mainForm.EndProgressBarUse);
-            DisplayMessageBox = new Action<String, String>(mainForm.OnDisplayMessageBox);
-            OnSetProgressValue = new Action<int>(mainForm.SetProgressValue);
         }
 
         private void ProcessSurveys(String URL, int port)
@@ -127,24 +96,18 @@ namespace IATClient
                 XmlTextWriter xmlWriter = new XmlTextWriter(beforeSurveyStream, Encoding.Unicode);
                 xmlWriter.WriteStartDocument();
                 xmlWriter.WriteStartElement("Survey");
-                xmlWriter.WriteAttributeString("IAT", IATName);
                 xmlWriter.WriteAttributeString("Type", "Before");
-                xmlWriter.WriteAttributeString("FileName", IAT.BeforeSurvey[ctr1].FileNameBase);
-                xmlWriter.WriteAttributeString("SurveyName", IAT.BeforeSurvey[ctr1].Name);
                 xmlWriter.WriteAttributeString("TimeoutMillis", (IAT.BeforeSurvey[ctr1].Timeout * 60000).ToString());
-                xmlWriter.WriteAttributeString("ServerURL", URL);
-                xmlWriter.WriteAttributeString("ServerPort", port.ToString());
-                xmlWriter.WriteAttributeString("ClientID", ClientID.ToString());
+                xmlWriter.WriteAttributeString("UploadTimeMillis", UploadTimeMillis.ToString());
                 if (IAT.UniqueResponse.SurveyUri == null)
-                    xmlWriter.WriteElementString("UniqueResponseItem", "-1");
+                    xmlWriter.WriteAttributeString("UniqueResponseItem", "-1");
                 else if (IAT.UniqueResponse.SurveyUri.Equals(IAT.BeforeSurvey[ctr1].URI))
                     xmlWriter.WriteAttributeString("UniqueResponseItem", IAT.UniqueResponse.ItemNum.ToString());
                 else
                     xmlWriter.WriteAttributeString("UniqueResponseItem", "-1");
-                xmlWriter.WriteElementString("ServerDomain", Properties.Resources.sDefaultIATServerDomain);
-                xmlWriter.WriteElementString("ServerPort", Properties.Resources.sDefaultIATServerPort);
-                xmlWriter.WriteElementString("ServerPath", Properties.Resources.sDefaultIATServerPath);
-                xmlWriter.WriteElementString("UploadTimeMillis", UploadTimeMillis.ToString());
+                xmlWriter.WriteElementString("IAT", IATName);
+                xmlWriter.WriteElementString("FileName", IAT.BeforeSurvey[ctr1].FileNameBase);
+                xmlWriter.WriteElementString("SurveyName", IAT.BeforeSurvey[ctr1].Name);
                 for (int ctr2 = 0; ctr2 < IAT.BeforeSurvey[ctr1].Items.Count; ctr2++)
                 {
                     if (IAT.BeforeSurvey[ctr1].Items[ctr2].ItemType == SurveyItemType.SurveyImage)
@@ -187,37 +150,30 @@ namespace IATClient
                 XmlTextWriter xmlWriter = new XmlTextWriter(afterSurveyStream, Encoding.Unicode);
                 xmlWriter.WriteStartDocument();
                 xmlWriter.WriteStartElement("Survey");
-                xmlWriter.WriteAttributeString("IAT", IATName);
-                xmlWriter.WriteAttributeString("Type", "After");
-                xmlWriter.WriteAttributeString("FileName", IAT.AfterSurvey[ctr1].FileNameBase);
-                xmlWriter.WriteAttributeString("SurveyName", IAT.AfterSurvey[ctr1].Name);
-                xmlWriter.WriteAttributeString("TimeoutMillis", (IAT.AfterSurvey[ctr1].Timeout * 60000).ToString());
-                xmlWriter.WriteAttributeString("ServerURL", URL);
-                xmlWriter.WriteAttributeString("ServerPort", port.ToString());
-                xmlWriter.WriteAttributeString("ClientID", ClientID.ToString());
+                xmlWriter.WriteAttributeString("Type", "Before");
+                xmlWriter.WriteAttributeString("TimeoutMillis", (IAT.BeforeSurvey[ctr1].Timeout * 60000).ToString());
+                xmlWriter.WriteAttributeString("UploadTimeMillis", UploadTimeMillis.ToString());
                 if (IAT.UniqueResponse.SurveyUri == null)
                     xmlWriter.WriteAttributeString("UniqueResponseItem", "-1");
-                else if (IAT.UniqueResponse.SurveyUri.Equals(IAT.AfterSurvey[ctr1].URI))
+                else if (IAT.UniqueResponse.SurveyUri.Equals(IAT.BeforeSurvey[ctr1].URI))
                     xmlWriter.WriteAttributeString("UniqueResponseItem", IAT.UniqueResponse.ItemNum.ToString());
                 else
                     xmlWriter.WriteAttributeString("UniqueResponseItem", "-1");
-                xmlWriter.WriteElementString("ServerDomain", Properties.Resources.sDefaultIATServerDomain);
-                xmlWriter.WriteElementString("ServerPort", Properties.Resources.sDefaultIATServerPort);
-                xmlWriter.WriteElementString("ServerPath", Properties.Resources.sDefaultIATServerPath);
-                xmlWriter.WriteElementString("UploadTimeMillis", UploadTimeMillis.ToString());
+                xmlWriter.WriteElementString("IAT", IATName);
+                xmlWriter.WriteElementString("FileName", IAT.BeforeSurvey[ctr1].FileNameBase);
+                xmlWriter.WriteElementString("SurveyName", IAT.BeforeSurvey[ctr1].Name);
                 for (int ctr2 = 0; ctr2 < IAT.AfterSurvey[ctr1].Items.Count; ctr2++)
                 {
                     if (IAT.AfterSurvey[ctr1].Items[ctr2].ItemType == SurveyItemType.SurveyImage)
                     {
-                        (IAT.AfterSurvey[ctr1].Items[ctr2] as CSurveyItemImage).OnlineFilename = String.Format("survey-image{0}", ++surveyImgCtr);
                         Images.IImageMedia imgMedia = (IAT.AfterSurvey[ctr1].Items[ctr2] as CSurveyItemImage).SurveyImage.IImage.OriginalImage;
-                        System.Drawing.Image img = imgMedia.Img;
                         MemoryStream memStream = new MemoryStream();
+                        System.Drawing.Image img = imgMedia.Img;
                         img.Save(memStream, imgMedia.ImageFormat.Format);
                         img.Dispose();
-                        SurveyImages.Add(new Tuple<String, MemoryStream>(String.Format("survey-image{0}", surveyImgCtr), memStream));
+                        (IAT.AfterSurvey[ctr1].Items[ctr2] as CSurveyItemImage).OnlineFilename = String.Format("survey-image{0}.{1}", ++surveyImgCtr, imgMedia.FileExtension);
+                        SurveyImages.Add(new Tuple<String, MemoryStream>(String.Format("survey-image{0}.{1}", surveyImgCtr, imgMedia.FileExtension), memStream));
                     }
-                    IAT.AfterSurvey[ctr1].Items[ctr2].WriteXml(xmlWriter);
                 }
                 xmlWriter.WriteEndElement();
                 xmlWriter.WriteEndDocument();
@@ -393,14 +349,8 @@ namespace IATClient
                 OperationFailed("The test you are attempting to upload differs from the test already on the server in ways that would cause discrepencies in the result set format. It cannot be deployed atop the existing test.", "Incompatible Result Sets");
                 return;
             }
-            SetStatusMessage(update.StatusMessage);
-            MainForm.Invoke(ResetProgress);
-            if (update.ProgressMax > 0)
-            {
-                if (update.CurrentProgress == 0)
-                    MainForm.Invoke(SetProgressRange, update.ProgressMin, update.ProgressMax);
-                MainForm.Invoke(ProgressIncrement, update.CurrentProgress);
-            }
+            MainForm.StatusMessage = update.StatusMessage;
+            MainForm.SetProgressRange(update.ProgressMin, update.ProgressMax, update.CurrentProgress);
         }
 
         private void TransactionReceived(INamedXmlSerializable T)
@@ -419,7 +369,7 @@ namespace IATClient
                         break;
 
                     case TransactionRequest.ETransaction.RequestTransmission:
-                        SetStatusMessage("Connection established");
+                        MainForm.StatusMessage = "Connection established";
                         ClientID = trans.ClientID;
                         outTrans = new TransactionRequest();
                         outTrans.IATName = IAT.Name;
@@ -433,12 +383,13 @@ namespace IATClient
                         break;
 
                     case TransactionRequest.ETransaction.IATExists:
-                        dResult = (DialogResult)MainForm.Invoke(DisplayYesNoMessageBox, "An IAT with this name associated with your account already exists on the server. If you have made costmetic changes to your " +
+                        dResult = MainForm.DisplayYesNoMessageBox("An IAT with this name associated with your account already exists on the server. If you have made costmetic changes to your " +
                             "test that do not effect the format of the result set, such as changing the wording of instructions or correcting typos, you may attempt to redeploy your IAT " +
                             "atop the one on the server. Do you wish to try this?", "IAT Exists");
                         if (dResult == DialogResult.No)
                         {
-                            MainForm.Invoke(EndProgressBarUse);
+                            MainForm.StatusMessage = String.Empty;
+                            MainForm.SetProgressRange(0, 0, 0);
                             if (DeploymentSessionID != -1)
                             {
                                 trans.Transaction = TransactionRequest.ETransaction.HaltTestDeployment;
@@ -459,11 +410,12 @@ namespace IATClient
                         break;
 
                     case TransactionRequest.ETransaction.TestBeingDeployed:
-                        dResult = (DialogResult)MainForm.Invoke(DisplayYesNoMessageBox, "An IAT with this name is currently in a state of deployment. If you have recently tried to upload a test " +
+                        dResult = MainForm.DisplayYesNoMessageBox("An IAT with this name is currently in a state of deployment. If you have recently tried to upload a test " +
                             "with this name, likely that deployment has been suspended. You may only upload this test if you abandon the previous deployment. Do you wish to do so?", "Test Being Deployed");
                         if (dResult == DialogResult.No)
                         {
-                            MainForm.Invoke(EndProgressBarUse);
+                            MainForm.StatusMessage = String.Empty;
+                            MainForm.SetProgressRange(0, 0, 0);
                             outTrans = new TransactionRequest();
                             outTrans.Transaction = TransactionRequest.ETransaction.AbortDeployment;
                             outTrans.LongValues["DeploymentId"] = trans.LongValues["DeploymentId"];
@@ -524,7 +476,7 @@ namespace IATClient
                         break;
 
                     case TransactionRequest.ETransaction.NoSuchIAT:
-                        SetStatusMessage("Requesting upload");
+                        MainForm.StatusMessage = "Requesting upload";
                         outTrans = new TransactionRequest();
                         outTrans.IATName = IAT.Name;
                         outTrans.Transaction = TransactionRequest.ETransaction.QueryRemainingIATS;
@@ -535,7 +487,9 @@ namespace IATClient
 
                     case TransactionRequest.ETransaction.QueryPublicityIAT:
                         outTrans = new TransactionRequest();
-                        if (MainForm.OnDisplayYesNoMessageBox(Properties.Resources.sQueryPublicityIAT, Properties.Resources.sQueryPublicityIATCaption) == DialogResult.Yes)
+                        var publicityIATDialogResult = MainForm.DisplayYesNoMessageBox(Properties.Resources.sQueryPublicityIAT,
+                            Properties.Resources.sQueryPublicityIATCaption);
+                        if (publicityIATDialogResult == DialogResult.Yes)  
                         {
                             outTrans.Transaction = TransactionRequest.ETransaction.PublicityIAT;
                         }
@@ -562,7 +516,7 @@ namespace IATClient
 
                     case TransactionRequest.ETransaction.TokenDefinitionReceived:
                         transmission = new Envelope(Manifest);
-                        SetStatusMessage("Uploading file manifest");
+                        MainForm.StatusMessage = "Uploading file manifest";
                         transmission.SendMessage(UploadTestWebSocket, AbortToken);
                         break;
                     case TransactionRequest.ETransaction.EncryptionKeysReceived:
@@ -576,7 +530,7 @@ namespace IATClient
                             }
                             else
                             {
-                                SetStatusMessage("Uploading file manifest");
+                                MainForm.StatusMessage = "Uploading file manifest";
                                 transmission = new Envelope(Manifest);
                                 transmission.SendMessage(UploadTestWebSocket, AbortToken);
                             }
@@ -588,13 +542,13 @@ namespace IATClient
                         break;
 
                     case TransactionRequest.ETransaction.DeploymentFileManifestReceived:
-                        SetStatusMessage("Uploading test data");
+                        MainForm.StatusMessage = "Uploading test data";
                         SendDeploymentFiles(trans.LongValues["DeploymentId"], trans.StringValues["SessionId"]);
                         SendItemSlides(trans.LongValues["DeploymentId"], trans.StringValues["SessionId"]);
                         break;
 
                     case TransactionRequest.ETransaction.RequestIATUpload:
-                        SetStatusMessage("Initializing result encryption data");
+                        MainForm.StatusMessage = "Initializing result encryption data";
                         UploadTimeMillis = trans.LongValues["DeploymentStartTime"];
                         DeploymentSessionID = trans.LongValues["DeploymentId"];
                         if (this.keyPair == null)
@@ -662,7 +616,7 @@ namespace IATClient
 
                         IATSummary.DataRetrievalPassword = DataPassword;
                         IATSummary.AdminPassword = AdminPassword;
-                        MainForm.BeginInvoke(OperationComplete, IATSummary);
+                        MainForm.OperationComplete(IATSummary);
                         UploadSuccess.Set();
                         break;
 
@@ -696,7 +650,6 @@ namespace IATClient
         public bool Upload(String iatName, String password)
         {
             cancellationTokenSource = new CancellationTokenSource();
-            ConnectCancel = false;
             IncomingMessage = null;
             UploadSuccess.Reset();
             UploadFailed.Reset();
@@ -712,7 +665,7 @@ namespace IATClient
             Envelope.OnReceipt[Envelope.EMessageType.RSAKeyPair] = new Action<INamedXmlSerializable>(OnRSAKeyPairReceipt);
             MainForm.Invoke(new Action<EventHandler, IATConfigMainForm.EProgressBarUses>(MainForm.BeginProgressBarUse), new EventHandler(OnCancel), IATConfigMainForm.EProgressBarUses.Upload);
             UploadTestWebSocket = new ClientWebSocket();
-            SetStatusMessage("Preparing Upload");
+            MainForm.StatusMessage = "Preparing Upload";
             CF = new IATConfig.ConfigFile(IAT);
             CF.ServerDomain = Properties.Resources.sDefaultIATServerDomain;
             CF.ServerPath = Properties.Resources.sDefaultIATServerPath;
@@ -725,7 +678,7 @@ namespace IATClient
                 uri.WriteXmlDocument(xWriter);
                 xWriter.Flush();
             }
-            SetStatusMessage("Establishing connection");
+            MainForm.StatusMessage = "Establishing connection";
             Task connectTask = null;
             try
             {

@@ -140,14 +140,6 @@ namespace IATClient.IATConfig
                         _NumItems++;
                         _ResponseTypes.Add(s.Items[ctr].Response.ResponseType);
                     }
-                    /*
-                    if ((s.Items[ctr].Response.ResponseType == CResponse.EResponseType.FixedDig) &&
-                        (s.Items[ctr].IsScored))
-                    {
-                        if (((CFixedDigResponse)s.Items[ctr].Response).IsOneUse)
-                            AddUniqueIDResponse(surveyNum + ctr, NumItems, (CFixedDigResponse)s.Items[ctr].Response.DefinedResponse);
-                    }
-                    */
                 }
             _NumOnceOnlyResponses = s.NumOnceOnlyResponses;
             _Type = type;

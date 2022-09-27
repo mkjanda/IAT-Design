@@ -169,7 +169,7 @@ namespace IATClient
         public override void WriteXml(XmlWriter writer)
         {
             // write the start of the "Response" element, signifying the start of a new response type
-            writer.WriteStartElement("Response");
+            writer.WriteStartElement("LikertResponse");
 
             // write the type of the response as an attribute of the "Resposne" element
             writer.WriteStartAttribute("Type");

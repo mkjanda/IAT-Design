@@ -129,7 +129,7 @@ namespace IATClient
 
         public override void WriteXml(XmlWriter writer)
         {
-            writer.WriteStartElement("Response");
+            writer.WriteStartElement("Boolean");
             writer.WriteAttributeString("Type", sTypeBool);
             Format.WriteXml(writer);
             writer.WriteElementString("TrueStatement", TrueStatement);

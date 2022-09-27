@@ -94,7 +94,7 @@ namespace IATClient
 
         public override void WriteXml(XmlWriter writer)
         {
-            writer.WriteStartElement("Response");
+            writer.WriteStartElement("Date");
             writer.WriteAttributeString("Type", sTypeDate);
             Format.WriteXml(writer);
             writer.WriteStartElement("StartDate");

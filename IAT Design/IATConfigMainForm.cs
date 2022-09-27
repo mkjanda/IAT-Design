@@ -42,6 +42,39 @@ namespace IATClient
             }
         }
 
+        public String StatusMessage
+        {
+            get
+            {
+                return MessageBar.Items["StatusLabel"].Text;
+            }
+            set
+            {
+                this.BeginInvoke(new Action(() =>
+                {
+                    if (ProgressBarUse == EProgressBarUses.None)
+                        return;
+                    MessageBar.Items["StatusLabel"].Text = value;
+                }));
+            }
+        }
+
+        public void SetProgressRange(int min, int max, int current)
+        {
+            this.BeginInvoke(new Action(() =>
+            {
+                Progress.Minimum = min;
+                Progress.Maximum = max;
+                Progress.Value = current;
+            }));
+        }
+
+        public DialogResult DisplayYesNoMessageBox(String message, String caption)
+        {
+            return (DialogResult)this.Invoke(new Func<DialogResult>(() => MessageBox.Show(message, caption, MessageBoxButtons.YesNo)));
+        }
+
+
         public IContentsItem ActiveItem { get; set; }
 
         /// <summary>
@@ -474,10 +507,7 @@ namespace IATClient
 
         private void OperationComplete(String msg, String caption)
         {
-            lock (lockObject)
-            {
-                MessageBox.Show(msg, caption, MessageBoxButtons.OK);
-            }
+            this.BeginInvoke(new Action(() => MessageBox.Show(this, msg, caption, MessageBoxButtons.OK)));
         }
 
         private void IATConfigMainForm_Load(object sender, EventArgs e)
@@ -1710,11 +1740,10 @@ namespace IATClient
             catch (Exception ex) { }
         }
 
+
+
         public void SetStatusMessage(String statusMessage)
         {
-            if (ProgressBarUse == EProgressBarUses.None)
-                return;
-            MessageBar.Items["StatusMessage"].Text = statusMessage;
         }
 
         public String GetStatusMessage()
@@ -1724,9 +1753,12 @@ namespace IATClient
 
         public void OperationComplete(CIATSummary summary)
         {
-            IATUploadCompleteForm uploadComplete = new IATUploadCompleteForm();
-            uploadComplete.Summary = summary;
-            uploadComplete.ShowDialog();
+            this.BeginInvoke(new Action(() =>
+            {
+                IATUploadCompleteForm uploadComplete = new IATUploadCompleteForm();
+                uploadComplete.Summary = summary;
+                uploadComplete.ShowDialog();
+            }));
         }
 
         public void ResetProgress()
@@ -1741,11 +1773,6 @@ namespace IATClient
             if (ProgressBarUse == EProgressBarUses.None)
                 return;
             Progress.Value = val;
-        }
-
-        public DialogResult OnDisplayYesNoMessageBox(String msg, String caption)
-        {
-            return MessageBox.Show(this, msg, caption, MessageBoxButtons.YesNo);
         }
 
         public void OnDisplayMessageBox(String msg, String caption)
