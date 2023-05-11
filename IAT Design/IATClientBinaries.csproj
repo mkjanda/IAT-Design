@@ -777,7 +777,9 @@
     <Compile Include="ValidationLock.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="ExcelXslt\[Content Types].xslt" />
+    <Content Include="ExcelXslt\[Content Types].xslt">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="ExcelXslt\_Contents-bobby.xml" />
     <Content Include="ExcelXslt\_Contents.xml" />
     <Content Include="Resources\AddItem.bmp" />

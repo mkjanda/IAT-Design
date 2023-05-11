@@ -260,7 +260,6 @@ namespace IATClient
 
         protected override void ResponseDisplay_Paint(object sender, PaintEventArgs e)
         {
-            //        e.Graphics.FillRectangle(Brushes.White, new Rectangle(new Point(RegEx.Right, RegEx.Top), new Size(this.Size.Width - RegEx.Right, this.Size.Height - TestBox.Bottom)));
             e.Graphics.DrawString(Label, DisplayFont, Brushes.Gray, LabelRect);
             if ((RegEx.Text != RegExDefaultText) || ((RegEx.Text != String.Empty) && (TestBox.Text != String.Empty)))
             {

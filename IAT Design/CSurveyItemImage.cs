@@ -34,10 +34,10 @@ namespace IATClient
         }
         public override String MimeType { get { return "text/xml+" + typeof(CSurveyItemImage).ToString(); } }
         public static new String sMimeType { get { return "text/xml+" + typeof(CSurveyItemImage).ToString(); } }
-        public String OnlineFilename { get; set; } = String.Empty;
         private bool bIsLoading = false;
         public override bool IsImage { get { return true; } }
         public override bool IsQuestion { get { return false; } }
+        public int ResourceId { get; set; }
 
         public CSurveyItemImage()
         {
@@ -121,7 +121,7 @@ namespace IATClient
             Image img = SurveyImage.IImage.OriginalImage.Img;
             var memStream = new MemoryStream();
             img.Save(memStream, SurveyImage.IImage.OriginalImage.ImageFormat.Format);
-            writer.WriteElementString("ImageData", Convert.ToBase64String(memStream.ToArray()));
+            writer.WriteElementString("ResourceId", ResourceId.ToString());
             memStream.Dispose();
             Response.WriteXml(writer);
             writer.WriteEndElement();

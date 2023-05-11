@@ -1,4 +1,6 @@
-﻿using System;
+﻿using IATClient.ResultData;
+using java.util;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -22,16 +24,18 @@ namespace IATClient.IATConfig
         private bool _Is7Block;
         private String _RedirectOnComplete;
         private int _LeftResponseASCIIKeyCodeUpper, _RightResponseASCIIKeyCodeUpper, _LeftResponseASCIIKeyCodeLower, _RightResponseASCIIKeyCodeLower;
+        public int NumBeforeSurveys { get; private set; } = 0;
+        public int NumAfterSurveys { get; private set; } = 0;
         private int _ClientID = -1;
         public enum ERandomizationType { None, RandomOrder, SetNumberOfPresentations };
         private ERandomizationType _RandomizationType;
         private int _ErrorMarkID;
         private int _LeftKeyOutlineID, _RightKeyOutlineID;
         private bool _PrefixSelfAlternatingSurveys;
-        private List<IATSurvey> _BeforeSurveys, _AfterSurveys;
+//        public List<IATSurvey> BeforeSurveys { get; private set; } = new List<IATSurvey>();
+   //     public List<IATSurvey> AfterSurvey { get; set; } = new List<IATSurvey>();
         private IATLayout _Layout;
         private IATEventList _EventList;
-        //        private DisplayItemList _DisplayItems;
         private String _Name = String.Empty;
         private String _DataRetrievalPassword = "xxx";
         private List<DynamicSpecifier> _DynamicSpecifiers = new List<DynamicSpecifier>();
@@ -42,33 +46,15 @@ namespace IATClient.IATConfig
         private SHA512Managed SHA512 = new SHA512Managed();
         private ManualResetEvent IATImagesProcessed = new ManualResetEvent(false);
         public ManualResetEvent SlidesProcessed { get; private set; } = new ManualResetEvent(false);
+        public ManualResetEvent SurveyImagesProcessed { get; private set; } = new ManualResetEvent(false);
         public ImageContainer IATImages { get; private set; }
         public ImageContainer SlideImages { get; private set; }
+        public CUniqueResponse UniqueResponse { get; set; }
+        public UniqueResponseItem URI { get; private set; } = null;
 
+        public long UploadTimeMillis { get; set; }
 
-        public long UploadTimeMillis
-        {
-            get
-            {
-                return _UploadTimeMillis;
-            }
-            set
-            {
-                _UploadTimeMillis = value;
-            }
-        }
-
-        public String Name
-        {
-            get
-            {
-                return _Name;
-            }
-            set
-            {
-                _Name = value;
-            }
-        }
+        public String Name { get; set; }
 
         public int NumItems
         {
@@ -86,201 +72,40 @@ namespace IATClient.IATConfig
             }
         }
 
-        public String ServerDomain
-        {
-            get
-            {
-                return _ServerDomain;
-            }
-            set
-            {
-                _ServerDomain = value;
-            }
-        }
+        public String ServerDomain { get; set; }
 
-        public String ServerPath
-        {
-            get
-            {
-                return _ServerPath;
-            }
-            set
-            {
-                _ServerPath = value;
-            }
-        }
+        public String ServerPath { get; set; }
 
-        public int ServerPort
-        {
-            get
-            {
-                return _ServerPort;
-            }
-            set
-            {
-                _ServerPort = value;
-            }
-        }
+        public int ServerPort { get; set; }
 
-        public bool Is7Block
-        {
-            get
-            {
-                return _Is7Block;
-            }
-            set
-            {
-                _Is7Block = value;
-            }
-        }
+        public bool Is7Block { get; set; } = true;
 
-        public String RedirectOnComplete
-        {
-            get
-            {
-                return _RedirectOnComplete;
-            }
-            set
-            {
-                _RedirectOnComplete = value;
-            }
-        }
+        public String RedirectOnComplete { get; set; }
 
-        public int LeftResponseASCIIKeyCodeUpper
-        {
-            get
-            {
-                return _LeftResponseASCIIKeyCodeUpper;
-            }
-            set
-            {
-                _LeftResponseASCIIKeyCodeUpper = value;
-            }
-        }
+        public int LeftResponseASCIIKeyCodeUpper { get; set; }
 
-        public int RightResponseASCIIKeyCodeUpper
-        {
-            get
-            {
-                return _RightResponseASCIIKeyCodeUpper;
-            }
-            set
-            {
-                _RightResponseASCIIKeyCodeUpper = value;
-            }
-        }
+        public int RightResponseASCIIKeyCodeUpper { get; set; }
 
-        public int LeftResponseASCIIKeyCodeLower
-        {
-            get
-            {
-                return _LeftResponseASCIIKeyCodeLower;
-            }
-            set
-            {
-                _LeftResponseASCIIKeyCodeLower = value;
-            }
-        }
+        public int LeftResponseASCIIKeyCodeLower { get; set; }
 
-        public int RightResponseASCIIKeyCodeLower
-        {
-            get
-            {
-                return _RightResponseASCIIKeyCodeLower;
-            }
-            set
-            {
-                _RightResponseASCIIKeyCodeLower = value;
-            }
-        }
+        public int RightResponseASCIIKeyCodeLower { get; set; }
 
-        public ERandomizationType RandomizationType
-        {
-            get
-            {
-                return _RandomizationType;
-            }
-            set
-            {
-                _RandomizationType = value;
-            }
-        }
+        public ERandomizationType RandomizationType { get; set; }
 
-        public int ErrorMarkID
-        {
-            get
-            {
-                return _ErrorMarkID;
-            }
-            set
-            {
-                _ErrorMarkID = value;
-            }
-        }
+        public int ErrorMarkID { get; set; }
 
-        public int LeftKeyOutlineID
-        {
-            get
-            {
-                return _LeftKeyOutlineID;
-            }
-            set
-            {
-                _LeftKeyOutlineID = value;
-            }
-        }
+        public int LeftKeyOutlineID { get; set; }
 
-        public int RightKeyOutlineID
-        {
-            get
-            {
-                return _RightKeyOutlineID;
-            }
-            set
-            {
-                _RightKeyOutlineID = value;
-            }
-        }
+        public int RightKeyOutlineID { get; set; }
 
-        public bool PrefixSelfAlternatingSurveys
-        {
-            get
-            {
-                return _PrefixSelfAlternatingSurveys;
-            }
-            set
-            {
-                _PrefixSelfAlternatingSurveys = value;
-            }
-        }
+        public bool PrefixSelfAlternatingSurveys { get; set; }
 
-        public List<IATSurvey> BeforeSurveys
-        {
-            get
-            {
-                return _BeforeSurveys;
-            }
-        }
+        public List<IATClient.CSurvey> BeforeSurveys { get; set; } = new List<IATClient.CSurvey>();
+        public List<String> SurveyB64Xml { get; private set; } = new List<String>();
 
-        public List<IATSurvey> AfterSurveys
-        {
-            get
-            {
-                return _AfterSurveys;
-            }
-        }
+        public List<IATClient.CSurvey> AfterSurveys { get; set; } = new List<IATClient.CSurvey>();
 
-        public IATLayout Layout
-        {
-            get
-            {
-                return _Layout;
-            }
-            set
-            {
-                _Layout = value;
-            }
-        }
+        public IATLayout Layout { get; set; }
 
         public IATEventList EventList
         {
@@ -289,43 +114,8 @@ namespace IATClient.IATConfig
                 return _EventList;
             }
         }
-        /*
-        public DisplayItemList DisplayItems
-        {
-            get
-            {
-                return _DisplayItems;
-            }
-        }
 
-        
-        public ImageContainer DisplayItemImages
-        {
-            get
-            {
-                return _DisplayItemImages;
-            }
-        }
-        */
-        public bool HasUniqiueResponses
-        {
-            get
-            {
-                return _HasUniqueResponses;
-            }
-        }
-
-        public int ClientID
-        {
-            get
-            {
-                return _ClientID;
-            }
-            set
-            {
-                _ClientID = value;
-            }
-        }
+        public int ClientID { get; set; }
 
         public List<DynamicSpecifier> DynamicSpecifiers
         {
@@ -466,9 +256,6 @@ namespace IATClient.IATConfig
 
         protected ConfigFile()
         {
-            _BeforeSurveys = new List<IATSurvey>();
-            _AfterSurveys = new List<IATSurvey>();
-            //           _DisplayItems = new DisplayItemList();
             _EventList = new IATEventList();
             Layout = new IATLayout();
         }
@@ -484,12 +271,7 @@ namespace IATClient.IATConfig
         {
             IAT = iat;
             _Name = IAT.Name;
-            _BeforeSurveys = new List<IATSurvey>();
-            for (int ctr = 0; ctr < IAT.BeforeSurvey.Count; ctr++)
-                _BeforeSurveys.Add(new IATSurvey(IAT.BeforeSurvey[ctr], 0, IATSurvey.EType.BeforeSurvey));
-            _AfterSurveys = new List<IATSurvey>();
-            for (int ctr = 0; ctr < IAT.AfterSurvey.Count; ctr++)
-                _AfterSurveys.Add(new IATSurvey(IAT.AfterSurvey[ctr], IAT.BeforeSurvey.Count + 1 + ctr, IATSurvey.EType.AfterSurvey));
+            XmlSerializer surveySerializer = new XmlSerializer(typeof(IATConfig.IATSurvey));
             IATImages = new ImageContainer((DIBase di) =>
             {
                 var memStream = new MemoryStream();
@@ -517,11 +299,39 @@ namespace IATClient.IATConfig
                 memStream.Dispose();
                 return iImg;
             }, SlidesProcessed);
-            //            _DisplayItems = new DisplayItemList();
+            BeforeSurveys.AddRange(IAT.BeforeSurvey);
+            AfterSurveys.AddRange(IAT.AfterSurvey);
+            var surveyStream = new MemoryStream();
+            var b64Encode = new ToBase64Transform();
+            var surveyImageItems = new List<CSurveyItemImage>();
+            for (int ctr = 0; ctr < BeforeSurveys.Count + AfterSurveys.Count; ctr++)
+            {
+                var survey = (ctr < BeforeSurveys.Count) ? BeforeSurveys[ctr] : AfterSurveys[ctr - BeforeSurveys.Count];
+                Survey s = new Survey(survey.Name);
+                s.Timeout = (int)(survey.Timeout * 60000);
+                s.HasCaption = survey.Items[0].IsCaption;
+                if (s.HasCaption)
+                    s.SetCaption(survey.Items[0]);
+                s.SetItems(survey.Items.Where(si => si.ItemType == SurveyItemType.Item).ToArray());
+                s.NumItems = survey.Items.Where(si => (si.ItemType == SurveyItemType.Item) &&
+                    (si.Response.ResponseType != CResponse.EResponseType.Instruction)).Count();
+                var cStream = new CryptoStream(surveyStream, b64Encode, CryptoStreamMode.Write);
+                surveySerializer.Serialize(cStream, s);
+                cStream.FlushFinalBlock();
+                SurveyB64Xml.Add(System.Text.Encoding.UTF8.GetString(surveyStream.ToArray()));
+                surveyStream.Dispose();
+                foreach (var si in survey.Items.Cast<CSurveyItemImage>().Where(item => item is CSurveyItemImage)) {
+                    IATImages.AddDI(si.SurveyImage);
+                    surveyImageItems.Add(si);
+                }
+            }
             _EventList = new IATEventList();
             Layout = new IATLayout(CIAT.SaveFile.Layout);
             if (iat.UniqueResponse.ItemNum != -1)
+            {
                 _HasUniqueResponses = true;
+                URI = new UniqueResponseItem(iat.UniqueResponse);
+            }
             _PrefixSelfAlternatingSurveys = true; // AlternationGroup.PrefixSelfAlternatingSurveys;
             _RandomizationType = ERandomizationType.SetNumberOfPresentations;
             _Is7Block = true; // IAT.Is7Block;
@@ -559,6 +369,8 @@ namespace IATClient.IATConfig
             SlideImages.AddDI(null);
             IATImages.AddDI(null);
             IATImagesProcessed.WaitOne();
+            foreach (var si in surveyImageItems)
+                si.ResourceId = IATImages.GetImage(si.SurveyImage.IImage.URI).Indexes[0];
         }
 
 
@@ -569,18 +381,14 @@ namespace IATClient.IATConfig
 
         public void WriteXml(XmlWriter writer)
         {
-            writer.WriteStartElement("ConfigFile");
-            writer.WriteAttributeString("NumBeforeSurveys", BeforeSurveys.Count.ToString());
-            writer.WriteAttributeString("NumAfterSurveys", AfterSurveys.Count.ToString());
-            writer.WriteAttributeString("HasUniqueResponse", _HasUniqueResponses.ToString().ToLower());
-            writer.WriteElementString("IATName", Name);
+            writer.WriteStartElement("ConfigFileBean");
+           writer.WriteElementString("IATName", Name);
             writer.WriteElementString("ServerDomain", ServerDomain);
             writer.WriteElementString("ServerPath", ServerPath);
             writer.WriteElementString("ServerPort", ServerPort.ToString());
-            writer.WriteElementString("UploadTimeMillis", UploadTimeMillis.ToString());
             writer.WriteElementString("ClientID", ClientID.ToString());
             writer.WriteElementString("NumIATItems", NumIATItems.ToString());
-            writer.WriteElementString("Is7Block", Is7Block.ToString());
+            writer.WriteElementString("IsSevenBlock", Is7Block.ToString());
             writer.WriteElementString("RedirectOnComplete", RedirectOnComplete.ToString());
             writer.WriteElementString("LeftResponseASCIIKeyCodeUpper", LeftResponseASCIIKeyCodeUpper.ToString());
             writer.WriteElementString("RightResponseASCIIKeyCodeUpper", RightResponseASCIIKeyCodeUpper.ToString());
@@ -593,22 +401,38 @@ namespace IATClient.IATConfig
             writer.WriteElementString("PrefixSelfAlternatingSurveys", PrefixSelfAlternatingSurveys.ToString());
             foreach (DynamicSpecifier ds in DynamicSpecifiers)
                 ds.WriteXml(writer);
-            for (int ctr = 0; ctr < BeforeSurveys.Count; ctr++)
-                BeforeSurveys[ctr].WriteXml(writer);
-            for (int ctr = 0; ctr < AfterSurveys.Count; ctr++)
-                AfterSurveys[ctr].WriteXml(writer);
+            foreach (var survey in IAT.BeforeSurvey)
+                survey.WriteXml(writer);
+            foreach (var survey in IAT.AfterSurvey)
+                survey.WriteXml(writer);
+            foreach (var b64Survey in SurveyB64Xml)
+                writer.WriteElementString("SurveyB64Xml", b64Survey);
+            if (UniqueResponse != null)
+            {
+                var uri = new UniqueResponseItem(UniqueResponse);
+                uri.WriteXml(writer);
+            }
             Layout.WriteXml(writer);
             EventList.WriteXml(writer);
             IATImages.WriteXml(writer);
             writer.WriteEndElement();
         }
 
+        public IATConfig.IATSurvey GetSurvey(int ndx)
+        {
+            XmlSerializer ser = new XmlSerializer(typeof(IATConfig.IATSurvey));
+            MemoryStream memStream = new MemoryStream(Convert.FromBase64String(SurveyB64Xml[ndx]));
+            var survey = (IATConfig.IATSurvey)ser.Deserialize(memStream);
+            memStream.Dispose();
+            return survey;
+        }
+
         public void ReadXml(XmlReader reader)
         {
             if (Convert.ToBoolean(reader["HasException"]))
                 throw new CXmlSerializationException(reader);
-            int nBeforeSurveys = Convert.ToInt32(reader["NumBeforeSurveys"]);
-            int nAfterSurveys = Convert.ToInt32(reader["NumAfterSurveys"]);
+             NumBeforeSurveys = Convert.ToInt32(reader["NumBeforeSurveys"]);
+            NumAfterSurveys = Convert.ToInt32(reader["NumAfterSurveys"]);
             _HasUniqueResponses = Convert.ToBoolean(reader["HasUniqueResponse"]);
             reader.ReadStartElement();
             Name = reader.ReadElementString("IATName");
@@ -633,15 +457,13 @@ namespace IATClient.IATConfig
             DynamicSpecifiers.Clear();
             while (reader.Name == "DynamicSpecifier")
                 DynamicSpecifiers.Add(DynamicSpecifier.CreateFromXml(reader));
-            BeforeSurveys.Clear();
-            AfterSurveys.Clear();
+            SurveyB64Xml.Clear();
             while (reader.Name == "IATSurvey")
+                SurveyB64Xml.Add(reader.ReadElementString("IATSurvey"));
+            if (reader.Name == "UniqueResponse")
             {
-                IATSurvey survey = IATSurvey.GetIATSurvey(reader);
-                if (survey.SurveyType == IATSurvey.EType.BeforeSurvey)
-                    BeforeSurveys.Add(survey);
-                else
-                    AfterSurveys.Add(survey);
+                URI = new UniqueResponseItem();
+                URI.ReadXml(reader);
             }
             Layout.ReadXml(reader);
             EventList.ReadXml(reader);
@@ -654,12 +476,14 @@ namespace IATClient.IATConfig
         }
     }
 
-    class UniqueResponseItem
+    public class UniqueResponseItem
     {
         private List<String> UniqueResponses = new List<String>();
         private String SurveyName;
         private int ItemNum;
         private bool Additive;
+
+        public UniqueResponseItem() { } 
 
         public UniqueResponseItem(CUniqueResponse resp)
         {
@@ -669,6 +493,31 @@ namespace IATClient.IATConfig
             SurveyName = exp.Replace(CIAT.SaveFile.GetSurvey(resp.SurveyUri).Name, "");
             if (!Additive)
                 UniqueResponses.AddRange(resp.Values);
+        }
+
+        public void ReadXml(XmlReader reader)
+        {
+            if (reader.Name != "UniqueResponse")
+                return;
+            reader.ReadStartElement();
+            Additive = Convert.ToBoolean(reader.GetAttribute("Additive"));
+            SurveyName = reader.ReadElementString("SurveyName");
+            ItemNum = Convert.ToInt32(reader.ReadElementString("ItemNum"));
+            UniqueResponses.Clear();
+            while (reader.Name == "Value")
+                UniqueResponses.Add(reader.ReadElementString("Value"));
+            reader.ReadEndElement();
+        }
+
+        public void WriteXml(XmlWriter writer)
+        {
+            writer.WriteStartElement("UniqueResponse");
+            writer.WriteAttributeString("Additive", Additive.ToString());
+            writer.WriteElementString("SurveyName", SurveyName);
+            writer.WriteElementString("ItemNum", ItemNum.ToString());
+            foreach (String val in UniqueResponses)
+                writer.WriteElementString("Value", val);
+            writer.WriteEndElement();
         }
 
         public void WriteXmlDocument(XmlWriter writer)

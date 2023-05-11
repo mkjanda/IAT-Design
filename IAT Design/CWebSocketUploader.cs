@@ -84,138 +84,27 @@ namespace IATClient
             MainForm = mainForm;
         }
 
-        private void ProcessSurveys(String URL, int port)
+        private void ConstructDeploymentStream()
         {
-            Surveys.Clear();
-            SASurveys.Clear();
-            int surveyImgCtr = 0;
-            for (int ctr1 = 0; ctr1 < IAT.BeforeSurvey.Count; ctr1++)
-            {
-                // store the schema-less XML used by the XSLT code
-                MemoryStream beforeSurveyStream = new MemoryStream();
-                XmlTextWriter xmlWriter = new XmlTextWriter(beforeSurveyStream, Encoding.Unicode);
-                xmlWriter.WriteStartDocument();
-                xmlWriter.WriteStartElement("Survey");
-                xmlWriter.WriteAttributeString("Type", "Before");
-                xmlWriter.WriteAttributeString("TimeoutMillis", (IAT.BeforeSurvey[ctr1].Timeout * 60000).ToString());
-                xmlWriter.WriteAttributeString("UploadTimeMillis", UploadTimeMillis.ToString());
-                if (IAT.UniqueResponse.SurveyUri == null)
-                    xmlWriter.WriteAttributeString("UniqueResponseItem", "-1");
-                else if (IAT.UniqueResponse.SurveyUri.Equals(IAT.BeforeSurvey[ctr1].URI))
-                    xmlWriter.WriteAttributeString("UniqueResponseItem", IAT.UniqueResponse.ItemNum.ToString());
-                else
-                    xmlWriter.WriteAttributeString("UniqueResponseItem", "-1");
-                xmlWriter.WriteElementString("IAT", IATName);
-                xmlWriter.WriteElementString("FileName", IAT.BeforeSurvey[ctr1].FileNameBase);
-                xmlWriter.WriteElementString("SurveyName", IAT.BeforeSurvey[ctr1].Name);
-                for (int ctr2 = 0; ctr2 < IAT.BeforeSurvey[ctr1].Items.Count; ctr2++)
-                {
-                    if (IAT.BeforeSurvey[ctr1].Items[ctr2].ItemType == SurveyItemType.SurveyImage)
-                    {
-                        Images.IImageMedia imgMedia = (IAT.BeforeSurvey[ctr1].Items[ctr2] as CSurveyItemImage).SurveyImage.IImage.OriginalImage;
-                        MemoryStream memStream = new MemoryStream();
-                        System.Drawing.Image img = imgMedia.Img;
-                        img.Save(memStream, imgMedia.ImageFormat.Format);
-                        img.Dispose();
-                        (IAT.BeforeSurvey[ctr1].Items[ctr2] as CSurveyItemImage).OnlineFilename = String.Format("survey-image{0}.{1}", ++surveyImgCtr, imgMedia.FileExtension);
-                        SurveyImages.Add(new Tuple<String, MemoryStream>(String.Format("survey-image{0}.{1}", surveyImgCtr, imgMedia.FileExtension), memStream));
-                    }
-                    IAT.BeforeSurvey[ctr1].Items[ctr2].WriteXml(xmlWriter);
-                }
-                xmlWriter.WriteEndElement();
-                xmlWriter.WriteEndDocument();
-                xmlWriter.Flush();
-                Surveys.Add(beforeSurveyStream);
-
-                // store the schema-ed XML used for result file processing
-                beforeSurveyStream = new MemoryStream();
-                xmlWriter = new XmlTextWriter(beforeSurveyStream, Encoding.Unicode);
-                Survey s = new Survey(IAT.BeforeSurvey[ctr1].Name);
-                s.Timeout = (int)(IAT.BeforeSurvey[ctr1].Timeout * 60000);
-                s.HasCaption = IAT.BeforeSurvey[ctr1].Items[0].IsCaption;
-                if (s.HasCaption)
-                    s.SetCaption(IAT.BeforeSurvey[ctr1].Items[0]);
-                s.SetItems(IAT.BeforeSurvey[ctr1].Items.Where(si => si.ItemType == SurveyItemType.Item).ToArray());
-                s.NumItems = IAT.BeforeSurvey[ctr1].Items.Where(si => (si.ItemType == SurveyItemType.Item) &&
-                    (si.Response.ResponseType != CResponse.EResponseType.Instruction)).Count();
-                XmlSerializer ser = new XmlSerializer(typeof(Survey));
-                ser.Serialize(xmlWriter, s);
-                xmlWriter.Flush();
-                SASurveys.Add(beforeSurveyStream);
-            }
-            for (int ctr1 = 0; ctr1 < IAT.AfterSurvey.Count; ctr1++)
-            {
-                // store the schema-less XML used by the XSLT code
-                MemoryStream afterSurveyStream = new MemoryStream();
-                XmlTextWriter xmlWriter = new XmlTextWriter(afterSurveyStream, Encoding.Unicode);
-                xmlWriter.WriteStartDocument();
-                xmlWriter.WriteStartElement("Survey");
-                xmlWriter.WriteAttributeString("Type", "Before");
-                xmlWriter.WriteAttributeString("TimeoutMillis", (IAT.BeforeSurvey[ctr1].Timeout * 60000).ToString());
-                xmlWriter.WriteAttributeString("UploadTimeMillis", UploadTimeMillis.ToString());
-                if (IAT.UniqueResponse.SurveyUri == null)
-                    xmlWriter.WriteAttributeString("UniqueResponseItem", "-1");
-                else if (IAT.UniqueResponse.SurveyUri.Equals(IAT.BeforeSurvey[ctr1].URI))
-                    xmlWriter.WriteAttributeString("UniqueResponseItem", IAT.UniqueResponse.ItemNum.ToString());
-                else
-                    xmlWriter.WriteAttributeString("UniqueResponseItem", "-1");
-                xmlWriter.WriteElementString("IAT", IATName);
-                xmlWriter.WriteElementString("FileName", IAT.BeforeSurvey[ctr1].FileNameBase);
-                xmlWriter.WriteElementString("SurveyName", IAT.BeforeSurvey[ctr1].Name);
-                for (int ctr2 = 0; ctr2 < IAT.AfterSurvey[ctr1].Items.Count; ctr2++)
-                {
-                    if (IAT.AfterSurvey[ctr1].Items[ctr2].ItemType == SurveyItemType.SurveyImage)
-                    {
-                        Images.IImageMedia imgMedia = (IAT.AfterSurvey[ctr1].Items[ctr2] as CSurveyItemImage).SurveyImage.IImage.OriginalImage;
-                        MemoryStream memStream = new MemoryStream();
-                        System.Drawing.Image img = imgMedia.Img;
-                        img.Save(memStream, imgMedia.ImageFormat.Format);
-                        img.Dispose();
-                        (IAT.AfterSurvey[ctr1].Items[ctr2] as CSurveyItemImage).OnlineFilename = String.Format("survey-image{0}.{1}", ++surveyImgCtr, imgMedia.FileExtension);
-                        SurveyImages.Add(new Tuple<String, MemoryStream>(String.Format("survey-image{0}.{1}", surveyImgCtr, imgMedia.FileExtension), memStream));
-                    }
-                }
-                xmlWriter.WriteEndElement();
-                xmlWriter.WriteEndDocument();
-                xmlWriter.Flush();
-                Surveys.Add(afterSurveyStream);
-
-                // store the schema-ed XML used for result file processing
-                afterSurveyStream = new MemoryStream();
-                xmlWriter = new XmlTextWriter(afterSurveyStream, Encoding.Unicode);
-                Survey s = new Survey(IAT.AfterSurvey[ctr1].Name);
-                s.Timeout = (int)(IAT.AfterSurvey[ctr1].Timeout * 60000);
-                s.HasCaption = IAT.AfterSurvey[ctr1].Items[0].IsCaption;
-                if (s.HasCaption)
-                    s.SetCaption(IAT.AfterSurvey[ctr1].Items[0]);
-                s.SetItems(IAT.AfterSurvey[ctr1].Items.Where(si => si.ItemType == SurveyItemType.Item).ToArray());
-                s.NumItems = IAT.AfterSurvey[ctr1].Items.Where(si => (si.ItemType == SurveyItemType.Item) &&
-                    (si.Response.ResponseType != CResponse.EResponseType.Instruction)).Count();
-                XmlSerializer ser = new XmlSerializer(typeof(Survey));
-                ser.Serialize(xmlWriter, s);
-                xmlWriter.Flush();
-                SASurveys.Add(afterSurveyStream);
-            }
-        }
-
-        private void BuildFileManifest()
-        {
-            Manifest = new Manifest();
-            Manifest.ClientId = ClientID;
+            IATConfig.ConfigFile CF = new IATConfig.ConfigFile(CIAT.SaveFile.IAT);
             CF.UploadTimeMillis = UploadTimeMillis;
             CF.ClientID = ClientID;
             ConfigFileXML = new MemoryStream();
             XmlTextWriter xWriter = new XmlTextWriter(ConfigFileXML, Encoding.Unicode);
             xWriter.WriteStartDocument();
             CF.WriteXml(xWriter);
-            xWriter.WriteEndDocument();
             xWriter.Flush();
+        }
+
+        private void BuildFileManifest()
+        {
+            Manifest = new Manifest();
+            Manifest.ClientId = ClientID;
             Manifest.AddFile(new ManifestFile(IATName, ConfigFileXML.Length)
             {
                 ResourceType = ManifestFile.EResourceType.DeploymentFile,
-                ResourceId = 1
+                ResourceId = 0
             });
-            ProcessSurveys(Properties.Resources.sDefaultIATServerDomain, Convert.ToInt32(Properties.Resources.sDefaultIATServerPort));
             String surveyFNameBase;
             Regex r = new Regex("[^a-zaA-Z0-9]");
             for (int ctr2 = 0; ctr2 < Surveys.Count; ctr2++)
@@ -224,11 +113,10 @@ namespace IATClient
                     surveyFNameBase = IAT.BeforeSurvey[ctr2].Name;
                 else
                     surveyFNameBase = IAT.AfterSurvey[ctr2 - IAT.BeforeSurvey.Count].Name;
-//                surveyFNameBase = r.Replace(surveyFNameBase, "");
                 Manifest.AddFile(new ManifestFile(surveyFNameBase, Surveys[ctr2].Length)
                 {
                     ResourceType = ManifestFile.EResourceType.DeploymentFile,
-                    ResourceId = 2 * ctr2 + 2
+                    ResourceId = ctr2 + 1
                 });
                 Manifest.AddFile(new ManifestFile(String.Format("{0} Data Retrieval", surveyFNameBase), SASurveys[ctr2].Length)
                 {
@@ -670,10 +558,10 @@ namespace IATClient
             CF.ServerDomain = Properties.Resources.sDefaultIATServerDomain;
             CF.ServerPath = Properties.Resources.sDefaultIATServerPath;
             CF.ServerPort = Convert.ToInt32(Properties.Resources.sDefaultIATServerPort);
-            if (CF.HasUniqiueResponses)
-            {
+            if (CIAT.SaveFile.IAT.UniqueResponse.ItemNum != -1) { 
+                CF.UniqueResponse = CIAT.SaveFile.IAT.UniqueResponse;
                 UniqueRespXML = new MemoryStream();
-                XmlWriter xWriter = new XmlTextWriter(UniqueRespXML, Encoding.UTF8);
+                XmlWriter xWriter = new XmlTextWriter(UniqueRespXML, Encoding.Unicode);
                 IATConfig.UniqueResponseItem uri = new IATConfig.UniqueResponseItem(IAT.UniqueResponse);
                 uri.WriteXmlDocument(xWriter);
                 xWriter.Flush();

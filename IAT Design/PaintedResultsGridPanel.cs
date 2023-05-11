@@ -25,25 +25,26 @@ namespace IATClient
             int widthWithoutBounded = 0;
             int widthWithBounded = 0;
             int maxWidth = 0;
-            for (int ctr = 0; ctr < ResultData.IATConfiguration.BeforeSurveys.Count; ctr++)
+            for (int ctr = 0; ctr < ResultData.IATConfiguration.NumBeforeSurveys; ctr++)
             {
+                var survey = ResultData.IATConfiguration.GetSurvey(ctr);
                 int[][] respWidths = new int[ResultData.IATResults.NumResultSets][];
                 for (int ctr2 = 0; ctr2 < ResultData.IATResults.NumResultSets; ctr2++)
                 {
-                    respWidths[ctr2] = new int[ResultData.IATResults[ctr2].BeforeSurveys[ctr].NumItems];
+                    respWidths[ctr2] = new int[survey.NumItems];
                     //        respWithoutBoundedWidths = new int[ResultData.IATResults[ctr2].BeforeSurveys[ctr].NumSurveyResults];
-                    for (int ctr3 = 0; ctr3 < ResultData.IATConfiguration.BeforeSurveys[ctr].NumItems; ctr3++)
+                    for (int ctr3 = 0; ctr3 < survey.NumItems; ctr3++)
                         respWidths[ctr2][ctr3] = TextRenderer.MeasureText(ResultData.IATResults[ctr2].BeforeSurveys[ctr][ctr3].Value, DataFont).Width + CellPadding.Horizontal;
                 }
                 maxWidth = 0;
-                for (int ctr2 = 0; ctr < ResultData.IATConfiguration.BeforeSurveys[ctr].NumItems; ctr2++)
+                for (int ctr2 = 0; ctr < ResultData.IATConfiguration.GetSurvey(ctr).NumItems; ctr2++)
                 {
                     for (int ctr3 = 0; ctr3 < ResultData.IATResults.NumResultSets; ctr3++)
                     {
                         if (respWidths[ctr3][ctr2] > maxWidth)
                             maxWidth = respWidths[ctr3][ctr2];
                     }
-                    if (ResultData.IATConfiguration.BeforeSurveys[ctr].ResponseTypes[ctr2] != CResponse.EResponseType.BoundedLength)
+                    if (survey.ResponseTypes[ctr2] != CResponse.EResponseType.BoundedLength)
                         widthWithoutBounded += maxWidth;
                     widthWithBounded += maxWidth;
                     maxWidth = 0;
@@ -59,25 +60,26 @@ namespace IATClient
             }
             widthWithBounded += maxWidth;
             widthWithoutBounded += maxWidth;
-            for (int ctr = 0; ctr < ResultData.IATConfiguration.AfterSurveys.Count; ctr++)
+            for (int ctr = 0; ctr < ResultData.IATConfiguration.NumAfterSurveys; ctr++)
             {
+                var survey = ResultData.IATConfiguration.GetSurvey(ResultData.IATConfiguration.NumBeforeSurveys + ctr);
                 int[][] respWidths = new int[ResultData.IATResults.NumResultSets][];
                 for (int ctr2 = 0; ctr2 < ResultData.IATResults.NumResultSets; ctr2++)
                 {
                     respWidths[ctr2] = new int[ResultData.IATResults[ctr2].AfterSurveys[ctr].NumItems];
                     //      respWithoutBoundedWidths = new int[ResultData.IATResults[ctr2].AfterSurveys[ctr].NumSurveyResults];
-                    for (int ctr3 = 0; ctr3 < ResultData.IATConfiguration.AfterSurveys[ctr].NumItems; ctr3++)
+                    for (int ctr3 = 0; ctr3 < survey.NumItems; ctr3++)
                         respWidths[ctr2][ctr3] = TextRenderer.MeasureText(ResultData.IATResults[ctr2].AfterSurveys[ctr][ctr3].Value, DataFont).Width + CellPadding.Horizontal;
                 }
                 maxWidth = 0;
-                for (int ctr2 = 0; ctr < ResultData.IATConfiguration.AfterSurveys[ctr].NumItems; ctr2++)
+                for (int ctr2 = 0; ctr < survey.NumItems; ctr2++)
                 {
                     for (int ctr3 = 0; ctr3 < ResultData.IATResults.NumResultSets; ctr3++)
                     {
                         if (respWidths[ctr3][ctr2] > maxWidth)
                             maxWidth = respWidths[ctr3][ctr2];
                     }
-                    if (ResultData.IATConfiguration.AfterSurveys[ctr].ResponseTypes[ctr2] != CResponse.EResponseType.BoundedLength)
+                    if (survey.ResponseTypes[ctr2] != CResponse.EResponseType.BoundedLength)
                         widthWithoutBounded += maxWidth;
                     widthWithBounded += maxWidth;
                     maxWidth = 0;

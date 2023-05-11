@@ -590,41 +590,21 @@ namespace IATClient
             s.Ordinality = CSurvey.EOrdinality.Before;
             _BeforeSurvey.Add(s.URI);
         }
-        /*
-                public int GetBlockIndex(CIATBlock block)
-                {
-                    int ctr = 0;
-                    int nBlockCtr = 0;
-                    while (ctr < Contents.Count)
-                    {
-                        IContentsItem cItem = Contents[ctr++];
-                        if (cItem.Type == ContentsItemType.IATBlock)
-                        {
-                            nBlockCtr++;
-                            if (block == (CIATBlock)cItem)
-                                return nBlockCtr;
-                        }
-                    }
-                    return -1;
-                }
+        
+        public int IndexInTest
+        {
+            get
+            {
+                return this.BeforeSurvey.Count;
+            }
+        }
 
-                public int GetInstructionBlockIndex(CInstructionBlock block)
-                {
-                    int ctr = 0;
-                    int nBlockCtr = 0;
-                    while (ctr < Contents.Count)
-                    {
-                        IContentsItem cItem = Contents[ctr++];
-                        if (cItem.Type == ContentsItemType.InstructionBlock)
-                        {
-                            nBlockCtr++;
-                            if (block == (CInstructionBlock)cItem)
-                                return nBlockCtr;
-                        }
-                    }
-                    return -1;
-                }
-        */
+        public int GetIndexInTest(CSurvey s)
+        {
+            if (BeforeSurvey.Contains(s))
+                return BeforeSurvey.IndexOf(s);
+            return BeforeSurvey.Count + 1 + AfterSurvey.IndexOf(s);
+        }
 
         public List<CFontFile.FontItem> UtilizedFonts
         {
