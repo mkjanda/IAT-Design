@@ -8,7 +8,7 @@ namespace IATClient
 {
     public abstract class DIImage : DIBase
     {
-        public static readonly int MaxFileSize = 10485760;
+        public static readonly int MaxFileSize = 125822912; 
         public String Description { get; set; } = String.Empty;
 
         private void IImageChanged(Images.ImageChangedEventArgs args)

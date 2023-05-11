@@ -267,62 +267,6 @@ namespace IATClient
             }
         }
 
-        public virtual CResponseObject MakeScored()
-        {
-            if (IsScored)
-                return DefinedResponse;
-
-            _IsScored = true;
-
-            switch (Response.ResponseType)
-            {
-                case CResponse.EResponseType.Boolean:
-                    _DefinedResponse = new CBoolResponseObject(CResponseObject.EType.correct, this);
-                    break;
-
-                case CResponse.EResponseType.BoundedLength:
-                    _DefinedResponse = new CBoundedLengthResponseObject(CResponseObject.EType.correct, this);
-                    break;
-
-                case CResponse.EResponseType.BoundedNum:
-                    _DefinedResponse = new CBoundedNumResponseObject(CResponseObject.EType.correct, this);
-                    break;
-
-                case CResponse.EResponseType.Date:
-                    _DefinedResponse = new CDateResponseObject(CResponseObject.EType.correct, this);
-                    break;
-
-                case CResponse.EResponseType.FixedDig:
-                    _DefinedResponse = new CFixedDigitResponseObject(CResponseObject.EType.correct, this);
-                    break;
-
-                case CResponse.EResponseType.Instruction:
-                    _DefinedResponse = null;
-                    break;
-
-                case CResponse.EResponseType.Likert:
-                    _DefinedResponse = new CLikertResponseObject(CResponseObject.EType.correct, this);
-                    break;
-
-                case CResponse.EResponseType.MultiBoolean:
-                    _DefinedResponse = new CMultiBooleanResponseObject(CResponseObject.EType.correct, this);
-                    break;
-
-                case CResponse.EResponseType.Multiple:
-                    _DefinedResponse = new CMultipleResponseObject(CResponseObject.EType.correct, this);
-                    break;
-
-                case CResponse.EResponseType.RegEx:
-                    _DefinedResponse = new CRegExResponseObject(CRegExResponseObject.EType.correct, this);
-                    break;
-
-                case CResponse.EResponseType.WeightedMultiple:
-                    _DefinedResponse = new CWeightedMultipleResponseObject(CResponseObject.EType.correct, this);
-                    break;
-            }
-            return DefinedResponse;
-        }
-
         protected void CreateDummyResponse()
         {
             DummyResponse = null;

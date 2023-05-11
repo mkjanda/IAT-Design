@@ -152,7 +152,7 @@ namespace IATClient
             {
                 if (new FileInfo(dlg.FileName).Length > DIImage.MaxFileSize)
                 {
-                    MessageBox.Show("Only pictures of 4MB or smaller are allowed.", "File Too Large");
+                    MessageBox.Show("Only pictures of 12MB or smaller are allowed.", "File Too Large");
                     return;
                 }
                 StimulusImage.Text = (DefinedItem.Stimulus as DIStimulusImage).Description;

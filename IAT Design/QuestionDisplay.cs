@@ -459,7 +459,7 @@ namespace IATClient
         {
             if (QuestionEdit == null)
                 return;
-            QuestionEdit.Width = this.Width - Padding.Horizontal - QuestionEditPadding.Horizontal;
+            QuestionEdit.Width = this.Width - Padding.Horizontal - QuestionEditPadding.Horizontal - QuestionEditMargin.Horizontal;
             QuestionEdit.Font = DisplayFont;
             Size szQ = TextRenderer.MeasureText((QuestionEdit.Text == String.Empty) ? "Qy" : QuestionEdit.Text, DisplayFont, new Size(Size.Width - QuestionEdit.Padding.Horizontal, 0),
                 TextFormatFlags.TextBoxControl | TextFormatFlags.WordBreak);
@@ -475,8 +475,8 @@ namespace IATClient
             bool resize = (nLines != QuestionLines);
             QuestionLines = nLines;
             //                QuestionEdit.Height = szQ.Height; 
-            QuestionEdit.Height = TextRenderer.MeasureText(QuestionEdit.Text, DisplayFont, new Size(QuestionEdit.Width, 0),
-                TextFormatFlags.WordBreak | TextFormatFlags.TextBoxControl).Height + QuestionEditPadding.Vertical;
+            QuestionEdit.Height = TextRenderer.MeasureText((QuestionEdit.Text == String.Empty) ? "Qy" : QuestionEdit.Text, DisplayFont, new Size(QuestionEdit.Width, 0),
+                TextFormatFlags.WordBreak | TextFormatFlags.TextBoxControl).Height + QuestionEditPadding.Top;
 
 
             //       if (resize)
@@ -501,11 +501,17 @@ namespace IATClient
                 this.Invoke(new Action(() =>
                 {
                     this.Width = Parent.Width - QuestionEditMargin.Horizontal;
+                    QuestionEdit.Width = Parent.Width - QuestionEditMargin.Horizontal - QuestionEditPadding.Horizontal - Padding.Horizontal;
                     RecalcChildren = recalcChildren ? doRecalcChildren : doNotRecalcChildren;
                     QuestionEdit.Font = DisplayFont;
-                    if (Controls.Contains(ResponseEdit) && ResponseEdit.IsCollapsed)
-                        Controls.Remove(ResponseEdit);
-                    else if (!Controls.Contains(ResponseEdit))
+                    if (ResponseEdit.IsCollapsed)
+                    {
+                        if (Controls.Contains(ResponseEdit))
+                            Controls.Remove(ResponseEdit);
+                        this.Height = Padding.Vertical + QuestionEdit.Height + QuestionEditMargin.Vertical + QuestionEditPadding.Vertical;
+                        return;
+                    }
+                    else if (!Controls.Contains(ResponseEdit) && (!ResponseEdit.IsCollapsed))
                         Controls.Add(ResponseEdit);
                     SizeQuestionEdit(false);
                     if (RecalcChildren.Equals(doRecalcChildren))
@@ -544,7 +550,7 @@ namespace IATClient
             Brush backBr = new SolidBrush(this.BackColor);
             br = new SolidBrush(outlineColor);
             pen = new Pen(br);
-            e.Graphics.DrawRectangle(pen, new Rectangle(0, Padding.Top + CollapseButton.Size.Height >> 1, this.Size.Width - 1, this.Size.Height - Padding.Top - CollapseButton.Size.Height));
+            e.Graphics.DrawRectangle(pen, new Rectangle(0, Padding.Top + CollapseButton.Size.Height >> 1, this.Size.Width - Padding.Right, this.Size.Height - Padding.Top - CollapseButton.Size.Height));
             if (bFormatHover || bFormatting)
                 e.Graphics.FillRectangle(Brushes.CornflowerBlue, FormatRect);
             else

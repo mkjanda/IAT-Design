@@ -144,7 +144,7 @@ namespace IATClient
             CancelButton.Click += new EventHandler(Cancel_Click);
             PurchaseInitiation initPurchase = new PurchaseInitiation();
             MemoryStream memStream = new MemoryStream();
-            XmlWriter xWriter = new XmlTextWriter(memStream, Encoding.UTF8);
+            XmlWriter xWriter = new XmlTextWriter(memStream, Encoding.Unicode);
             xWriter.WriteStartDocument();
             initPurchase.WriteXml(xWriter);
             xWriter.WriteEndDocument();
@@ -458,7 +458,7 @@ namespace IATClient
             request.KeepAlive = false;
             request.ContentType = "text/xml; charset=utf-8";
             MemoryStream memStream = new MemoryStream();
-            XmlWriter xWriter = new XmlTextWriter(memStream, Encoding.UTF8);
+            XmlWriter xWriter = new XmlTextWriter(memStream, Encoding.Unicode);
             xWriter.WriteStartDocument();
             pOrder.WriteXml(xWriter);
             xWriter.Flush();

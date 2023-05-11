@@ -9,8 +9,9 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Xml;
 using System.Xml.Linq;
+using System.Net;
 using Saxon.Api;
-
+using IATClient.IATConfig;
 
 namespace IATClient
 {
@@ -274,7 +275,7 @@ namespace IATClient
             }
             else
                 Index = Convert.ToInt32(xDoc.Root.Attribute("Index").Value);
-            _IndexInContents = Convert.ToInt32(xDoc.Root.Attribute("IndexInContents").Value);
+//            _IndexInContents = Convert.ToInt32(xDoc.Root.Attribute("IndexInContents").Value);
             Ordinality = (CSurvey.EOrdinality)Enum.Parse(typeof(CSurvey.EOrdinality), xDoc.Root.Attribute("Ordinality").Value);
             Timeout = Convert.ToDecimal(xDoc.Root.Attribute("Timeout").Value.ToString());
             if (CVersion.Compare(CIAT.SaveFile.Version, new CVersion("1.1.0.14")) >= 0)
@@ -404,15 +405,11 @@ namespace IATClient
                 CIAT.SaveFile.IAT.InsertAfterSurvey(this, InsertionNdx);
         }
 
-        protected int _IndexInContents = -1;
-
         public int IndexInContents
         {
             get
             {
-                if (CIAT.SaveFile.IAT.Contents.Contains(this))
-                    return CIAT.SaveFile.IAT.Contents.IndexOf(this);
-                return _IndexInContents;
+                return CIAT.SaveFile.IAT.GetIndexInTest(this);
             }
         }
 
@@ -465,6 +462,31 @@ namespace IATClient
             SHDocVw.WebBrowser xBrowser = (SHDocVw.WebBrowser)SurveyPreview.ActiveXInstance;
         }
 
+        public void WriteXml(XmlWriter xWriter)
+        {
+            xWriter.WriteStartElement("Survey");
+            xWriter.WriteAttributeString("TimeoutMillis", (Timeout * 60000).ToString());
+            if (CIAT.SaveFile.IAT.UniqueResponse.SurveyUri != null)
+            {
+                if (CIAT.SaveFile.IAT.UniqueResponse.SurveyUri.Equals(this.URI))
+                    xWriter.WriteAttributeString("UniqueResponseItem", CIAT.SaveFile.IAT.UniqueResponse.ItemNum.ToString());
+                else
+                    xWriter.WriteAttributeString("UniqueResponseItem", "-1");
+            }
+            else
+                xWriter.WriteAttributeString("UniqueResponseItem", "-1");
+            xWriter.WriteElementString("IAT", CIAT.SaveFile.IAT.Name);
+            xWriter.WriteElementString("FileName", WebUtility.UrlEncode(Name + ".xml"));
+            xWriter.WriteElementString("SurveyName", Name);
+            xWriter.WriteElementString("InitialPosition", IndexInContents.ToString());
+            xWriter.WriteElementString("AlternationGroup", (AlternationGroup == null) ? "0" : AlternationGroup.ToString());
+            foreach (var si in Items)
+            {
+                si.WriteXml(xWriter);
+            }
+            xWriter.WriteEndElement();
+        }
+
         private String SurveyPreviewHTML
         {
             get
@@ -474,14 +496,7 @@ namespace IATClient
                 MemoryStream memStream = new MemoryStream();
                 XmlWriter xWriter = new XmlTextWriter(memStream, System.Text.Encoding.Unicode);
                 xWriter.WriteStartDocument();
-                xWriter.WriteStartElement("Survey");
-                for (int ctr = 0; ctr < Items.Count; ctr++)
-                {
-                    if (Items[ctr].IsImage)
-                        (Items[ctr] as CSurveyItemImage).WritePreviewXml(xWriter);
-                    else
-                        Items[ctr].WriteXml(xWriter);
-                }
+                WriteXml(xWriter);
                 xWriter.WriteEndDocument();
                 xWriter.Flush();
                 memStream.Seek(0, SeekOrigin.Begin);

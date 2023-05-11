@@ -477,9 +477,9 @@ namespace IATClient
             dlg.Title = Properties.Resources.sOpenImageFileDialogTitle;
             if (dlg.ShowDialog() == DialogResult.OK)
             {
-                if (new FileInfo(dlg.FileName).Length >= 4194304)
+                if (new FileInfo(dlg.FileName).Length >= 12582912)
                 {
-                    MessageBox.Show("Only pictures of 4MB or smaller are allowed.", "File Too Large");
+                    MessageBox.Show("Only pictures of 12MB or smaller are allowed.", "File Too Large");
                     return;
                 }
                 SurveyView.AddImage(InsertRadio.Checked, dlg.FileName);
