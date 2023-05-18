@@ -62,13 +62,13 @@ namespace IATClient
 
             if (f == EFor.Response)
             {
-                FontFamily = PrivateFont.Lora.FontFamily;
+                FontFamily = PrivateFont.Calibri.FontFamily;
                 FontSize = "14px";
             }
             else
             {
                 FontSize = "16px";
-                FontFamily = PrivateFont.JosefinSans.FontFamily;
+                FontFamily = PrivateFont.Calibri.FontFamily;
             }
             Color = Color.Black;
             For = f;
@@ -79,18 +79,18 @@ namespace IATClient
         public SurveyItemFormat(EFor f, CResponse.EResponseType respType)
         {
             if ((f == EFor.Item) && (respType == CResponse.EResponseType.Instruction))
-                FontFamily = PrivateFont.Lora.FontFamily;
+                FontFamily = PrivateFont.Calibri.FontFamily;
             else
-                FontFamily = PrivateFont.JosefinSans.FontFamily;
+                FontFamily = PrivateFont.Calibri.FontFamily;
             if (f == EFor.Response)
             {
-                FontFamily = PrivateFont.Lora.FontFamily;
+                FontFamily = PrivateFont.Calibri.FontFamily;
                 FontSize = "14px";
             }
             else
             {
                 FontSize = "16px";
-                FontFamily = PrivateFont.JosefinSans.FontFamily;
+                FontFamily = PrivateFont.Calibri.FontFamily;
             }
             Color = Color.Black;
             For = f;

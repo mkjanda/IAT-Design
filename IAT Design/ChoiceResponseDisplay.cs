@@ -231,11 +231,9 @@ namespace IATClient
             Invalidate();
         }
 
-        protected async void LayoutChoices()
+        protected void LayoutChoices()
         {
-            Action a = () =>
-            {
-                this.Invoke(new Action(() =>
+                this.BeginInvoke(new Action(() =>
                 {
                     AddChoiceButton.Size = System.Windows.Forms.TextRenderer.MeasureText("Add Choice", AddChoiceButton.Font)
                         + new Size(16, 8);
@@ -270,9 +268,9 @@ namespace IATClient
                     else
                         AddChoiceButton.Location = new Point(this.Width - AddChoiceButton.Width - Padding.Right, ChoiceEditPadding.Vertical + Padding.Top);
                     ChoicesSize = new Size(this.Width, height);
+                    Parent.Size = ChoicesSize;
                 }));
-            };
-            await Task.Run(a);
+            
         }
 
 

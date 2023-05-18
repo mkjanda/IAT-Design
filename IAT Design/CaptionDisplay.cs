@@ -358,7 +358,7 @@ namespace IATClient
                 FontFamilyDrop.Text = (sender as ToolStripMenuItem).Text;
                 RecalcSize(false);
             }, f.FamilyName)).ToArray());
-            FontFamilyDrop.Text = PrivateFont.JosefinSans.DisplayName;
+            FontFamilyDrop.Text = PrivateFont.Georgia.DisplayName;
             FontFamilyDrop.TextChanged += (sender, args) => { RecalcSize(false); LayoutControl(); };
             CaptionFormatStrip.Items.Add(FontFamilyDrop);
             FontColorDrop = new ToolStripDropDownButton();

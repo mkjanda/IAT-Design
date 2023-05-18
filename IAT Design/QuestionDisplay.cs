@@ -330,9 +330,11 @@ namespace IATClient
             {
                 if (IsHandleCreated)
                 {
+                    SuspendLayout();
                     RecalcSize(false);
                     if (SurveyItem != null)
                         SurveyItem.Text = QuestionEdit.Text;
+                    ResumeLayout(false);
                 }
             };
             QuestionEdit.ForeColor = Format.Color;
@@ -534,7 +536,6 @@ namespace IATClient
                     OptionalRect = new Rectangle(CollapseButton.Location.X - szOptional.Width - 10, 0, szOptional.Width, szOptional.Height);
                     Size szFormat = TextRenderer.MeasureText("Format Text", System.Drawing.SystemFonts.DialogFont) + new Size(10, 4);
                     _FormatRect = new Rectangle(OptionalRect.Left - szFormat.Width - 10, 0, szFormat.Width, szFormat.Height);
-                    Invalidate();
                 }));
                 return Height;
             };
