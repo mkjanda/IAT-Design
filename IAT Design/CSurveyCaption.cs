@@ -29,7 +29,7 @@ namespace IATClient
 
         public int BorderWidth { get; set; } = 8;
 
-        public String FontName { get; set; } = PrivateFont.JosefinSans.FamilyName;
+        public String FontName { get; set; } = PrivateFont.Georgia.FamilyName;
 
         public System.Drawing.Color FontColor { get; set; } = NamedColor.UltraViolet.Color;
 

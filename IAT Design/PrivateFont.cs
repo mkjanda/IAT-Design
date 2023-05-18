@@ -11,16 +11,13 @@ namespace IATClient
     class PrivateFont
     {
         private static PrivateFontCollection PFC = new PrivateFontCollection();
-        public static readonly PrivateFont Okashi = new PrivateFont("Okashi", "Okashi^", Properties.Resources.font1);
-        public static readonly PrivateFont Amagro = new PrivateFont("Amagro", "Amagro bold", Properties.Resources.font2);
-        public static readonly PrivateFont Disney = new PrivateFont("Disney", "New Walt Disney Font", Properties.Resources.font5);
-        public static readonly PrivateFont Chiseled = new PrivateFont("Chiseled", "RACE1 Brannt Chiseled NCV", Properties.Resources.font4);
-        public static readonly PrivateFont Kaushan = new PrivateFont("Kaushan", "Kaushan Script", Properties.Resources.font6);
-        public static readonly PrivateFont Goxaqo = new PrivateFont("Goxaqo", "Goxaqo Personal Use", Properties.Resources.font3);
-        public static readonly PrivateFont JosefinSans = new PrivateFont("Josefin Sans", "Josefin Sans", Properties.Resources.font7);
-        public static readonly PrivateFont Lora = new PrivateFont("Lora", "Lora", Properties.Resources.font8);
-        public static readonly PrivateFont Typewriter = new PrivateFont("Typewriter", "Another Typewriter", Properties.Resources.font9);
-        public static readonly PrivateFont Bree = new PrivateFont("Lobster", "Lobster Two", Properties.Resources.font10);
+        public static readonly PrivateFont Georgia = new PrivateFont("Georgia", "Georgia", Properties.Resources.font1);
+        public static readonly PrivateFont Calibri = new PrivateFont("Calibri", "Calibri", Properties.Resources.font2);
+        public static readonly PrivateFont Forte = new PrivateFont("Forte", "Forte", Properties.Resources.font3);
+        public static readonly PrivateFont MVBoli = new PrivateFont("MV Boli", "MV Boli", Properties.Resources.font4);
+        public static readonly PrivateFont Pristina = new PrivateFont("Pristina", "Pristina", Properties.Resources.font5);
+        public static readonly PrivateFont SegoePrint = new PrivateFont("Segoe Print", "Segoe Print", Properties.Resources.font6);
+        public static readonly PrivateFont SegoeScript = new PrivateFont("Segoe Script", "Segoe Script", Properties.Resources.font7);
         public String FamilyName { get; private set; }
         public String DisplayName { get; private set; }
         public FontFamily FontFamily { get; private set; }

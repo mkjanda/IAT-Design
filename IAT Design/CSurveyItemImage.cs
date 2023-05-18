@@ -114,22 +114,17 @@ namespace IATClient
 
         public override void WriteXml(XmlWriter writer)
         {
-            writer.WriteStartElement(sSurveyItem);
+            writer.WriteStartElement("SurveyImage");
             writer.WriteAttributeString("Image", "True");
             writer.WriteAttributeString("Optional", "False");
             writer.WriteElementString("MimeType", SurveyImage.IImage.OriginalImage.ImageFormat.MimeType);
-            Image img = SurveyImage.IImage.OriginalImage.Img;
-            var memStream = new MemoryStream();
-            img.Save(memStream, SurveyImage.IImage.OriginalImage.ImageFormat.Format);
             writer.WriteElementString("ResourceId", ResourceId.ToString());
-            memStream.Dispose();
-            Response.WriteXml(writer);
             writer.WriteEndElement();
         }
 
         public void WritePreviewXml(XmlWriter writer)
         {
-            writer.WriteStartElement(sSurveyItem);
+            writer.WriteStartElement("SurveyImage");
             writer.WriteAttributeString("Image", "True");
             writer.WriteAttributeString("Optional", "False");
             Images.IImage surveyImage = CIAT.SaveFile.GetIImage(SurveyImage.IImage.URI);
@@ -149,6 +144,7 @@ namespace IATClient
             imgStream.Dispose();
             writer.WriteElementString("Id", "survey-image-" + GetItemIndex().ToString());
             writer.WriteEndElement();
+            Response = new CInstruction();
         }
 
         public override object Clone()
