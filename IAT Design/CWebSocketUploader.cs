@@ -89,6 +89,11 @@ namespace IATClient
             IATConfig.ConfigFile CF = new IATConfig.ConfigFile(CIAT.SaveFile.IAT);
             CF.UploadTimeMillis = UploadTimeMillis;
             CF.ClientID = ClientID;
+            foreach (var s in CIAT.SaveFile.IAT.BeforeSurvey)
+                CF.BeforeSurveys.Add(s);
+            foreach (var s in CIAT.SaveFile.IAT.AfterSurvey)
+                CF.AfterSurveys.Add(s);
+            CF.UniqueResponse = CIAT.SaveFile.IAT.UniqueResponse;
             ConfigFileXML = new MemoryStream();
             XmlTextWriter xWriter = new XmlTextWriter(ConfigFileXML, Encoding.Unicode);
             xWriter.WriteStartDocument();
@@ -102,66 +107,28 @@ namespace IATClient
             Manifest.ClientId = ClientID;
             Manifest.AddFile(new ManifestFile(IATName, ConfigFileXML.Length)
             {
-                ResourceType = ManifestFile.EResourceType.DeploymentFile,
+                ResourceType = ManifestFile.EResourceType.testConfiguration,
                 ResourceId = 0
             });
-            String surveyFNameBase;
-            Regex r = new Regex("[^a-zaA-Z0-9]");
-            for (int ctr2 = 0; ctr2 < Surveys.Count; ctr2++)
-            {
-                if (ctr2 < IAT.BeforeSurvey.Count)
-                    surveyFNameBase = IAT.BeforeSurvey[ctr2].Name;
-                else
-                    surveyFNameBase = IAT.AfterSurvey[ctr2 - IAT.BeforeSurvey.Count].Name;
-                Manifest.AddFile(new ManifestFile(surveyFNameBase, Surveys[ctr2].Length)
-                {
-                    ResourceType = ManifestFile.EResourceType.DeploymentFile,
-                    ResourceId = ctr2 + 1
-                });
-                Manifest.AddFile(new ManifestFile(String.Format("{0} Data Retrieval", surveyFNameBase), SASurveys[ctr2].Length)
-                {
-                    ResourceType = ManifestFile.EResourceType.DeploymentFile,
-                    ResourceId = 2 * ctr2 + 3
-                });
-            }
-            if (UniqueRespXML != null)
-            {
-                ManifestFile urf = new ManifestFile("UniqueResponse", UniqueRespXML.Length)
-                {
-                    ResourceType = ManifestFile.EResourceType.DeploymentFile,
-                    ResourceId = Surveys.Count * 2 + 2
-                };
-                Manifest.AddFile(urf);
-            }
-            foreach (Tuple<String, MemoryStream> tup in SurveyImages)
-                Manifest.AddFile(new ManifestFile(tup.Item1, tup.Item2.Length)
-                {
-                    ResourceId = Manifest.NumEntities + 1,
-                    ResourceType = ManifestFile.EResourceType.DeploymentFile
-                });
-            Manifest.AddFiles(CF.IATImages.ConstructFileManifest(ManifestFile.EResourceType.DeploymentImage));
-            Manifest.AddFiles(CF.SlideImages.ConstructFileManifest(ManifestFile.EResourceType.ItemSlide));
+            Manifest.AddFiles(CF.IATImages.ConstructFileManifest(ManifestFile.EResourceType.image));
+            Manifest.AddFiles(CF.SlideImages.ConstructFileManifest(ManifestFile.EResourceType.itemSlide));
         }
 
         private bool SendDeploymentFiles(long deploymentId, String sessionId)
         {
             MemoryStream memStream = new MemoryStream();
             memStream.Write(ConfigFileXML.ToArray(), 0, (int)ConfigFileXML.Length);
-            if (UniqueRespXML != null)
-                memStream.Write(UniqueRespXML.ToArray(), 0, (int)UniqueRespXML.Length);
-            for (int ctr = 0; ctr < Surveys.Count; ctr++)
+/*            for (int ctr = 0; ctr < Surveys.Count; ctr++)
             {
                 memStream.Write(Surveys[ctr].ToArray(), 0, (int)Surveys[ctr].Length);
                 memStream.Write(SASurveys[ctr].ToArray(), 0, (int)SASurveys[ctr].Length);
-            }
+            }*/
             byte[][] ImageData = CF.IATImages.GetImageData();
             for (int ctr = 0; ctr < ImageData.Length; ctr++)
                 memStream.Write(ImageData[ctr], 0, ImageData[ctr].Length);
-            foreach (Tuple<String, MemoryStream> tup in SurveyImages)
-            {
-                memStream.Write(tup.Item2.ToArray(), 0, (int)tup.Item2.Length);
-                tup.Item2.Dispose();
-            }
+            ImageData = CF.SlideImages.GetImageData();
+            for (int ctr = 0; ctr < ImageData.Length; ctr++)
+                memStream.Write(ImageData[ctr], 0, ImageData[ctr].Length);
             try
             {
                 WebClient c = new WebClient();
@@ -410,6 +377,7 @@ namespace IATClient
                     case TransactionRequest.ETransaction.EncryptionKeysReceived:
                         try
                         {
+                            ConstructDeploymentStream();
                             BuildFileManifest();
                             if (IAT.TokenType != ETokenType.NONE)
                             {
@@ -558,14 +526,6 @@ namespace IATClient
             CF.ServerDomain = Properties.Resources.sDefaultIATServerDomain;
             CF.ServerPath = Properties.Resources.sDefaultIATServerPath;
             CF.ServerPort = Convert.ToInt32(Properties.Resources.sDefaultIATServerPort);
-            if (CIAT.SaveFile.IAT.UniqueResponse.ItemNum != -1) { 
-                CF.UniqueResponse = CIAT.SaveFile.IAT.UniqueResponse;
-                UniqueRespXML = new MemoryStream();
-                XmlWriter xWriter = new XmlTextWriter(UniqueRespXML, Encoding.Unicode);
-                IATConfig.UniqueResponseItem uri = new IATConfig.UniqueResponseItem(IAT.UniqueResponse);
-                uri.WriteXmlDocument(xWriter);
-                xWriter.Flush();
-            }
             MainForm.StatusMessage = "Establishing connection";
             Task connectTask = null;
             try
