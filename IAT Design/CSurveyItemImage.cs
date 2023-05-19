@@ -118,6 +118,10 @@ namespace IATClient
             writer.WriteAttributeString("Image", "True");
             writer.WriteAttributeString("Optional", "False");
             writer.WriteElementString("MimeType", SurveyImage.IImage.OriginalImage.ImageFormat.MimeType);
+            var memStream = new MemoryStream();
+            var bmp = SurveyImage.IImage.OriginalImage.Img;
+            bmp.Save(memStream, SurveyImage.IImage.OriginalImage.ImageFormat.Format);
+            writer.WriteElementString("ImageData", Convert.ToBase64String(memStream.ToArray()));
             writer.WriteElementString("ResourceId", ResourceId.ToString());
             writer.WriteEndElement();
         }

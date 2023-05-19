@@ -751,14 +751,14 @@ namespace IATClient
                         LR.ScheduleInvalidation();
                         C.ScheduleInvalidation();
                         validationLock.InvalidationEvent.Set();
-                        validationLock.ValidationEvent.WaitOne();
+                        validationLock.ValidationEvent.WaitOne(5000);
                         validationLock = new ValidationLock(new DIBase[] { LeftValue, RightValue });
                         LeftValue.ResumeLayout(false);
                         RightValue.ResumeLayout(false);
                         LeftValue.ScheduleInvalidation();
                         RightValue.ScheduleInvalidation();
                         validationLock.InvalidationEvent.Set();
-                        validationLock.ValidationEvent.WaitOne();
+                        validationLock.ValidationEvent.WaitOne(5000);
                     }
                     catch (Exception ex)
                     {

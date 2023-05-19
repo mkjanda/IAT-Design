@@ -276,6 +276,12 @@ namespace IATClient.IATConfig
             {
                 var memStream = new MemoryStream();
                 var bmp = di.IImage.Img;
+                if (bmp == null)
+                {
+                    di.ScheduleInvalidationSync();
+                    di.InvalidationEvent.Wait();
+                    bmp = di.IImage.Img;
+                }
                 bmp.Save(memStream, di.IImage.ImageFormat.Format);
                 IATImage img = new IATImage()
                 {
@@ -389,7 +395,7 @@ namespace IATClient.IATConfig
             writer.WriteElementString("ClientID", ClientID.ToString());
             writer.WriteElementString("NumIATItems", NumIATItems.ToString());
             writer.WriteElementString("IsSevenBlock", Is7Block.ToString());
-            writer.WriteElementString("RedirectOnComplete", RedirectOnComplete.ToString());
+            writer.WriteElementString("RedirectOnComplete", CIAT.SaveFile.IAT.RedirectionURL.ToString());
             writer.WriteElementString("LeftResponseASCIIKeyCodeUpper", LeftResponseASCIIKeyCodeUpper.ToString());
             writer.WriteElementString("RightResponseASCIIKeyCodeUpper", RightResponseASCIIKeyCodeUpper.ToString());
             writer.WriteElementString("LeftResponseASCIIKeyCodeLower", LeftResponseASCIIKeyCodeLower.ToString());
@@ -444,7 +450,7 @@ namespace IATClient.IATConfig
             ClientID = Convert.ToInt32(reader.ReadElementString());
             NumIATItems = Convert.ToInt32(reader.ReadElementString());
             Is7Block = Convert.ToBoolean(reader.ReadElementString());
-            RedirectOnComplete = reader.ReadElementString();
+            CIAT.SaveFile.IAT.RedirectionURL = reader.ReadElementString();
             LeftResponseASCIIKeyCodeUpper = Convert.ToInt32(reader.ReadElementString());
             RightResponseASCIIKeyCodeUpper = Convert.ToInt32(reader.ReadElementString());
             LeftResponseASCIIKeyCodeLower = Convert.ToInt32(reader.ReadElementString());
@@ -487,6 +493,12 @@ namespace IATClient.IATConfig
 
         public UniqueResponseItem(CUniqueResponse resp)
         {
+            if (resp.SurveyUri == null)
+            {
+                ItemNum = -1;
+                SurveyName = String.Empty;
+                return;
+            }
             Additive = resp.Additive;
             ItemNum = resp.ItemNum;
             Regex exp = new Regex("[^A-Z0-9a-z]");

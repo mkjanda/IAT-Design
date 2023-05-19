@@ -35,8 +35,6 @@ namespace IATClient.IATConfig
                     TimerEvents.TryGetValue(sender as System.Timers.Timer, out ManualResetEvent evt);
                     evt.WaitOne();
                     evt.Reset();
-                    try
-                    {
                         while (ImageBases.TryDequeue(out DIBase result))
                         {
                             if (result == null)
@@ -65,12 +63,8 @@ namespace IATClient.IATConfig
                                     duplicate.Indexes.Add(nImg);
                                 }
                             }
-                        };
-                    }
-                    finally
-                    {
+                        }
                         evt.Set();
-                    }
                 };
                 Timers.Add(t);
                 t.Start();
