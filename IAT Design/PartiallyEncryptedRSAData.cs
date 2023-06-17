@@ -1,10 +1,12 @@
 ﻿using System;
+using System.ComponentModel.Design;
 using System.IO;
+using System.Linq;
 using System.Security.Cryptography;
 using System.Xml;
 using System.Xml.Linq;
 using System.Xml.Schema;
-
+using System.Text.RegularExpressions;
 namespace IATClient
 {
     public class PartiallyEncryptedRSAData : INamedXmlSerializable
@@ -24,7 +26,7 @@ namespace IATClient
             }
         }
 
-        public static readonly byte[] IV = new byte[] { (byte)0xFA, (byte)0x64, (byte)0x92, (byte)0x21, (byte)0x4A, (byte)0x74, (byte)0x41, (byte)0xE9 };
+        public byte[] IV = new byte[] { (byte)0xFA, (byte)0x64, (byte)0x92, (byte)0x21, (byte)0x4A, (byte)0x74, (byte)0x41, (byte)0xE9 };
         public PartiallyEncryptedRSAData(EKeyType keyType)
         {
             KeyType = keyType;
@@ -129,7 +131,16 @@ namespace IATClient
         {
             if (_Decrypted)
                 return;
-            byte[] desCipher = stringToDESCipherKey(password);
+            byte[] desCipher;
+            if (password.StartsWith("secret:"))
+            {
+                password = password.Remove(0, "secret:".Length);
+                var bytes = password.Split('-').Select(b => Byte.Parse(b, System.Globalization.NumberStyles.HexNumber)).ToArray();
+                desCipher = bytes.Where((b, ndx) => ndx < 8).ToArray();
+                IV = bytes.Where((b, ndx) => ndx >= 8).ToArray();
+            }
+            else 
+                desCipher = stringToDESCipherKey(password);
             MemoryStream memStream = new MemoryStream(Convert.FromBase64String(EncryptedKey));
             DESCryptoServiceProvider desCrypt = new DESCryptoServiceProvider();
             desCrypt.Mode = CipherMode.CBC;
@@ -162,7 +173,11 @@ namespace IATClient
 
         public void Generate(String password)
         {
-            byte[] desCipher = stringToDESCipherKey(password);
+            Regex r = new Regex("secret:(.+)");
+            var bytes = r.Match(password).Groups[1].Value.Split('-')
+                            .Select(b => Byte.Parse(b, System.Globalization.NumberStyles.HexNumber)).ToArray();
+            var desCipher = bytes.Where((b, ndx) => ndx < 8).ToArray();
+            var iv = bytes.Where((b, ndx) => ndx >= 8).ToArray();
             RSACryptoServiceProvider rsaCrypt = new RSACryptoServiceProvider();
             RSAParameters rsaParams = rsaCrypt.ExportParameters(true);
             N = rsaParams.Modulus;
@@ -196,7 +211,7 @@ namespace IATClient
             DESCryptoServiceProvider desCrypt = new DESCryptoServiceProvider();
             desCrypt.Mode = CipherMode.CBC;
             desCrypt.Padding = PaddingMode.ISO10126;
-            CryptoStream cStream = new CryptoStream(encryptedKey, desCrypt.CreateEncryptor(desCipher, IV), CryptoStreamMode.Write);
+            CryptoStream cStream = new CryptoStream(encryptedKey, desCrypt.CreateEncryptor(desCipher, iv), CryptoStreamMode.Write);
             memStream.Seek(0, SeekOrigin.Begin);
             cStream.Write(memStream.ToArray(), 0, (int)memStream.Length);
             cStream.FlushFinalBlock();

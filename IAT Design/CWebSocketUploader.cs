@@ -86,8 +86,8 @@ namespace IATClient
 
         private void ConstructDeploymentStream()
         {
-            IATConfig.ConfigFile CF = new IATConfig.ConfigFile(CIAT.SaveFile.IAT);
             CF.UploadTimeMillis = UploadTimeMillis;
+            CF.Name = IATName;
             CF.ClientID = ClientID;
             foreach (var s in CIAT.SaveFile.IAT.BeforeSurvey)
                 CF.BeforeSurveys.Add(s);
@@ -95,7 +95,7 @@ namespace IATClient
                 CF.AfterSurveys.Add(s);
             CF.UniqueResponse = CIAT.SaveFile.IAT.UniqueResponse;
             ConfigFileXML = new MemoryStream();
-            XmlTextWriter xWriter = new XmlTextWriter(ConfigFileXML, Encoding.Unicode);
+            XmlTextWriter xWriter = new XmlTextWriter(ConfigFileXML, Encoding.UTF8);
             xWriter.WriteStartDocument();
             CF.WriteXml(xWriter);
             xWriter.Flush();
@@ -112,29 +112,39 @@ namespace IATClient
             });
             Manifest.AddFiles(CF.IATImages.ConstructFileManifest(ManifestFile.EResourceType.image));
             Manifest.AddFiles(CF.SlideImages.ConstructFileManifest(ManifestFile.EResourceType.itemSlide));
+            CF.ErrorMarkID = Manifest.Contents.Cast<ManifestFile>().Where(f => f.ResourceType == ManifestFile.EResourceType.errorMark)
+                .Select(f => f.ResourceId).ToList().First();
         }
 
         private bool SendDeploymentFiles(long deploymentId, String sessionId)
         {
-            MemoryStream memStream = new MemoryStream();
-            memStream.Write(ConfigFileXML.ToArray(), 0, (int)ConfigFileXML.Length);
-/*            for (int ctr = 0; ctr < Surveys.Count; ctr++)
-            {
-                memStream.Write(Surveys[ctr].ToArray(), 0, (int)Surveys[ctr].Length);
-                memStream.Write(SASurveys[ctr].ToArray(), 0, (int)SASurveys[ctr].Length);
-            }*/
+            MemoryStream[] streams = new MemoryStream[3];
+            streams[0] = ConfigFileXML;
+            /*            for (int ctr = 0; ctr < Surveys.Count; ctr++)
+                        {
+                            memStream.Write(Surveys[ctr].ToArray(), 0, (int)Surveys[ctr].Length);
+                            memStream.Write(SASurveys[ctr].ToArray(), 0, (int)SASurveys[ctr].Length);
+                        }*/
+            var memStream = new MemoryStream();
             byte[][] ImageData = CF.IATImages.GetImageData();
             for (int ctr = 0; ctr < ImageData.Length; ctr++)
                 memStream.Write(ImageData[ctr], 0, ImageData[ctr].Length);
+            streams[1] = memStream;
+            memStream = new MemoryStream();
             ImageData = CF.SlideImages.GetImageData();
             for (int ctr = 0; ctr < ImageData.Length; ctr++)
                 memStream.Write(ImageData[ctr], 0, ImageData[ctr].Length);
+            streams[2] = memStream;
             try
             {
                 WebClient c = new WebClient();
                 c.Headers["deploymentId"] = deploymentId.ToString();
                 c.Headers["sessionId"] = sessionId;
-                c.UploadData(Properties.Resources.sDeploymentUploadURL, memStream.ToArray());
+                c.UploadData(Properties.Resources.sDeploymentUploadURL + "/configuration", streams[0].ToArray());
+                c.UploadData(Properties.Resources.sDeploymentUploadURL + "/images", streams[1].ToArray());
+                c.UploadData(Properties.Resources.sDeploymentUploadURL + "/itemSlides", streams[2].ToArray());
+                foreach (var s in streams)
+                    s.Dispose();
                 return true;
             }
             catch (WebException ex)
@@ -156,20 +166,6 @@ namespace IATClient
             {
                 memStream.Dispose();
             }
-        }
-
-        private void SendItemSlides(long deploymentId, String sessionId)
-        {
-            CF.SlidesProcessed.WaitOne();
-            byte[][] itemSlideData = CF.SlideImages.GetImageData();
-            MemoryStream memStream = new MemoryStream();
-            for (int ctr = 0; ctr < itemSlideData.Length; ctr++)
-                memStream.Write(itemSlideData[ctr], 0, itemSlideData[ctr].Length);
-            WebClient web = new WebClient();
-            web.Headers["deploymentId"] = deploymentId.ToString();
-            web.Headers["sessionId"] = sessionId;
-            web.UploadData(Properties.Resources.sItemSlideUploadURL, memStream.ToArray());
-            memStream.Dispose();
         }
 
         public void OnRSAKeyPairReceipt(INamedXmlSerializable keyPair)
@@ -400,7 +396,7 @@ namespace IATClient
                     case TransactionRequest.ETransaction.DeploymentFileManifestReceived:
                         MainForm.StatusMessage = "Uploading test data";
                         SendDeploymentFiles(trans.LongValues["DeploymentId"], trans.StringValues["SessionId"]);
-                        SendItemSlides(trans.LongValues["DeploymentId"], trans.StringValues["SessionId"]);
+//                        SendItemSlides(trans.LongValues["DeploymentId"], trans.StringValues["SessionId"]);
                         break;
 
                     case TransactionRequest.ETransaction.RequestIATUpload:
@@ -510,6 +506,9 @@ namespace IATClient
             UploadSuccess.Reset();
             UploadFailed.Reset();
             UploadCancelled.Reset();
+            var hasher = new Rfc2898DeriveBytes(password,
+                Convert.FromBase64String(LocalStorage.Activation[LocalStorage.Field.Salt]), 1000);
+            var bytes = hasher.GetBytes(8);
             DataPassword = password;
             AdminPassword = password;
             _IATName = iatName;
@@ -521,7 +520,7 @@ namespace IATClient
             Envelope.OnReceipt[Envelope.EMessageType.RSAKeyPair] = new Action<INamedXmlSerializable>(OnRSAKeyPairReceipt);
             MainForm.Invoke(new Action<EventHandler, IATConfigMainForm.EProgressBarUses>(MainForm.BeginProgressBarUse), new EventHandler(OnCancel), IATConfigMainForm.EProgressBarUses.Upload);
             UploadTestWebSocket = new ClientWebSocket();
-            MainForm.StatusMessage = "Preparing Upload";
+            MainForm.StatusMessage = "Packaging Test";
             CF = new IATConfig.ConfigFile(IAT);
             CF.ServerDomain = Properties.Resources.sDefaultIATServerDomain;
             CF.ServerPath = Properties.Resources.sDefaultIATServerPath;
@@ -581,11 +580,17 @@ namespace IATClient
             }
             if (UploadTestWebSocket.State == WebSocketState.Open)
             {
-                if (!UploadTestWebSocket.CloseAsync(WebSocketCloseStatus.InternalServerError, String.Empty, cancellationTokenSource.Token).Wait(1000))
+                try
+                {
+                    if (!UploadTestWebSocket.CloseAsync(WebSocketCloseStatus.InternalServerError, String.Empty, cancellationTokenSource.Token).Wait(1000))
+                        cancellationTokenSource.Cancel();
+                }
+                finally
+                {
                     UploadTestWebSocket.Dispose();
-                else
-                    cancellationTokenSource.Cancel();
+                }
             }
+            MainForm.StatusMessage = String.Empty;
             return (nTrigger == 0);
         }
         private void Receive()

@@ -6,7 +6,7 @@ namespace IATClient.Messages
 {
     public class ManifestFile : FileEntity
     {
-        public enum EResourceType { itemSlide, testConfiguration, updateFile, image };
+        public enum EResourceType { itemSlide, testConfiguration, updateFile, image, errorMark };
 
         public EResourceType ResourceType { get; set; }
 

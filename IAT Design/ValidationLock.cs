@@ -45,8 +45,15 @@ namespace IATClient
                 di.LockValidation(this);
                 DIValidationDictionary[di] = new ManualResetEvent(false);
             });
+            if (DIValidationDictionary.Count == 0)
+                return;
             Task.Run(() =>
             {
+                if (DIValidationDictionary.Count == 0)
+                {
+                    ValidationEvent.Set();
+                    return;
+                }
                 if (!WaitHandle.WaitAll(DIValidationDictionary.Values.ToArray(), LockWaitPeriod))
                     cancellationSource.Cancel();
                 else

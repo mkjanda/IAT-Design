@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 using System.Runtime.Remoting.Messaging;
+using System.Security.Cryptography;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -430,7 +431,7 @@ namespace IATClient
         private void DeleteIATDataButton_Click(object sender, EventArgs e)
         {
             String password;
-            if ((password = m_ServerInterfacePanel.IATManager.GetIATPasswordFromRegistry(SelectedIAT)) == null)
+            if ((password = LocalStorage.GetIATPassword(SelectedIAT)) == null)
             {
                 if (m_ServerInterfacePanel.PasswordBox.Text == String.Empty)
                 {
@@ -438,7 +439,15 @@ namespace IATClient
                     return;
                 }
                 else
-                    password = m_ServerInterfacePanel.PasswordBox.Text;
+                {
+                    if (IATManager.ServerReport.IATReports[SelectedIAT].Version.CompareTo(new CTestVersion("iat-1.0.6")) <= 0)
+                        password = m_ServerInterfacePanel.PasswordBox.Text;
+                    else
+                    {
+                        password = "secret:" + BitConverter.ToString(MD5.Create().ComputeHash(
+                            System.Text.Encoding.UTF8.GetBytes(m_ServerInterfacePanel.PasswordBox.Text)));
+                    }
+                }
             }
             if (MessageBox.Show("This will permanently remove all data collected with this IAT from the server. Are you sure you wish to proceed?", "Confirm IAT Data Deletion", MessageBoxButtons.YesNo) != DialogResult.Yes)
                 return;
@@ -480,7 +489,9 @@ namespace IATClient
 
         private void UploadIATButton_Click(object sender, EventArgs e)
         {
-            MainForm.SetStatusMessage(Properties.Resources.sCreatingPreUploadBackup);
+            try
+            {
+                MainForm.SetStatusMessage(Properties.Resources.sCreatingPreUploadBackup);
             MainForm.Invalidate();
             OpenFileDialog dlg = new OpenFileDialog();
             dlg.DefaultExt = Properties.Resources.sFileExt;
@@ -530,28 +541,16 @@ namespace IATClient
             IATUploader = new CWebSocketUploader(CIAT.SaveFile.IAT, MainForm);
             Func<String, String, bool> del = new Func<String, String, bool>(IATUploader.Upload);
             CurrentUploadingIAT = upForm.IATName;
-            CurrentUploadingIATPassword = upForm.Password;
-            del.BeginInvoke(upForm.IATName, upForm.Password, new AsyncCallback(IATUploadComplete), del);
+            CurrentUploadingIATPassword = "secret:" + BitConverter.ToString(MD5.Create().ComputeHash(System.Text.Encoding.UTF8.GetBytes(upForm.Password)));
             m_ServerInterfacePanel.DisableControlsForServerTransaction();
-        }
-
-
-        public void Reinitialize()
-        {
-            m_ServerInterfacePanel.DisableControlsForServerTransaction();
-            Task.Run<bool>(() => IATManager.RetrieveServerReport()).ContinueWith((task) => m_ServerInterfacePanel.SyncCtx.Send(
-                obj => m_ServerInterfacePanel.PopulateIATPanel(new EventHandler(IATLabel_Click)), null)).ContinueWith(
-                task => m_ServerInterfacePanel.SyncCtx.Send(obj => m_ServerInterfacePanel.EnableControlsAsync(ServerInterfacePanel.EControls.testLabels), null));
-        }
-
-        private void IATUploadComplete(IAsyncResult async)
-        {
-            try
-            {
-                bool bResult = ((async as AsyncResult).AsyncDelegate as Func<String, String, bool>).EndInvoke(async);
-                if ((bResult) && StorePasswordToRegistry)
-                    LocalStorage.SetIATPassword(CurrentUploadingIAT, CurrentUploadingIATPassword);
-                String uploadedIatName = CIAT.SaveFile.IAT.Name;
+            var uploadResult = IATUploader.Upload(upForm.IATName, CurrentUploadingIATPassword);
+            if (uploadResult && StorePasswordToRegistry)
+                LocalStorage.SetIATPassword(upForm.IATName, CurrentUploadingIATPassword);
+            String uploadedIatName = CIAT.SaveFile.IAT.Name;
+            CIAT.SaveFile.Dispose();
+            CIAT.Open(ActiveTestFilename, false, true);
+            CIAT.ImageManager.StartWorkers();
+            File.Delete(ActiveTestFilename);
                 CIAT.SaveFile.Dispose();
                 CIAT.Open(ActiveTestFilename, false, true);
                 CIAT.ImageManager.StartWorkers();
@@ -584,18 +583,37 @@ namespace IATClient
             }
         }
 
+
+        public void Reinitialize()
+        {
+            m_ServerInterfacePanel.DisableControlsForServerTransaction();
+            Task.Run<bool>(() => IATManager.RetrieveServerReport()).ContinueWith((task) => m_ServerInterfacePanel.SyncCtx.Send(
+                obj => m_ServerInterfacePanel.PopulateIATPanel(new EventHandler(IATLabel_Click)), null)).ContinueWith(
+                task => m_ServerInterfacePanel.SyncCtx.Send(obj => m_ServerInterfacePanel.EnableControlsAsync(ServerInterfacePanel.EControls.testLabels), null));
+        }
+
+
         private void RetrieveResultsButton_Click(object sender, EventArgs e)
         {
             String password;
-            if ((password = m_ServerInterfacePanel.IATManager.GetIATPasswordFromRegistry(SelectedIAT)) == null)
+            if ((password = LocalStorage.GetIATPassword(SelectedIAT)) == null)
             {
+                if (IATManager.ServerReport.IATReports[SelectedIAT].Version.CompareTo(new CTestVersion("iat-1.0.6")) <= 0)
+                {
+                    MessageBox.Show(Properties.Resources.DownloadLegacy, "Incompatible Version", MessageBoxButtons.OK);
+                    return;
+                }
                 if (m_ServerInterfacePanel.PasswordBox.Text == String.Empty)
                 {
                     MessageBox.Show("Please enter the data retrieval password for this IAT in the Password box.", "No Password Supplied");
                     return;
                 }
                 else
-                    password = m_ServerInterfacePanel.PasswordBox.Text;
+                {
+                    password = "secret:" + BitConverter.ToString(MD5.Create().ComputeHash(
+                        System.Text.Encoding.UTF8.GetBytes(m_ServerInterfacePanel.PasswordBox.Text)));
+                }
+                password = m_ServerInterfacePanel.PasswordBox.Text;
             }
             AsyncCallback resultDataRetrieved = new AsyncCallback(RetrieveResultsComplete);
             Func<String, String, bool> retrieveResults = new Func<String, String, bool>(m_ServerInterfacePanel.IATManager.RetrieveResults);
@@ -615,22 +633,25 @@ namespace IATClient
             }
             this.Invoke((Action)ShowResultsPanel);
             String password;
-            if ((password = m_ServerInterfacePanel.IATManager.GetIATPasswordFromRegistry(m_ServerInterfacePanel.SelectedIATLabel.Text)) == null)
-                password = m_ServerInterfacePanel.PasswordBox.Text;
+            if ((password = LocalStorage.GetIATPassword(SelectedIAT)) == null)
+            {
+                if (IATManager.ServerReport.IATReports[SelectedIAT].Version.CompareTo(new CTestVersion("iat-1.0.6")) <= 0)
+                    password = m_ServerInterfacePanel.PasswordBox.Text;
+                else
+                {
+                    password = "secret:" + BitConverter.ToString(MD5.Create().ComputeHash(
+                        System.Text.Encoding.UTF8.GetBytes(m_ServerInterfacePanel.PasswordBox.Text)));
+                }
+            }
             Task.Run(() =>
             {
                 m_ServerInterfacePanel.IATPanel.Enabled = false;
                 var result = IATManager.RetrieveItemSlides(SelectedIAT, password);
-                Task downloadSlides = new Task(() =>
-                {
-                    IATManager.RetrieveItemSlides(SelectedIAT, password);
-                });
-                downloadSlides.RunSynchronously();
                 bool again = true;
                 while (!result && again)
                 {
                     if (MessageBox.Show("Would you like to attempt to retrieve item slides again?", "Slide Retrieval Failed", MessageBoxButtons.YesNo) == DialogResult.Yes)
-                        downloadSlides.RunSynchronously();
+                        result = IATManager.RetrieveItemSlides(SelectedIAT, password);
                     else
                     {
                         ClearResultPanel();
@@ -702,14 +723,20 @@ namespace IATClient
         {
             String iatName = SelectedIAT;
             String password;
-            if ((password = m_ServerInterfacePanel.IATManager.GetIATPasswordFromRegistry(SelectedIAT)) == null)
+            if ((password = LocalStorage.GetIATPassword(SelectedIAT)) == null)
             {
                 if (m_ServerInterfacePanel.PasswordBox.Text == String.Empty)
                 {
                     MessageBox.Show("Please enter the data retrieval password for this IAT in the Password box.", "No Password Supplied");
                     return;
                 }
-                password = m_ServerInterfacePanel.PasswordBox.Text;
+                else if (IATManager.ServerReport.IATReports[SelectedIAT].Version.CompareTo(new CTestVersion("iat-1.0.6")) <= 0)
+                    password = m_ServerInterfacePanel.PasswordBox.Text;
+                else
+                {
+                    password = "secret:" + BitConverter.ToString(MD5.Create().ComputeHash(
+                        System.Text.Encoding.UTF8.GetBytes(m_ServerInterfacePanel.PasswordBox.Text)));
+                }
             }
             if (MessageBox.Show("This will permanently remove your IAT and all data collected with it from the server. Are you sure you wish to proceed?", "Confirm IAT Deletion", MessageBoxButtons.YesNo) != DialogResult.Yes)
                 return;

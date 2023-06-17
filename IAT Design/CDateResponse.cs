@@ -95,8 +95,6 @@ namespace IATClient
         public override void WriteXml(XmlWriter writer)
         {
             writer.WriteStartElement("Date");
-            writer.WriteAttributeString("Type", sTypeDate);
-            Format.WriteXml(writer);
             writer.WriteStartElement("StartDate");
             writer.WriteAttributeString("HasValue", HasStartDate.ToString());
             if (HasStartDate)
@@ -130,6 +128,7 @@ namespace IATClient
             writer.WriteEndElement();
 
             // write the close of the "Response" element
+            Format.WriteXml(writer);
             writer.WriteEndElement();
         }
 

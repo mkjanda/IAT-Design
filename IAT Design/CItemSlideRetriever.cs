@@ -21,7 +21,6 @@ namespace IATClient
         private Manifest _SlideManifest = null;
         private ManualResetEvent TransactionComplete = new ManualResetEvent(false), TransactionFailed = new ManualResetEvent(false);
         private PartiallyEncryptedRSAData DataKey;
-        private object PacketQueueSyncObject = new object();
         private Dictionary<int, Packet> PacketMap = null;
         private String itemSlideDownloadKey;
         private long clientID;

@@ -60,8 +60,7 @@ namespace IATClient.IATConfig
 
         public void WriteXml(XmlWriter writer)
         {
-            writer.WriteStartElement("IATEventList");
-            writer.WriteAttributeString("NumEvents", _IATEvents.Count.ToString());
+            writer.WriteStartElement("EventList");
             for (int ctr = 0; ctr < _IATEvents.Count; ctr++)
                 _IATEvents[ctr].WriteXml(writer);
             writer.WriteEndElement();

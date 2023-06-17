@@ -6,6 +6,7 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.WebSockets;
+using System.Runtime.CompilerServices;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading;
@@ -23,6 +24,7 @@ namespace IATClient
             public static Field UserEmail = new Field(3, "UserEMail", false);
             public static Field ActivationKey = new Field(4, "IATActivationKey", true);
             public static Field UserName = new Field(5, "ClientName", false);
+            public static Field Salt = new Field(6, "Salt", false);
 
             public static Field Version_1_1_confirmed = new Field(6, "Version_1_1_confirmed", false);
             public bool Encrypted { get; private set; }
@@ -119,25 +121,33 @@ namespace IATClient
         {
             get
             {
+                EActivationStatus status;
                 if (Activation[Field.ProductKey] == null)
-                    return EActivationStatus.NotActivated;
+                    status = EActivationStatus.NotActivated;
                 //                if (CVersion.Compare(new CVersion(Activation[Field.Version]), new CVersion(Properties.Resources.sVersion)) != 0)
                 //                  return EActivationStatus.InconsistentVersion;
-                if (Activation[Field.ActivationKey] != null)
+                else if (Activation[Field.ActivationKey] != null)
                 {
                     if (IsActivatedCode(Activation[Field.ProductKey], Activation[Field.ActivationKey]))
-                        return EActivationStatus.Activated;
+                        status = EActivationStatus.Activated;
                     else
-                        return EActivationStatus.NotActivated;
+                        status = EActivationStatus.NotActivated;
                 }
-                EMailConfirmation emailConfirm = new EMailConfirmation();
-                Task<EMailConfirmation.EConfirmResult> emailConfirmationCheck = Task<EMailConfirmation.EConfirmResult>.Run(() => emailConfirm.ConfirmEMailVerification());
-                emailConfirmationCheck.Wait();
-                if (emailConfirmationCheck.IsFaulted)
-                    return EActivationStatus.EMailNotVerified;
-                else if (emailConfirmationCheck.Result != EMailConfirmation.EConfirmResult.success)
-                    return EActivationStatus.EMailNotVerified;
-                return EActivationStatus.Activated;
+                else
+                {
+                    EMailConfirmation emailConfirm = new EMailConfirmation();
+                    Task<EMailConfirmation.EConfirmResult> emailConfirmationCheck = Task<EMailConfirmation.EConfirmResult>.Run(() => emailConfirm.ConfirmEMailVerification());
+                    emailConfirmationCheck.Wait();
+                    if (emailConfirmationCheck.IsFaulted)
+                        status = EActivationStatus.EMailNotVerified;
+                    else if (emailConfirmationCheck.Result != EMailConfirmation.EConfirmResult.success)
+                        status = EActivationStatus.EMailNotVerified;
+                    status = EActivationStatus.Activated;
+                }
+                if ((status == EActivationStatus.Activated) && (Activation[Field.Salt] == null))
+                    Activation[Field.Salt] = Convert.ToBase64String(Convert.FromBase64String(Activation[Field.ProductKey]));
+
+                return status;
             }
         }
 
@@ -205,36 +215,33 @@ namespace IATClient
                 return null;
             if (Activation.ActivationDocument.Root.Element("Tests").Element(IAT) == null)
                 return null;
-            byte[] encPass = Convert.FromBase64String(Activation.ActivationDocument.Root.Element("Tests").Element(IAT).Attribute("Password").Value);
+            String password = Activation.ActivationDocument.Root.Element("Tests").Element(IAT).Attribute("Password").Value;
+            if (password.StartsWith("secret:"))
+                return password;
+            byte[] encPass = Convert.FromBase64String(password);
             MemoryStream passStream = new MemoryStream();
             CryptoStream cStream = new CryptoStream(passStream, DESCrypt.CreateDecryptor(IatDESData, IatIVData), CryptoStreamMode.Write);
             cStream.Write(encPass, 0, encPass.Length);
             cStream.Flush();
             cStream.FlushFinalBlock();
-            String password = System.Text.Encoding.UTF8.GetString(passStream.ToArray());
+            String decPass = System.Text.Encoding.UTF8.GetString(passStream.ToArray());
             cStream.Dispose();
             passStream.Dispose();
-            return password;
+            return decPass;
         }
 
         public static void SetIATPassword(String iatName, String password)
         {
-            MemoryStream encPassStream = new MemoryStream();
-            CryptoStream cStream = new CryptoStream(encPassStream, DESCrypt.CreateEncryptor(IatDESData, IatIVData), CryptoStreamMode.Write);
-            cStream.Write(Encoding.UTF8.GetBytes(password), 0, Encoding.UTF8.GetBytes(password).Length);
-            cStream.Flush();
-            cStream.FlushFinalBlock();
-            String encPass = Convert.ToBase64String(encPassStream.ToArray());
             if (Activation.ActivationDocument.Root.Element("Tests") == null)
-                Activation.ActivationDocument.Root.Add(new XElement("Tests", new XElement(iatName, new XAttribute("Password", encPass))));
+                Activation.ActivationDocument.Root.Add(new XElement("Tests", new XElement(iatName, new XAttribute("Password", password))));
             else if (Activation.ActivationDocument.Root.Element("Tests").Elements().Select(elem => elem.Name).Contains(iatName))
             {
                 foreach (XAttribute attr in Activation.ActivationDocument.Root.Element("Tests").Element(iatName).Attributes())
                     attr.Remove();
-                Activation.ActivationDocument.Root.Element("Tests").Element(iatName).Add(new XAttribute("Password", encPass));
+                Activation.ActivationDocument.Root.Element("Tests").Element(iatName).Add(new XAttribute("Password", password));
             }
             else
-                Activation.ActivationDocument.Root.Element("Tests").Add(new XElement(iatName, new XAttribute("Password", encPass)));
+                Activation.ActivationDocument.Root.Element("Tests").Add(new XElement(iatName, new XAttribute("Password", password)));
             Activation.ActivationDocument.Save(ActivationFilePath);
         }
 

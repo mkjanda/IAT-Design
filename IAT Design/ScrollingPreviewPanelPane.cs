@@ -76,7 +76,8 @@ namespace IATClient
             set
             {
                 if (_PreviewedItem != null)
-                    _PreviewedItem.ThumbnailPreviewPanel = null;
+                    if (_PreviewedItem.ThumbnailPreviewPanel != null)
+                        _PreviewedItem.ThumbnailPreviewPanel = null;
                 _PreviewedItem = value;
                 if (value != null)
                     _PreviewedItem.ThumbnailPreviewPanel = this;

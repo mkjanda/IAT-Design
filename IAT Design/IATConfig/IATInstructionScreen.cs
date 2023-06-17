@@ -30,7 +30,8 @@ namespace IATClient.IATConfig
             {
                 if (_ContinueASCIIKeyCode != -1)
                     return _ContinueASCIIKeyCode;
-                _ContinueASCIIKeyCode = Encoding.ASCII.GetBytes(InstructionScreen.ContinueKey)[0];
+                _ContinueASCIIKeyCode = Encoding.ASCII.GetBytes((InstructionScreen.ContinueKey.ToLower() == "space") ? " " : 
+                    InstructionScreen.ContinueKey)[0];
                 return _ContinueASCIIKeyCode;
             }
             set

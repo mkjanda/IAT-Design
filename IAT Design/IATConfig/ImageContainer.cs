@@ -1,10 +1,17 @@
 ﻿using IATClient.Messages;
+using net.sf.saxon.@event;
+using net.sf.saxon.om;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Diagnostics.Eventing.Reader;
+using System.Drawing;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Threading;
+using System.Threading.Tasks;
+using System.Timers;
+using System.Windows.Forms;
 using System.Xml;
 
 namespace IATClient.IATConfig
@@ -16,58 +23,61 @@ namespace IATClient.IATConfig
         private int idCtr = 0;
         private int numImagesProcessed = 0;
         private ConcurrentDictionary<System.Timers.Timer, ManualResetEvent> TimerEvents = new ConcurrentDictionary<System.Timers.Timer, ManualResetEvent>();
-        private ConcurrentQueue<DIBase> ImageBases = new ConcurrentQueue<DIBase>();
+        private readonly ConcurrentQueue<IATImage> ImageBases = new ConcurrentQueue<IATImage>();
         private readonly List<System.Timers.Timer> Timers = new List<System.Timers.Timer>();
         private readonly List<object> TimerLocks = new List<object>();
         private List<IATImage> ImageList = new List<IATImage>();
         private SHA512Managed SHA512 = new SHA512Managed();
-        private readonly object ImageListLock = new object();
-
+        private readonly object ImageListLock = new object(), queueLock = new object();
+        private readonly ManualResetEvent QueueEvent = new ManualResetEvent(false);
+        private readonly ManualResetEvent ImagesProcessed;
         public ImageContainer(Func<DIBase, IATImage> generateImage, ManualResetEvent imagesProcessed)
         {
+            ImagesProcessed = imagesProcessed;
+            object incLock = new object();
+            int numThreadsFinished = 0;
             for (int ctr = 0; ctr < NUM_WORKER_THREADS; ctr++)
             {
-                TimerLocks.Add(new object());
-                var t = new System.Timers.Timer(WORKER_INTERVAL);
-                TimerEvents.TryAdd(t, new ManualResetEvent(true));
-                t.Elapsed += (sender, args) =>
+                System.Timers.Timer timer = new System.Timers.Timer(100);
+                timer.Elapsed += (sender, evt) =>
                 {
-                    TimerEvents.TryGetValue(sender as System.Timers.Timer, out ManualResetEvent evt);
-                    evt.WaitOne();
-                    evt.Reset();
-                        while (ImageBases.TryDequeue(out DIBase result))
+                    IATImage iatImage;
+                    lock (queueLock)
+                    {
+                        if (!ImageBases.TryDequeue(out iatImage))
+                            return;
+                    }
+                    if (iatImage == null)
+                    {
+                        lock (incLock)
                         {
-                            if (result == null)
-                            {
-                                ImageBases.Enqueue(null);
+                            if (++numThreadsFinished == NUM_WORKER_THREADS)
                                 imagesProcessed.Set();
-                                (sender as System.Timers.Timer).Stop();
-                                evt.Set();
-                                return;
-                            }
-                            var iImg = generateImage(result);
-                            lock (ImageListLock)
-                            {
-                                int nImg = Interlocked.Increment(ref numImagesProcessed);
-                                IATImage duplicate = ImageList.FirstOrDefault<IATImage>(i => i.SHA == iImg.SHA);
-                                if (duplicate == null)
-                                {
-                                    iImg.Id = ++idCtr;
-                                    iImg.SourceUris.Add(result.URI);
-                                    iImg.Indexes.Add(nImg);
-                                    ImageList.Add(iImg);
-                                }
-                                else
-                                {
-                                    duplicate.SourceUris.Add(result.URI);
-                                    duplicate.Indexes.Add(nImg);
-                                }
-                            }
+                            ImageBases.Enqueue(null);
+                            timer.Stop();
+                            return;
                         }
-                        evt.Set();
+                    }
+                    else
+                    {
+                        var image = generateImage(CIAT.SaveFile.GetDI(iatImage.SourceUris[0]));
+                        var sha = image.SHA;
+                        lock (ImageListLock)
+                        {
+                            var duplicate = ImageList.Where(i => (i.SHA == sha) && iatImage.Bounds.Equals(i.Bounds)).FirstOrDefault();
+                            if (duplicate == null)
+                            {
+                                image.SourceUris.AddRange(iatImage.SourceUris);
+                                image.Bounds = iatImage.Bounds;
+                                image.Id = ImageList.Count + 1;
+                                ImageList.Add(image);
+                            }
+                            else if (duplicate != null)
+                                duplicate.SourceUris.AddRange(iatImage.SourceUris);
+                        }
+                    }
                 };
-                Timers.Add(t);
-                t.Start();
+                timer.Start();
             }
         }
 
@@ -80,29 +90,28 @@ namespace IATClient.IATConfig
             }
         }
 
-        public void AddDI(DIBase di)
+        public void AddDI(DIBase di, Rectangle rect)
         {
-            ImageBases.Enqueue(di);
+            if (di == null)
+            {
+                ImageBases.Enqueue(null);
+                return;
+            }
+            var iatImage = new IATImage();
+            iatImage.Bounds = rect;
+            iatImage.SourceUris.Add(di.URI);
+            ImageBases.Enqueue(iatImage);
         }
 
-        public List<ResourceReference> ResourceReferences
-        {
-            get
-            {
-                List<ResourceReference> refs = new List<ResourceReference>();
-                foreach (var i in ImageList)
-                    refs.Add(new ResourceReference()
-                    {
-                        ResourceId = i.Id,
-                        ReferenceIds = i.Indexes.Cast<long>().ToList()
-                    });
-                return refs;
-            }
-        }
 
         public IATImage GetImage(Uri u)
         {
-            return ImageList.First(i => i.SourceUris.Contains(u));
+            return ImageList.First(tup => tup.SourceUris.Contains(u));
+        }
+
+        public List<IATImage> GetImages(Uri u)
+        {
+            return ImageList.Where(i => i.SourceUris.Contains(u)).ToList();
         }
 
         public void ReadXml(XmlReader xReader)
@@ -120,19 +129,24 @@ namespace IATClient.IATConfig
 
         public void WriteXml(XmlWriter xWriter)
         {
+            ImagesProcessed.WaitOne();
             xWriter.WriteStartElement("DisplayItemList");
             xWriter.WriteAttributeString("NumDisplayItems", ImageList.Count.ToString());
-            ImageList.ForEach((i) => i.WriteXml(xWriter));
+            ImageList.ForEach((t) => t.WriteXml(xWriter));
             xWriter.WriteEndElement();
         }
 
         public ManifestFile[] ConstructFileManifest(ManifestFile.EResourceType resourceType)
         {
+            ImagesProcessed.WaitOne();
             ManifestFile[] fileManifest = new ManifestFile[ImageList.Count];
             for (int ctr = 0; ctr < ImageList.Count; ctr++)
             {
                 fileManifest[ctr] = new ManifestFile();
-                fileManifest[ctr].ResourceType = resourceType;
+                if ((ImageList[ctr].SourceUris[0].Equals(CIAT.SaveFile.Layout.ErrorMark.URI)) && (resourceType == ManifestFile.EResourceType.image))
+                    fileManifest[ctr].ResourceType = ManifestFile.EResourceType.errorMark;
+                else
+                    fileManifest[ctr].ResourceType = resourceType;
                 fileManifest[ctr].Name = ImageList[ctr].FileName;
                 fileManifest[ctr].Size = ImageList[ctr].ImageData.Length;
                 fileManifest[ctr].ResourceId = ImageList[ctr].Id;

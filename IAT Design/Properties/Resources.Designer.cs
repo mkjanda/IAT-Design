@@ -221,7 +221,16 @@ namespace IATClient.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to BwIAAACkAABSU0EyAAgAAAEAAQDF2V+N4+fLoe0oYJ2P1hz0K94WNI9rTVjTMO3fjEg5Hv++lWMwDylhapmbIDtuLY42DnLt/bQYej2qg4liA7F8sibEMpnlOOiIy40GwDnoD9X/NbDDaq2n22Iy0ePZk2p0SWtGHcd8ucSkvc72E27MHuzG4qWkT+pIi8U95L2Dh0rkfKIMCUgJU4ETBheboeAOOUCLVnx5E4vbZrPDJd77TaQf6boLKnUgsuBcnuxxdeYsRVx3FxPGbsBygkqDoq7fQ1/sOCaMJy9LZu4L3QCzdqifN0eyC9MUcbfOV0faGZ5uvhC09L52Cm5iP/LF4PcyhjFNv0jA9lu3vIn24FnZz2/JEyUT29SrF3MGVCjq9qpASvbzyNKs8WMji7F9TcHBUzHoEhiztOr32BMF3t8GtOTbQRsD5AiEeFj8IIY8gy0gJjmshvcgp0bdcjGhbNTo2u+fIJ0zOIlSK9pFIa0Zh+BoEyOW+KjPiv1v [rest of string was truncated]&quot;;.
+        ///   Looks up a localized string similar to The current version of IAT Design is not capable of performing this task. You can download a non-updating legacy copy that should serve your needs at https://iatsoftware.net/IATDesign-1-1-1-46.zip..
+        /// </summary>
+        internal static string DownloadLegacy {
+            get {
+                return ResourceManager.GetString("DownloadLegacy", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to BwIAAACkAABSU0EyAAgAAAEAAQAJhm/VZRUscN3gqNlTz4v246Ttvz5f+cwq0ES36tl4bzSNuAsJbHH3MwfMO+PHCvYASEuM66IzWGXmHHonoG7egMyIvQsdKPfZl70ohpCK9tQj8Gs/WcjdS1wzEQZOW8oJAwx9x6SvZGlrF2UXBIh0POkkylv2Q+eTUS+i5GbHkaDN/UHUCg2Og2PxAwj5aD/TPCe8Dxzd9VFeeWlHCei1sCDGxd4T3SWJvYDJxP5iNtgX4nkGuX1xZXrXRLW9uZDt56MAHSLbFrmW2CYWqeviZ8vFzpy05kJhQHlp/UMuzKYWiPEDD/2XmGaFG5JhHPwvuuEj5lQp69iZow3OSJq574kNmEfb/VWbNqlBAUNwJ3RzQtJOngFQmresJrSgmYeiGh4EKvzzpstMXEOlPsYE2gM16CHbGMAbPikpc5BlLTtTom43VynlM06h6rzM6tnxhabVDKXFVtaeoUZo1IInLcWeThKYOWJ1tKM3 [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string ErrorReportCspBlob {
             get {
@@ -249,7 +258,7 @@ namespace IATClient.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to AAEAAAASAQAABAAgRFNJRwAAAAEAApSIAAAACEdERUYBQgFCAAABLAAAABZHUE9Tt6zzXwAAAUQAAA9uR1NVQgABAAAAABC0AAAACk9TLzKIEt28AAAQwAAAAGBjbWFw/nnq3wAAESAAAAWIY3Z0IADvE3UAAoagAAAAPmZwZ212ZH12AAKG4AAADRZnYXNwAAAAEAAChpgAAAAIZ2x5ZvGw+YIAABaoAAJYSGhlYWQL6ZZ4AAJu8AAAADZoaGVhBfsCUQACbygAAAAkaG10eG14IzEAAm9MAAAFDGxvY2EBbmm0AAJ0WAAABRBtYXhwApcQlgACeWgAAAAgbmFtZTqKN5AAAnmIAAADS3Bvc3RTOMHMAAJ81AAACcRwcmVwWVEEEQACk/gAAACNAAEAAAAMAAAAAAAAAAIAAQEwAUEAAwAAAAEAAAAKAB4ALgABREZMVAAIAAQAAAAA//8AAQAAAAFrZXJuAAgAAAACAAAAAQACAAYADgACAAgAAQAQ [rest of string was truncated]&quot;;.
+        ///   Looks up a localized string similar to AAEAAAAWAQAABABgRFNJRxIhWgIAAwy0AAAdsEdERUYAJgNlAAMqZAAAAB5HUE9T8yZZkgADKoQAACEsR1NVQlX2xvEAA0uwAAAORkxUU0hxANd/AAAPxAAAA2RPUy8yTL6POAAAAegAAABgVkRNWG6wdjQAABMoAAAF4GNtYXASF7ePAABxOAAABmRjdnQga5pdswAAiMwAAAM4ZnBnbft+U5MAAHecAAAKr2dhc3AAKgApAAMMoAAAABRnbHlmTzhplwAAmYgAAmfmaGRteKDp+uMAABkIAABYMGhlYWTqcs0iAAABbAAAADZoaGVhD0sKAQAAAaQAAAAkaG10eLD82cUAAAJIAAANfGxvY2EEuAsYAACMBAAADYRtYXhwB+UMEAAAAcgAAAAgbWV0YRqlklEAA1n4AAAASG5hbWU8ZYNiAAMBcAAACw9wb3N0/04AZQADDIAAAAAgcHJlcHp0tqEAAIJMAAAGfwABAAAABZcKfiXvJl8PPPUAGwgA [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string font1 {
             get {
@@ -267,7 +276,7 @@ namespace IATClient.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to AAEAAAASAQAABAAgRFNJRwAAAAEAANV0AAAACEdERUYCzANyAAABLAAAACJHUE9TatV9UAAAAVAAADYgR1NVQnPJKPAAADdwAAACjk9TLzJ5TsdkAAA6AAAAAGBjbWFw/0rBsQAAOmAAAAY0Y3Z0IBKaUYgAAMdYAAAAamZwZ212ZH54AADHxAAADRZnYXNwAAAAEAAAx1AAAAAIZ2x5ZrxvtcsAAECUAAByCGhlYWQYsmCkAACynAAAADZoaGVhDysIrQAAstQAAAAkaG10eESLZb8AALL4AAAF0mxvY2HpLwUcAAC4zAAAAuxtYXhwArsOHAAAu7gAAAAgbmFtZenb4ykAALvYAAADnHBvc3Tn5fx4AAC/dAAAB9lwcmVwRj27IgAA1NwAAACYAAEAAAAMAAAAAAAAAAIAAwACAN4AAQE0AVsAAQFcAVwAAwAAAAEAAAAKAB4AMAABREZMVAAIAAQAAAAA//8AAQAAAAFrZXJuAAgAAAADAAAAAQAC [rest of string was truncated]&quot;;.
+        ///   Looks up a localized string similar to AAEAAAAWAQAABABgRFNJR4u35lMAGYWsAAAhmEVCRFQxOa4XABIjPAAAT5xFQkxDfDVvAAASctgAABXgR0RFRk3EYIgAEoi4AAAHBkdQT1OpoBSXABKPwAADx5hHU1VCo7Cr+wAWV1gAAy3OT1MvMp3CPegAAAHoAAAAYGNtYXDceZTLAABwUAAAdzBjdnQguXDYNQABGagAAAW8ZnBnbX7eAzcAAOeAAAANK2dhc3AAHgAjABIjLAAAABBnbHlme0alawABjXAADfMQaGVhZP78rdYAAAFsAAAANmhoZWENrR7DAAABpAAAACRobXR43EfTJgAAAkgAAG4Ia2VybjcV41EAD4CAAAJx/mxvY2G/umicAAEfZAAAbgxtYXhwLoEqfQAAAcgAAAAgbWV0YZqCoHYAGYUoAAAAhG5hbWXu28BQABHygAAAMIlwb3N0/xsAhgASIwwAAAAgcHJlcKX7ab4AAPSsAAAk+QABAAAABkKPB4cO9V8PPPUAGQgA [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string font2 {
             get {
@@ -276,7 +285,7 @@ namespace IATClient.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to T1RUTwAMAIAAAwBAQ0ZGIJ6Cq50AAAR4AAAiIURTSUcAAAABAAA9MAAAAAhHUE9T53PbzgAAKyAAABIAR1NVQgAZAAwAAD0gAAAAEE9TLzJzkmGhAAABMAAAAGBjbWFwDWQPjgAAArgAAAHAaGVhZBrnxJgAAADMAAAANmhoZWEHaf+IAAABBAAAACRobXR4d88DjwAAAZAAAAEobWF4cABKUAAAAAEoAAAABm5hbWWCIpTmAAAmnAAABGRwb3N0/58AMgAAKwAAAAAgAAEAAAABAADNe3ZSXw889QADBkAAAAAA3Gr/sgAAAADcfYAs/8//CAMZAnoAAAADAAIAAAAAAAAAAQAABBr92gBkAo7/z/7VAxoAAQAAAAAAAAAAAAAAAAAAAEoAAFAAAEoAAAAEAZ4BkAAFAAQCigJYAAAASwKKAlgAAAFeADIAMgAAAAAAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAABWYWNhAMAAIAB6BBr92gBkAu4A+gAA [rest of string was truncated]&quot;;.
+        ///   Looks up a localized string similar to AAEAAAAPAIAAAwBwRFNJR0XlMXMAANbUAAAafE9TLzJwnpH8AAABeAAAAFZjbWFwv2nO2QAABbQAAANEY3Z0IDFePWQAAA8oAAABqmZwZ23LJqJvAAAI+AAABR5nbHlmJ5zlqQAAEsgAALboaGVhZNs0yIoAAAD8AAAANmhoZWESuw5fAAABNAAAACRobXR4HqFGJwAAAdAAAAPka2VybgGsAKAAAMmwAAAEvGxvY2HMt/i9AAAQ1AAAAfRtYXhwAlcCywAAAVgAAAAgbmFtZU11KNoAAM5sAAAGN3Bvc3RhL3gZAADUpAAAAi1wcmVwqem/ZgAADhgAAAEPAAEAAAABmZobqYNMXw889QALCAAAAAAAueVuWAAAAAC6AnX9/g7+SgofB1YAAAAGAAIAAAAAAAAAAQAABwr+SgIdCj/+Dvz8Ch8H4QFkAAAAAAAAAAAAAAAAAPkAAQAAAPkAvAAHAG8ABAACABAALwA5AAABBwFuAAIAAQABA2kBkAAF [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string font3 {
             get {
@@ -285,7 +294,7 @@ namespace IATClient.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to AAEAAAASAQAABAAgR1BPU3Lh1OYAAbsUAABWtExUU0g9K36gAAAFlAAAAOdPUy8yh7Z0NAAAAagAAABgVkRNWGvdc1sAAAZ8AAAF4GNtYXDuew7xAAAhPAAABbZjdnQgAPsH3gAAKNwAAAAaZnBnbQZZnDcAACb0AAABc2dseWamoexEAAAo+AABCrhoZG14qIuLwwAADFwAABTgaGVhZP6UiD8AAAEsAAAANmhoZWEHcQRmAAABZAAAACRobXR4JYYlLQAAAggAAAOMa2VyboeAin0AATV4AAB+6mxvY2F3wr9oAAEzsAAAAchtYXhwAwcEngAAAYgAAAAgbmFtZWxRm1YAAbRkAAAEiXBvc3RggEm5AAG48AAAAiJwcmVw0dQ0KwAAKGgAAAByAAEAAAABAABDRBe4Xw889QAZA+gAAAAAzW3IcgAAAADNj3xZ/7H+9AS5A5oAAAAJAAIAAAAAAAAAAQAAArv+0wBJBOn/sf/GBLkAAQAAAAAAAAAA [rest of string was truncated]&quot;;.
+        ///   Looks up a localized string similar to AAEAAAAUAQAABABARFNJRzp0FvQAARRQAAAhiEdERUYB+gLJAAEOmAAAADZHUE9T2PwuyQABDtAAAATmR1NVQtq50jEAARO4AAAAXk9TLzJnVnw1AAAByAAAAGBWRE1YcW14MAAABtgAAAXmY21hcEP7QdAAAAzAAAACNGN2dCAkFDaYAAAZ1AAAAhBmcGdtB9sxigAADvQAAAe6Z2FzcAAaAAkAAQ6IAAAAEGdseWaBIwF+AAAeQAAA5rxoZWFk9wiMTwAAAUwAAAA2aGhlYRH3BVgAAAGEAAAAJGhtdHgPjrLKAAACKAAABLBsb2NhahAvuwAAG+QAAAJabWF4cAO3A4EAAAGoAAAAIG1ldGEa9gGQAAEUGAAAADVuYW1lCFzruwABBPwAAAlpcG9zdP6fAGQAAQ5oAAAAIHByZXCKmholAAAWsAAAAyIAAQAAAAbZmkwBSZFfDzz1ABsIAAAAAAC2SnQWAAAAANnN883+IP2eCZwINgAAAAkAAQAA [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string font4 {
             get {
@@ -294,7 +303,7 @@ namespace IATClient.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to AAEAAAALAIAAAwAwT1MvMj08swAAAAE4AAAAVmNtYXD+9n07AAAFWAAAA+ZnYXNw//8AAwAAgCQAAAAIZ2x5Zg1XZGAAAAsoAABtxGhlYWQf2W4YAAAAvAAAADZoaGVhIq8bxQAAAPQAAAAkaG10eEfpESEAAAGQAAADyGxvY2EMV/H0AAAJQAAAAeZtYXhwAQ0CHQAAARgAAAAgbmFtZcxDoPkAAHjsAAAErHBvc3SMOAAXAAB9mAAAAooAAQAAAAEAAMp8mtNfDzz1AAsIAAAAAADRl8ZaAAAAANPdXZ/86v2+HlwHZgAAAAYAAQAAAAAAAAABAAAHZv2+AAAejPzq/ogeXAABAAAAAAAAAAAAAAAAAAAA8gABAAAA8gG5ABIAYgAFAAAAAAAAAAAAAAAAAAAAAwACAAECfQGQAAUACAWaBTMAAAEbBZoFMwAAA9EAZgISAAACAAUAAAAAAAAAgAAAp1AAAEoAAAAAAAAAAEhMICAAQAAgIKwC7P5G [rest of string was truncated]&quot;;.
+        ///   Looks up a localized string similar to AAEAAAASAQAABAAgRFNJR4hnCSYAAS4QAAAU6ExUU0jUDkJJAAAMOAAAAPtPUy8yaaR/KwAAAagAAABWVkRNWFzYZEkAAA00AAAF4GNtYXCOvXoAAAAHAAAAA0hjdnQgVPc36QAAGSwAAAGkZnBnbbp1ncMAABRwAAAEumdhc3AAFwAJAAACAAAAABBnbHlmbhwIVgAAPTgAAO6WaGRteHnmaLoAAB6sAAAejGhlYWTIGsGVAAABLAAAADZoaGVhCvQEVQAAAWQAAAAkaG10eGnbPacAABrQAAAD3GxvY2GYAtZ2AAAKSAAAAfBtYXhwCVsGIgAAAYgAAAAgbmFtZSEbyisAAAIQAAAE7nBvc3SP8K3tAAEr0AAAAj1wcmVwm8sULgAAExQAAAFaAAEAAAABAU4L1WEtXw889QAbCAAAAAAAr9GOLQAAAAC0KOnI/Jv8bQhWBuoAAAAGAAIAAAAAAAAAAQAABgD8bQAACMH8m/4vCFYAAQAAAAAAAAAA [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string font5 {
             get {
@@ -303,7 +312,7 @@ namespace IATClient.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to T1RUTwAMAIAAAwBAQ0ZGIN4lByMAANPUAACIe0dQT1OpuUpIAABzOAAAXqxHU1VCJLE1HQAA0eQAAAHuT1MvMo/TfREAAAEwAAAAYGNtYXBFicTwAAATeAAABj5oZWFk+UxKEgAAAMwAAAA2aGhlYQfzAn8AAAEEAAAAJGhtdHg+moypAAAZuAAABnhrZXJusVTBVQAAIFAAAFLmbWF4cAGeUAAAAAEoAAAABm5hbWXqF1RtAAABkAAAEehwb3N0/7sALwAAIDAAAAAgAAEAAAABAIMvs+EnXw889QADA+gAAAAAy0CC8QAAAADLQILx/zD+kQSEBDwAAAADAAIAAAAAAAAAAQAABDz+kQAABDL/MP4dBIQAAQAAAAAAAAAAAAAAAAAAAZ4AAFAAAZ4AAAACAgEBkAAFAAACvAKKAAAAjAK8AooAAAHdADIA+goGAwYGAgQHBQgCBaAAAL9QAABbAAAAAAAAAABweXJzAEAAAPsEBDz+kQAABDwBbwAA [rest of string was truncated]&quot;;.
+        ///   Looks up a localized string similar to AAEAAAAWAQAABABgRFNJR9NbH1AAAj2UAAAdxEdERUYAAQAAAAJbWAAAABhHUE9TrprF5QACW3AAADYaTFRTSN3pTA8AAA0QAAACtk9TLzJGsdvRAAAB6AAAAGBWRE1YckF5mQAAD8gAAAXgY21hcE0rTEAAAEOkAAAIEmN2dCAVByWeAABXOAAAAdxmcGdtlcB/AAAAS7gAAAlQZ2FzcAAXAAkAAj2EAAAAEGdseWZd5abAAABefAAB1LJoZG148laH2wAAFagAAC38aGVhZPviMCoAAAFsAAAANmhoZWETyAhXAAABpAAAACRobXR402oEKgAAAkgAAArIa2VybgBWAKMAAjMwAAAAGGxvY2GggCh8AABZFAAABWZtYXhwBPkE5gAAAcgAAAAgbWV0YRqlklEAApGMAAAASG5hbWVzpl6bAAIzSAAAChpwb3N0/34AjwACPWQAAAAgcHJlcI/Sus4AAFUIAAACLQABAAAABQo9PdaEkl8PPPUAGwgA [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string font6 {
             get {
@@ -312,7 +321,7 @@ namespace IATClient.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to AAEAAAASAQAABAAgRFNJRwAAAAEAAVTUAAAACEdERUY2vDfjAAABLAAAANRHUE9TZXB6zgAAAgAAAEbYR1NVQglZ9V8AAEjYAAAKjE9TLzJo9KMfAABTZAAAAGBjbWFwUshQQQAAU8QAAAiMY3Z0IBewBlgAAUZYAAAAaGZwZ209HI58AAFGwAAADW1nYXNwAAAAEAABRlAAAAAIZ2x5ZvT6vkUAAFxQAADB8mhlYWQLqE1xAAEeRAAAADZoaGVhBjAGtgABHnwAAAAkaG10ePzKMbEAAR6gAAAJoGxvY2HcIatiAAEoQAAABNJtYXhwA6gOQgABLRQAAAAgbmFtZVPmap8AAS00AAAHd3Bvc3QuhalpAAE0rAAAEaFwcmVwKRv9UAABVDAAAACjAAEAAAAMAAAAAACaAAIAFwAEAGoAAQBtAIcAAQCJAJwAAQCfALYAAQC4APAAAQDyAQcAAQEJASkAAQErAVQAAQFWAVsAAQFdAWkAAQFrAZgAAQGj [rest of string was truncated]&quot;;.
+        ///   Looks up a localized string similar to AAEAAAAWAQAABABgRFNJR84c4iIACPxgAAAhhEdERUYv8jbCAAe/jAAAAFpHUE9TKTar/AAHv+gAAGSgR1NVQmgOefYACCSIAADXjkxUU0ilUC3IAAAgmAAAB5hPUy8ySc9zkAAAAegAAABgY21hcCAOhVkAAN54AAAIHGN2dCAOOx/NAADx0AAAAdxmcGdtlcB/AAAA5pQAAAlQZ2FzcAAXAAkAB798AAAAEGdseWa9yxRKAAESAAAGon5oZG14TLvlAgAAKDAAALZIaGVhZASYtKUAAAFsAAAANmhoZWETbg0gAAABpAAAACRobXR4QeUDrAAAAkgAAB5Qa2VybgBWAJ4AB7SAAAAAGGxvY2Ea27lUAADzrAAAHlRtYXhwCnIL0gAAAcgAAAAgbWV0YRqlklEACPwYAAAASG5hbWVvW6LuAAe0mAAACsRwb3N0/34AjwAHv1wAAAAgcHJlcBlvQXsAAO/kAAAB6gABAAAABQeufIZ98V8PPPUAGwgA [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string font7 {
             get {
@@ -370,7 +379,7 @@ namespace IATClient.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to BwIAAACkAABSU0EyAAgAAAEAAQB5Jlx80AZPhtsrXrHyxvqrl93jBMV+3QwHYg9NiqdBwP4XDYBIv17RyBpQcPKytBnchqE3ftatXJCxXqRvnuSsk+7nSXsJZQ6zq70sApZAbMo0QqICwnaHIRJ50tRJyXM4TdahDahoomHfxu02vNElcgAOmONQjKcyWDYPqs7q741V77qqJRg+PQV2ZK8n8tnhC/u1muZ68VqJvskSDG/gdigPG1Qmmw9i1N4lRchXmzMKguawxsJDLgU8buZXQhoA5edWkZpSZKZePGiBScEsDPkM9fw6PZ+6LkMMAe8TgCOW9pr398YD+4z2xb7JV8C17mmPrIK7M7JxC3hvtb7EB/aD8A0sGT7M6gxnS51+OoX4YhCqd7It4Ucugq0Yg1SIGoeijxR0SkHrLX0zk5/4TZgQ2BJpnggjGihlS1IwT9bQ9F8kt0SM7Vmre/ToN5KDdnBKKJNE3QmSQ0WBWhmdKIBb05dEqPRp/285 [rest of string was truncated]&quot;;.
+        ///   Looks up a localized string similar to BwIAAACkAABSU0EyAAgAAAEAAQBNwlHGYvfNyelt03Pl4eWdBOHGYVyxdLT57PVg+j4LMiWy1f+SOFdDf/y0aFgitc2W0CkJPhcF/YDlNpwvwAqVH2IxDq3vZVLFLipkOOZEACVdJBt9xttSpRVOQwnqX1Vagfg4wozGHY+obmry41e+3H31JAbQustL7lP+/0MT6YIk4vx71Zzf0MjUUXEW8e5/CcOSvSjV34P/HUSbQBkH5CvosEFnGFp4lMuUk2tNv/H8WY5i7zsth1hbhjQOX3KVVCvcZRmEQ2sIGsoMlPyQgEwPSY5G/RgVTT3eGWiZXbhjfwUwcyMQ08ZaKC95zQzO+SQ20Tei19/0LyDb/JCbr5O/nHSD6NfsWmyAcdmdzyErEe6vEvADNwbLkugIUk/4GlsnuE88dRZZe918/yQMpIreWb+PvQrqD8QhIWMvIMDJ4NEbUrXubz011+/7nuY/byUZxFTJAM2BygzbpqT4iGO/t59oy2h/QPwI [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string HandshakeCSP {
             get {
@@ -4510,12 +4519,12 @@ namespace IATClient.Properties {
         ///   Looks up a localized string similar to &lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
         ///&lt;xsl:stylesheet xmlns:xs=&quot;http://www.w3.org/2001/XMLSchema&quot; xmlns:xsl=&quot;http://www.w3.org/1999/XSL/Transform&quot; xmlns:mine=&quot;http://www.iatsoftware.net&quot; version=&quot;2.0&quot; exclude-result-prefixes=&quot;xs mine&quot;&gt;
         ///
-        ///  &lt;xsl:output method=&quot;xml&quot; omit-xml-declaration=&quot;yes&quot; encoding=&quot;UTF-8&quot; indent=&quot;yes&quot; /&gt;
+        ///	&lt;xsl:output method=&quot;xml&quot; omit-xml-declaration=&quot;yes&quot; encoding=&quot;UTF-8&quot; indent=&quot;yes&quot; /&gt;
         ///
-        ///  &lt;xsl:variable name=&quot;root&quot; select=&quot;/&quot; /&gt;
-        ///  &lt;xsl:variable name=&quot;pageWidth&quot; select=&quot;500&quot; /&gt;
-        ///  &lt;xsl:variable name=&quot;surveyWidth&quot; select=&quot;800&quot; /&gt;
-        ///  &lt;xsl:function name=&quot;mine:textWidth [rest of string was truncated]&quot;;.
+        ///	&lt;xsl:variable name=&quot;root&quot; select=&quot;/&quot; /&gt;
+        ///	&lt;xsl:variable name=&quot;pageWidth&quot; select=&quot;&apos;100%&apos;&quot; /&gt;
+        ///	&lt;xsl:variable name=&quot;surveyWidth&quot; select=&quot;&apos;80%&apos;&quot; /&gt;
+        ///	&lt;xsl:function name=&quot;mine:textWidth [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string SurveyPage {
             get {

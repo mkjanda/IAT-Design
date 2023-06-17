@@ -91,9 +91,6 @@ namespace IATClient
         {
             // write the start of the "Response" element to signify the beginning of a new response type
             writer.WriteStartElement("RegularExpression");
-            writer.WriteStartAttribute("Type");
-            writer.WriteString(sTypeRegEx);
-            writer.WriteEndAttribute();
 
             Format.WriteXml(writer);
 

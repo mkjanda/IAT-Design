@@ -1,12 +1,17 @@
 ﻿using IATClient.ResultData;
 using java.util;
+using net.sf.saxon.lib;
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.IO;
 using System.Linq;
+using System.Runtime.InteropServices;
+using System.Runtime.InteropServices.WindowsRuntime;
 using System.Security.Cryptography;
 using System.Text.RegularExpressions;
 using System.Threading;
+using System.Windows.Forms;
 using System.Xml;
 using System.Xml.Schema;
 using System.Xml.Serialization;
@@ -47,8 +52,24 @@ namespace IATClient.IATConfig
         private ManualResetEvent IATImagesProcessed = new ManualResetEvent(false);
         public ManualResetEvent SlidesProcessed { get; private set; } = new ManualResetEvent(false);
         public ManualResetEvent SurveyImagesProcessed { get; private set; } = new ManualResetEvent(false);
-        public ImageContainer IATImages { get; private set; }
-        public ImageContainer SlideImages { get; private set; }
+        private ImageContainer _IATImages;
+        public ImageContainer IATImages
+        {
+            get
+            {
+                IATImagesProcessed.WaitOne();
+                return _IATImages;
+            }
+        }
+        private ImageContainer _SlideImages;
+        public ImageContainer SlideImages
+        {
+            get
+            {
+                SlidesProcessed.WaitOne();
+                return _SlideImages;
+            }
+        }
         public CUniqueResponse UniqueResponse { get; set; }
         public UniqueResponseItem URI { get; private set; } = null;
 
@@ -82,13 +103,9 @@ namespace IATClient.IATConfig
 
         public String RedirectOnComplete { get; set; }
 
-        public int LeftResponseASCIIKeyCodeUpper { get; set; }
+        public String LeftResponseKey { get; private set; } 
 
-        public int RightResponseASCIIKeyCodeUpper { get; set; }
-
-        public int LeftResponseASCIIKeyCodeLower { get; set; }
-
-        public int RightResponseASCIIKeyCodeLower { get; set; }
+        public String RightResponseKey { get; private set; } 
 
         public ERandomizationType RandomizationType { get; set; }
 
@@ -150,14 +167,22 @@ namespace IATClient.IATConfig
 
         public IATImage GetIATImage(Uri u)
         {
-            return IATImages.GetImage(u);
+            return _IATImages.GetImage(u);
+        }
+
+        public List<IATImage> GetIATImages(Uri u)
+        {
+            return _IATImages.GetImages(u);
         }
 
         private void ProcessIATItem(IATClient.CIATItem item, CIATBlock block)
         {
             DIBase DisplayItem = item.Stimulus as DIBase;
-            IATImages.AddDI(DisplayItem);
-            SlideImages.AddDI(item.GetDIPreview(block.URI));
+     //       _IATImages.AddDI(DisplayItem, new Rectangle(new Point(DIType.StimulusImage.GetBoundingRectangle().X + (DIType.StimulusImage.GetBoundingRectangle().Width -
+       //         item.Stimulus.AbsoluteBounds.Width >> 1), DIType.StimulusImage.GetBoundingRectangle().Top +
+         //       (DIType.StimulusImage.GetBoundingRectangle().Height - item.Stimulus.AbsoluteBounds.Height >> 1)), item.Stimulus.AbsoluteBounds.Size));
+            _IATImages.AddDI(DisplayItem, DIType.StimulusImage.GetBoundingRectangle());
+            _SlideImages.AddDI(item.GetDIPreview(block.URI), DIType.Preview.GetBoundingRectangle());
             EventList.Add(new IATItem()
             {
                 ConfigFile = this,
@@ -172,9 +197,22 @@ namespace IATClient.IATConfig
 
         private bool ProcessIATBlock(CIATBlock Block, bool IsPracticeBlock, int blockNum)
         {
-            IATImages.AddDI(CIAT.SaveFile.GetDI(Block.InstructionsUri));
-            IATImages.AddDI(CIAT.SaveFile.GetDI(Block.Key.LeftValue.URI));
-            IATImages.AddDI(CIAT.SaveFile.GetDI(Block.Key.RightValue.URI));
+            var lValue = Block.Key.LeftValue;
+            var rValue = Block.Key.RightValue;
+            var instructions = CIAT.SaveFile.GetDI(Block.InstructionsUri);
+            //            _IATImages.AddDI(CIAT.SaveFile.GetDI(Block.InstructionsUri), new Rectangle(new Point(DIType.IatBlockInstructions.GetBoundingRectangle().Left +
+            //              (DIType.IatBlockInstructions.GetBoundingRectangle().Width - instructions.AbsoluteBounds.Width >> 1),
+            //            DIType.IatBlockInstructions.GetBoundingRectangle().Top + (DIType.IatBlockInstructions.GetBoundingRectangle().Height -
+            //          instructions.AbsoluteBounds.Height >> 1)), instructions.AbsoluteBounds.Size));
+            _IATImages.AddDI(CIAT.SaveFile.GetDI(Block.InstructionsUri), DIType.IatBlockInstructions.GetBoundingRectangle());
+//            _IATImages.AddDI(CIAT.SaveFile.GetDI(Block.Key.LeftValue.URI), new Rectangle(new Point(CIAT.SaveFile.Layout.LeftKeyValueRectangle.X + 
+  //              (CIAT.SaveFile.Layout.LeftKeyValueRectangle.Width - lValue.AbsoluteBounds.Width >> 1), CIAT.SaveFile.Layout.LeftKeyValueRectangle.Top +
+    //            (CIAT.SaveFile.Layout.LeftKeyValueRectangle.Height - lValue.AbsoluteBounds.Height >> 1)), lValue.AbsoluteBounds.Size));
+            _IATImages.AddDI(CIAT.SaveFile.GetDI(Block.Key.LeftValue.URI), CIAT.SaveFile.Layout.LeftKeyValueRectangle);
+//            _IATImages.AddDI(CIAT.SaveFile.GetDI(Block.Key.RightValue.URI), new Rectangle(new Point(CIAT.SaveFile.Layout.RightKeyValueRectangle.X + 
+  //              (CIAT.SaveFile.Layout.RightKeyValueRectangle.Width - rValue.AbsoluteBounds.Width >> 1), CIAT.SaveFile.Layout.RightKeyValueRectangle.Top +
+    //            (CIAT.SaveFile.Layout.RightKeyValueRectangle.Height - rValue.AbsoluteBounds.Height >> 1)), rValue.AbsoluteBounds.Size));
+            _IATImages.AddDI(CIAT.SaveFile.GetDI(Block.Key.RightValue.URI), CIAT.SaveFile.Layout.RightKeyValueRectangle);
             EventList.Add(new BeginIATBlock()
             {
                 ConfigFile = this,
@@ -188,8 +226,19 @@ namespace IATClient.IATConfig
 
         private void ProcessTextInstructionScreen(CTextInstructionScreen screen)
         {
-            IATImages.AddDI(CIAT.SaveFile.GetDI(screen.InstructionsUri));
-            IATImages.AddDI(CIAT.SaveFile.GetDI(screen.ContinueInstructionsUri));
+            var instructions = CIAT.SaveFile.GetDI(screen.InstructionsUri);
+            var continueInstructions = CIAT.SaveFile.GetDI(screen.ContinueInstructionsUri);
+            //            _IATImages.AddDI(CIAT.SaveFile.GetDI(screen.InstructionsUri), new Rectangle(new Point(DIType.TextInstructionsScreen.GetBoundingRectangle().X +
+            //              (DIType.TextInstructionsScreen.GetBoundingRectangle().Width - instructions.AbsoluteBounds.Width >> 1),
+            //            DIType.TextInstructionsScreen.GetBoundingRectangle().Y +
+            //          (DIType.TextInstructionsScreen.GetBoundingRectangle().Height - instructions.AbsoluteBounds.Height >> 1)),
+            //        instructions.AbsoluteBounds.Size));
+            _IATImages.AddDI(CIAT.SaveFile.GetDI(screen.InstructionsUri), DIType.TextInstructionsScreen.GetBoundingRectangle());
+            //            _IATImages.AddDI(CIAT.SaveFile.GetDI(screen.ContinueInstructionsUri), new Rectangle(new Point(DIType.ContinueInstructions.GetBoundingRectangle().X +
+            //               (DIType.ContinueInstructions.GetBoundingRectangle().Width - continueInstructions.AbsoluteBounds.Width >> 1),
+            //              DIType.ContinueInstructions.GetBoundingRectangle().Y + (DIType.ContinueInstructions.GetBoundingRectangle().Height - 
+            //             continueInstructions.AbsoluteBounds.Height >> 1)), instructions.AbsoluteBounds.Size));
+            _IATImages.AddDI(CIAT.SaveFile.GetDI(screen.ContinueInstructionsUri), DIType.ContinueInstructions.GetBoundingRectangle());
             var processedScreen = new TextInstructionScreen()
             {
                 ConfigFile = this,
@@ -200,11 +249,41 @@ namespace IATClient.IATConfig
 
         private void ProcessMockItemInstructionScreen(IATClient.CMockItemScreen screen)
         {
-            IATImages.AddDI(CIAT.SaveFile.GetDI(screen.StimulusUri));
-            IATImages.AddDI(CIAT.SaveFile.GetDI(CIAT.SaveFile.GetIATKey(screen.ResponseKeyUri).LeftValueUri));
-            IATImages.AddDI(CIAT.SaveFile.GetDI(CIAT.SaveFile.GetIATKey(screen.ResponseKeyUri).RightValueUri));
-            IATImages.AddDI(CIAT.SaveFile.GetDI(screen.InstructionsUri));
-            IATImages.AddDI(CIAT.SaveFile.GetDI(screen.ContinueInstructionsUri));
+            var stim = CIAT.SaveFile.GetDI(screen.StimulusUri);
+            var lKey = CIAT.SaveFile.GetIATKey(screen.ResponseKeyUri).LeftValue;
+            var rKey = CIAT.SaveFile.GetIATKey(screen.ResponseKeyUri).RightValue;
+            var instructions = CIAT.SaveFile.GetDI(screen.InstructionsUri);
+            var continueInstr = CIAT.SaveFile.GetDI(screen.ContinueInstructionsUri);
+            //            _IATImages.AddDI(CIAT.SaveFile.GetDI(screen.StimulusUri), new Rectangle(new Point(DIType.StimulusImage.GetBoundingRectangle().X + 
+            //               (DIType.StimulusImage.GetBoundingRectangle().Width - stim.AbsoluteBounds.Width >> 1), DIType.StimulusImage.GetBoundingRectangle().Top +
+            //             (DIType.StimulusImage.GetBoundingRectangle().Height - stim.AbsoluteBounds.Height >> 1)), stim.AbsoluteBounds.Size));
+            _IATImages.AddDI(CIAT.SaveFile.GetDI(screen.StimulusUri), DIType.StimulusImage.GetBoundingRectangle());
+            //            _IATImages.AddDI(CIAT.SaveFile.GetDI(CIAT.SaveFile.GetIATKey(screen.ResponseKeyUri).LeftValueUri), 
+            //              new Rectangle(new Point(CIAT.SaveFile.Layout.LeftKeyValueRectangle.X + (CIAT.SaveFile.Layout.LeftKeyValueRectangle.Width -
+            //            lKey.AbsoluteBounds.Width >> 1), CIAT.SaveFile.Layout.LeftKeyValueRectangle.Top +
+            //          (CIAT.SaveFile.Layout.LeftKeyValueRectangle.Height - lKey.AbsoluteBounds.Height >> 1)), lKey.AbsoluteBounds.Size));
+            _IATImages.AddDI(CIAT.SaveFile.GetDI(CIAT.SaveFile.GetIATKey(screen.ResponseKeyUri).LeftValueUri), CIAT.SaveFile.Layout.LeftKeyValueRectangle);
+            //            _IATImages.AddDI(CIAT.SaveFile.GetDI(CIAT.SaveFile.GetIATKey(screen.ResponseKeyUri).RightValueUri), 
+            //               new Rectangle(new Point(CIAT.SaveFile.Layout.RightKeyValueRectangle.X + (CIAT.SaveFile.Layout.RightKeyValueRectangle.Width -
+            //              rKey.AbsoluteBounds.Width >> 1), CIAT.SaveFile.Layout.RightKeyValueRectangle.Top +
+            //             (CIAT.SaveFile.Layout.RightKeyValueRectangle.Height - rKey.AbsoluteBounds.Height >> 1)), rKey.AbsoluteBounds.Size));
+            _IATImages.AddDI(CIAT.SaveFile.GetDI(CIAT.SaveFile.GetIATKey(screen.ResponseKeyUri).RightValueUri), CIAT.SaveFile.Layout.RightKeyValueRectangle);
+            //                new Rectangle(new Point(CIAT.SaveFile.Layout.RightKeyValueRectangle.X + (CIAT.SaveFile.Layout.RightKeyValueRectangle.Width -
+            //              rKey.AbsoluteBounds.Width >> 1), CIAT.SaveFile.Layout.RightKeyValueRectangle.Top +
+            //            (CIAT.SaveFile.Layout.RightKeyValueRectangle.Height - rKey.AbsoluteBounds.Height >> 1)), rKey.AbsoluteBounds.Size));
+            //      _IATImages.AddDI(CIAT.SaveFile.GetDI(screen.InstructionsUri), new Rectangle(new Point(DIType.MockItemInstructions.GetBoundingRectangle().X + 
+            //                (DIType.MockItemInstructions.GetBoundingRectangle().Width - instructions.AbsoluteBounds.Width >> 1), 
+            //              DIType.MockItemInstructions.GetBoundingRectangle().Top + (DIType.MockItemInstructions.GetBoundingRectangle().Height - 
+            //            instructions.AbsoluteBounds.Height >> 1)), instructions.AbsoluteBounds.Size));
+            _IATImages.AddDI(CIAT.SaveFile.GetDI(screen.InstructionsUri), DIType.MockItemInstructions.GetBoundingRectangle());
+            //        (DIType.MockItemInstructions.GetBoundingRectangle().Width - instructions.AbsoluteBounds.Width >> 1),
+            //      DIType.MockItemInstructions.GetBoundingRectangle().Top + (DIType.MockItemInstructions.GetBoundingRectangle().Height -
+            //    instructions.AbsoluteBounds.Height >> 1)), instructions.AbsoluteBounds.Size));
+            //            _IATImages.AddDI(CIAT.SaveFile.GetDI(screen.ContinueInstructionsUri), new Rectangle(new Point(DIType.ContinueInstructions.GetBoundingRectangle().X +
+            //              (DIType.ContinueInstructions.GetBoundingRectangle().Width - continueInstr.AbsoluteBounds.Width >> 1), DIType.ContinueInstructions.GetBoundingRectangle().Top +
+            //            (DIType.ContinueInstructions.GetBoundingRectangle().Height - continueInstr.AbsoluteBounds.Height >> 1)), continueInstr.AbsoluteBounds.Size));
+            _IATImages.AddDI(CIAT.SaveFile.GetDI(screen.ContinueInstructionsUri), DIType.ContinueInstructions.GetBoundingRectangle());
+            
             EventList.Add(new MockItemInstructionScreen()
             {
                 ConfigFile = this,
@@ -214,10 +293,25 @@ namespace IATClient.IATConfig
 
         private void ProcessKeyedInstructionScreen(IATClient.CKeyInstructionScreen screen)
         {
-            IATImages.AddDI(CIAT.SaveFile.GetDI(CIAT.SaveFile.GetIATKey(screen.ResponseKeyUri).LeftValueUri));
-            IATImages.AddDI(CIAT.SaveFile.GetDI(CIAT.SaveFile.GetIATKey(screen.ResponseKeyUri).RightValueUri));
-            IATImages.AddDI(CIAT.SaveFile.GetDI(screen.InstructionsUri));
-            IATImages.AddDI(CIAT.SaveFile.GetDI(screen.ContinueInstructionsUri));
+            var lKey = CIAT.SaveFile.GetIATKey(screen.ResponseKeyUri).LeftValue;
+            var rKey = CIAT.SaveFile.GetIATKey(screen.ResponseKeyUri).RightValue;
+            var instructions = CIAT.SaveFile.GetDI(screen.InstructionsUri);
+            var continueInstr = CIAT.SaveFile.GetDI(screen.ContinueInstructionsUri);
+            var diRects = new Dictionary<Uri, Rectangle>();
+           _IATImages.AddDI(lKey, CIAT.SaveFile.Layout.LeftKeyValueRectangle);
+            _IATImages.AddDI(rKey, CIAT.SaveFile.Layout.RightKeyValueRectangle);
+
+            //            _IATImages.AddDI(CIAT.SaveFile.GetDI(CIAT.SaveFile.GetIATKey(screen.ResponseKeyUri).LeftValueUri, CIAT.SaveFile.Layout.LeftKeyValueRectangle);
+            //            _IATImages.AddDI(CIAT.SaveFile.GetDI(CIAT.SaveFile.GetIATKey(screen.ResponseKeyUri).RightValueUri), 
+            //                new Rectangle(new Point(CIAT.SaveFile.Layout.RightKeyValueRectangle.X + (CIAT.SaveFile.Layout.RightKeyValueRectangle.Width -
+            //               rKey.AbsoluteBounds.Width >> 1), CIAT.SaveFile.Layout.RightKeyValueRectangle.Top +
+            //              (CIAT.SaveFile.Layout.RightKeyValueRectangle.Height - rKey.AbsoluteBounds.Height >> 1)), rKey.AbsoluteBounds.Size));
+            _IATImages.AddDI(CIAT.SaveFile.GetDI(screen.InstructionsUri), DIType.KeyedInstructionsScreen.GetBoundingRectangle());
+
+            //           _IATImages.AddDI(CIAT.SaveFile.GetDI(screen.ContinueInstructionsUri), new Rectangle(new Point(DIType.ContinueInstructions.GetBoundingRectangle().X + (DIType.ContinueInstructions.GetBoundingRectangle().Width -
+            //               continueInstr.AbsoluteBounds.Width >> 1), DIType.ContinueInstructions.GetBoundingRectangle().Top +
+            //              (DIType.ContinueInstructions.GetBoundingRectangle().Height - continueInstr.AbsoluteBounds.Height >> 1)), continueInstr.AbsoluteBounds.Size));
+            _IATImages.AddDI(CIAT.SaveFile.GetDI(screen.ContinueInstructionsUri), DIType.ContinueInstructions.GetBoundingRectangle());
             EventList.Add(new KeyedInstructionScreen()
             {
                 ConfigFile = this,
@@ -271,27 +365,43 @@ namespace IATClient.IATConfig
         {
             IAT = iat;
             _Name = IAT.Name;
-            XmlSerializer surveySerializer = new XmlSerializer(typeof(IATConfig.IATSurvey));
-            IATImages = new ImageContainer((DIBase di) =>
+            XmlSerializer surveySerializer = new XmlSerializer(typeof(Survey));
+            _IATImages = new ImageContainer((DIBase di) =>
             {
                 var memStream = new MemoryStream();
                 var bmp = di.IImage.Img;
+                IATImage retVal = null;
+                ManualResetEvent mEvt = new ManualResetEvent(true);
                 if (bmp == null)
                 {
-                    di.ScheduleInvalidationSync();
-                    di.InvalidationEvent.Wait();
-                    bmp = di.IImage.Img;
+                    di.IImage.Changed += (evt, i, o) =>
+                    {
+                        i.Img.Save(memStream, i.ImageFormat.Format);
+                        retVal = new IATImage()
+                        {
+                            ImageData = memStream.ToArray(),
+                            Format = i.ImageFormat.Format
+                        };
+                        mEvt.Set();
+                    };
+                    mEvt.Reset();
+                    di.ScheduleInvalidation();
+                    mEvt.WaitOne();
                 }
-                bmp.Save(memStream, di.IImage.ImageFormat.Format);
-                IATImage img = new IATImage()
+                else
                 {
-                    ImageData = memStream.ToArray(),
-                    Format = di.IImage.ImageFormat.Format
-                };
-                bmp.Dispose();
-                return img;
+                    bmp.Save(memStream, di.IImage.ImageFormat.Format);
+                    retVal = new IATImage()
+                    {
+                        ImageData = memStream.ToArray(),
+                        Format = di.IImage.ImageFormat.Format
+                    };
+                    memStream.Dispose();
+                    bmp.Dispose();
+                }
+                return retVal;
             }, IATImagesProcessed);
-            SlideImages = new ImageContainer((DIBase di) =>
+            _SlideImages = new ImageContainer((DIBase di) =>
             {
                 var img = (di as DIPreview).SaveToJpeg();
                 var memStream = new MemoryStream();
@@ -313,7 +423,7 @@ namespace IATClient.IATConfig
             for (int ctr = 0; ctr < BeforeSurveys.Count + AfterSurveys.Count; ctr++)
             {
                 var survey = (ctr < BeforeSurveys.Count) ? BeforeSurveys[ctr] : AfterSurveys[ctr - BeforeSurveys.Count];
-                Survey s = new Survey(survey.Name);
+                var s = new Survey(survey.Name);
                 s.Timeout = (int)(survey.Timeout * 60000);
                 s.HasCaption = survey.Items[0].IsCaption;
                 if (s.HasCaption)
@@ -326,10 +436,10 @@ namespace IATClient.IATConfig
                 cStream.FlushFinalBlock();
                 SurveyB64Xml.Add(System.Text.Encoding.UTF8.GetString(surveyStream.ToArray()));
                 surveyStream.Dispose();
-                foreach (var si in survey.Items.Cast<CSurveyItemImage>().Where(item => item is CSurveyItemImage)) {
-                    IATImages.AddDI(si.SurveyImage);
-                    surveyImageItems.Add(si);
-                }
+  //              foreach (var si in survey.Items.Where(i => i is CSurveyItemImage).Cast<CSurveyItemImage>()) {
+    //                _IATImages.AddDI(si.SurveyImage);
+      //              surveyImageItems.Add(si);
+//                }
             }
             _EventList = new IATEventList();
             Layout = new IATLayout(CIAT.SaveFile.Layout);
@@ -351,9 +461,9 @@ namespace IATClient.IATConfig
             _LeftResponseASCIIKeyCodeUpper = System.Text.Encoding.ASCII.GetBytes(IAT.LeftResponseChar.ToUpper())[0];
             _RightResponseASCIIKeyCodeLower = System.Text.Encoding.ASCII.GetBytes(IAT.RightResponseChar.ToLower())[0];
             _RightResponseASCIIKeyCodeUpper = System.Text.Encoding.ASCII.GetBytes(IAT.RightResponseChar.ToUpper())[0];
-            IATImages.AddDI(CIAT.SaveFile.Layout.ErrorMark);
-            IATImages.AddDI(CIAT.SaveFile.Layout.LeftKeyValueOutline);
-            IATImages.AddDI(CIAT.SaveFile.Layout.RightKeyValueOutline);
+            _IATImages.AddDI(CIAT.SaveFile.Layout.ErrorMark, CIAT.SaveFile.Layout.ErrorRectangle);
+            _IATImages.AddDI(CIAT.SaveFile.Layout.LeftKeyValueOutline, CIAT.SaveFile.Layout.LeftKeyValueOutlineRectangle);
+            _IATImages.AddDI(CIAT.SaveFile.Layout.RightKeyValueOutline, CIAT.SaveFile.Layout.RightKeyValueOutlineRectangle);
             for (int ctr = 0; ctr < IAT.Contents.Count; ctr++)
             {
                 if (IAT.Contents[ctr].Type == ContentsItemType.IATBlock)
@@ -372,11 +482,11 @@ namespace IATClient.IATConfig
             //            foreach (DynamicSpecifier ds in DynamicSpecifier.GetAllSpecifiers())
             //              DynamicSpecifiers.Add(ds.GetSerializableSpecifier());
             //            DynamicSpecifier.CompactSpecifierDictionary(IAT);
-            SlideImages.AddDI(null);
-            IATImages.AddDI(null);
+            _SlideImages.AddDI(null, Rectangle.Empty);
+            _IATImages.AddDI(null, Rectangle.Empty);
             IATImagesProcessed.WaitOne();
-            foreach (var si in surveyImageItems)
-                si.ResourceId = IATImages.GetImage(si.SurveyImage.IImage.URI).Indexes[0];
+   //         foreach (var si in surveyImageItems)
+   //             si.ResourceId = _IATImages.GetImage(si.SurveyImage.IImage.URI).Indexes[0];
         }
 
 
@@ -387,8 +497,9 @@ namespace IATClient.IATConfig
 
         public void WriteXml(XmlWriter writer)
         {
-            writer.WriteStartElement("ConfigFileBean");
-           writer.WriteElementString("IATName", Name);
+            IATImagesProcessed.WaitOne();
+            writer.WriteStartElement("ConfigFile");
+            writer.WriteElementString("IATName", Name);  
             writer.WriteElementString("ServerDomain", ServerDomain);
             writer.WriteElementString("ServerPath", ServerPath);
             writer.WriteElementString("ServerPort", ServerPort.ToString());
@@ -396,14 +507,12 @@ namespace IATClient.IATConfig
             writer.WriteElementString("NumIATItems", NumIATItems.ToString());
             writer.WriteElementString("IsSevenBlock", Is7Block.ToString());
             writer.WriteElementString("RedirectOnComplete", CIAT.SaveFile.IAT.RedirectionURL.ToString());
-            writer.WriteElementString("LeftResponseASCIIKeyCodeUpper", LeftResponseASCIIKeyCodeUpper.ToString());
-            writer.WriteElementString("RightResponseASCIIKeyCodeUpper", RightResponseASCIIKeyCodeUpper.ToString());
-            writer.WriteElementString("LeftResponseASCIIKeyCodeLower", LeftResponseASCIIKeyCodeLower.ToString());
-            writer.WriteElementString("RightResponseASCIIKeyCodeLower", RightResponseASCIIKeyCodeLower.ToString());
+            writer.WriteElementString("LeftResponseKey", IAT.LeftResponseChar.ToLower());
+            writer.WriteElementString("RightResponseKey", IAT.RightResponseChar.ToLower());
             writer.WriteElementString("RandomizationType", RandomizationType.ToString());
             writer.WriteElementString("ErrorMarkID", ErrorMarkID.ToString());
-            writer.WriteElementString("LeftKeyOutlineID", LeftKeyOutlineID.ToString());
-            writer.WriteElementString("RightKeyOutlineID", RightKeyOutlineID.ToString());
+            writer.WriteElementString("LeftKeyOutlineID", _IATImages.GetImage(CIAT.SaveFile.Layout.LeftKeyValueOutline.URI).Id.ToString());
+            writer.WriteElementString("RightKeyOutlineID", _IATImages.GetImage(CIAT.SaveFile.Layout.RightKeyValueOutline.URI).Id.ToString());
             writer.WriteElementString("PrefixSelfAlternatingSurveys", PrefixSelfAlternatingSurveys.ToString());
             foreach (DynamicSpecifier ds in DynamicSpecifiers)
                 ds.WriteXml(writer);
@@ -420,7 +529,7 @@ namespace IATClient.IATConfig
             }
             Layout.WriteXml(writer);
             EventList.WriteXml(writer);
-            IATImages.WriteXml(writer);
+            _IATImages.WriteXml(writer);
             writer.WriteEndElement();
         }
 
@@ -451,10 +560,8 @@ namespace IATClient.IATConfig
             NumIATItems = Convert.ToInt32(reader.ReadElementString());
             Is7Block = Convert.ToBoolean(reader.ReadElementString());
             CIAT.SaveFile.IAT.RedirectionURL = reader.ReadElementString();
-            LeftResponseASCIIKeyCodeUpper = Convert.ToInt32(reader.ReadElementString());
-            RightResponseASCIIKeyCodeUpper = Convert.ToInt32(reader.ReadElementString());
-            LeftResponseASCIIKeyCodeLower = Convert.ToInt32(reader.ReadElementString());
-            RightResponseASCIIKeyCodeLower = Convert.ToInt32(reader.ReadElementString());
+            LeftResponseKey = reader.ReadElementString();
+            RightResponseKey = reader.ReadElementString();
             RandomizationType = (ERandomizationType)Enum.Parse(typeof(ERandomizationType), reader.ReadElementString());
             ErrorMarkID = Convert.ToInt32(reader.ReadElementString());
             LeftKeyOutlineID = Convert.ToInt32(reader.ReadElementString());
@@ -473,7 +580,7 @@ namespace IATClient.IATConfig
             }
             Layout.ReadXml(reader);
             EventList.ReadXml(reader);
-            IATImages.ReadXml(reader);
+            _IATImages.ReadXml(reader);
         }
 
         public XmlSchema GetSchema()
