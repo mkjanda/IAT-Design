@@ -1,4 +1,6 @@
 ﻿using System;
+using System.CodeDom;
+using System.Linq;
 using System.Xml;
 
 namespace IATClient.IATConfig
@@ -55,42 +57,25 @@ namespace IATClient.IATConfig
         {
             get
             {
-                if (_InstructionsDisplayID != -1)
-                    return _InstructionsDisplayID;
-                _InstructionsDisplayID = ConfigFile.GetIATImage(CIAT.SaveFile.GetIATBlock(BlockUri).InstructionsUri).Id;
-                return _InstructionsDisplayID;
-            }
-            set
-            {
-                _InstructionsDisplayID = value;
+                return ConfigFile.GetIATImage(CIAT.SaveFile.GetIATBlock(BlockUri).InstructionsUri).Id;
             }
         }
         public int LeftResponseDisplayID
         {
             get
             {
-                if (_LeftResponseDisplayID != -1)
-                    return _LeftResponseDisplayID;
-                _LeftResponseDisplayID = ConfigFile.GetIATImage(CIAT.SaveFile.GetIATBlock(BlockUri).Key.LeftValueUri).Id;
-                return _LeftResponseDisplayID;
-            }
-            set
-            {
-                _LeftResponseDisplayID = value;
+                var tups = ConfigFile.GetIATImages(CIAT.SaveFile.GetIATBlock(BlockUri).Key.LeftValueUri);
+                tups.Sort((t1, t2) => t1.Bounds.X.CompareTo(t2.Bounds.X));
+                return tups.First().Id;
             }
         }
         public int RightResponseDisplayID
         {
             get
             {
-                if (_RightResponseDisplayID != -1)
-                    return _RightResponseDisplayID;
-                _RightResponseDisplayID = ConfigFile.GetIATImage(CIAT.SaveFile.GetIATBlock(BlockUri).Key.RightValueUri).Id;
-                return _RightResponseDisplayID;
-            }
-            set
-            {
-                _RightResponseDisplayID = value;
+                var tups = ConfigFile.GetIATImages(CIAT.SaveFile.GetIATBlock(BlockUri).Key.RightValueUri);
+                tups.Sort((t1, t2) => t1.Bounds.X.CompareTo(t2.Bounds.X));
+                return tups.Last().Id;
             }
         }
         private int _AlternatedWith = -1;
@@ -138,9 +123,9 @@ namespace IATClient.IATConfig
             AlternatedWith = Convert.ToInt32(reader.ReadElementString());
             BlockNum = Convert.ToInt32(reader.ReadElementString());
             NumItems = Convert.ToInt32(reader.ReadElementString());
-            InstructionsDisplayID = Convert.ToInt32(reader.ReadElementString());
-            LeftResponseDisplayID = Convert.ToInt32(reader.ReadElementString());
-            RightResponseDisplayID = Convert.ToInt32(reader.ReadElementString());
+//            InstructionsDisplayID = Convert.ToInt32(reader.ReadElementString());
+  //          LeftResponseDisplayID = Convert.ToInt32(reader.ReadElementString());
+    //        RightResponseDisplayID = Convert.ToInt32(reader.ReadElementString());
             reader.ReadEndElement();
         }
     }

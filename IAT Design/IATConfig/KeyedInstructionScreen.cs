@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Xml;
 
 namespace IATClient.IATConfig
@@ -20,7 +21,9 @@ namespace IATClient.IATConfig
             {
                 if (_LeftResponseDisplayID != -1)
                     return _LeftResponseDisplayID;
-                _LeftResponseDisplayID = ConfigFile.GetIATImage(CIAT.SaveFile.GetIATKey(InstructionScreen.ResponseKeyUri).LeftValueUri).Id;
+                var tups = ConfigFile.GetIATImages(CIAT.SaveFile.GetIATKey(KeyedScreen.ResponseKeyUri).LeftValueUri);
+                tups.Sort((t1, t2) => t1.Bounds.X.CompareTo(t2.Bounds.X));
+                _LeftResponseDisplayID = tups.First().Id;
                 return _LeftResponseDisplayID;
             }
             set
@@ -35,7 +38,9 @@ namespace IATClient.IATConfig
             {
                 if (_RightResponseDisplayID != -1)
                     return _RightResponseDisplayID;
-                _RightResponseDisplayID = ConfigFile.GetIATImage(CIAT.SaveFile.GetIATKey(InstructionScreen.ResponseKeyUri).RightValueUri).Id;
+                var tups = ConfigFile.GetIATImages(CIAT.SaveFile.GetIATKey(KeyedScreen.ResponseKeyUri).RightValueUri);
+                tups.Sort((t1, t2) => t1.Bounds.X.CompareTo(t2.Bounds.X));
+                _RightResponseDisplayID = tups.Last().Id;
                 return _RightResponseDisplayID;
             }
             set

@@ -386,7 +386,6 @@ namespace IATClient
                     return;
                 CTextInstructionScreen newScrn = new CTextInstructionScreen(InstructionBlock);
                 var continueUri = (InstructionBlock[CurrentScreenNdx].ContinueInstructions.Clone() as DIContinueInstructions).URI;
-                newScrn.ContinueInstructionsUri = continueUri;
                 ContinueInstructions.TextDisplayItemUri = continueUri;
                 ScrollingPreview.Replace(CurrentInstructionScreenNdx, newScrn);
                 InstructionBlock[CurrentInstructionScreenNdx].Dispose();
@@ -418,9 +417,7 @@ namespace IATClient
                 InstructionBlock[CurrentInstructionScreenNdx].Dispose();
                 var newScrn = new CMockItemScreen(InstructionBlock);
                 newScrn.DIPreview.PreviewPanel = ScreenPreview;
-                newScrn.ContinueInstructionsUri = continueInstructions.URI;
                 MainForm.SuspendLayout();
-                newScrn.DIPreview.PreviewPanel = ScreenPreview;
                 ContinueInstructions.TextDisplayItemUri = continueInstructions.URI;
                 ScrollingPreview.Replace(CurrentInstructionScreenNdx, newScrn);
                 InstructionBlock.InsertScreen(newScrn, CurrentInstructionScreenNdx);
@@ -428,6 +425,7 @@ namespace IATClient
                 UpdateScreenDefPanel(newScrn);
                 ShowMockItemPanel(newScrn);
                 MainForm.ResumeLayout(false);
+                newScrn.DIPreview.ScheduleInvalidation();
             }
             else
             {
@@ -506,7 +504,6 @@ namespace IATClient
                 InstructionBlock[CurrentInstructionScreenNdx].Dispose();
                 var newScrn = new CKeyInstructionScreen(InstructionBlock);
                 newScrn.DIPreview.PreviewPanel = ScreenPreview;
-                newScrn.ContinueInstructionsUri = continueInstructions.URI;
                 MainForm.SuspendLayout();
                 newScrn.DIPreview.PreviewPanel = ScreenPreview;
                 ContinueInstructions.TextDisplayItemUri = continueInstructions.URI;

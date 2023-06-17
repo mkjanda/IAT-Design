@@ -1,10 +1,12 @@
-﻿using System;
+﻿using javax.xml.transform;
+using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 using System.Security.Cryptography;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Linq;
 using System.Windows.Forms;
 namespace IATClient
 {
@@ -61,12 +63,13 @@ namespace IATClient
 
         public void SetProgressRange(int min, int max, int current)
         {
-            this.BeginInvoke(new Action(() =>
-            {
-                Progress.Minimum = min;
-                Progress.Maximum = max;
-                Progress.Value = current;
-            }));
+            if (min != max)
+                this.BeginInvoke(new Action(() =>
+                {
+                    Progress.Minimum = min;
+                    Progress.Maximum = max;
+                    Progress.Value = current;
+                }));
         }
 
         public DialogResult DisplayYesNoMessageBox(String message, String caption)
@@ -1953,13 +1956,15 @@ namespace IATClient
                 MessageBox.Show("Please enter a password of at least four characters.", "Invalid Password");
                 return;
             }
-            else
-            {
-                byte[] des = PartiallyEncryptedRSAData.stringToDESCipherKey(IATPasswordBox.Text);
+            else { 
+
+                var bytes = MD5.Create().ComputeHash(System.Text.Encoding.UTF8.GetBytes(IATPasswordBox.Text));
+                byte[] des = new List<byte>(bytes).Where((b, ndx) => ndx < 8).ToArray();
+                byte[] iv = new List<byte>(bytes).Where((b, ndx) => ndx >= 8).ToArray();
                 try
                 {
                     var crypt = new DESCryptoServiceProvider();
-                    crypt.CreateEncryptor(des, PartiallyEncryptedRSAData.IV);
+                    crypt.CreateEncryptor(des, iv);
                 }
                 catch (CryptographicException ex)
                 {
@@ -1982,8 +1987,17 @@ namespace IATClient
             {
                 try
                 {
-                    IATUploader = new CWebSocketUploader(CIAT.SaveFile.IAT, this);
-                    UploadComplete(IATUploader.Upload(CIAT.SaveFile.IAT.Name, IATPasswordBox.Text));
+                    var password = "secret:" + BitConverter.ToString(MD5.Create().ComputeHash(
+                        System.Text.Encoding.UTF8.GetBytes(IATPasswordBox.Text)));
+                    var IATUploader = new CWebSocketUploader(CIAT.SaveFile.IAT, this);
+                    if (IATUploader.Upload(CIAT.SaveFile.IAT.Name, password))
+                    {
+                        if (StorePasswordToRegistry)
+                        {
+                            LocalStorage.SetIATPassword(IATName, password);
+                        }
+                    }
+                    StatusMessage = String.Empty;
                 }
                 catch (Exception ex)
                 {
@@ -1997,8 +2011,6 @@ namespace IATClient
         {
             try
             {
-                if (StorePasswordToRegistry && result)
-                    LocalStorage.SetIATPassword(IATName, IATPasswordBox.Text);
             }
             catch (Exception ex)
             {

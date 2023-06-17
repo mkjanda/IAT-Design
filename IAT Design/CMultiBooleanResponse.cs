@@ -199,11 +199,6 @@ namespace IATClient
             // write the start of the "Response" element, signifying the beginning of a new response type
             writer.WriteStartElement("MultiBoolean");
 
-            // write the type of the response as an attribute of the "Response" element
-            writer.WriteStartAttribute("Type");
-            writer.WriteString(sTypeMultiBoolean);
-            writer.WriteEndAttribute();
-
             Format.WriteXml(writer);
 
             // write the number of statements

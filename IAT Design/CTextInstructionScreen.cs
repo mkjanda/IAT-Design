@@ -53,6 +53,9 @@ namespace IATClient
             }
             protected set
             {
+                if (_InstructionsUri != null)
+                    CIAT.SaveFile.DeleteRelationship(this.URI, _InstructionsUri);
+                CIAT.SaveFile.CreateRelationship(BaseType, typeof(DIBase), URI, value);
                 DIPreview dic = CIAT.SaveFile.GetDI(PreviewUri) as DIPreview;
                 dic.RemoveComponent(LayoutItem.TextInstructionScreen, false);
                 _InstructionsUri = value;

@@ -810,6 +810,7 @@
     <EmbeddedResource Include="Resources\ExcelTrans.xml" />
     <None Include="Resources\ErrorReportCspBlob.txt" />
     <None Include="Resources\ErrorReportCspBlob1.txt" />
+    <None Include="Resources\DownloadLegacy.txt" />
     <Content Include="Resources\ExpandArrow.bmp" />
     <None Include="Resources\FootlightMTFont.txt" />
     <None Include="Resources\FontDataUris.txt" />

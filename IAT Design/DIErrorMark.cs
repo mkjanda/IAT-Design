@@ -29,7 +29,7 @@ namespace IATClient
                 return CIATLayout.IErrorMarkUri;
             }
         }
-        /*
+        
         private Rectangle AbsoluteClip(Bitmap bmp)
         {
             Bitmap clone = bmp.Clone() as Bitmap;
@@ -87,7 +87,7 @@ namespace IATClient
             clone.Dispose();
             return absoluteBounds;
         }
-        */
+        
         protected override Bitmap Generate()
         {
             if (Broken || IsDisposed)
@@ -110,7 +110,7 @@ namespace IATClient
                                 g.FillRectangle(br, new Rectangle(0, 0, szBounds.Width + 50, szBounds.Height + 50));
                                 using (Font markFont = new Font(MarkFontFamily, fontSize))
                                     g.DrawString(Mark, markFont, markBrush, new PointF(0, 0));
-                                CalcAbsoluteBounds(bmp, CIAT.SaveFile.Layout.BackColor);
+                                AbsoluteBounds = AbsoluteClip(bmp);
                             }
                             catch (Exception ignoring)
                             {
@@ -124,7 +124,7 @@ namespace IATClient
                                 g.FillRectangle(br, new Rectangle(0, 0, szBounds.Width + 50, szBounds.Height + 50));
                                 using (Font markFont = new Font(MarkFontFamily, fontSize))
                                     g.DrawString(Mark, markFont, markBrush, new PointF(0, 0));
-                                CalcAbsoluteBounds(bmp, CIAT.SaveFile.Layout.BackColor);
+                                AbsoluteBounds = AbsoluteClip(bmp);
                             }
                             catch (Exception ignoring)
                             {
@@ -140,7 +140,7 @@ namespace IATClient
                                 g.FillRectangle(br, new Rectangle(0, 0, szBounds.Width + 50, szBounds.Height + 50));
                                 using (Font markFont = new Font(MarkFontFamily, fontSize))
                                     g.DrawString(Mark, markFont, markBrush, new PointF(0, 0));
-                                CalcAbsoluteBounds(bmp, CIAT.SaveFile.Layout.BackColor);
+                                AbsoluteBounds = AbsoluteClip(bmp); 
                             }
                             catch (Exception ignoring)
                             {
@@ -154,7 +154,7 @@ namespace IATClient
                                 g.FillRectangle(br, new Rectangle(0, 0, szBounds.Width + 50, szBounds.Height + 50));
                                 using (Font markFont = new Font(MarkFontFamily, fontSize))
                                     g.DrawString(Mark, markFont, markBrush, new PointF(0, 0));
-                                CalcAbsoluteBounds(bmp, CIAT.SaveFile.Layout.BackColor);
+                                AbsoluteBounds = AbsoluteClip(bmp); 
                             }
                             catch (Exception ignoring)
                             {
@@ -169,7 +169,7 @@ namespace IATClient
                                 g.FillRectangle(br, new Rectangle(0, 0, szBounds.Width + 50, szBounds.Height + 50));
                                 using (Font markFont = new Font(MarkFontFamily, fontSize))
                                     g.DrawString(Mark, markFont, markBrush, new PointF(0, 0));
-                                CalcAbsoluteBounds(bmp, CIAT.SaveFile.Layout.BackColor);
+                                AbsoluteBounds = AbsoluteClip(bmp); 
                                 fontSize += 1F;
                             }
                             catch (Exception ignoring)
@@ -184,7 +184,7 @@ namespace IATClient
                                 g.FillRectangle(br, new Rectangle(0, 0, szBounds.Width + 50, szBounds.Height + 50));
                                 using (Font markFont = new Font(MarkFontFamily, fontSize))
                                     g.DrawString(Mark, markFont, markBrush, new PointF(0, 0));
-                                CalcAbsoluteBounds(bmp, CIAT.SaveFile.Layout.BackColor);
+                                AbsoluteBounds = AbsoluteClip(bmp); 
                             }
                             catch (Exception ignoring)
                             {
@@ -198,7 +198,7 @@ namespace IATClient
                 using (Graphics g = Graphics.FromImage(errorBmp))
                 {
                     g.FillRectangle(br, new Rectangle(new Point(0, 0), errorBmp.Size));
-                    g.DrawImage(bmp, AbsoluteBounds.Location);
+                    g.DrawImage(bmp, new Rectangle(new Point(0, 0), CIAT.SaveFile.Layout.ErrorSize), AbsoluteBounds, GraphicsUnit.Pixel);
                 }
                 errorBmp.MakeTransparent(CIAT.SaveFile.Layout.BackColor);
                 br.Dispose();

@@ -139,7 +139,7 @@ namespace IATClient
         {
             xWriter.WriteStartElement("Format");
             xWriter.WriteElementString("Font", PrivateFont.Fonts.Where(f => f.FontFamily.Name == FontFamily.Name).Select(f => f.DisplayName).FirstOrDefault());
-            xWriter.WriteElementString("FontSize", FontSize);
+            xWriter.WriteElementString("FontSize", FontSize.Replace("px", ""));
             xWriter.WriteElementString("ColorR", Color.R.ToString("x2"));
             xWriter.WriteElementString("ColorG", Color.G.ToString("x2"));
             xWriter.WriteElementString("ColorB", Color.B.ToString("x2"));
@@ -155,13 +155,13 @@ namespace IATClient
 
         public void WriteXml(XmlWriter xWriter)
         {
-            xWriter.WriteStartElement("SurveyItemFormat");
+            xWriter.WriteStartElement("Format");
             var f = PrivateFont.Fonts.Where(f => f.FontFamily.Name == FontFamily.Name).Select(f => f.DisplayName).FirstOrDefault();
             if (f != null)
                 xWriter.WriteElementString("Font", f);
             else
                 xWriter.WriteElementString("Font", PrivateFont.Fonts[1].DisplayName);
-            xWriter.WriteElementString("FontSize", FontSize);
+            xWriter.WriteElementString("FontSize", FontSize.Replace("px", ""));
             xWriter.WriteElementString("ColorR", Color.R.ToString("x2"));
             xWriter.WriteElementString("ColorG", Color.G.ToString("x2"));
             xWriter.WriteElementString("ColorB", Color.B.ToString("x2"));

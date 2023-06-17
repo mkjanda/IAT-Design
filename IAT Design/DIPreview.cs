@@ -174,7 +174,7 @@ namespace IATClient
                     while (img == null)
                     {
                         di.ScheduleInvalidation();
-                        di.InvalidationEvent.Wait();
+                        return null;
                     }
                     Rectangle diRect = component.BoundingRectangle;
                     g.DrawImage(img, diRect.Location);

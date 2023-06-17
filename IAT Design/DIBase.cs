@@ -141,7 +141,7 @@ namespace IATClient
             StoreOriginalImage = false,
             IsResponseKeyComponent = false
         };
-        public static DIType KeyedInstructionsScreen = new DIType(10, "KeyedInstructionsScreen")
+        public static readonly DIType KeyedInstructionsScreen = new DIType(10, "KeyedInstructionsScreen")
         {
             Create = new Func<Uri, DIBase>((uri) => { return new DIKeyedInstructionsScreen(uri); }),
             Type = typeof(DIKeyedInstructionsScreen),
@@ -154,7 +154,7 @@ namespace IATClient
             StoreOriginalImage = false,
             IsResponseKeyComponent = false
         };
-        public static DIType Preview = new DIType(11, "Preview")
+        public static readonly DIType Preview = new DIType(11, "Preview")
         {
             Create = new Func<Uri, DIBase>((uri) => { return new DIPreview(uri); }),
             Type = typeof(DIPreview),
@@ -260,6 +260,7 @@ namespace IATClient
         public bool HasPreviewPanel { get; private set; }
         public bool IsGenerated { get; private set; }
         public bool HasThumbnail { get; private set; }
+        public int DeploymentID {get;set;} = -1;
         public bool StoreOriginalImage { get; private set; }
         public bool IsResponseKeyComponent { get; private set; }
         public bool IsText

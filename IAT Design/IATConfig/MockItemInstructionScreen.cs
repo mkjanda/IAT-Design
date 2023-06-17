@@ -82,7 +82,7 @@ namespace IATClient.IATConfig
 
         public override void WriteXml(XmlWriter writer)
         {
-            writer.WriteStartElement("IATEvent");
+            writer.WriteStartElement("MockItemInstructionScreen");
             writer.WriteAttributeString("EventType", EventType.ToString());
             writer.WriteElementString("ContinueASCIIKeyCode", ContinueASCIIKeyCode.ToString());
             writer.WriteElementString("ContinueInstructionsID", ContinueInstructionsDisplayID.ToString());

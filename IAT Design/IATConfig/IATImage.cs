@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Drawing.Imaging;
 using System.Linq;
 using System.Security.Cryptography;
@@ -13,6 +14,7 @@ namespace IATClient.IATConfig
         public List<int> Indexes { get; private set; } = new List<int>();
         private String sha = String.Empty;
         public int Id { get; set; }
+        public Rectangle Bounds { get; set; } = Rectangle.Empty;
         public String SHA
         {
             get
@@ -45,10 +47,18 @@ namespace IATClient.IATConfig
             xWriter.WriteStartElement("IATDisplayItem");
             xWriter.WriteElementString("ID", Id.ToString());
             xWriter.WriteElementString("Filename", FileName);
-            xWriter.WriteElementString("X", di.AbsoluteBounds.X.ToString());
-            xWriter.WriteElementString("Y", di.AbsoluteBounds.Y.ToString());
-            xWriter.WriteElementString("Width", di.AbsoluteBounds.Width.ToString());
-            xWriter.WriteElementString("Height", di.AbsoluteBounds.Height.ToString());
+            try
+            {
+                xWriter.WriteElementString("X", Bounds.Left.ToString());
+                xWriter.WriteElementString("Y", Bounds.Top.ToString());
+            }
+            catch (NotImplementedException)
+            {
+                xWriter.WriteElementString("X", di.AbsoluteBounds.X.ToString());
+                xWriter.WriteElementString("Y", di.AbsoluteBounds.Y.ToString());
+            }
+            xWriter.WriteElementString("Width", Bounds.Width.ToString());
+            xWriter.WriteElementString("Height", Bounds.Height.ToString());
             xWriter.WriteEndElement();
         }
 

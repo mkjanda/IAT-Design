@@ -7,6 +7,7 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.WebSockets;
+using System.Runtime.CompilerServices;
 using System.Security.Cryptography;
 using System.Threading;
 using System.Threading.Tasks;
@@ -54,18 +55,8 @@ namespace IATClient
                 ItemSlideMap.Remove(selectedIAT);
             }
         }
-        private CServerReport _ServerReport;
 
-        public CServerReport ServerReport
-        {
-            get
-            {
-                lock (lockObject)
-                    return _ServerReport;
-            }
-        }
-
-
+        public CServerReport ServerReport { get; private set; }
         public CIATManager()
         {
             MainForm = (IATConfigMainForm)Application.OpenForms[Properties.Resources.sMainFormName];
@@ -163,7 +154,7 @@ namespace IATClient
 
         private void ReceiveServerReport(INamedXmlSerializable serverReport)
         {
-            _ServerReport = (CServerReport)serverReport;
+            ServerReport = (CServerReport)serverReport;
             TransactionCompleteEvent.Set();
         }
 
@@ -173,7 +164,7 @@ namespace IATClient
             foreach (String iatName in sReport.IATReports.Keys)
                 if (!ServerReport.IATReports.Keys.Contains(iatName))
                     ClearData(iatName);
-            _ServerReport = sReport;
+            ServerReport = sReport;
             TransactionCompleteEvent.Set();
         }
 

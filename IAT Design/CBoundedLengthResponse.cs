@@ -131,7 +131,6 @@ namespace IATClient
         public override void WriteXml(XmlWriter writer)
         {
             writer.WriteStartElement("BoundedLength");
-            writer.WriteAttributeString("Type", sTypeBoundedLength);
             Format.WriteXml(writer);
             writer.WriteElementString("MinLength", MinLength.ToString());
             writer.WriteElementString("MaxLength", MaxLength.ToString());

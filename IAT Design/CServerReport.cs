@@ -1,9 +1,47 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Xml;
-
+using System.Text.RegularExpressions;
 namespace IATClient
 {
+    public class CTestVersion
+    {
+        private String _Version;
+        public String Version { get
+            {
+                return _Version;
+            } set
+            {
+                Regex ex = new Regex("iat-([0-9]+)\\.([0-9]+)\\.([0-9]+)");
+                var m = ex.Match(value);
+                Major = Convert.ToInt32(m.Groups[1].Value);
+                Minor = Convert.ToInt32(m.Groups[2].Value);
+                Revision = Convert.ToInt32(m.Groups[3].Value);
+            }
+        }
+        public int Major { get; private set; }
+        public int Minor { get; private set; }
+        public int Revision { get; private set; }
+
+        public CTestVersion(string version)
+        {
+            Version = version;
+        }
+
+        public int CompareTo(CTestVersion other)
+        {
+            if (Major != other.Major)
+                return Major - other.Major;
+            if (Minor != other.Minor)
+                return Minor - other.Minor;
+            if (Revision != other.Revision)
+                return Revision - other.Revision;
+            return 0;
+        }
+
+    }
+
+
     class CIATReport
     {
         private String _AuthorTitle, _AuthorFName, _AuthorLName, _AuthorEMail, _LastDataRetrieval, _IATName, _URL;
@@ -33,6 +71,8 @@ namespace IATClient
                 return _AuthorFName;
             }
         }
+
+        public CTestVersion Version { get; private set; }
 
         public String AuthorLName
         {
@@ -123,6 +163,8 @@ namespace IATClient
             _AuthorFName = reader.ReadElementString();
             _AuthorLName = reader.ReadElementString();
             _AuthorEMail = reader.ReadElementString();
+            var ver = reader.ReadElementString();
+            Version = new CTestVersion(ver);
             reader.ReadEndElement();
         }
     }

@@ -1,5 +1,8 @@
 ﻿using System;
 using System.Xml;
+using System.Collections.Generic;
+using System.Drawing;
+using System.IO;
 
 namespace IATClient.IATConfig
 {
@@ -7,7 +10,7 @@ namespace IATClient.IATConfig
     {
         public enum EEventType { BeginIATBlock, EndIATBlock, IATItem, BeginInstructionBlock, TextInstructionScreen, MockItemInstructionScreen, KeyedInstructionScreen };
 
-
+        public Dictionary<Uri, Rectangle> DIRectangles { get; set; }
         public EEventType EventType { get; set; }
 
         public IATEvent(EEventType type)

@@ -178,9 +178,10 @@ namespace IATClient
                 }
                 _SurveyItem?.Dispose();
                 _SurveyItem = value;
-                _ItemType = SurveyItem.Response.ResponseType;
+                _ItemType = _SurveyItem.Response.ResponseType;
                 SuspendLayoutCalculations();
                 Format = value.Format;
+                
                 if (value.Text == String.Empty)
                     QuestionEdit.Text = DefaultQuestionEditText;
                 else
@@ -190,6 +191,8 @@ namespace IATClient
                 SizeQuestionEdit(true);
                 RecalcSize(true);
                 ResumeLayoutCalculations();
+                ResponseEdit.Format = value.Response.Format;
+
             }
         }
 
@@ -197,7 +200,11 @@ namespace IATClient
         {
             get
             {
-                return ResponseEdit.Format;
+                return ResponseEdit?.Format;
+            }
+            set
+            {
+                ResponseEdit.Format = value;
             }
         }
 
@@ -208,8 +215,8 @@ namespace IATClient
                 if (e.SurveyItemFormat.For == SurveyItemFormat.EFor.Item)
                 {
                     Format = e.SurveyItemFormat;
-                    if (SurveyItem != null)
-                        SurveyItem.Format = e.SurveyItemFormat;
+                    if (_SurveyItem != null)
+                        _SurveyItem.Format = e.SurveyItemFormat;
                     QuestionEdit.ForeColor = Format.Color;
                     SizeQuestionEdit(true);
                     ResumeLayout();
@@ -217,9 +224,10 @@ namespace IATClient
                 else
                 {
                     ResponseEdit.Format = e.SurveyItemFormat;
-                    if (SurveyItem != null)
-                        if (SurveyItem.Response != null)
-                            SurveyItem.Response.Format = e.SurveyItemFormat;
+                    ResponseFormat = e.SurveyItemFormat;
+                    if (_SurveyItem != null)
+                        if (_SurveyItem.Response != null)
+                            _SurveyItem.Response.Format = e.SurveyItemFormat;
                 }
             }));
         }
@@ -332,8 +340,8 @@ namespace IATClient
                 {
                     SuspendLayout();
                     RecalcSize(false);
-                    if (SurveyItem != null)
-                        SurveyItem.Text = QuestionEdit.Text;
+                    if (_SurveyItem != null)
+                        _SurveyItem.Text = QuestionEdit.Text;
                     ResumeLayout(false);
                 }
             };

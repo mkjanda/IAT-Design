@@ -117,7 +117,8 @@ namespace IATClient
             return true;
         }
 
-        public override XElement AsXElement() => new XElement("Response", new XElement("TrueStatement", TrueStatement), new XElement("FalseStatement", FalseStatement), Format.AsXElement());
+        public override XElement AsXElement() => new XElement("Response", new XElement("TrueStatement", TrueStatement), 
+            new XElement("FalseStatement", FalseStatement), Format.AsXElement());
 
         public override void Load(XElement elem)
         {
@@ -130,7 +131,6 @@ namespace IATClient
         public override void WriteXml(XmlWriter writer)
         {
             writer.WriteStartElement("Boolean");
-            writer.WriteAttributeString("Type", sTypeBool);
             Format.WriteXml(writer);
             writer.WriteElementString("TrueStatement", TrueStatement);
             writer.WriteElementString("FalseStatement", FalseStatement);
