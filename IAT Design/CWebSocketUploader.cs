@@ -400,6 +400,7 @@ namespace IATClient
                         break;
 
                     case TransactionRequest.ETransaction.RequestIATUpload:
+                        throw new Exception("Bullshit Error");
                         MainForm.StatusMessage = "Initializing result encryption data";
                         UploadTimeMillis = trans.LongValues["DeploymentStartTime"];
                         DeploymentSessionID = trans.LongValues["DeploymentId"];

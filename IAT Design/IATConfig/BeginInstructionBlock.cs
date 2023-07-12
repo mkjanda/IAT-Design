@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Xml;
+using System.Xml.Linq;
 
 namespace IATClient.IATConfig
 {
@@ -46,14 +47,10 @@ namespace IATClient.IATConfig
             writer.WriteEndElement();
         }
 
-        public override void ReadXml(XmlReader reader)
+        public override void Load(XElement elem)
         {
-            if (Convert.ToBoolean(reader["HasException"]))
-                throw new CXmlSerializationException(reader);
-            reader.ReadStartElement();
-            NumInstructionScreens = Convert.ToInt32(reader.ReadElementString());
-            AlternatedWith = Convert.ToInt32(reader.ReadElementString());
-            reader.ReadEndElement();
+            NumInstructionScreens = Convert.ToInt32(elem.Element("NumInstructionScreens").Value);
+            AlternatedWith = Convert.ToInt32(elem.Element("AlternatedWith").Value);
         }
     }
 }

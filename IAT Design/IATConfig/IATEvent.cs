@@ -2,14 +2,14 @@
 using System.Xml;
 using System.Collections.Generic;
 using System.Drawing;
-using System.IO;
+using System.Xml.Linq;
 
 namespace IATClient.IATConfig
 {
-    public abstract class IATEvent : INamedXmlSerializable
-    {
+    public abstract class IATEvent {
         public enum EEventType { BeginIATBlock, EndIATBlock, IATItem, BeginInstructionBlock, TextInstructionScreen, MockItemInstructionScreen, KeyedInstructionScreen };
 
+        public ConfigFile ConfigFile { get; set; }
         public Dictionary<Uri, Rectangle> DIRectangles { get; set; }
         public EEventType EventType { get; set; }
 
@@ -18,11 +18,10 @@ namespace IATClient.IATConfig
             EventType = type;
         }
 
-        static public IATEvent CreateFromXml(XmlReader reader)
+        static private IATEvent CreateEventOfType(EEventType type)
         {
             IATEvent e = null;
-            EEventType eType = (EEventType)Enum.Parse(typeof(EEventType), reader.Name);
-            switch (eType)
+            switch (type)
             {
                 case EEventType.BeginIATBlock:
                     e = new BeginIATBlock();
@@ -52,12 +51,22 @@ namespace IATClient.IATConfig
                     e = new TextInstructionScreen();
                     break;
             }
-            e.ReadXml(reader);
             return e;
         }
 
+        static public IATEvent CreateFromXElement(XElement elem)
+        {
+            if (Enum.TryParse<EEventType>(elem.Name.LocalName, true, out EEventType eType))
+            {
+                var evt = CreateEventOfType(eType);
+                evt.Load(elem);
+                return evt;
+            }
+            return null;
+        }
+
         public abstract void WriteXml(XmlWriter writer);
-        public abstract void ReadXml(XmlReader reader);
+        public abstract void Load(XElement elem);
         public String GetName()
         {
             return "IATEvent";

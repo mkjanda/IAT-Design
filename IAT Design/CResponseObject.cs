@@ -86,7 +86,7 @@ namespace IATClient
                     respObj = new CBoundedLengthResponseObject(EType.actual, resp);
                     break;
 
-                case ResponseType.BoundedNumber:
+                case ResponseType.BoundedNum:
                     respObj = new CBoundedNumResponseObject(EType.actual, resp);
                     break;
 
@@ -94,7 +94,7 @@ namespace IATClient
                     respObj = new CDateResponseObject(EType.actual, resp);
                     break;
 
-                case ResponseType.FixedDigit:
+                case ResponseType.FixedDig:
                     respObj = new CFixedDigitResponseObject(EType.actual, resp);
                     break;
 
@@ -857,7 +857,7 @@ namespace IATClient
                     respObj = new CBoundedLengthResponseObject((CBoundedLengthResponseObject)obj, (BoundedLength)resp);
                     break;
 
-                case ResponseType.BoundedNumber:
+                case ResponseType.BoundedNum:
                     respObj = new CBoundedNumResponseObject((CBoundedNumResponseObject)obj, (BoundedNumber)resp);
                     break;
 
@@ -865,7 +865,7 @@ namespace IATClient
                     respObj = new CDateResponseObject((CDateResponseObject)obj, (Date)resp);
                     break;
 
-                case ResponseType.FixedDigit:
+                case ResponseType.FixedDig:
                     respObj = new CFixedDigitResponseObject((CFixedDigitResponseObject)obj, (FixedDigit)resp);
                     break;
 

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Xml;
+using System.Xml.Linq;
 
 namespace IATClient.ResultData
 {
@@ -21,6 +22,7 @@ namespace IATClient.ResultData
                 }
             }
 
+
             public override void ReadXml(XmlReader reader)
             {
                 if (Convert.ToBoolean(reader["HasException"]))
@@ -32,6 +34,15 @@ namespace IATClient.ResultData
                 PresentationNumber = reader.ReadElementContentAsInt();
                 _Error = reader.ReadElementContentAsBoolean();
                 reader.ReadEndElement();
+            }
+
+            public override void Load(XElement elem)
+            {
+                BlockNumber = Convert.ToInt32(elem.Element("BlockNum").Value);
+                ItemNumber = Convert.ToInt32(elem.Element("ItemNum").Value);
+                ResponseTime = Convert.ToInt32(elem.Element("ResponseTime").Value);
+                Error = Convert.ToBoolean(elem.Element("Error").Value);
+                PresentationNumber = Convert.ToInt32(elem.Element("PresentationNum").Value);
             }
 
             public override void WriteXml(XmlWriter writer)

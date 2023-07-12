@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
+using System.Runtime.ConstrainedExecution;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -13,6 +14,16 @@ namespace IATClient
         private static Padding ChoiceEditPadding = new Padding(43, 2, 33, 3);
         private List<NumericUpDown> Weights;
         private List<Rectangle> WeightRects;
+
+        protected override int ChoiceEditWidth
+        {
+            get
+            {
+                if (Weights.Count == 0)
+                    return base.ChoiceEditWidth;
+                return base.ChoiceEditWidth - Weights.Select(w => w.Width).Max(); 
+            }
+        }
 
         protected override Padding GetChoiceEditPadding()
         {
@@ -133,7 +144,6 @@ namespace IATClient
                         Weights[ctr].Font = DisplayFont;
                         Weights[ctr].Location = new Point(InteriorPadding.Left, ChoiceEdits[ctr].Location.Y);
                         Weights[ctr].Size = new Size(maxWeightWidth + 20, ChoiceEdits[ctr].Height);
-                        ChoiceEdits[ctr].Width -= Weights[ctr].Width - InteriorPadding.Horizontal;
                         ChoiceEdits[ctr].Location = new Point(Weights[ctr].Right + InteriorPadding.Horizontal, ChoiceEdits[ctr].Top);
                     }
                     this.Height = ChoicesSize.Height + InteriorPadding.Vertical;

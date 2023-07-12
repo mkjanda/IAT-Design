@@ -2202,6 +2202,24 @@ namespace IATClient.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Your eerror was successfully reported. I apologize for the inconvience. I&apos;ll contact you in the next handful of days to inform you of the status of the error. If you don&apos;t hear from me, please email me at michael@iatsoftware.net..
+        /// </summary>
+        internal static string sErrorReportedMessageEmail {
+            get {
+                return ResourceManager.GetString("sErrorReportedMessageEmail", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Your eerror was successfully reported. I apologize for the inconvience. I&apos;ll contact you in the next handful of days to inform you of the status of the error. If you don&apos;t hear from me, please email me at michael@iatsoftware.net, including your product key, {0}. .
+        /// </summary>
+        internal static string sErrorReportedMessageProductKey {
+            get {
+                return ResourceManager.GetString("sErrorReportedMessageProductKey", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to A non-internet related issue surfaced while submitting your error report. Contact me at michael@iatsoftware.net.
         /// </summary>
         internal static string sErrorReportException {

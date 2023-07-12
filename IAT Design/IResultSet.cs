@@ -1,12 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Xml;
+using System.Xml.Linq;
 
 namespace IATClient
 {
     public interface ISurveyItemResponse
     {
-        String Value { get; }
+        String Value { get; set; }
         bool IsAnswered { get; }
         bool IsBlank { get; }
         bool WasForceSubmitted { get; }
@@ -61,6 +62,7 @@ namespace IATClient
         int NumDataElements { get; }
         int NumItems { get; }
         void ReadXml(XmlReader reader);
+        void Load(XDocument doc);
     }
 
     public interface IIATItemResponse
@@ -72,6 +74,7 @@ namespace IATClient
         long ResponseTime { get; set; }
         void ReadXml(XmlReader xReader);
         void WriteXml(XmlWriter xWriter);
+        void Load(XElement elem);
     }
 
     public interface IIATResponse : IResultSetElem, IEnumerable<IIATItemResponse>

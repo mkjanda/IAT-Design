@@ -533,7 +533,7 @@ namespace IATClient
                         yOffset += sz.Height;
                         break;
 
-                    case ResponseType.BoundedNumber:
+                    case ResponseType.BoundedNum:
                         BoundedNumber bn = (BoundedNumber)survey.SurveyItems[ctr].Response;
                         str = String.Format("A numeric response between {0} and {1}.", bn.MinValue, bn.MaxValue);
                         sz = g.MeasureString(str, f);
@@ -556,7 +556,7 @@ namespace IATClient
                         yOffset += sz.Height;
                         break;
 
-                    case ResponseType.FixedDigit:
+                    case ResponseType.FixedDig:
                         FixedDigit fd = (FixedDigit)survey.SurveyItems[ctr].Response;
                         str = String.Format("A response that consists of {0} digits.", fd.NumDigs);
                         sz = g.MeasureString(str, f);
@@ -688,7 +688,7 @@ namespace IATClient
                                 ((BoundedLength)s.SurveyItems[ctr].Response).MaxLength);
                         break;
 
-                    case ResponseType.BoundedNumber:
+                    case ResponseType.BoundedNum:
                         BoundedNumber bnr = (BoundedNumber)s.SurveyItems[ctr].Response;
                         sqf.QuestionText = s.SurveyItems[ctr].Text;
                         sqf.ResponseSummary = String.Format("A number between {0} and {1}.", bnr.MinValue, bnr.MaxValue);
@@ -708,7 +708,7 @@ namespace IATClient
                             sqf.ResponseSummary = "A date in MM/DD/YYYY format.";
                         break;
 
-                    case ResponseType.FixedDigit:
+                    case ResponseType.FixedDig:
                         FixedDigit fdr = (FixedDigit)s.SurveyItems[ctr].Response;
                         sqf.QuestionText = s.SurveyItems[ctr].Text;
                         sqf.ResponseSummary = String.Format("A series of {0} digits.", fdr.NumDigs);
@@ -925,12 +925,16 @@ namespace IATClient
                     }
                 }
             }
-            var slideNums = (from tr in ResultDocument.TestResult select from ir in tr.IATResult.IATResponse select ir.ItemNum + 1).Aggregate((a1, a2) => a1.Concat(a2)).Cast<int>().Distinct().OrderBy(i => i).ToList();
+            var slideNums = (from tr in ResultDocument.TestResult select from ir in tr.IATResult.IATResponse select ir.ItemNum).Aggregate((a, b) => a.Concat(b)).Distinct()
+                    .OrderBy<uint, int>(a => (int)a).Select(a => (int)a).ToList();
             ResultDocument.ItemSlide = new ResultDocument.TItemSlide[slideNums.Count()];
             for (int ctr = 0; ctr < ResultDocument.ItemSlide.Length; ctr++)
             {
-                ResultDocument.ItemSlide[ctr].SlideNum = slideNums[ctr];
-                ResultDocument.ItemSlide[ctr].ItemNum = ctr;
+                ResultDocument.ItemSlide[ctr] = new ResultDocument.TItemSlide()
+                {
+                    SlideNum = slideNums[ctr],
+                    ItemNum = ctr
+                };
             }
         }
 
@@ -1005,10 +1009,10 @@ namespace IATClient
         {
             try
             {
-                var itemNums = (from tr in ResultDocument.TestResult select from ir in tr.IATResult.IATResponse select ir.ItemNum).
-                    Aggregate((a1, a2) => a1.Concat(a2)).Distinct().Cast<int>().OrderBy(i => i);
-                var slideNums = SlideContainer.SlideManifest.Contents.Cast<ManifestFile>().Where(f => itemNums.Contains(f.ResourceId)).Where(f2 => itemNums.Contains(f2.ResourceId))
-                    .Select(f => f.ReferenceIds).Cast<IEnumerable<int>>().Aggregate((r1, r2) => r1.Concat(r2)).Distinct().OrderBy(i => i);
+                var itemNums = (from tr in ResultDocument.TestResult select from ir in tr.IATResult.IATResponse select ir.ItemNum)
+                    .Aggregate((a, b) => a.Concat(b)).Distinct().OrderBy(a => a).Select(a => (int)a);
+                var slideNums = SlideContainer.SlideManifest.Contents.Cast<ManifestFile>().AsQueryable()
+                    .Join<ManifestFile, int, int, int>(itemNums, mf => mf.ResourceId, i => i, (mf, i) => i).Distinct().OrderBy(i => i);
 
                 var indexes = from sn in slideNums select slideNums.ToList().IndexOf(sn);
                 //                TItemSlideEntry[] slideEntries = SlideContainer.SlideManifest.ItemSlideEntries;
@@ -1045,22 +1049,22 @@ namespace IATClient
                     lock (ExcelTransform.TransformLock)
                     {
                         zpp = (ZipPackagePart)outZip.CreatePart(PackUriHelper.CreatePartUri(new Uri(String.Format("/xl/media/image{0}.png", ctr + 1), UriKind.Relative)), "image/png");
-                        TitlePageImages[ctr].Save(zpp.GetStream(), System.Drawing.Imaging.ImageFormat.Png);
-                        zpp.GetStream().Flush();
-                        zpp.GetStream().Close();
+                        var s = zpp.GetStream();
+                        TitlePageImages[ctr].Save(s, System.Drawing.Imaging.ImageFormat.Png);
+                        s.Dispose();
                     }
                 }
                 List<String> savedImgs = new List<String>();
-                ctr = TitlePageImages.Count + 1;
+                SlideContainer.ProcessSlidesSync();
                 foreach (var sn in slideNums)
                 {
                     lock (ExcelTransform.TransformLock)
                     {
-                        zpp = (ZipPackagePart)outZip.CreatePart(PackUriHelper.CreatePartUri(new Uri(String.Format("/xl/media/image{0}.jpg", ctr.ToString()), UriKind.Relative)), System.Net.Mime.MediaTypeNames.Image.Jpeg);
-                        Image img = SlideContainer.SlideDictionary[sn].FullSizedImage;
-                        img.Save(zpp.GetStream(), System.Drawing.Imaging.ImageFormat.Jpeg);
-                        zpp.GetStream().Flush();
-                        zpp.GetStream().Close();
+                        zpp = (ZipPackagePart)outZip.CreatePart(PackUriHelper.CreatePartUri(new Uri(String.Format("/xl/media/image{0}.jpg", (ctr++).ToString()), UriKind.Relative)), System.Net.Mime.MediaTypeNames.Image.Jpeg);
+                        Image img = SlideContainer.SlideDictionary[sn].DisplayImage;
+                        Stream s = zpp.GetStream();
+                        img.Save(s, System.Drawing.Imaging.ImageFormat.Jpeg);
+                        s.Dispose();
                     }
                 }
                 transformEvent.WaitOne();

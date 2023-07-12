@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Collections;
 using System.Xml;
+using System.Xml.Linq;
 
 namespace IATClient.IATConfig
 {
     class IATItem : IATEvent, IEqualityComparer
     {
-        public ConfigFile ConfigFile { get; set; }
         public Uri ItemUri { get; set; }
 
         public new bool Equals(object A, object B)
@@ -30,63 +30,9 @@ namespace IATClient.IATConfig
             }
         }
 
-        /*
-        private String _SpecifierArg = String.Empty;
-        public String SpecifierArg
-        {
-            get
-            {
-                if (_SpecifierArg != String.Empty)
-                    return _SpecifierArg;
-                _SpecifierArg = CIAT.SaveFile.GetIATItem(ItemUri).SpecifierArg;
-                return _SpecifierArg;
-            }
-            set
-            {
-                _SpecifierArg = value;
-            }
-        }
-        private int _SpecifierID = -1;
-        public int SpecifierID
-        {
-            get
-            {
-                if (_SpecifierID != -1)
-                    return _SpecifierID;
-                _SpecifierID = CIAT.SaveFile.GetIATItem(ItemUri).KeySpecifierID;
-                return _SpecifierID;
-            }
-            set
-            {
-                _SpecifierID = value;
-            }
-        }
-        */
-        private KeyedDirection _KeyedDir = KeyedDirection.None;
-        public KeyedDirection KeyedDir
-        {
-            get
-            {
-                return _KeyedDir;
-            }
-            set
-            {
-                _KeyedDir = value;
-            }
-        }
+        public KeyedDirection KeyedDir { get; set; }
         private static int ItemCtr = 0;
-        private int _ItemNum = ++ItemCtr;
-        public int ItemNum
-        {
-            get
-            {
-                return _ItemNum;
-            }
-            set
-            {
-                _ItemNum = value;
-            }
-        }
+        public int ItemNum { get; set; } = ++ItemCtr;
         public int BlockNum { get; set; }
         public int OriginatingBlock { get; set; }
         private int _StimulusDisplayID = -1;
@@ -99,7 +45,7 @@ namespace IATClient.IATConfig
                 _StimulusDisplayID = ConfigFile.GetIATImage(CIAT.SaveFile.GetIATItem(ItemUri).StimulusUri).Id;
                 return _StimulusDisplayID;
             }
-            set
+            private set
             {
                 _StimulusDisplayID = value;
             }
@@ -128,19 +74,13 @@ namespace IATClient.IATConfig
             writer.WriteEndElement();
         }
 
-        public override void ReadXml(XmlReader reader)
+        public override void Load(XElement elem)
         {
-            if (Convert.ToBoolean(reader["HasException"]))
-                throw new CXmlSerializationException(reader);
-            reader.ReadStartElement();
-            ItemNum = Convert.ToInt32(reader.ReadElementString());
-            BlockNum = Convert.ToInt32(reader.ReadElementString());
-            StimulusDisplayID = Convert.ToInt32(reader.ReadElementString());
-            OriginatingBlock = Convert.ToInt32(reader.ReadElementString());
-            KeyedDir = KeyedDirection.FromString(reader.ReadElementString());
-            //          SpecifierID = Convert.ToInt32(reader.ReadElementString());
-            //            SpecifierArg = reader.ReadElementString();
-            reader.ReadEndElement();
+            ItemNum = Convert.ToInt32(elem.Element("ItemNum").Value);
+            BlockNum = Convert.ToInt32(elem.Element("BlockNum").Value);
+            StimulusDisplayID = Convert.ToInt32(elem.Element("StimulusDisplayID").Value);
+            OriginatingBlock = Convert.ToInt32(elem.Element("OriginatingBlock").Value);
+            KeyedDir = KeyedDirection.FromString(elem.Element("KeyedDir").Value);
         }
     }
 }

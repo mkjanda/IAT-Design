@@ -2,14 +2,15 @@
 using System.CodeDom;
 using System.Linq;
 using System.Xml;
+using System.Xml.Linq;
 
 namespace IATClient.IATConfig
 {
     class BeginIATBlock : IATEvent
     {
-        public ConfigFile ConfigFile { get; set; }
         public Uri BlockUri { get; set; }
         private int _BlockNum = -1, _NumItems = -1, _NumPresentations = -1;
+        private int _InstructionsDisplayID = -1, _LeftResponseDisplayID = -1, _RightResponseDisplayID = -1;
         public int BlockNum
         {
             get
@@ -19,7 +20,7 @@ namespace IATClient.IATConfig
                 _BlockNum = CIAT.SaveFile.GetIATBlock(BlockUri).IndexInContainer + 1;
                 return _BlockNum;
             }
-            set
+            private set
             {
                 _BlockNum = value;
             }
@@ -33,7 +34,7 @@ namespace IATClient.IATConfig
                 _NumItems = CIAT.SaveFile.GetIATBlock(BlockUri).NumItems;
                 return _NumItems;
             }
-            set
+            private set
             {
                 _NumItems = value;
             }
@@ -47,35 +48,55 @@ namespace IATClient.IATConfig
                 _NumPresentations = CIAT.SaveFile.GetIATBlock(BlockUri).NumPresentations;
                 return _NumPresentations;
             }
-            set
+            private set
             {
                 _NumPresentations = value;
             }
         }
-        private int _InstructionsDisplayID, _LeftResponseDisplayID, _RightResponseDisplayID;
         public int InstructionsDisplayID
         {
             get
             {
-                return ConfigFile.GetIATImage(CIAT.SaveFile.GetIATBlock(BlockUri).InstructionsUri).Id;
+                if (_InstructionsDisplayID != -1)
+                    return _InstructionsDisplayID;
+                _InstructionsDisplayID = ConfigFile.GetIATImage(CIAT.SaveFile.GetIATBlock(BlockUri).InstructionsUri).Id;
+                return _InstructionsDisplayID; 
+            }
+            private set
+            {
+                _InstructionsDisplayID = value;
             }
         }
         public int LeftResponseDisplayID
         {
             get
-            {
+            {   
+                if (_LeftResponseDisplayID != -1)
+                    return _LeftResponseDisplayID;
                 var tups = ConfigFile.GetIATImages(CIAT.SaveFile.GetIATBlock(BlockUri).Key.LeftValueUri);
                 tups.Sort((t1, t2) => t1.Bounds.X.CompareTo(t2.Bounds.X));
-                return tups.First().Id;
+                _LeftResponseDisplayID = tups.First().Id;
+                return _LeftResponseDisplayID;
+            }
+            private set
+            {
+                _LeftResponseDisplayID = value;
             }
         }
         public int RightResponseDisplayID
         {
             get
             {
+                if (_RightResponseDisplayID != -1)
+                    return _RightResponseDisplayID;
                 var tups = ConfigFile.GetIATImages(CIAT.SaveFile.GetIATBlock(BlockUri).Key.RightValueUri);
                 tups.Sort((t1, t2) => t1.Bounds.X.CompareTo(t2.Bounds.X));
-                return tups.Last().Id;
+                _RightResponseDisplayID = tups.Last().Id;
+                return _RightResponseDisplayID;
+            }
+            private set
+            {
+                _RightResponseDisplayID = value;
             }
         }
         private int _AlternatedWith = -1;
@@ -90,7 +111,7 @@ namespace IATClient.IATConfig
                 _AlternatedWith = CIAT.SaveFile.GetIATBlock(BlockUri).AlternateBlock.IndexInContainer + 1;
                 return _AlternatedWith;
             }
-            set
+            private set
             {
                 _AlternatedWith = value;
             }
@@ -114,19 +135,16 @@ namespace IATClient.IATConfig
             writer.WriteEndElement();
         }
 
-        public override void ReadXml(XmlReader reader)
+
+        public override void Load(XElement elem)
         {
-            if (Convert.ToBoolean(reader["HasException"]))
-                throw new CXmlSerializationException(reader);
-            reader.ReadStartElement();
-            NumPresentations = Convert.ToInt32(reader.ReadElementString());
-            AlternatedWith = Convert.ToInt32(reader.ReadElementString());
-            BlockNum = Convert.ToInt32(reader.ReadElementString());
-            NumItems = Convert.ToInt32(reader.ReadElementString());
-//            InstructionsDisplayID = Convert.ToInt32(reader.ReadElementString());
-  //          LeftResponseDisplayID = Convert.ToInt32(reader.ReadElementString());
-    //        RightResponseDisplayID = Convert.ToInt32(reader.ReadElementString());
-            reader.ReadEndElement();
+            NumPresentations = Convert.ToInt32(elem.Element("NumPresentations").Value);
+            AlternatedWith = Convert.ToInt32(elem.Element("AlternatedWith").Value);
+            BlockNum = Convert.ToInt32(elem.Element("BlockNum").Value);
+            NumItems = Convert.ToInt32(elem.Element("NumItems").Value);
+            InstructionsDisplayID = Convert.ToInt32(elem.Element("InstructionsDisplayID").Value);
+            RightResponseDisplayID = Convert.ToInt32(elem.Element("RightResponseDisplayID").Value);
+            LeftResponseDisplayID = Convert.ToInt32(elem.Element("LeftResponseDisplayID").Value);
         }
     }
 }

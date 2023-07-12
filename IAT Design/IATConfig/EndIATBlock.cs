@@ -1,4 +1,5 @@
 ﻿using System.Xml;
+using System.Xml.Linq;
 
 namespace IATClient.IATConfig
 {
@@ -16,11 +17,10 @@ namespace IATClient.IATConfig
             writer.WriteEndElement();
         }
 
-        public override void ReadXml(XmlReader reader)
+        public override void Load(XElement elem)
         {
-            reader.ReadStartElement();
-            reader.ReadElementString(); // read dummy value
-            reader.ReadEndElement();
+            return;
         }
+
     }
 }

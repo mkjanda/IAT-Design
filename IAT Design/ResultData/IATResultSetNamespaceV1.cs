@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
 using System.Xml;
+using System.Xml.Linq;
 
 namespace IATClient.ResultData
 {
@@ -13,8 +14,6 @@ namespace IATClient.ResultData
         {
             private readonly int val;
             private readonly String name;
-
-            private static readonly Dictionary<String, AnswerState> instance = new Dictionary<String, AnswerState>();
             public static readonly AnswerState Answered, Unanswered, ForceSubmitted;
 
             static AnswerState()
@@ -28,19 +27,11 @@ namespace IATClient.ResultData
             {
                 this.val = val;
                 this.name = name;
-                instance[name] = this;
             }
 
             public override string ToString()
             {
                 return this.name;
-            }
-
-            public static explicit operator AnswerState(String str)
-            {
-                if (instance.ContainsKey(str))
-                    return instance[str];
-                throw new InvalidCastException();
             }
         }
 
@@ -84,6 +75,10 @@ namespace IATClient.ResultData
                     if (AnswerState == AnswerState.ForceSubmitted)
                         return AnswerState.ForceSubmitted.ToString();
                     return Answer;
+                }
+                set
+                {
+                    Answer = value;
                 }
             }
 
@@ -224,6 +219,16 @@ namespace IATClient.ResultData
                 reader.ReadEndElement();
             }
 
+            public virtual void Load(XDocument doc)
+            {
+                foreach (var elem in doc.Root.Elements("IATResultSetElement"))
+                {
+                    var responseElem = ElemFactory.CreateIATItemResponse();
+                    responseElem.Load(elem);
+                    ElementList.Add(responseElem);
+                }
+            }
+
             public String GetName()
             {
                 return "IATResultSetElementList";
@@ -316,6 +321,11 @@ namespace IATClient.ResultData
                 writer.WriteEndElement();
             }
 
+            public virtual void Load(XElement elem)
+            {
+                throw new NotImplementedException();
+            }
+
             public virtual void ReadXml(XmlReader reader)
             {
                 if (Convert.ToBoolean(reader["HasException"]))
@@ -336,8 +346,8 @@ namespace IATClient.ResultData
 
         public class SurveyResponseSet : ISurveyResponse
         {
-            private ISurveyItemResponse[] SurveyResults = null;
-            private IResultElemFactory Factory;
+            protected ISurveyItemResponse[] SurveyResults = null;
+            protected IResultElemFactory Factory;
 
             private int _NumSurveyResults = -1;
 
@@ -410,6 +420,11 @@ namespace IATClient.ResultData
                         SurveyResults[ctr].ReadXml(reader);
                     reader.ReadEndElement();
                 }
+            }
+
+            public virtual void Load(XDocument doc)
+            {
+                throw new NotImplementedException();
             }
 
             public String GetName()

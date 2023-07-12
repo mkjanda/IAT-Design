@@ -121,9 +121,9 @@ namespace IATClient
             }
             else
             {
-                writer.WriteElementString("Year", DateTime.MinValue.Year.ToString());
-                writer.WriteElementString("Month", DateTime.MinValue.Month.ToString());
-                writer.WriteElementString("Day", DateTime.MinValue.Day.ToString());
+                writer.WriteElementString("Year", DateTime.MaxValue.Year.ToString());
+                writer.WriteElementString("Month", DateTime.MaxValue.Month.ToString());
+                writer.WriteElementString("Day", DateTime.MaxValue.Day.ToString());
             }
             writer.WriteEndElement();
 

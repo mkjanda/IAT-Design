@@ -1,6 +1,4 @@
 ﻿using IATClient.ResultData;
-using java.util;
-using net.sf.saxon.lib;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -13,6 +11,7 @@ using System.Text.RegularExpressions;
 using System.Threading;
 using System.Windows.Forms;
 using System.Xml;
+using System.Xml.Linq;
 using System.Xml.Schema;
 using System.Xml.Serialization;
 
@@ -20,28 +19,34 @@ namespace IATClient.IATConfig
 {
 
 
-    public class ConfigFile : INamedXmlSerializable, IXmlSerializable
+    public class ConfigFile : INamedXmlSerializable
     {
-        private String _ServerDomain = String.Empty, _ServerPath = String.Empty;
-        private int _ServerPort = -1;
         private int NumIATItems { get; set; } = 0;
-        private int NumSlidesProcessed { get; set; } = 0;
-        private bool _Is7Block;
-        private String _RedirectOnComplete;
-        private int _LeftResponseASCIIKeyCodeUpper, _RightResponseASCIIKeyCodeUpper, _LeftResponseASCIIKeyCodeLower, _RightResponseASCIIKeyCodeLower;
-        public int NumBeforeSurveys { get; private set; } = 0;
-        public int NumAfterSurveys { get; private set; } = 0;
+        public int NumBeforeSurveys
+        {
+            get
+            {
+                return BeforeSurveys.Count;
+            }
+        }
+        public int NumAfterSurveys
+        {
+            get
+            {
+                return AfterSurveys.Count;
+            }
+        }
         private int _ClientID = -1;
         public enum ERandomizationType { None, RandomOrder, SetNumberOfPresentations };
         private ERandomizationType _RandomizationType;
+        public List<IATImage> DisplayItems { get; private set; } = new List<IATImage>();
         private int _ErrorMarkID;
         private int _LeftKeyOutlineID, _RightKeyOutlineID;
         private bool _PrefixSelfAlternatingSurveys;
-//        public List<IATSurvey> BeforeSurveys { get; private set; } = new List<IATSurvey>();
-   //     public List<IATSurvey> AfterSurvey { get; set; } = new List<IATSurvey>();
+        public List<ResultData.Survey> IATBeforeSurveys { get; private set; } = new List<ResultData.Survey>();
+        public List<ResultData.Survey> IATAfterSurveys { get; private set; } = new List<ResultData.Survey>();
         private IATLayout _Layout;
         private IATEventList _EventList;
-        private String _Name = String.Empty;
         private String _DataRetrievalPassword = "xxx";
         private List<DynamicSpecifier> _DynamicSpecifiers = new List<DynamicSpecifier>();
         private CIAT IAT;
@@ -117,10 +122,10 @@ namespace IATClient.IATConfig
 
         public bool PrefixSelfAlternatingSurveys { get; set; }
 
-        public List<IATClient.CSurvey> BeforeSurveys { get; set; } = new List<IATClient.CSurvey>();
+        public List<IATClient.CSurvey> BeforeSurveys { get; private set; } = new List<IATClient.CSurvey>();
         public List<String> SurveyB64Xml { get; private set; } = new List<String>();
 
-        public List<IATClient.CSurvey> AfterSurveys { get; set; } = new List<IATClient.CSurvey>();
+        public List<IATClient.CSurvey> AfterSurveys { get; private set; } = new List<IATClient.CSurvey>();
 
         public IATLayout Layout { get; set; }
 
@@ -354,17 +359,17 @@ namespace IATClient.IATConfig
             Layout = new IATLayout();
         }
 
-        static public ConfigFile LoadFromXml(XmlReader reader)
+        static public ConfigFile LoadFromXml(XDocument doc)
         {
             ConfigFile cf = new ConfigFile();
-            cf.ReadXml(reader);
+            cf.Load(doc);
             return cf;
         }
 
         public ConfigFile(CIAT iat)
         {
             IAT = iat;
-            _Name = IAT.Name;
+            Name = IAT.Name;
             XmlSerializer surveySerializer = new XmlSerializer(typeof(Survey));
             _IATImages = new ImageContainer((DIBase di) =>
             {
@@ -450,17 +455,13 @@ namespace IATClient.IATConfig
             }
             _PrefixSelfAlternatingSurveys = true; // AlternationGroup.PrefixSelfAlternatingSurveys;
             _RandomizationType = ERandomizationType.SetNumberOfPresentations;
-            _Is7Block = true; // IAT.Is7Block;
+            Is7Block = true; // IAT.Is7Block;
             if (!Is7Block)
             {
                 throw new NotImplementedException("As of yet, only the upload of 7-Block IATs is permitted.  Please consult the documentation for information on how to construct them.");
             }
             NumIATItems = IAT.Contents.Where(c => c.Type == ContentsItemType.IATBlock).Cast<CIATBlock>().Select(b => b.NumItems).Sum();
-            _RedirectOnComplete = IAT.RedirectionURL;
-            _LeftResponseASCIIKeyCodeLower = System.Text.Encoding.ASCII.GetBytes(IAT.LeftResponseChar.ToLower())[0];
-            _LeftResponseASCIIKeyCodeUpper = System.Text.Encoding.ASCII.GetBytes(IAT.LeftResponseChar.ToUpper())[0];
-            _RightResponseASCIIKeyCodeLower = System.Text.Encoding.ASCII.GetBytes(IAT.RightResponseChar.ToLower())[0];
-            _RightResponseASCIIKeyCodeUpper = System.Text.Encoding.ASCII.GetBytes(IAT.RightResponseChar.ToUpper())[0];
+            RedirectOnComplete = IAT.RedirectionURL;
             _IATImages.AddDI(CIAT.SaveFile.Layout.ErrorMark, CIAT.SaveFile.Layout.ErrorRectangle);
             _IATImages.AddDI(CIAT.SaveFile.Layout.LeftKeyValueOutline, CIAT.SaveFile.Layout.LeftKeyValueOutlineRectangle);
             _IATImages.AddDI(CIAT.SaveFile.Layout.RightKeyValueOutline, CIAT.SaveFile.Layout.RightKeyValueOutlineRectangle);
@@ -499,6 +500,8 @@ namespace IATClient.IATConfig
         {
             IATImagesProcessed.WaitOne();
             writer.WriteStartElement("ConfigFile");
+            writer.WriteAttributeString("NumBeforeSurveys", NumBeforeSurveys.ToString());
+            writer.WriteAttributeString("NumAfterSurveys", NumAfterSurveys.ToString());
             writer.WriteElementString("IATName", Name);  
             writer.WriteElementString("ServerDomain", ServerDomain);
             writer.WriteElementString("ServerPath", ServerPath);
@@ -533,6 +536,12 @@ namespace IATClient.IATConfig
             writer.WriteEndElement();
         }
 
+        public void ReadXml(XmlReader reader)
+        {
+            var doc = XDocument.Load(reader);
+            Load(doc);
+        }
+
         public IATConfig.IATSurvey GetSurvey(int ndx)
         {
             XmlSerializer ser = new XmlSerializer(typeof(IATConfig.IATSurvey));
@@ -542,45 +551,40 @@ namespace IATClient.IATConfig
             return survey;
         }
 
-        public void ReadXml(XmlReader reader)
+        public void Load(XDocument doc)
         {
-            if (Convert.ToBoolean(reader["HasException"]))
-                throw new CXmlSerializationException(reader);
-             NumBeforeSurveys = Convert.ToInt32(reader["NumBeforeSurveys"]);
-            NumAfterSurveys = Convert.ToInt32(reader["NumAfterSurveys"]);
-            _HasUniqueResponses = Convert.ToBoolean(reader["HasUniqueResponse"]);
-            reader.ReadStartElement();
-            Name = reader.ReadElementString("IATName");
-            ServerDomain = reader.ReadElementString("ServerDomain");
-            ServerPath = reader.ReadElementString("ServerPath");
-            ServerPort = Convert.ToInt32(reader.ReadElementString("ServerPort"));
-            if (reader.Name == "UploadTimeMillis")
-                UploadTimeMillis = Convert.ToInt64(reader.ReadElementString("UploadTimeMillis"));
-            ClientID = Convert.ToInt32(reader.ReadElementString());
-            NumIATItems = Convert.ToInt32(reader.ReadElementString());
-            Is7Block = Convert.ToBoolean(reader.ReadElementString());
-            CIAT.SaveFile.IAT.RedirectionURL = reader.ReadElementString();
-            LeftResponseKey = reader.ReadElementString();
-            RightResponseKey = reader.ReadElementString();
-            RandomizationType = (ERandomizationType)Enum.Parse(typeof(ERandomizationType), reader.ReadElementString());
-            ErrorMarkID = Convert.ToInt32(reader.ReadElementString());
-            LeftKeyOutlineID = Convert.ToInt32(reader.ReadElementString());
-            RightKeyOutlineID = Convert.ToInt32(reader.ReadElementString());
-            PrefixSelfAlternatingSurveys = Convert.ToBoolean(reader.ReadElementString());
-            DynamicSpecifiers.Clear();
-            while (reader.Name == "DynamicSpecifier")
-                DynamicSpecifiers.Add(DynamicSpecifier.CreateFromXml(reader));
-            SurveyB64Xml.Clear();
-            while (reader.Name == "IATSurvey")
-                SurveyB64Xml.Add(reader.ReadElementString("IATSurvey"));
-            if (reader.Name == "UniqueResponse")
+            var bSurveys = Convert.ToInt32(doc.Root.Attribute("NumBeforeSurveys").Value);
+            var aSurveys = Convert.ToInt32(doc.Root.Attribute("NumAfterSurveys").Value);
+            _HasUniqueResponses = Convert.ToBoolean(doc.Root.Attribute("HasUniqueResponse").Value);
+            Name = doc.Root.Element("IATName").Value;
+            ServerDomain = doc.Root.Element("ServerDomain").Value;
+            ServerPath = doc.Root.Element("ServerPath").Value;
+            ServerPort = Convert.ToInt32(doc.Root.Element("ServerPort").Value);
+            ClientID = Convert.ToInt32(doc.Root.Element("ClientID").Value);
+            NumIATItems= Convert.ToInt32(doc.Root.Element("NumIATItems").Value);
+            Is7Block = true;
+            RedirectOnComplete = doc.Root.Element("RedirectOnComplete").Value;
+            LeftResponseKey = doc.Root.Element("LeftResponseKey").Value;
+            RightResponseKey = doc.Root.Element("RightResponseKey").Value;
+            PrefixSelfAlternatingSurveys = Convert.ToBoolean(doc.Root.Element("PrefixSelfAlternatingSurveys").Value);
+            foreach (var s in doc.Root.Elements("SurveyB64Xml"))
             {
-                URI = new UniqueResponseItem();
-                URI.ReadXml(reader);
+                var ser = new XmlSerializer(typeof(ResultData.Survey));
+                var survey = ser.Deserialize(new StringReader(System.Text.Encoding.UTF8.GetString(Convert.FromBase64String(s.Value)))) as ResultData.Survey;
+                if (s.ElementsBeforeSelf("SurveyB64Xml").Count() < bSurveys)
+                    IATBeforeSurveys.Add(survey);
+                else
+                    IATAfterSurveys.Add(survey);
             }
-            Layout.ReadXml(reader);
-            EventList.ReadXml(reader);
-            _IATImages.ReadXml(reader);
+            URI = new UniqueResponseItem();
+            URI.Additive = Convert.ToBoolean(doc.Root.Element("UniqueResponse").Attribute("Additive").Value);
+            URI.SurveyName = doc.Root.Element("UniqueResponse").Element("SurveyName").Value;
+            URI.ItemNum = Convert.ToInt32(doc.Root.Element("UniqueResponse").Element("ItemNum").Value);
+            Layout.Load(doc.Root.Element("Layout"));
+            EventList.Load(doc.Root.Element("EventList"));
+            DisplayItems.Clear();
+            foreach (var di in doc.Root.Element("DisplayItemList").Elements("IATDisplayItem"))
+                DisplayItems.Add(IATImage.Create(di));
         }
 
         public XmlSchema GetSchema()
@@ -592,9 +596,9 @@ namespace IATClient.IATConfig
     public class UniqueResponseItem
     {
         private List<String> UniqueResponses = new List<String>();
-        private String SurveyName;
-        private int ItemNum;
-        private bool Additive;
+        public String SurveyName { get; set; } = String.Empty;
+        public int ItemNum { get; set; } = -1;
+        public bool Additive { get; set; } = false;
 
         public UniqueResponseItem() { } 
 

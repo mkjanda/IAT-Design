@@ -108,10 +108,8 @@ namespace IATClient
                 foreach (IResultSetElem rse in resultSet)
                 {
                     inStream = ProcessChunk(elemCtr++);
-                    TextReader txtReader = new StreamReader(inStream, Encoding.UTF8);
-                    reader = new XmlTextReader(txtReader);
-                    reader.MoveToContent();
-                    rse.ReadXml(reader);
+                    var doc = XDocument.Load(new StreamReader(inStream, Encoding.UTF8));
+                    rse.Load(doc);
                 }
                 if (!ResultElemFactory.VerifyResultSet(resultSet))
                     return null;

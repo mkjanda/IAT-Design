@@ -1,10 +1,15 @@
-﻿using System;
+﻿using java.io;
+using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.Linq;
+using System.Reflection;
+using System.Runtime.CompilerServices;
 using System.Security.Cryptography;
+using System.Windows.Interop;
 using System.Xml;
+using System.Xml.Linq;
 
 namespace IATClient.IATConfig
 {
@@ -47,6 +52,7 @@ namespace IATClient.IATConfig
             xWriter.WriteStartElement("IATDisplayItem");
             xWriter.WriteElementString("ID", Id.ToString());
             xWriter.WriteElementString("Filename", FileName);
+            xWriter.WriteElementString("Format", typeof(ImageFormat).GetProperties().Where(pInfo => pInfo.Name == Format.ToString()).Select(p => p.Name).First());
             try
             {
                 xWriter.WriteElementString("X", Bounds.Left.ToString());
@@ -62,19 +68,15 @@ namespace IATClient.IATConfig
             xWriter.WriteEndElement();
         }
 
-        public void ReadXml(XmlReader reader)
+        static public IATImage Create(XElement elem)
         {
-            var di = CIAT.SaveFile.GetDI(SourceUris.First());
-            reader.ReadStartElement("IATDisplayItem");
-            Id = Convert.ToInt32(reader.ReadElementString("ID"));
-            reader.ReadElementString("Filename");
-            reader.ReadElementString("X");
-            reader.ReadElementString("Y");
-            reader.ReadElementString("Width");
-            reader.ReadElementString("Height");
-            reader.ReadEndElement();
+            return new IATImage(Convert.ToInt32(elem.Element("ID").Value))
+            {
+                Format = (ImageFormat)typeof(ImageFormat).GetProperties().Where(g => g.Name == elem.Element("Format").Value).Select(g => g.GetValue(null)).First(),
+                Bounds = new Rectangle(Convert.ToInt32(elem.Element("X").Value), Convert.ToInt32(elem.Element("Y").Value),
+                    Convert.ToInt32(elem.Element("Width").Value), Convert.ToInt32(elem.Element("Height").Value))
+            };
         }
-
 
         static private SHA512Managed sha512 = new SHA512Managed();
     }

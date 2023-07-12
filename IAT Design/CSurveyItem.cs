@@ -74,6 +74,16 @@ namespace IATClient
 
 
 
+        public int ItemNum
+        {
+            get
+            {
+                var survey = CIAT.SaveFile.GetSurvey(ParentSurveyUri);
+                return survey.Items.TakeWhile(si => !si.URI.Equals(URI)).Where(si => si.ItemType == SurveyItemType.Item).
+                    Where(si => si.Response.ResponseType != CResponse.EResponseType.Instruction).ToList().Count() + 1;
+            }
+        }
+
         public virtual Uri ParentSurveyUri
         {
             get
@@ -251,6 +261,14 @@ namespace IATClient
         {
             writer.WriteStartElement(sSurveyItem);
             writer.WriteAttributeString("Optional", Optional.ToString());
+            var items = CIAT.SaveFile.GetSurvey(ParentSurveyUri).Items;
+            var index = items.IndexOf(this);
+            writer.WriteAttributeString("ItemNum", index.ToString());
+            if (Response.ResponseType != CResponse.EResponseType.Instruction)
+                writer.WriteAttributeString("QuestionNum", (items.IndexOf(this) - items.Where((si, ndx) => ((si.ItemType != SurveyItemType.Item) || 
+                   (si.Response.ResponseType == CResponse.EResponseType.Instruction)) && (ndx <= index)).ToList().Count + 1).ToString());
+            else
+                writer.WriteAttributeString("QuestionNum", "0");
             writer.WriteElementString("Text", Text);
             Response.WriteXml(writer);
             Format.WriteXml(writer);

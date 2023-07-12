@@ -17,6 +17,10 @@ namespace IATClient
         private const int ValueEntryWidth = 40;
         private Point ptMinSelectionsLabel = new Point(0, 0), ptMaxSelectionsLabel = new Point(0, 0);
         private int arrowThingGuessWidth = 20;
+        private int _Maximum = 0;
+        private object lockObj = new object();
+
+
         protected override Padding GetChoiceEditPadding()
         {
             return ChoiceEditPadding;
@@ -103,24 +107,30 @@ namespace IATClient
 
         void MaxSelections_ValueChanged(object sender, EventArgs e)
         {
-            if (MaxSelections.Value < MinSelections.Value)
+            lock (lockObj)
             {
-                MessageBox.Show("The minimum number of selections that must be made cannot exceed the maximum number of allowable selections. The minimum number of allowable selections " +
-                    "has been adjusted.");
-                MinSelections.Value = MaxSelections.Value;
-            }
+                if (MaxSelections.Value < MinSelections.Value)
+                {
+                    MessageBox.Show("The minimum number of selections that must be made cannot exceed the maximum number of allowable selections. The minimum number of allowable selections " +
+                        "has been adjusted.");
+                    MinSelections.Value = MaxSelections.Value;
+                }
             (SurveyItem.Response as CMultiBooleanResponse).MaxSelections = Convert.ToInt32(MaxSelections.Value);
+            }
         }
 
         void MinSelections_ValueChanged(object sender, EventArgs e)
         {
-            if (MaxSelections.Value < MinSelections.Value)
+            lock (lockObj)
             {
-                MessageBox.Show("The minimum number of selections that must be made cannot exceed the maximum number of allowable selections. The maximum number of allowable selections " +
-                    "has been adjusted.");
-                MaxSelections.Value = MinSelections.Value;
-            }
+                if (MaxSelections.Value < MinSelections.Value)
+                {
+                    MessageBox.Show("The minimum number of selections that must be made cannot exceed the maximum number of allowable selections. The maximum number of allowable selections " +
+                        "has been adjusted.");
+                    MaxSelections.Value = MinSelections.Value;
+                }
             (SurveyItem.Response as CMultiBooleanResponse).MinSelections = Convert.ToInt32(MinSelections.Value);
+            }
         }
 
         void MultipleSelectionDisplay_MouseMove(object sender, MouseEventArgs e)
@@ -152,16 +162,25 @@ namespace IATClient
 
         public override void SetResponse(CResponse response)
         {
-            CMultiBooleanResponse mbr = (CMultiBooleanResponse)response;
-            SuspendLayout();
-            ClearChoices();
-            for (int ctr = 0; ctr < mbr.LabelList.Length; ctr++)
-                CreateChoiceEdit(mbr.LabelList[ctr]);
-            MinSelections.Maximum = mbr.NumValues;
-            MaxSelections.Maximum = mbr.NumValues;
-            MinSelections.Value = mbr.MinSelections;
-            MaxSelections.Value = mbr.MaxSelections;
-            ResumeLayout();
+            Task.Run(() =>
+            {
+                this.BeginInvoke(new Action(() =>
+                {
+                    lock (lockObj)
+                    {
+                        CMultiBooleanResponse mbr = (CMultiBooleanResponse)response;
+                        SuspendLayout();
+                        ClearChoices();
+                        for (int ctr = 0; ctr < mbr.LabelList.Length; ctr++)
+                            CreateChoiceEdit(mbr.LabelList[ctr]);
+                        MinSelections.Maximum = mbr.NumValues;
+                        MaxSelections.Maximum = mbr.NumValues;
+                        MaxSelections.Value = mbr.MaxSelections;
+                        MinSelections.Value = mbr.MinSelections;
+                        ResumeLayout(false);
+                    }
+                }));
+            });
         }
 
         protected override string GetChoiceDefaultText(TextBox sender)
@@ -171,12 +190,15 @@ namespace IATClient
 
         protected override void AddChoiceButton_Click(object sender, EventArgs e)
         {
-            (SurveyItem.Response as CMultiBooleanResponse).AddLabel(Properties.Resources.sMultiSelectDefaultChoiceText);
-            CreateChoiceEdit(Properties.Resources.sMultiSelectDefaultChoiceText);
-            MinSelections.Maximum++;
-            MaxSelections.Maximum++;
-            MaxSelections.Value++;
-            LayoutControl();
+            lock (lockObj)
+            {
+                (SurveyItem.Response as CMultiBooleanResponse).AddLabel(Properties.Resources.sMultiSelectDefaultChoiceText);
+                CreateChoiceEdit(Properties.Resources.sMultiSelectDefaultChoiceText);
+                MinSelections.Maximum++;
+                MaxSelections.Maximum++;
+                MaxSelections.Value++;
+                LayoutControl();
+            }
         }
 
         protected override void UpdateChoiceText(int ndx, string text)

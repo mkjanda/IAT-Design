@@ -1,12 +1,13 @@
 ﻿using System;
 using System.Xml;
+using System.Xml.Linq;
 
 namespace IATClient.IATConfig
 {
     class MockItemInstructionScreen : KeyedInstructionScreen
     {
         private int _StimulusDisplayID = -1;
-        private Nullable<bool> _ErrorMarkIsDisplayed = null, _OutlineLeftResponse = null, _OutlineRightResponse = null;
+        private bool? _ErrorMarkIsDisplayed = null, _OutlineLeftResponse = null, _OutlineRightResponse = null;
         private CMockItemScreen MockItemScreen
         {
             get
@@ -96,21 +97,14 @@ namespace IATClient.IATConfig
             writer.WriteEndElement();
         }
 
-        public override void ReadXml(XmlReader reader)
+        public override void Load(XElement elem)
         {
-            if (Convert.ToBoolean(reader["HasException"]))
-                throw new CXmlSerializationException(reader);
-            reader.ReadStartElement();
-            ContinueASCIIKeyCode = Convert.ToInt32(reader.ReadElementString());
-            ContinueInstructionsDisplayID = Convert.ToInt32(reader.ReadElementString());
-            LeftResponseDisplayID = Convert.ToInt32(reader.ReadElementString());
-            RightResponseDisplayID = Convert.ToInt32(reader.ReadElementString());
-            StimulusDisplayID = Convert.ToInt32(reader.ReadElementString());
-            InstructionsDisplayID = Convert.ToInt32(reader.ReadElementString());
-            ErrorMarkIsDisplayed = Convert.ToBoolean(reader.ReadElementString());
-            OutlineLeftResponse = Convert.ToBoolean(reader.ReadElementString());
-            OutlineRightResponse = Convert.ToBoolean(reader.ReadElementString());
-            reader.ReadEndElement();
+            base.Load(elem);
+            StimulusDisplayID = Convert.ToInt32(elem.Element("StimulusDisplayID").Value);
+            ErrorMarkIsDisplayed = Convert.ToBoolean(elem.Element("ErrorMarkIsDisplayed").Value);
+            OutlineLeftResponse = Convert.ToBoolean(elem.Element("OutlineLeftResponse").Value);
+            OutlineRightResponse = Convert.ToBoolean(elem.Element("OutlineRightResponse").Value);
         }
+
     }
 }

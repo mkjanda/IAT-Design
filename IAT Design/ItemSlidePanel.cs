@@ -83,7 +83,7 @@ namespace IATClient
                 l.Size = TextRenderer.MeasureText(l.Text, l.Font);
                 ThumbLabels.Add(l);
                 ThumbPanel.Controls.Add(thumbPanel);
-                var slide = itemSlideContainer.SlideDictionary[ctr];
+                var slide = itemSlideContainer.SlideDictionary[ctr + 1];
                 slide.FullSizedUpdate = (ndx) =>
                 {
                     if (slide.DisplayImage == null)
@@ -98,12 +98,7 @@ namespace IATClient
                     FullSizedSlide.SetImage(actionImage)
                         ), new object[] { img });
                 };
-                foreach (var reference in itemSlideContainer.SlideManifest.Contents.Cast<ManifestFile>().Select(f => f.ReferenceIds).Cast<IEnumerable<int>>()
-                    .Aggregate((l1, l2) => l1.Concat(l2)))
-                {
-                    slide.ThumbnailRequesters[Convert.ToInt32(reference)] = (actionImage) => thumbPanel.BeginInvoke(new Action<Image>((img) => thumbPanel.SetBackgroundImage(img)), new object[] { actionImage });
-                }
-                ItemSlideContainer.ProcessSlides();
+                    slide.ThumbnailRequesters[0] = (actionImage) => thumbPanel.BeginInvoke(new Action<Image>((img) => thumbPanel.SetBackgroundImage(img)), new object[] { actionImage });
             }
             nCols = this.Width / (ItemSlideContainer.ThumbnailSize.Width + ThumbnailPadding.Horizontal);
             nRows = (NumSlides / nCols);
@@ -118,6 +113,7 @@ namespace IATClient
             this.VerticalScroll.Value = 0;
             int nRowHeight = System.Drawing.SystemFonts.DefaultFont.Height + ItemSlideContainer.ThumbnailSize.Height + ThumbnailPadding.Vertical;
             _IsInitialized = true;
+            ItemSlideContainer.ProcessSlides();
         }
 
         private void LayoutThumbPanel(int Cols, int Rows)
@@ -158,15 +154,13 @@ namespace IATClient
                 int nRow = ndx / nRows;
                 int yPos = thumbPanel.Top - ThumbPanel.VerticalScroll.Value;
                 int nNewRow = ndx / nRowsWithSlide;
-                ThumbPanel.Width = CollapsedPanelWidth;
+                ThumbPanel.Width = 500;
                 LayoutThumbPanel(nColsWithSlide, nRowsWithSlide);
                 //                ThumbPanel.VerticalScroll.Value = thumbPanel.Top - yPos;
                 Controls.Add(FullSizedSlide);
             }
             FullSizedSlide.SetResultData(ItemSlideContainer.GetSlideLatencies(ndx + 1), ItemSlideContainer.GetMeanSlideLatency(ndx + 1), ItemSlideContainer.GetMeanNumErrors(ndx + 1), ResultSet + 1);
-            var fileRefs = ItemSlideContainer.SlideManifest.Contents.Cast<ManifestFile>().Select(f => new { res = f.ResourceId, refs = f.ReferenceIds });
-            var slideNum = fileRefs.Where(fr => fr.refs.Contains(ndx)).Select(fr => fr.res).First();
-            var slide = ItemSlideContainer.SlideDictionary[slideNum];
+            var slide = ItemSlideContainer.SlideDictionary[ndx + 1];
             slide.FullSizedUpdate(ndx);
             FullSizedSlide.Invalidate();
             ItemSlideContainer.RequestDisplayImage(ndx + 1);

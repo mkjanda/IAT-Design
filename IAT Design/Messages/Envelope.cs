@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Net.WebSockets;
+using System.Threading.Tasks;
 using System.Threading;
 using System.Windows.Forms;
 using System.Xml;
@@ -229,7 +230,7 @@ namespace IATClient.Messages
             try
             {
                 if (MessageMap.ContainsKey(MessageType))
-                    MessageMap[MessageType](_Message);
+                    Task.Run(() => MessageMap[MessageType](_Message));
                 if (MessageType == EMessageType.ServerException)
                     ErrorReporter.ReportError(_Message as CServerException);
             }

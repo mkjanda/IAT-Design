@@ -15,7 +15,21 @@ namespace IATClient
         public ManualResetEvent ImageRetrievedEvent { get; private set; } = new ManualResetEvent(false);
         public Image FullSizedImage { get; set; }
         public Image DisplayImage { get; set; }
-        public Image ThumbnailImage { get; set; }
+        private Image _ThumbnailImage;
+        public Image ThumbnailImage
+        {
+            get
+            {
+                return _ThumbnailImage;
+            }
+            set
+            {
+                _ThumbnailImage = value; 
+                foreach (var a in ThumbnailRequesters.Values)
+                    a(value);
+                ThumbnailRequesters.Clear();
+            }
+        }
         public double MeanLatency { get; private set; } = Double.NaN;
         public double MeanNumErrors { get; private set; } = Double.NaN;
         public long ImageDataSize { get; set; } = 0;
@@ -34,7 +48,7 @@ namespace IATClient
             int errorSum = 0;
             for (int ctr = 0; ctr < rData.IATResults.NumResultSets; ctr++)
             {
-                SubjectLatencies[ctr] = new List<long>();
+                SubjectLatencies.Add(new List<long>());
                 for (int ctr2 = 0; ctr2 < rData.IATResults[ctr].IATResponse.NumItems; ctr2++)
                 {
                     if (rData.IATResults[ctr].IATResponse[ctr2].ItemNumber == slideNum)

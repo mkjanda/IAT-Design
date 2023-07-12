@@ -280,6 +280,7 @@
     <Compile Include="ResultData\Caption.cs" />
     <Compile Include="ResultData\Date.cs" />
     <Compile Include="ResultData\FixedDigit.cs" />
+    <Compile Include="ResultData\IATResultSetNamespaceV4.cs" />
     <Compile Include="ResultData\Likert.cs" />
     <Compile Include="ResultData\MultiBoolean.cs" />
     <Compile Include="ResultData\Multiple.cs" />

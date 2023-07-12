@@ -72,7 +72,10 @@ namespace IATClient
             public CException(Exception ex)
             {
                 _ExceptionMessage = ex.Message;
-                _StackTrace = new List<String>(ex.StackTrace.Split(new char[] { '\n' }, StringSplitOptions.RemoveEmptyEntries));
+                if (ex.StackTrace != null)
+                    _StackTrace = new List<String>(ex.StackTrace.Split(new char[] { '\n' }, StringSplitOptions.RemoveEmptyEntries));
+                else
+                    _StackTrace = new List<String>();   
                 Exception innerEx = ex.InnerException;
                 while (innerEx != null)
                 {
