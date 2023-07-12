@@ -123,7 +123,6 @@ namespace IATClient.Messages
             reader.ReadStartElement();
             Path = reader.ReadElementString("Path").Replace("/", "\\");
             _Name = reader.ReadElementString("Name");
-            _Size = Convert.ToInt64(reader.ReadElementString());
             String fe = reader.ReadElementString("EntityType");
             Enum.TryParse<EFileEntityType>(fe, out EFileEntityType type);
             FileEntityType = type;
@@ -132,14 +131,12 @@ namespace IATClient.Messages
             String rt = reader.ReadElementString("ResourceType");
             Enum.TryParse<EResourceType>(rt, out EResourceType rType);
             ResourceType = rType;
-            if (reader.Name == "ResourceReference")
+            if (reader.Name == "ResourceId")
             {
                 ReferenceIds.Clear();
-                reader.ReadStartElement("ResourceReference");
                 ResourceId = Convert.ToInt32(reader.ReadElementString("ResourceId"));
                 while (reader.Name == "ReferenceId")
                     ReferenceIds.Add(Convert.ToInt32(reader.ReadElementString("ReferenceId")));
-                reader.ReadEndElement();
             }
             reader.ReadEndElement();
         }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Xml;
+using System.Xml.Linq;
 
 namespace IATClient.IATConfig
 {
@@ -39,15 +40,12 @@ namespace IATClient.IATConfig
             writer.WriteEndElement();
         }
 
-        public override void ReadXml(XmlReader reader)
+        public override void Load(XElement elem)
         {
-            if (Convert.ToBoolean(reader["HasException"]))
-                throw new CXmlSerializationException(reader);
-            reader.ReadStartElement();
-            ContinueASCIIKeyCode = Convert.ToInt32(reader.ReadElementString("ContinueASCIIKeyCode"));
-            ContinueInstructionsDisplayID = Convert.ToInt32(reader.ReadElementString("ContinueInstructionsDisplayID"));
-            InstructionsDisplayID = Convert.ToInt32(reader.ReadElementString("InstructionsDisplayID"));
-            reader.ReadEndElement();
+            base.Load(elem);
+            ContinueASCIIKeyCode = Convert.ToInt32(elem.Element("ContinueASCIIKeyCode").Value);
+            InstructionsDisplayID = Convert.ToInt32(elem.Element("InstructionsDisplayID").Value);
         }
+
     }
 }

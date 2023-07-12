@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Drawing;
 using System.Xml;
+using System.Xml.Linq;
 using System.Xml.Schema;
 
 namespace IATClient.IATConfig
@@ -201,6 +203,28 @@ namespace IATClient.IATConfig
             b = Convert.ToInt32(reader.ReadElementString(), 16);
             PageBackColor = System.Drawing.Color.FromArgb(r, g, b);
             reader.ReadEndElement();
+        }
+
+        public void Load(XElement elem)
+        {
+            InteriorWidth = Convert.ToInt32(elem.Element("InteriorWidth").Value);
+            InteriorHeight = Convert.ToInt32(elem.Element("InteriorHeight").Value);
+            BorderWidth = Convert.ToInt32(elem.Element("BorderWidth").Value);
+            ResponseWidth = Convert.ToInt32(elem.Element("ResponseWidth").Value);
+            ResponseHeight = Convert.ToInt32(elem.Element("ResponseHeight").Value);
+            BorderColor = Color.FromArgb(Convert.ToInt32(elem.Element("BorderColorR").Value, 16),
+                Convert.ToInt32(elem.Element("BorderColorG").Value, 16),
+                Convert.ToInt32(elem.Element("BorderColorB").Value, 16));
+            BackColor = Color.FromArgb(Convert.ToInt32(elem.Element("BackColorR").Value, 16),
+                Convert.ToInt32(elem.Element("BackColorG").Value, 16),
+                Convert.ToInt32(elem.Element("BackColorB").Value, 16));
+            OutlineColor = Color.FromArgb(Convert.ToInt32(elem.Element("OutlineColorR").Value, 16),
+                Convert.ToInt32(elem.Element("OutlineColorG").Value, 16),
+                Convert.ToInt32(elem.Element("OutlineColorB").Value, 16));
+
+
+
+
         }
 
         public XmlSchema GetSchema()

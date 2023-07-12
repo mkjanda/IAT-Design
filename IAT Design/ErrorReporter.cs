@@ -115,13 +115,14 @@ namespace IATClient
                 requestForm.ShowDialog();
                 if (requestForm.DialogResult == DialogResult.OK)
                 {
-                    downloader = new WebClient();
-                    downloader.Headers.Add(HttpRequestHeader.Accept, "text/plain");
+                    ShakeHands();
+                    var wClient = new WebClient();
+                    wClient.Headers.Add(HttpRequestHeader.Accept, "text/plain");
                     if (requestForm.ProductKey != String.Empty)
-                        downloader.QueryString.Add("ProductKey", requestForm.ProductKey);
+                        wClient.QueryString.Add("ProductKey", requestForm.ProductKey);
                     if (requestForm.Email != String.Empty)
-                        downloader.QueryString.Add("Email", requestForm.Email);
-                    String verifyResult = downloader.DownloadString(Properties.Resources.sErrorReportDataSubmissionURL);
+                        wClient.QueryString.Add("Email", requestForm.Email);
+                    String verifyResult = wClient.DownloadString(Properties.Resources.sErrorReportDataSubmissionURL);
                     reported = true;
                     if (verifyResult == "Both")
                     {
@@ -208,8 +209,11 @@ namespace IATClient
                     switch (reportResponse.Response)
                     {
                         case ErrorReportResponse.EResponseCode.success:
-                            MessageBox.Show(String.Format(Properties.Resources.sErrorReportedMessage, report.ProductKey),
-                            Properties.Resources.sErrorReportedCaption);
+                            if (report.ProductKey != null)
+                                MessageBox.Show(String.Format(Properties.Resources.sErrorReportedMessageProductKey, report.ProductKey),
+                                Properties.Resources.sErrorReportedCaption);
+                            else if (report.Email != null)
+                                MessageBox.Show(Properties.Resources.sErrorReportedMessageEmail, Properties.Resources.sErrorReportedCaption);
                             break;
 
                         case ErrorReportResponse.EResponseCode.killFiled:
@@ -233,7 +237,7 @@ namespace IATClient
                 {
                     if (spl.IsLoaded)
                         spl.Close();
-                    IsReportingEvent.Reset();
+                    IsReportingEvent.Set();
                 }
             });
             task.Start(scheduler);

@@ -84,7 +84,7 @@ namespace IATClient
                 resp.HasStartDate = EnableStartDate.Checked;
                 if (!EnableStartDate.Checked)
                 {
-                    resp.StartDate = DateTime.Now;
+                    resp.StartDate = DateTime.MaxValue;
                     if (!resp.HasEndDate)
                         Label = LabelMessages[0];
                     else

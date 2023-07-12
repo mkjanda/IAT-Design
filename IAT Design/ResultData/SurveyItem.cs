@@ -9,6 +9,8 @@ namespace IATClient.ResultData
     [Serializable]
     public class SurveyItem
     {
+        [XmlAttribute(AttributeName = "Optional", Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public bool Optional { get; set; }
         [XmlElement(ElementName = "Text", Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
         public String Text { get; set; }
         [XmlElement(ElementName = "Response", Form = System.Xml.Schema.XmlSchemaForm.Unqualified, Type = typeof(Response))]
@@ -98,5 +100,5 @@ namespace IATClient.ResultData
     }
 
     [Serializable]
-    public enum ResponseType { None, Boolean, Likert, Date, Multiple, WeightedMultiple, RegEx, MultiBoolean, FixedDigit, BoundedNumber, BoundedLength, Picture };
+    public enum ResponseType { None, Boolean, Likert, Date, Multiple, WeightedMultiple, RegEx, MultiBoolean, FixedDig, BoundedNum, BoundedLength, Picture };
 }

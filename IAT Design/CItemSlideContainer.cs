@@ -5,6 +5,7 @@ using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.IO;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -14,7 +15,8 @@ namespace IATClient
     {
         private static Size MaxThumbSize = new Size(112, 112), MaxDisplaySize = new Size(500, 500);
         public Dictionary<int, CItemSlide> SlideDictionary { get; private set; } = new Dictionary<int, CItemSlide>();
-        public readonly Size DisplaySize, ThumbnailSize;
+        public Size DisplaySize { get ; private set; }  
+        public readonly Size ThumbnailSize = new Size(96, 96);
         private readonly CancellationTokenSource CancellationSource = new CancellationTokenSource();
         private ResultData.ResultData ResultData;
         private List<byte[]> SlideData { get; set; }
@@ -29,22 +31,31 @@ namespace IATClient
             }
         }
 
-        public CItemSlideContainer(ResultData.ResultData rd, List<byte[]> slideData, Manifest slideManifest)
+        public CItemSlideContainer(ResultData.ResultData rd, List<byte[]> slideData, List<ManifestFile> mfList)
         {
-            ResultData = rd;
-            SlideData = slideData;
-            SlideManifest = slideManifest;
-            List<CItemSlide> slideList = new List<CItemSlide>();
-            var files = slideManifest.Contents;
-            foreach (var file in files.Cast<ManifestFile>())
+            try
             {
-                var slide = new CItemSlide();
-                slide.ResourceId = file.ResourceId;
-                slide.ReferenceIds.AddRange(file.ReferenceIds);
-                slide.ImageDataSize = file.Size;
-                slide.SetResultData(ResultData, files.IndexOf(file));
-                foreach (var r in file.ReferenceIds)
-                    SlideDictionary[r] = slide;
+                ResultData = rd;
+                SlideData = slideData;
+                List<CItemSlide> slideList = new List<CItemSlide>();
+                int ctr = 0;
+                SlideManifest = new Manifest();
+                foreach (var file in mfList)
+                {
+                    SlideManifest.AddFile(file);
+                    var slide = new CItemSlide();
+                    slide.ResourceId = file.ResourceId;
+                    slide.ReferenceIds.AddRange(file.ReferenceIds);
+                    slide.ImageDataSize = file.Size;
+                    slide.SetResultData(ResultData, mfList.IndexOf(file));
+                    var ms = new MemoryStream(slideData[ctr++]);
+                    ms.Dispose();
+                    SlideDictionary[slide.ResourceId] = slide;
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
             }
         }
 
@@ -87,7 +98,7 @@ namespace IATClient
             Size sz;
             if (arImg >= arDisplay)
             {
-                sz = new Size(imgSize.Width, (int)(imgSize.Width * arDisplay));
+                sz = new Size(imgSize.Width, (int)(imgSize.Width / arDisplay));
             }
             else
             {
@@ -109,9 +120,7 @@ namespace IATClient
         {
             Task.Run(() =>
             {
-                var fileRefs = SlideManifest.Contents.Where(fe => fe.FileEntityType == FileEntity.EFileEntityType.File).Cast<ManifestFile>();
-                var slideNum = fileRefs.Where(fr => fr.ReferenceIds.Contains(ndx)).Select(fr => fr.ResourceId).First();
-                var slide = SlideDictionary[slideNum];
+                var slide = SlideDictionary[ndx + 1];
                 slide.ImageRetrievedEvent.WaitOne();
                 Image full = slide.FullSizedImage;
                 var di = GetSizedImage(full, DisplaySize);
@@ -138,10 +147,9 @@ namespace IATClient
         }
 
 
-        public void ProcessSlides()
+        public void ProcessSlidesSync()
         {
-            Task.Run(() =>
-            {
+            try {
                 Rectangle thumbImageDestRect = Rectangle.Empty;
                 Rectangle displayImageDestRect = Rectangle.Empty;
                 var slideTuples = SlideDictionary.Values.Select(s => new { s.ReferenceIds, resourceId = s.ResourceId }).OrderBy(a => a.resourceId);
@@ -149,23 +157,23 @@ namespace IATClient
                 //                  .Cast<ManifestFile>().Select()
                 foreach (var entry in slideTuples)
                 {
-                    var memStream = new MemoryStream(SlideData[entry.resourceId]);
+                    var memStream = new MemoryStream(SlideData[entry.resourceId - 1]);
                     var fullSizedImage = Image.FromStream(memStream);
                     memStream.Dispose();
-                    if (entry.resourceId == 0)
+                    if (entry.resourceId == 1)
                     {
-                        double fullAr = (double)SlideDictionary.Values.First().FullSizedImage.Width / (double)SlideDictionary.Values.First().FullSizedImage.Height;
+                        double fullAr = (double)fullSizedImage.Width / (double)fullSizedImage.Height;
                         double displayAr = (double)MaxDisplaySize.Width / (double)MaxDisplaySize.Height;
                         double thumbAr = (double)ThumbnailSize.Width / (double)ThumbnailSize.Height;
                         if (fullAr > displayAr)
                         {
-                            Size dispSize = new Size((int)(MaxDisplaySize.Height * fullAr), MaxDisplaySize.Height);
-                            displayImageDestRect = new Rectangle(new Point(0, 0), dispSize);
+                            DisplaySize = new Size((int)(MaxDisplaySize.Height * fullAr), MaxDisplaySize.Height);
+                            displayImageDestRect = new Rectangle(new Point(0, 0), DisplaySize);
                         }
                         else
                         {
-                            Size dispSize = new Size(MaxDisplaySize.Width, (int)(MaxDisplaySize.Width / fullAr));
-                            displayImageDestRect = new Rectangle(new Point(0, 0), dispSize);
+                            DisplaySize = new Size(MaxDisplaySize.Width, (int)(MaxDisplaySize.Width / fullAr));
+                            displayImageDestRect = new Rectangle(new Point(0, 0), DisplaySize);
                         }
                         if (fullAr > thumbAr)
                         {
@@ -178,19 +186,18 @@ namespace IATClient
                             thumbImageDestRect = new Rectangle(new Point(0, (ThumbnailSize.Height - thumbSize.Height) >> 1), thumbSize);
                         }
                     }
-                    var displayImage = GetSizedImage(fullSizedImage, displayImageDestRect.Size);
-                    var thumbImage = GetSizedImage(fullSizedImage, thumbImageDestRect.Size);
-                    foreach (var rId in entry.ReferenceIds)
-                    {
-                        SlideDictionary[rId].FullSizedImage = (fullSizedImage.Clone() as Image);
-                        SlideDictionary[rId].DisplayImage = (displayImage.Clone() as Image);
-                        SlideDictionary[rId].ThumbnailImage = (thumbImage.Clone() as Image);
-                    }
-                    fullSizedImage.Dispose();
-                    displayImage.Dispose();
-                    thumbImage.Dispose();
+                    SlideDictionary[entry.resourceId].FullSizedImage = fullSizedImage;
+                    SlideDictionary[entry.resourceId].DisplayImage = GetSizedImage(fullSizedImage, displayImageDestRect.Size); 
+                    SlideDictionary[entry.resourceId].ThumbnailImage = GetSizedImage(fullSizedImage, new Size(96, 96)); 
                 }
-            }, CancellationSource.Token);
+            }
+            catch (Exception ex) {
+                throw ex;
+            }
+        }
+        public void ProcessSlides()
+        {
+            Task.Run(() => ProcessSlidesSync());
         }
     }
 }

@@ -98,6 +98,14 @@ namespace IATClient.ResultData
                         return IATResultSetNamespaceV1.AnswerState.ForceSubmitted.ToString();
                     return Answer;
                 }
+                set
+                {
+                    Answer = value;
+                    if (Answer.Length == 0)
+                        AnswerState = IATResultSetNamespaceV1.AnswerState.Unanswered;
+                    else
+                        AnswerState = IATResultSetNamespaceV1.AnswerState.Answered;
+                }
             }
 
             public bool IsAnswered

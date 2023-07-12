@@ -1,6 +1,7 @@
 ﻿using IATClient.Messages;
 using System;
 using System.Drawing;
+using System.Linq.Expressions;
 using System.Net;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -122,6 +123,7 @@ namespace IATClient
 
         private void Activate_Click(object sender, EventArgs e)
         {
+            try { 
             if (ProductKey.Text.Length != 20)
             {
                 ActivateMessage.Text = "Product key should be 20 characters in length";
@@ -218,6 +220,11 @@ namespace IATClient
                     this.Invoke(new Action(() => Close()));
                 }
             });
+        }
+            catch (Exception ex)
+            {
+                ErrorReporter.ReportActivationError(ex);
+            }
         }
 
         private void ActivationComplete(IAsyncResult aResult)

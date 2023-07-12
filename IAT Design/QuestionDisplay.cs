@@ -153,7 +153,7 @@ namespace IATClient
         }
 
 
-        CSurveyItem _SurveyItem = null;
+        protected CSurveyItem _SurveyItem = null;
         public override CSurveyItem SurveyItem
         {
             get
@@ -508,7 +508,7 @@ namespace IATClient
                 return Task.Run(() => 0);
             Func<int> f = () =>
             {
-                this.Invoke(new Action(() =>
+                this.BeginInvoke(new Action(() =>
                 {
                     this.Width = Parent.Width - QuestionEditMargin.Horizontal;
                     QuestionEdit.Width = Parent.Width - QuestionEditMargin.Horizontal - QuestionEditPadding.Horizontal - Padding.Horizontal;

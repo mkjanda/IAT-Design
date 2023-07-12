@@ -305,7 +305,7 @@ namespace IATClient
             if (ItemSlideMap.Keys.Contains(iatName))
                 if (ItemSlideMap[iatName] != null)
                     ItemSlideMap[iatName].Dispose();
-            int nTrigger = WaitHandle.WaitAny(new WaitHandle[] { TransactionFailedEvent, TransactionCompleteEvent }, 10000, true);
+            int nTrigger = WaitHandle.WaitAny(new WaitHandle[] { TransactionFailedEvent, TransactionCompleteEvent }, 60000, true);
             return (nTrigger == 1);
         }
 
@@ -370,28 +370,45 @@ namespace IATClient
                     TransactionFailedEvent.Set();
                     break;
 
+
+                case TransactionRequest.ETransaction.ItemSlideDownloadReady:
+                    
+                    WebClient web = new WebClient();
+                    var query = new NameValueCollection(3);
+                    query.Add("IATName", CurrIATName);
+                    query.Add("ClientID", ClientId.ToString());
+                    query.Add("DownloadKey", trans.StringValues["DownloadKey"]);
+                    web.QueryString = query;
+                    byte[] itemSlideData = web.DownloadData(Properties.Resources.sItemSlideDownloadURL);
+                    var receipt = new MemoryStream(itemSlideData);
+                    var slideData = new List<byte[]>();
+                    var fileList = ItemSlideManifest.Contents.Where(fe => fe.FileEntityType == FileEntity.EFileEntityType.File).Cast<ManifestFile>().Where(mf => mf.ResourceType == ManifestFile.EResourceType.itemSlide).ToList();
+                    foreach (var file in fileList)
+                    {
+                        byte[] sd = new byte[file.Size];
+                        receipt.Read(sd, 0, (int)file.Size);
+                        slideData.Add(sd);
+                    }
+                    ItemSlideMap[CurrIATName] = new CItemSlideContainer(ResultDataMap[CurrIATName], slideData, fileList);
+                    ItemSlideMap[CurrIATName].ProcessSlides();
+                    TransactionCompleteEvent.Set();
+                    break;
+
+
             }
         }
+
+        public long ClientId { get; private set; }
+        public Manifest ItemSlideManifest { get; private set; }
 
         private void OnManifest(INamedXmlSerializable message)
         {
             var manifest = message as Manifest;
-            WebClient web = new WebClient();
-            var query = new NameValueCollection(3);
-            query.Add("ProductKey", LocalStorage.Activation[LocalStorage.Field.ProductKey]);
-            query.Add("TestName", CurrIATName);
-            web.QueryString = query;
-            byte[] itemSlideData = web.DownloadData(Properties.Resources.sItemSlideDownloadURL);
-            var receipt = new MemoryStream(itemSlideData);
-            var slideData = new List<byte[]>();
-            foreach (var file in manifest.Contents.Where(fe => fe.FileEntityType == FileEntity.EFileEntityType.File).Cast<ManifestFile>())
-            {
-                byte[] sd = new byte[file.Size];
-                receipt.Write(sd, 0, (int)file.Size);
-                slideData.Add(sd);
-            }
-            ItemSlideMap[CurrIATName] = new CItemSlideContainer(ResultDataMap[CurrIATName], slideData, manifest);
-            TransactionCompleteEvent.Set();
+            ItemSlideManifest = manifest;
+            var trans = new TransactionRequest(TransactionRequest.ETransaction.RequestItemSlides);
+            ClientId = manifest.ClientId;
+            trans.IATName = CurrIATName;
+            new Envelope(trans).SendMessage(IATManagerWebSocket, AbortToken);
         }
 
         private void OnAdminKeyReceived(INamedXmlSerializable obj)

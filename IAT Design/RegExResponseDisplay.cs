@@ -90,6 +90,13 @@ namespace IATClient
                     if (Parent != null)
                         ((QuestionDisplay)Parent).Active = true;
                 };
+                box.TextChanged += (sender, args) =>
+                {
+                    TextBox tb = sender as TextBox;
+                    if (tb == RegEx)
+                        (SurveyItem.Response as CRegExResponse).RegEx = tb.Text;
+                    Invalidate();
+                };
                 box.Multiline = true;
                 box.TabStop = true;
                 if (box == RegEx)
@@ -221,15 +228,6 @@ namespace IATClient
                 tb.Text = TestDefaultText;
             if ((tb == RegEx) && (tb.Text == String.Empty))
                 tb.Text = RegExDefaultText;
-        }
-
-        private void TextBox_TextChanged(object sender, EventArgs e)
-        {
-            TextBox tb = sender as TextBox;
-            if (tb == RegEx)
-                (SurveyItem.Response as CRegExResponse).RegEx = tb.Text;
-            ResumeLayout(true);
-            Invalidate();
         }
 
         protected bool RegExIsValid(String regEx)

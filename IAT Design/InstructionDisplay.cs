@@ -11,7 +11,6 @@ namespace IATClient
         private Font LabelFont;
         private Rectangle LabelRect;
         private String Label;
-        private CSurveyItem _SurveyItem = null;
         private Rectangle _FormatRect;
         protected override Rectangle FormatRect { get { return _FormatRect; } }
         protected override String DefaultQuestionEditText

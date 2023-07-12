@@ -13,6 +13,7 @@ using System.Threading.Tasks;
 using System.Timers;
 using System.Windows.Forms;
 using System.Xml;
+using System.Xml.Linq;
 
 namespace IATClient.IATConfig
 {
@@ -114,19 +115,6 @@ namespace IATClient.IATConfig
             return ImageList.Where(i => i.SourceUris.Contains(u)).ToList();
         }
 
-        public void ReadXml(XmlReader xReader)
-        {
-            int nDisplayItems = Convert.ToInt32(xReader["NumDisplayItems"]);
-            xReader.ReadStartElement("DisplayItemList");
-            for (int ctr = 0; ctr < nDisplayItems; ctr++)
-            {
-                var iImg = new IATImage();
-                iImg.ReadXml(xReader);
-                ImageList.Add(iImg);
-            }
-            xReader.ReadEndElement();
-        }
-
         public void WriteXml(XmlWriter xWriter)
         {
             ImagesProcessed.WaitOne();
@@ -135,6 +123,7 @@ namespace IATClient.IATConfig
             ImageList.ForEach((t) => t.WriteXml(xWriter));
             xWriter.WriteEndElement();
         }
+
 
         public ManifestFile[] ConstructFileManifest(ManifestFile.EResourceType resourceType)
         {

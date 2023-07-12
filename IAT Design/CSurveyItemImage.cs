@@ -115,8 +115,8 @@ namespace IATClient
         public override void WriteXml(XmlWriter writer)
         {
             writer.WriteStartElement("SurveyImage");
-            writer.WriteAttributeString("Image", "True");
-            writer.WriteAttributeString("Optional", "False");
+            writer.WriteAttributeString("Image", "true");
+            writer.WriteAttributeString("Optional", "false");
             writer.WriteElementString("MimeType", SurveyImage.IImage.OriginalImage.ImageFormat.MimeType);
             var memStream = new MemoryStream();
             var bmp = SurveyImage.IImage.OriginalImage.Img;
@@ -129,8 +129,8 @@ namespace IATClient
         public void WritePreviewXml(XmlWriter writer)
         {
             writer.WriteStartElement("SurveyImage");
-            writer.WriteAttributeString("Image", "True");
-            writer.WriteAttributeString("Optional", "False");
+            writer.WriteAttributeString("Image", "true");
+            writer.WriteAttributeString("Optional", "false");
             Images.IImage surveyImage = CIAT.SaveFile.GetIImage(SurveyImage.IImage.URI);
             writer.WriteElementString("MimeType", surveyImage.MimeType);
             MemoryStream imgStream = new MemoryStream();

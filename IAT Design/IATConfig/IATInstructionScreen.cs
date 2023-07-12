@@ -1,11 +1,12 @@
-﻿using System.Text;
+﻿using System;
+using System.Text;
+using System.Xml.Linq;
 
 namespace IATClient.IATConfig
 {
 
     abstract class IATInstructionScreen : IATEvent
     {
-        public ConfigFile ConfigFile { get; set; }
         int _ContinueInstructionsDisplayID = -1;
         public int ContinueInstructionsDisplayID
         {
@@ -16,7 +17,7 @@ namespace IATClient.IATConfig
                 _ContinueInstructionsDisplayID = ConfigFile.GetIATImage(InstructionScreen.ContinueInstructionsUri).Id;
                 return _ContinueInstructionsDisplayID;
             }
-            set
+            private set
             {
                 _ContinueInstructionsDisplayID = value;
             }
@@ -43,6 +44,11 @@ namespace IATClient.IATConfig
         public IATInstructionScreen(EEventType type)
             : base(type)
         {
+        }
+
+        public override void Load(XElement elem)
+        {
+            ContinueInstructionsDisplayID = Convert.ToInt32(elem.Element("ContinueInstructionsID").Value);
         }
     }
 }
