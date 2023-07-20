@@ -1319,7 +1319,7 @@
     <value>Further, the server was unable to correctly rollback the deployment of your IAT. Before you attempt to upload it again, you must delete it via the server interface panel.</value>
   </data>
   <data name="sDataTransactionWebsocketURI" xml:space="preserve">
-    <value>ws://127.0.0.1/IAT/DataTransaction</value>
+    <value>wss://iatsoftware.net/IAT/DataTransaction</value>
   </data>
   <data name="sClientDeleted" xml:space="preserve">
     <value>You no longer have an account with IAT Software.</value>
@@ -1346,16 +1346,16 @@
     <value>/IAT</value>
   </data>
   <data name="sUploadURI" xml:space="preserve">
-    <value>http://127.0.0.1/IAT/DeploymentUpload?DeploymentID={0}&amp;Key={1}&amp;Size={2}</value>
+    <value>https://iatsoftware.net/IAT/DeploymentUpload?DeploymentID={0}&amp;Key={1}&amp;Size={2}</value>
   </data>
   <data name="sItemSlideURL" xml:space="preserve">
-    <value>http://127.0.0.1/IAT/ItemSlideDownload</value>
+    <value>https://iatsoftware.net/IAT/ItemSlideDownload</value>
   </data>
   <data name="sPurchaseResourcesURI" xml:space="preserve">
     <value>https://www.iatsoftware.net/IAT/PurchaseTransaction/InitiatePurchase</value>
   </data>
   <data name="sRetrieveResourcePricesURI" xml:space="preserve">
-    <value>http://127.0.0.1/IAT/PurchaseTransaction/Pricing</value>
+    <value>https://iatsoftware.net/IAT/PurchaseTransaction/Pricing</value>
   </data>
   <data name="sSubmitPurchaseOrderURI" xml:space="preserve">
     <value>https://www.iatsoftware.net/IAT/PurchaseTransaction/SubmitOrder</value>
@@ -1385,7 +1385,7 @@
     <value>The IAT test design program encountered an error that was sucessfully reported. I apologize for the inconvience. I'll contact you in the next handful of days to inform you of the status of the error. If you don't hear from me, please email me at michael@iatsoftware.net, including your product key, {0}. Your product key is also accessible from the Help drop-down menu.\nA recovery save file will be attempted after you close this window and then the program will terminate.\n{1}</value>
   </data>
   <data name="sErrorReportURL" xml:space="preserve">
-    <value>http://127.0.0.1/IAT/ClientErrorReport</value>
+    <value>https://iatsoftware.net/IAT/ClientErrorReport</value>
   </data>
   <data name="sPurchaseServiceUnavailableURL" xml:space="preserve">
     <value>https://www.iatsoftware.net/IAT/PurchaseTransaction/ServiceUnavailable</value>
@@ -1463,7 +1463,7 @@
     <value>Server Down</value>
   </data>
   <data name="sRetrieveResultsURL" xml:space="preserve">
-    <value>http://127.0.0.1/IAT/RetrieveResults</value>
+    <value>https://iatsoftware.net/IAT/RetrieveResults</value>
   </data>
   <data name="sTemporarilySavedTestFilename" xml:space="preserve">
     <value>iat-temp.iat</value>
@@ -1493,7 +1493,7 @@
     <value>..\Resources\sig.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
   </data>
   <data name="sInvalidSaveFileReportURL" xml:space="preserve">
-    <value>http://127.0.0.1/ClientErrorReport/InvalidSaveFile</value>
+    <value>https://iatsoftware.net/ClientErrorReport/InvalidSaveFile</value>
   </data>
   <data name="sBlockHasNoItems" xml:space="preserve">
     <value>IAT Block #{0} has no stimuli</value>
@@ -1532,7 +1532,7 @@
     <value>This is embarrassing but an error occurred in the automated error report mechanism. The report error has been logged on the server. Information pertinant to the software failure is shown below. If you'd like, enter your email address below and I will contact you for more information so the error can be resolved or, at least, let you know when the automated error report mechanism is up and running.</value>
   </data>
   <data name="sErrorReportDataSubmissionURL" xml:space="preserve">
-    <value>http://127.0.0.1/IAT/ClientErrorReport/ExtraData</value>
+    <value>https://iatsoftware.net/IAT/ClientErrorReport/ExtraData</value>
   </data>
   <data name="sErrorReportException" xml:space="preserve">
     <value>A non-internet related issue surfaced while submitting your error report. Contact me at michael@iatsoftware.net</value>
@@ -1547,7 +1547,7 @@
     <value>Submission Error</value>
   </data>
   <data name="sActivationErrorReportURLTesting" xml:space="preserve">
-    <value>http://127.0.0.1/IAT/ClientErrorReport/Activation</value>
+    <value>https://iatsoftware.net/IAT/ClientErrorReport/Activation</value>
   </data>
   <data name="GenerateCaption" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\GenerateCaption.xslt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
@@ -1583,19 +1583,19 @@
     <value>..\Resources\font9.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
   </data>
   <data name="sActivationErrorReportURL" xml:space="preserve">
-    <value>http://127.0.0.1/IAT/ClientErrorReport</value>
+    <value>https://iatsoftware.net/IAT/ClientErrorReport</value>
   </data>
   <data name="savesplash" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\savesplash.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="sItemSlideUploadURL" xml:space="preserve">
-    <value>http://127.0.0.1/IAT/DeploymentUpload/ItemSlideFiles</value>
+    <value>https://iatsoftware.net/IAT/DeploymentUpload/ItemSlideFiles</value>
   </data>
   <data name="sDeploymentUploadURL" xml:space="preserve">
-    <value>http://127.0.0.1/IAT/DeploymentUpload/DeploymentFiles</value>
+    <value>https://iatsoftware.net/IAT/DeploymentUpload/DeploymentFiles</value>
   </data>
   <data name="sItemSlideDownloadURL" xml:space="preserve">
-    <value>http://127.0.0.1/IAT/ItemSlides</value>
+    <value>https://iatsoftware.net/IAT/ItemSlides</value>
   </data>
   <data name="DownloadLegacy" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\DownloadLegacy.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>

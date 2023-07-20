@@ -137,6 +137,6 @@
     <value>https://www.iatsoftware.net/IAT/ClientSoftwareUpdate/UpdateNotification?Version={0}</value>
   </data>
   <data name="sVersion" xml:space="preserve">
-    <value>1.0.2.0</value>
+    <value>1.1.2.0</value>
   </data>
 </root>

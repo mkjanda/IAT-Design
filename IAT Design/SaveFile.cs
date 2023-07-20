@@ -1469,7 +1469,7 @@ namespace IATClient
             {
                 SaveSplash spl = new SaveSplash();
                 spl.Show();
-                ImageMetaDataDocument.CleanPackageForSave();
+//                ImageMetaDataDocument.CleanPackageForSave();
                 Flush(false);
                 ioLock.EnterWriteLock();
                 try

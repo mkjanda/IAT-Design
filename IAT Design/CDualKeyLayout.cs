@@ -506,9 +506,9 @@ namespace IATClient
                     {
                         ptConjunction = new Point((bounds.Width - conjunction.AbsoluteBounds.Width) >> 1, Math.Max(ULSize.Height + VertPadding, URSize.Height + VertPadding));
                         int llrHeight = bounds.Height - ptConjunction.Y - VertPadding - conjunction.AbsoluteBounds.Height;
-                        if (llrHeight > LLSize.Height)
+                        if (llrHeight < LLSize.Height)
                             LLSize = new Size((int)((double)llrHeight * arLL), llrHeight);
-                        if (llrHeight > LRSize.Height)
+                        if (llrHeight < LRSize.Height)
                             LRSize = new Size((int)((double)llrHeight * arLR), llrHeight);
                         LV1Rect = new Rectangle(new Point((bounds.Width - ULSize.Width) >> 1, ptConjunction.Y - (VertPadding >> 1) - ULSize.Height), ULSize);
                         RV1Rect = new Rectangle(new Point((bounds.Width - URSize.Width) >> 1, ptConjunction.Y - (VertPadding >> 1) - URSize.Height), URSize);

@@ -904,7 +904,7 @@ namespace IATClient.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to http://127.0.0.1/IAT/ClientErrorReport.
+        ///   Looks up a localized string similar to https://iatsoftware.net/IAT/ClientErrorReport.
         /// </summary>
         internal static string sActivationErrorReportURL {
             get {
@@ -913,7 +913,7 @@ namespace IATClient.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to http://127.0.0.1/IAT/ClientErrorReport/Activation.
+        ///   Looks up a localized string similar to https://iatsoftware.net/IAT/ClientErrorReport/Activation.
         /// </summary>
         internal static string sActivationErrorReportURLTesting {
             get {
@@ -1472,7 +1472,7 @@ namespace IATClient.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to ws://127.0.0.1/IAT/DataTransaction.
+        ///   Looks up a localized string similar to wss://iatsoftware.net/IAT/DataTransaction.
         /// </summary>
         internal static string sDataTransactionWebsocketURI {
             get {
@@ -2021,7 +2021,7 @@ namespace IATClient.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to http://127.0.0.1/IAT/DeploymentUpload/DeploymentFiles.
+        ///   Looks up a localized string similar to https://iatsoftware.net/IAT/DeploymentUpload/DeploymentFiles.
         /// </summary>
         internal static string sDeploymentUploadURL {
             get {
@@ -2175,7 +2175,7 @@ namespace IATClient.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to http://127.0.0.1/IAT/ClientErrorReport/ExtraData.
+        ///   Looks up a localized string similar to https://iatsoftware.net/IAT/ClientErrorReport/ExtraData.
         /// </summary>
         internal static string sErrorReportDataSubmissionURL {
             get {
@@ -2274,7 +2274,7 @@ namespace IATClient.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to http://127.0.0.1/IAT/ClientErrorReport.
+        ///   Looks up a localized string similar to https://iatsoftware.net/IAT/ClientErrorReport.
         /// </summary>
         internal static string sErrorReportURL {
             get {
@@ -2814,7 +2814,7 @@ namespace IATClient.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to http://127.0.0.1/ClientErrorReport/InvalidSaveFile.
+        ///   Looks up a localized string similar to https://iatsoftware.net/ClientErrorReport/InvalidSaveFile.
         /// </summary>
         internal static string sInvalidSaveFileReportURL {
             get {
@@ -2904,7 +2904,7 @@ namespace IATClient.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to http://127.0.0.1/IAT/ItemSlides.
+        ///   Looks up a localized string similar to https://iatsoftware.net/IAT/ItemSlides.
         /// </summary>
         internal static string sItemSlideDownloadURL {
             get {
@@ -2913,7 +2913,7 @@ namespace IATClient.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to http://127.0.0.1/IAT/DeploymentUpload/ItemSlideFiles.
+        ///   Looks up a localized string similar to https://iatsoftware.net/IAT/DeploymentUpload/ItemSlideFiles.
         /// </summary>
         internal static string sItemSlideUploadURL {
             get {
@@ -2922,7 +2922,7 @@ namespace IATClient.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to http://127.0.0.1/IAT/ItemSlideDownload.
+        ///   Looks up a localized string similar to https://iatsoftware.net/IAT/ItemSlideDownload.
         /// </summary>
         internal static string sItemSlideURL {
             get {
@@ -3966,7 +3966,7 @@ namespace IATClient.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to http://127.0.0.1/IAT/PurchaseTransaction/Pricing.
+        ///   Looks up a localized string similar to https://iatsoftware.net/IAT/PurchaseTransaction/Pricing.
         /// </summary>
         internal static string sRetrieveResourcePricesURI {
             get {
@@ -3975,7 +3975,7 @@ namespace IATClient.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to http://127.0.0.1/IAT/RetrieveResults.
+        ///   Looks up a localized string similar to https://iatsoftware.net/IAT/RetrieveResults.
         /// </summary>
         internal static string sRetrieveResultsURL {
             get {
@@ -4525,7 +4525,7 @@ namespace IATClient.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to http://127.0.0.1/IAT/DeploymentUpload?DeploymentID={0}&amp;Key={1}&amp;Size={2}.
+        ///   Looks up a localized string similar to https://iatsoftware.net/IAT/DeploymentUpload?DeploymentID={0}&amp;Key={1}&amp;Size={2}.
         /// </summary>
         internal static string sUploadURI {
             get {
