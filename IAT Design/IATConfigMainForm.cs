@@ -519,6 +519,9 @@ namespace IATClient
             BuildMenu();
             if (LocalStorage.Activated == LocalStorage.EActivationStatus.NotActivated)
             {
+                if (MessageBox.Show("You will be uploading material to my server that I will not review. I want a verified " +
+                    "email address should you upload something GROSSLY inappropriate.", "What's With Activation?", MessageBoxButtons.YesNo) != DialogResult.Yes)
+                    this.Close();
                 ActivationDialog dlg = new ActivationDialog();
                 dlg.ShowDialog();
                 if (dlg.ProductActivated != LocalStorage.EActivationStatus.Activated)

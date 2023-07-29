@@ -80,7 +80,7 @@ namespace IATClient
                 LayoutEvent.Reset();
                 Monitor.Exit(lockObj);
                 LayoutChoices();
-                this.BeginInvoke(new Action(() =>
+                this.Invoke(new Action(() =>
                 {
                     ReverseScoredCheck.Size = TextRenderer.MeasureText("Reverse Scored", DisplayFont) + new Size(20, 0);
                     ReverseScoredCheck.Location = new Point(this.Width - Padding.Right - ReverseScoredCheck.Width, AddChoiceButton.Bottom + ChoiceEditPadding.Top);

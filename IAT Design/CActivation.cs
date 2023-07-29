@@ -450,7 +450,6 @@ namespace IATClient
             EMail = eMail;
             Title = title;
             ProductKey = productKey;
-            (null as ManualResetEvent).Set();
             LocalStorage.Activation[LocalStorage.Field.UserEmail] = EMail;
             LocalStorage.Activation[LocalStorage.Field.ProductKey] = ProductKey;
             LocalStorage.Activation[LocalStorage.Field.UserName] = Title + " " + FName + " " + LName;

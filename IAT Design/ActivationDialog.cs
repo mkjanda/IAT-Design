@@ -172,7 +172,7 @@ namespace IATClient
                 actObj.Activate(fName, lName, email, title, productKey);
                 if (actObj.ActivationResult == ActivationResponse.EResult.Success)
                 {
-                    this.Invoke((Action)(() =>
+                    this.BeginInvoke((Action)(() =>
                     {
                         ResendVerificationButton.Enabled = true;
                         HaveVerifiedButton.Enabled = true;
@@ -184,7 +184,7 @@ namespace IATClient
                 }
                 else
                 {
-                    this.Invoke((Action)(() =>
+                    this.BeginInvoke((Action)(() =>
                     {
                         ProductKey.Enabled = true;
                         FName.Enabled = true;
@@ -227,37 +227,6 @@ namespace IATClient
             }
         }
 
-        private void ActivationComplete(IAsyncResult aResult)
-        {
-        }
-
-        private void ActivationFailed(ActivationResponse.EResult result)
-        {
-            if (result == ActivationResponse.EResult.InvalidProductCode)
-            {
-                MessageBox.Show("The product key you entered is invalid.", "Activation Failed");
-            }
-            else if (result == ActivationResponse.EResult.NoActivationsRemaining)
-            {
-                MessageBox.Show("You have consumed all your allotted activations of the software. Please contact us at admin@iatsoftware.net to acquire more.", "Activation Failed");
-            }
-            else if (result == ActivationResponse.EResult.ClientFrozen)
-            {
-                MessageBox.Show("Your account has been frozen. Any data you have collected remains on the server. Contact us at admin@iatsoftware.net for details.", "Account Frozen");
-            }
-            else if (result == ActivationResponse.EResult.ClientDeleted)
-            {
-                MessageBox.Show("You no longer have an account with IAT Software.", "Account Deleted");
-            }
-            else if (result == ActivationResponse.EResult.ServerFailure)
-            {
-                MessageBox.Show("The server failed to complete the activation process. Please contact us at admin@iatsoftware.net", "Activation Failed");
-            }
-            else if (result == ActivationResponse.EResult.CannotConnect)
-            {
-                MessageBox.Show("The program cannot communicate with the server. Please check your internet connection and try again. If this problem persists, contact us at admin@iatsoftware.net", "Activation Failed");
-            }
-        }
 
         private void HaveVerifiedButton_Click(object sender, EventArgs e)
         {
@@ -309,10 +278,6 @@ namespace IATClient
                         break;
                 }
             }
-        }
-
-        private void ResentEMailOpComplete(TransactionRequest.ETransaction resultTrans)
-        {
         }
 
         private void ResendVerificationButton_Click(object sender, EventArgs e)
