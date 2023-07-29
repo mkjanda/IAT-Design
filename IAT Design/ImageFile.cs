@@ -70,14 +70,17 @@ namespace IATClient.Images
                 ImageManager owner = o as ImageManager;
                 List<IImage> thumbGens = new List<IImage>();
                 IImage iImg;
-                while (ThumbGenerations.TryTake(out iImg))
-                    thumbGens.Add(iImg);
-                thumbGens = thumbGens.Distinct().ToList();
-                foreach (IImage img in thumbGens)
+                if (ThumbGenerations != null)
                 {
-                    if (Halting)
-                        return;
-                    (img as Image).UpdateThumbnail();
+                    while (ThumbGenerations.TryTake(out iImg))
+                        thumbGens.Add(iImg);
+                    thumbGens = thumbGens.Distinct().ToList();
+                    foreach (IImage img in thumbGens)
+                    {
+                        if (Halting)
+                            return;
+                        (img as Image).UpdateThumbnail();
+                    }
                 }
                 Monitor.Exit(thumbItrLock);
             });
@@ -170,10 +173,10 @@ namespace IATClient.Images
             ThumbGenerationThread?.Dispose();
             CacheThread?.Dispose();
             ResizerThread?.Dispose();
-            CachedImages = null;
-            FetchBag = null;
-            ThumbGenerations = null;
-            ResizerQueue = null;
+            CachedImages = new ConcurrentBag<ImageMedia>();
+            FetchBag = new ConcurrentBag<ImageMedia>();
+            ThumbGenerations = new ConcurrentBag<IImage>();
+            ResizerQueue = new ConcurrentBag<Tuple<Image, Size>>();
         }
 
         public void AddToResizer(IImage obj, Size newSize)

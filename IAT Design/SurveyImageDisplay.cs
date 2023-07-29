@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Drawing;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace IATClient
 {
@@ -28,7 +29,7 @@ namespace IATClient
                 var origImg = SII.SurveyImage.IImage.OriginalImage.Img;
                 var siiAr = (double)SII.SurveyImage.IImage.OriginalSize.Width / SII.SurveyImage.IImage.OriginalSize.Height;
                 SII.SurveyImage.PreviewPanel = this;
-                SII.SurveyImage.IImage.Resize(new Size(Math.Min(this.Width, origImg.Width), (int)(Math.Min(this.Width, origImg.Width) / siiAr)));
+                SII.SurveyImage.IImage.Resize(new Size(origImg.Width, (int)(origImg.Width / siiAr)));
             }
         }
 
@@ -89,7 +90,7 @@ namespace IATClient
 
         public SurveyImageDisplay()
         {
-            ImageBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage;
+            ImageBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             ImageBox.Dock = System.Windows.Forms.DockStyle.Fill;
             ImageBox.BorderStyle = System.Windows.Forms.BorderStyle.None;
             ImageBox.BackColor = System.Drawing.Color.White;
@@ -106,7 +107,7 @@ namespace IATClient
                     var origImg = SII.SurveyImage.IImage.OriginalImage.Img;
                     var siiAr = (double)SII.SurveyImage.IImage.OriginalSize.Width / SII.SurveyImage.IImage.OriginalSize.Height;
                     SII.SurveyImage.PreviewPanel = this;
-                    SII.SurveyImage.IImage.Resize(new Size(Math.Min(this.Width, origImg.Width), (int)(Math.Min(this.Width, origImg.Width) / siiAr)));
+                    SII.SurveyImage.IImage.Resize(new Size(origImg.Width, (int)(origImg.Width / siiAr)));
                 }
             };
             this.BackColor = Color.White;

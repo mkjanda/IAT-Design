@@ -34,7 +34,9 @@ namespace IATClient
         {
             IsReportingEvent.WaitOne();
             IsReportingEvent.Reset();
-            if (CIAT.SaveFile.IsDisposing)
+            if (CIAT.SaveFile == null)
+                return;
+                if (CIAT.SaveFile.IsDisposing)
                 return;
             Errors++;
             ErrorsReported++;

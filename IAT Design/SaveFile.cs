@@ -1474,6 +1474,7 @@ namespace IATClient
                 ioLock.EnterWriteLock();
                 try
                 {
+                    CIAT.ImageManager.StopWorkers();
                     SavePackage.Close();
                     //                    if ((WorkingSaveFilename != filename) && (File.Exists(filename)))
                     File.Delete(filename);
@@ -1505,6 +1506,7 @@ namespace IATClient
                 {
                     ioLock.ExitWriteLock();
                     spl.Close();
+                    CIAT.ImageManager.StartWorkers();
                     SaveEvent.Set();
                 }
             }));
