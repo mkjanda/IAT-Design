@@ -1,13 +1,13 @@
 ﻿using System;
 using System.Drawing;
 using System.Windows.Forms;
+using System.Windows.Forms.VisualStyles;
 
 namespace IATClient
 {
-    public class ScrollingPreviewPanelPane : Control, IImageDisplay
+    public class ScrollingPreviewPanelPane : UserControl, IImageDisplay
     {
         private object lockObject = new object();
-        private PictureBox ImageBox = new PictureBox();
         private bool bSelected = false;
         private bool bMouseDown = false;
         private Point MouseDownAt = Point.Empty;
@@ -32,9 +32,11 @@ namespace IATClient
             set
             {
                 _Image = value;
-                BackgroundImage = value;
+                ImageBox.Image = value;
             }
         }
+
+        public PictureBox ImageBox { get; } = new PictureBox();
 
 
         public void SetImage(Images.IImageMedia image)
@@ -124,14 +126,22 @@ namespace IATClient
             this.BackgroundImage = DINull.DINull.IImage.Img;
             this.BackgroundImageLayout = ImageLayout.Stretch;
             this.ParentChanged += new EventHandler(ScrollingPreviewPanelPane_ParentChanged);
-            this.Paint += new PaintEventHandler(ScrollingPreviewPanelPane_Paint);
-            this.MouseDown += new MouseEventHandler(ScrollingPreviewPanelPane_MouseDown);
-            this.MouseMove += new MouseEventHandler(ScrollingPreviewPanelPane_MouseMove);
-            this.MouseUp += new MouseEventHandler(ScrollingPreviewPanelPane_MouseUp);
-            this.DragDrop += new DragEventHandler(ScrollingPreviewPanelPane_DragDrop);
-            this.DragOver += new DragEventHandler(ScrollingPreviewPanelPane_DragOver);
-            this.DragLeave += new EventHandler(ScrollingPreviewPanelPane_DragLeave);
+            ImageBox.Paint += new PaintEventHandler(ScrollingPreviewPanelPane_Paint);
+            ImageBox.MouseDown += new MouseEventHandler(ScrollingPreviewPanelPane_MouseDown);
+            ImageBox.MouseMove += new MouseEventHandler(ScrollingPreviewPanelPane_MouseMove);
+            ImageBox.MouseUp += new MouseEventHandler(ScrollingPreviewPanelPane_MouseUp);
+            ImageBox.DragDrop += new DragEventHandler(ScrollingPreviewPanelPane_DragDrop);
+            ImageBox.DragOver += new DragEventHandler(ScrollingPreviewPanelPane_DragOver);
+            ImageBox.DragLeave += new EventHandler(ScrollingPreviewPanelPane_DragLeave);
             this.AllowDrop = true;
+            this.Controls.Add(ImageBox);
+            ImageBox.SizeMode = PictureBoxSizeMode.Zoom;
+            ImageBox.BackColor = CIAT.SaveFile.Layout.BackColor;
+            ImageBox.Dock = DockStyle.Fill;
+            this.HandleCreated += (sender, args) =>
+            {
+                this.AutoScaleMode = AutoScaleMode.Inherit;
+            };
         }
 
         private void ScrollingPreviewPanelPane_DragLeave(object sender, EventArgs e)
@@ -191,18 +201,10 @@ namespace IATClient
 
         void ScrollingPreviewPanelPane_Paint(object sender, PaintEventArgs e)
         {
-            Brush bkBrush = new SolidBrush(CIAT.SaveFile.Layout.BackColor);
-            e.Graphics.FillRectangle(bkBrush, e.ClipRectangle);
-            bkBrush.Dispose();
-            try
-            {
-                e.Graphics.DrawImage(Image, 0, 0);
-            }
-            catch (Exception) { }
             if (bSelected)
                 e.Graphics.DrawRectangle(Pens.LimeGreen, new Rectangle(new Point(0, 0), this.Size - new Size(1, 1)));
             else
-                e.Graphics.DrawRectangle(Pens.Gray, new Rectangle(new Point(0, 0), this.Size - new Size(1, 1)));
+                    e.Graphics.DrawRectangle(Pens.Gray, new Rectangle(new Point(0, 0), this.Size - new Size(1, 1)));
 
         }
 

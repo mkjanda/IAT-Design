@@ -106,8 +106,9 @@ namespace IATClient
         public StimulusDefinitionPanel(Uri parentBlockUri)
         {
             ParentBlockUri = parentBlockUri;
-            //            this.AutoScaleMode = AutoScaleMode.Dpi;
+            this.AutoScaleMode = AutoScaleMode.Inherit;
             InitializeComponent();
+            this.PerformLayout();
             StimulusText = new TextEditControl(StimulusTextWidth, DIText.UsedAs.Stimulus, true);
             StimulusText.Location = new Point(StimulusTextPos.X, StimulusTextPos.Y);
             StimulusGroup.Controls.Add(StimulusText);

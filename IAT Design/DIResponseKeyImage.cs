@@ -13,12 +13,12 @@ namespace IATClient
 {
     public class DIResponseKeyImage : DIImage, IResponseKeyDI
     {
-        public bool LayoutSuspended { get; protected set; } = false;
-        public void SuspendLayout()
+        public override bool LayoutSuspended { get; protected set; } = false;
+        public override void SuspendLayout()
         {
             LayoutSuspended = true;
         }
-        public void ResumeLayout(bool invalidate)
+        public override void ResumeLayout(bool invalidate)
         {
             if (!LayoutSuspended)
                 return;

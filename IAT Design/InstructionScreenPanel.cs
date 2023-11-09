@@ -205,10 +205,9 @@ namespace IATClient
             this.Enabled = false;
             InstructionBlockUri = instrBlock.URI;
             InitializeComponent();
-
+            this.PerformAutoScale();
             PreviewGroup = new GroupBox();
             PreviewGroup.Location = new Point(0, 0);
-            PreviewGroup.ClientSize = new Size(500, 500) + new Size(12, 18);
             PreviewGroup.Text = "Instruction Screen Preview";
             ScreenPreview = new ImageDisplay();
             ScreenPreview.BackColor = CIAT.SaveFile.Layout.BackColor;
@@ -217,13 +216,11 @@ namespace IATClient
             double arPreview = (double)CIAT.SaveFile.Layout.InteriorSize.Width / (double)CIAT.SaveFile.Layout.InteriorSize.Height;
             ScreenPreview.Size = Images.ImageMediaType.FullPreview.ImageSize;
             ScreenPreview.Location = new Point(3, 12);
-            PreviewGroup.Controls.Add(ScreenPreview);
-            Controls.Add(PreviewGroup);
+            Controls.Add(ScreenPreview);
 
-            ScrollingPreview = new ScrollingPreviewPanel();
+            ScrollingPreview = new ScrollingPreviewPanel(new Size(this.ClientRectangle.Width, Images.ImageManager.ThumbnailSize.Height));
             ScrollingPreview.Orientation = ScrollingPreviewPanel.EOrientation.horizontal;
             ScrollingPreview.Location = new Point(0, 525);
-            ScrollingPreview.Size = new Size(this.ClientRectangle.Width, Images.ImageManager.ThumbnailSize.Height + 10);
             ScrollingPreview.PreviewSize = Images.ImageManager.ThumbnailSize;
             ScrollingPreview.AutoScaleMode = AutoScaleMode.Font;
             ScrollingPreview.PreviewClickCallback = new Action<int>((ndx) => { CurrentInstructionScreenNdx = ndx; });
@@ -267,6 +264,7 @@ namespace IATClient
             MockItemRadio.Checked = false;
             KeyRadio.Checked = false;
             this.PerformLayout();
+            this.PerformAutoScale();
             CurrentInstructionScreenNdx = 0;
         }
 

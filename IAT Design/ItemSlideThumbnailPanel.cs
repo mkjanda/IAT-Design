@@ -5,11 +5,10 @@ using System.Windows.Forms;
 
 namespace IATClient
 {
-    class ItemSlideThumbnailPanel : Panel
+    class ItemSlideThumbnailPanel : UserControl
     {
         private object lockObject = new object();
         private PictureBox ImageBox;
-        private EventHandler OnClick;
 
         public ItemSlideThumbnailPanel(EventHandler onClick, Size sz)
         {
@@ -17,35 +16,19 @@ namespace IATClient
             this.BorderStyle = BorderStyle.FixedSingle;
             BackColor = System.Drawing.Color.White;
             this.Click += new EventHandler(onClick);
-            OnClick = onClick;
             BackgroundImage = null;
             ImageBox = new PictureBox();
-            ImageBox.SizeMode = PictureBoxSizeMode.CenterImage;
+            ImageBox.SizeMode = PictureBoxSizeMode.Zoom;
             ImageBox.Dock = DockStyle.Fill;
             ImageBox.BackColor = Color.White;
             ImageBox.BorderStyle = BorderStyle.None;
             Controls.Add(ImageBox);
-            ImageBox.Click += new EventHandler(ImageBox_OnClick);
-        }
-
-        private void ImageBox_OnClick(object sender, EventArgs e)
-        {
-            OnClick(this, e);
-        }
-
-        public void Lock()
-        {
-            Monitor.Enter(lockObject);
-        }
-
-        public void Unlock()
-        {
-            Monitor.Exit(lockObject);
-        }
-
-        public bool TryLock()
-        {
-            return Monitor.TryEnter(lockObject);
+            ImageBox.Click += (sender, args) => { onClick(this, args); };
+            this.HandleCreated += (sender, args) =>
+            {
+                this.AutoScaleDimensions = new SizeF(72F, 72F);
+                this.AutoScaleMode = AutoScaleMode.Dpi;
+            };
         }
 
         public void SetBackgroundImage(Image img)
