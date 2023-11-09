@@ -248,6 +248,8 @@ namespace IATClient
             FontToolStrip.ResumeLayout();
             bSenderUpdates = senderUpdates;
             this.Size = new Size(SetWidth, TextEdit.Size.Height + TextEdit.Margin.Vertical + FontToolStrip.Height);
+            this.AutoScaleMode = AutoScaleMode.Dpi;
+            this.AutoScaleDimensions = new SizeF(96F, 96F);
         }
 
         private bool bSenderUpdates = false;

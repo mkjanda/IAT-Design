@@ -1,4 +1,6 @@
-﻿namespace IATClient
+﻿using System.Drawing;
+
+namespace IATClient
 {
     partial class MainPanel
     {
@@ -163,8 +165,6 @@
             // 
             // MainPanel
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.TestContentsGroup);
             this.Controls.Add(this.MessageBoxGroup);
             this.Controls.Add(this.PreviewGroup);

@@ -1,4 +1,6 @@
-﻿namespace IATClient
+﻿using System.Drawing;
+
+namespace IATClient
 {
     partial class StimulusDefinitionPanel
     {
@@ -107,7 +109,6 @@
             // 
             // KeyedGroup
             // 
-            this.KeyedGroup.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.KeyedGroup.Controls.Add(this.KeyedRight);
             this.KeyedGroup.Controls.Add(this.KeyedLeft);
             this.KeyedGroup.Location = new System.Drawing.Point(300, 23);
@@ -186,18 +187,15 @@
             // 
             // StimulusDefinitionPanel
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.StimulusGroup);
             this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.Name = "StimulusDefinitionPanel";
             this.Size = new System.Drawing.Size(491, 263);
-            this.Load += new System.EventHandler(this.StimulusDefinitionPanel_Load);
+            this.Load += new System.EventHandler(this.StimulusDefinitionPanel_Load); 
+
             this.StimulusGroup.ResumeLayout(false);
             this.StimulusGroup.PerformLayout();
-            this.KeyedGroup.ResumeLayout(false);
             this.KeyedGroup.PerformLayout();
-            this.StimulusTypeGroup.ResumeLayout(false);
             this.StimulusTypeGroup.PerformLayout();
             this.ResumeLayout(false);
 

@@ -1,4 +1,6 @@
-﻿namespace IATClient
+﻿using System.Drawing;
+
+namespace IATClient
 {
     public partial class InstructionScreenPanel
     {
@@ -160,8 +162,6 @@
             // 
             // InstructionScreenPanel
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.Done);
             this.Controls.Add(this.DeleteScreen);
             this.Controls.Add(this.AddScreen);
@@ -175,11 +175,13 @@
             this.Margin = new System.Windows.Forms.Padding(4);
             this.MinimumSize = new System.Drawing.Size(1347, 794);
             this.Name = "InstructionScreenPanel";
+            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
+            this.AutoScaleDimensions = new SizeF(96F, 96F);
             this.Size = new System.Drawing.Size(1347, 794);
             this.Load += new System.EventHandler(this.InstructionScreenPanel_Load);
             //this.ParentChanged += new System.EventHandler(this.InstructionScreenPanel_ParentChanged);
             this.ResumeLayout(false);
-            this.PerformLayout();
+
 
         }
 

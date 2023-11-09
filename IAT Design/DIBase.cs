@@ -494,8 +494,8 @@ namespace IATClient
         private readonly object InvalidationLock = new object();
         public readonly ManualResetEventSlim InvalidationEvent = new ManualResetEventSlim(true), BlockedInvalidationComplete = new ManualResetEventSlim(true);
 
-        public bool LayoutSuspended { get; private set; }
-        public void SuspendLayout()
+        public virtual bool LayoutSuspended { get; protected set; }
+        public virtual void SuspendLayout()
         {
             LayoutSuspended = true;
         }

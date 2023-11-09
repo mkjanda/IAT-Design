@@ -98,28 +98,25 @@ namespace IATClient
             SuspendLayout();
             if (CIAT.SaveFile.IAT.Is7Block)
                 ResponseKeyDrop.Enabled = false;
-            BlockUri = block.URI;
-            PreviewPanel = new ImageDisplay();
+            BlockUri = block.URI;            PreviewPanel = new ImageDisplay();
             PreviewPanel.BackColor = Color.Black;
             StimulusPanel = new StimulusDefinitionPanel(BlockUri);
-            StimulusPanel.AutoScaleMode = AutoScaleMode.Dpi;
             StimulusPanel.Size = new Size(StimulusPanelSize.Width, StimulusPanelSize.Height);
             StimulusPanel.Location = new Point(StimulusPanelPos.X, StimulusPanelPos.Y);
             StimulusPanel.BlockDynamicallyKeyed = new IsDynamicallyKeyedCallback(IsDynamicallyKeyed);
             Controls.Add(StimulusPanel);
-            PreviewPanel.BackgroundImageLayout = ImageLayout.Stretch;
+            PreviewPanel.BackgroundImageLayout = ImageLayout.Zoom;
             PreviewPanel.Size = Images.ImageMediaType.FullPreview.ImageSize;
             PreviewPanel.Location = new Point(10, 12);
+            Controls.Add(PreviewPanel);
             PreviewGroup = new GroupBox();
             PreviewGroup.ClientSize = new Size(500, 500) + new Size(12, 18);
             PreviewGroup.Location = new Point(0, 0);
             PreviewGroup.Controls.Add(PreviewPanel);
             Controls.Add(PreviewGroup);
-            ScrollingPreview = new ScrollingPreviewPanel();
+            ScrollingPreview = new ScrollingPreviewPanel(new Size(this.ClientRectangle.Width, Images.ImageManager.ThumbnailSize.Height));
             ScrollingPreview.Orientation = ScrollingPreviewPanel.EOrientation.horizontal;
             ScrollingPreview.Location = new Point(ScrollingPreviewPos.X, ScrollingPreviewPos.Y);
-            ScrollingPreview.Size = new Size(this.ClientRectangle.Width, Images.ImageManager.ThumbnailSize.Height + 10);
-            ScrollingPreview.AutoScaleMode = AutoScaleMode.Font;
             ScrollingPreview.PreviewSize = Images.ImageManager.ThumbnailSize;
             ScrollingPreview.PreviewClickCallback = new Action<int>((newNdx) => { SelectedItemNdx = newNdx; });
 
@@ -152,13 +149,15 @@ namespace IATClient
             }
             Controls.Add(ScrollingPreview);
             CreateInstructionsEdit();
-            this.HandleCreated += (sender, args) => PopulateResponseKeyDrop();
-            ResumeLayout(false);
-            this.PerformLayout();
-            this.PerformAutoScale();
+            this.HandleCreated += (sender, args) =>
+            {
+                PopulateResponseKeyDrop();
+            };
+            AutoScaleMode = AutoScaleMode.Dpi;
+            AutoScaleDimensions = new SizeF(72F, 72F);
+            ResumeLayout(true);
             Controls.Remove(DynamicallyKeyedCheck);
             this.Enabled = false;
-
         }
 
         private void PopulateResponseKeyDrop()

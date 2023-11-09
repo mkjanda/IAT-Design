@@ -64,22 +64,13 @@
     <SignAssembly>false</SignAssembly>
   </PropertyGroup>
   <PropertyGroup>
-    <AssemblyOriginatorKeyFile>IAT Design.pfx</AssemblyOriginatorKeyFile>
-  </PropertyGroup>
-  <PropertyGroup>
     <RunPostBuildEvent>OnOutputUpdated</RunPostBuildEvent>
   </PropertyGroup>
   <PropertyGroup>
     <ManifestCertificateThumbprint>EF7719244F66AB4C7F06B7E566669259A88A419A</ManifestCertificateThumbprint>
   </PropertyGroup>
   <PropertyGroup>
-    <ManifestKeyFile>IATClientBinaries_TemporaryKey.pfx</ManifestKeyFile>
-  </PropertyGroup>
-  <PropertyGroup>
     <GenerateManifests>true</GenerateManifests>
-  </PropertyGroup>
-  <PropertyGroup>
-    <SignManifests>true</SignManifests>
   </PropertyGroup>
   <PropertyGroup>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
@@ -394,7 +385,7 @@
     </Compile>
     <Compile Include="ImageBrowser.Designer.cs" />
     <Compile Include="ImageDisplay.cs">
-      <SubType>Component</SubType>
+      <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="ImageFile.cs" />
     <Compile Include="ImageKeyPanel.cs">
@@ -430,7 +421,7 @@
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="ItemSlideThumbnailPanel.cs">
-      <SubType>Component</SubType>
+      <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="IThumbnailPreviewable.cs" />
     <Compile Include="KeyInstructionsPanel.cs">
@@ -585,7 +576,7 @@
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="ScrollingPreviewPanelPane.cs">
-      <SubType>Component</SubType>
+      <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="SelectionSpecifierControl.cs" />
     <Compile Include="SendConfirmationEMailForm.cs">
@@ -618,7 +609,7 @@
     </Compile>
     <Compile Include="SurveyDisplay.Designer.cs" />
     <Compile Include="SurveyImageDisplay.cs">
-      <SubType>Component</SubType>
+      <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="SurveyIndicies.cs" />
     <Compile Include="SurveyItemDisplay.cs">
@@ -748,7 +739,6 @@
     <None Include="FileManifest.xsd">
       <SubType>Designer</SubType>
     </None>
-    <None Include="IAT Design.pfx" />
     <None Include="IATConfigFile.xsd">
       <SubType>Designer</SubType>
     </None>
@@ -950,12 +940,7 @@
     </PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
-       Other similar extension points exist, see Microsoft.Common.targets. 
+       Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">
-  </Target>-->
-  <!--
-  <Target Name="AfterBuild" Condition="'$(Configuration)' == 'Release'">
-    <Exec Command="&quot;C:\Program Files (x86)\Windows Kits\10\bin\10.0.18362.0\x86\signtool.exe&quot; sign /f &quot;$(SolutionDir)sectigo.pfx&quot; /p Exp(iBLeeMblEEm)  /t http://timestamp.comodoca.com /v &quot;$(TargetPath)&quot;" />
-    <Exec Command="&quot;C:\Program Files (x86)\Windows Kits\10\bin\10.0.18362.0\x86\signtool.exe&quot; sign /f &quot;$(SolutionDir)sectigo.pfx&quot; /p Exp(iBLeeMblEEm) /fd sha256 /tr http://timestamp.comodoca.com/?td=sha256 /td sha256 /as /v &quot;$(TargetPath)&quot;" />
   </Target>-->
 </Project>

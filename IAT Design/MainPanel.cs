@@ -8,8 +8,7 @@ namespace IATClient
 {
     public partial class MainPanel : UserControl
     {
-        // the size of the main panel
-        //       public static Size MainPanelSize = new Size(1010, 645);
+               public static Size MainPanelSize = new Size(1010, 645);
         private Panel ContentsPanel = new Panel();
         private Dictionary<IContentsItem, CollapsableTreeButton> ContentsDictionary = new Dictionary<IContentsItem, CollapsableTreeButton>();
         private ImageDisplay PreviewPanel = new ImageDisplay();
@@ -127,6 +126,10 @@ namespace IATClient
             PreviewPanel.Size = Images.ImageMediaType.FullWindow.ImageSize;
             PreviewPanel.Location = new Point(3, 15);
             KeyDynamicButton.Enabled = false;
+
+            this.HandleCreated += (sender, args) => {
+                this.AutoScaleMode = AutoScaleMode.Inherit;
+            };
         }
 
         private void DisplayValidationResults()
@@ -156,6 +159,7 @@ namespace IATClient
                 CItemValidator.ValidateItem(ib);
             DisplayValidationResults();
         }
+
 
         private new void Validate()
         {
