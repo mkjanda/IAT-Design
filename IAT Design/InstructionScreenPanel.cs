@@ -205,7 +205,7 @@ namespace IATClient
             this.Enabled = false;
             InstructionBlockUri = instrBlock.URI;
             InitializeComponent();
-            this.PerformAutoScale();
+            this.Size = InstructionScreenPanelSize;
             PreviewGroup = new GroupBox();
             PreviewGroup.Location = new Point(0, 0);
             PreviewGroup.Text = "Instruction Screen Preview";
@@ -218,7 +218,7 @@ namespace IATClient
             ScreenPreview.Location = new Point(3, 12);
             Controls.Add(ScreenPreview);
 
-            ScrollingPreview = new ScrollingPreviewPanel(new Size(this.ClientRectangle.Width, Images.ImageManager.ThumbnailSize.Height));
+            ScrollingPreview = new ScrollingPreviewPanel();//new Size(this.ClientRectangle.Width, Images.ImageManager.ThumbnailSize.Height));
             ScrollingPreview.Orientation = ScrollingPreviewPanel.EOrientation.horizontal;
             ScrollingPreview.Location = new Point(0, 525);
             ScrollingPreview.PreviewSize = Images.ImageManager.ThumbnailSize;

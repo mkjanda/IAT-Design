@@ -53,8 +53,6 @@ namespace IATClient
                         | System.Windows.Forms.AnchorStyles.Right)));
             this.StimulusGroup.Controls.Add(this.SelectButton);
             this.StimulusGroup.Controls.Add(this.Browse);
-            this.StimulusGroup.Controls.Add(this.StimulusImage);
-            this.StimulusGroup.Controls.Add(this.StimulusImageLabel);
             this.StimulusGroup.Controls.Add(this.KeyedGroup);
             this.StimulusGroup.Controls.Add(this.StimulusTypeGroup);
             this.StimulusGroup.Location = new System.Drawing.Point(4, 9);
@@ -69,6 +67,7 @@ namespace IATClient
             // SelectButton
             // 
             this.SelectButton.Location = new System.Drawing.Point(300, 207);
+            this.SelectButton.Anchor = System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right;
             this.SelectButton.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.SelectButton.Name = "SelectButton";
             this.SelectButton.Size = new System.Drawing.Size(100, 28);
@@ -79,7 +78,8 @@ namespace IATClient
             // 
             // Browse
             // 
-            this.Browse.Location = new System.Drawing.Point(192, 207);
+            this.Browse.Location = new System.Drawing.Point(83, 207);
+            this.Browse.Anchor = System.Windows.Forms.AnchorStyles.Bottom| System.Windows.Forms.AnchorStyles.Left;
             this.Browse.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.Browse.Name = "Browse";
             this.Browse.Size = new System.Drawing.Size(100, 28);
@@ -88,24 +88,6 @@ namespace IATClient
             this.Browse.UseVisualStyleBackColor = true;
             this.Browse.Click += new System.EventHandler(this.Browse_Click);
             // 
-            // StimulusImage
-            // 
-            this.StimulusImage.Location = new System.Drawing.Point(192, 175);
-            this.StimulusImage.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
-            this.StimulusImage.Name = "StimulusImage";
-            this.StimulusImage.ReadOnly = true;
-            this.StimulusImage.Size = new System.Drawing.Size(207, 22);
-            this.StimulusImage.TabIndex = 10;
-            // 
-            // StimulusImageLabel
-            // 
-            this.StimulusImageLabel.AutoSize = true;
-            this.StimulusImageLabel.Location = new System.Drawing.Point(76, 178);
-            this.StimulusImageLabel.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
-            this.StimulusImageLabel.Name = "StimulusImageLabel";
-            this.StimulusImageLabel.Size = new System.Drawing.Size(107, 17);
-            this.StimulusImageLabel.TabIndex = 9;
-            this.StimulusImageLabel.Text = "Stimulus Image:";
             // 
             // KeyedGroup
             // 
@@ -116,6 +98,7 @@ namespace IATClient
             this.KeyedGroup.Name = "KeyedGroup";
             this.KeyedGroup.Padding = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.KeyedGroup.Size = new System.Drawing.Size(151, 82);
+            this.KeyedGroup.Anchor = System.Windows.Forms.AnchorStyles.Right | System.Windows.Forms.AnchorStyles.Top;
             this.KeyedGroup.TabIndex = 8;
             this.KeyedGroup.TabStop = false;
             this.KeyedGroup.Text = "Keyed Direction";
@@ -154,6 +137,7 @@ namespace IATClient
             this.StimulusTypeGroup.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.StimulusTypeGroup.Name = "StimulusTypeGroup";
             this.StimulusTypeGroup.Padding = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.StimulusTypeGroup.Anchor = System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Top;
             this.StimulusTypeGroup.Size = new System.Drawing.Size(148, 82);
             this.StimulusTypeGroup.TabIndex = 7;
             this.StimulusTypeGroup.TabStop = false;

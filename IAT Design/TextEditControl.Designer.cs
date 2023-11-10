@@ -47,6 +47,7 @@
             this.FontToolStrip.Size = new System.Drawing.Size(375, 25);
             this.FontToolStrip.TabIndex = 0;
             this.FontToolStrip.Text = "toolStrip1";
+            FontToolStrip.LayoutStyle = System.Windows.Forms.ToolStripLayoutStyle.Flow;
             // 
             // FontLabel
             // 

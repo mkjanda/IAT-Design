@@ -62,17 +62,14 @@ namespace IATClient
 
         public delegate bool IsDynamicallyKeyedCallback();
 
-        public static Point IATInstructionsPanelPosition = new Point(530, 400);
-        public static Size IATInstructionsPanelSize = new Size(375, 120);
+        public static Point InstructionsEditPosition = new Point(530, 375);
+        public static Size InstructionsEditSize = new Size(350, 145);
 
         // the child item controls
         private TextEditControl InstructionsEdit;
 
         public Uri BlockUri { get; private set; }
 
-        /// <summary>
-        /// gets the currently active IAT item
-        /// </summary>
         public CIATItem ActiveItem
         {
             get
@@ -80,6 +77,139 @@ namespace IATClient
                 return StimulusPanel.IATItem;
             }
         }
+
+        private System.ComponentModel.IContainer components = null;
+
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing && (components != null))
+            {
+                components.Dispose();
+            }
+            base.Dispose(disposing);
+        }
+
+        private void InitializeComponent()
+        {
+            this.AddStimulus = new System.Windows.Forms.Button();
+            this.InsertStimulus = new System.Windows.Forms.Button();
+            this.DeleteStimulus = new System.Windows.Forms.Button();
+            this.Done = new System.Windows.Forms.Button();
+            this.ResponseKeyLabel = new System.Windows.Forms.Label();
+            this.ResponseKeyDrop = new System.Windows.Forms.ComboBox();
+            this.ManageKeys = new System.Windows.Forms.Button();
+            this.DynamicallyKeyedCheck = new System.Windows.Forms.CheckBox();
+            // 
+            // AddStimulus
+            // 
+            this.AddStimulus.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.AddStimulus.Name = "AddStimulus";
+            this.AddStimulus.Size = new System.Drawing.Size(108, 28);
+            this.AddStimulus.TabIndex = 4;
+            this.AddStimulus.Text = "Add Stimulus";
+            this.AddStimulus.UseVisualStyleBackColor = true;
+            this.AddStimulus.Click += new System.EventHandler(this.AddStimulus_Click);
+            // 
+            // InsertStimulus
+            // 
+            this.InsertStimulus.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.InsertStimulus.Name = "InsertStimulus";
+            this.InsertStimulus.Size = new System.Drawing.Size(108, 28);
+            this.InsertStimulus.TabIndex = 5;
+            this.InsertStimulus.Text = "Insert Stimulus";
+            this.InsertStimulus.UseVisualStyleBackColor = true;
+            this.InsertStimulus.Click += new System.EventHandler(this.InsertStimulus_Click);
+            // 
+            // DeleteStimulus
+            // 
+            this.DeleteStimulus.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.DeleteStimulus.Name = "DeleteStimulus";
+            this.DeleteStimulus.Size = new System.Drawing.Size(108, 28);
+            this.DeleteStimulus.TabIndex = 6;
+            this.DeleteStimulus.Text = "Delete Stimulus";
+            this.DeleteStimulus.UseVisualStyleBackColor = true;
+            this.DeleteStimulus.Click += new System.EventHandler(this.DeleteStimulus_Click);
+            // 
+            // Done
+            // 
+            this.Done.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.Done.Name = "Done";
+            this.Done.Size = new System.Drawing.Size(108, 28);
+            this.Done.TabIndex = 7;
+            this.Done.Text = "Done";
+            this.Done.UseVisualStyleBackColor = true;
+            this.Done.Click += new System.EventHandler(this.Done_Click);
+            // 
+            // ResponseKeyLabel
+            // 
+            this.ResponseKeyLabel.AutoSize = true;
+            this.ResponseKeyLabel.Location = new System.Drawing.Point(755, 36);
+            this.ResponseKeyLabel.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.ResponseKeyLabel.Name = "ResponseKeyLabel";
+            this.ResponseKeyLabel.Size = new System.Drawing.Size(104, 17);
+            this.ResponseKeyLabel.TabIndex = 0;
+            this.ResponseKeyLabel.Text = "Response Key:";
+            // 
+            // ResponseKeyDrop
+            // 
+            this.ResponseKeyDrop.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.ResponseKeyDrop.FormattingEnabled = true;
+            this.ResponseKeyDrop.Location = new System.Drawing.Point(868, 32);
+            this.ResponseKeyDrop.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.ResponseKeyDrop.Name = "ResponseKeyDrop";
+            this.ResponseKeyDrop.Size = new System.Drawing.Size(204, 24);
+            this.ResponseKeyDrop.TabIndex = 9;
+            this.ResponseKeyDrop.SelectedIndexChanged += new System.EventHandler(this.ResponseKeyDrop_SelectedIndexChanged);
+            // 
+            // ManageKeys
+            // 
+            this.ManageKeys.Location = new System.Drawing.Point(1081, 32);
+            this.ManageKeys.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.ManageKeys.Name = "ManageKeys";
+            this.ManageKeys.Size = new System.Drawing.Size(183, 28);
+            this.ManageKeys.TabIndex = 10;
+            this.ManageKeys.Text = "Create / Manage Keys";
+            this.ManageKeys.UseVisualStyleBackColor = true;
+            this.ManageKeys.Click += new System.EventHandler(this.ManageKeys_Click);
+            // 
+            // DynamicallyKeyedCheck
+            // 
+            this.DynamicallyKeyedCheck.AutoSize = true;
+            this.DynamicallyKeyedCheck.Location = new System.Drawing.Point(868, 65);
+            this.DynamicallyKeyedCheck.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.DynamicallyKeyedCheck.Name = "DynamicallyKeyedCheck";
+            this.DynamicallyKeyedCheck.Size = new System.Drawing.Size(372, 21);
+            this.DynamicallyKeyedCheck.TabIndex = 11;
+            this.DynamicallyKeyedCheck.Text = "Dynamically key IAT block based on survey responses";
+            this.DynamicallyKeyedCheck.UseVisualStyleBackColor = true;
+            this.DynamicallyKeyedCheck.CheckedChanged += new System.EventHandler(this.DynamicallyKeyedCheck_CheckedChanged);
+            // 
+            // IATBlockPanel
+            // 
+            this.Controls.Add(this.DynamicallyKeyedCheck);
+            this.Controls.Add(this.ManageKeys);
+            this.Controls.Add(this.ResponseKeyDrop);
+            this.Controls.Add(this.ResponseKeyLabel);
+            this.Controls.Add(this.Done);
+            this.Controls.Add(this.DeleteStimulus);
+            this.Controls.Add(this.InsertStimulus);
+            this.Controls.Add(this.AddStimulus);
+            this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.Name = "IATBlockPanel";
+            //            this.ParentChanged += new System.EventHandler(this.IATBlockPanel_ParentChanged);
+
+        }
+
+        private System.Windows.Forms.Button AddStimulus;
+        private System.Windows.Forms.Button InsertStimulus;
+        private System.Windows.Forms.Button DeleteStimulus;
+        private System.Windows.Forms.Button Done;
+        private System.Windows.Forms.Label ResponseKeyLabel;
+        private System.Windows.Forms.ComboBox ResponseKeyDrop;
+        private System.Windows.Forms.Button ManageKeys;
+        private System.Windows.Forms.CheckBox DynamicallyKeyedCheck;
+
+
 
         public bool IsDynamicallyKeyed()
         {
@@ -93,12 +223,15 @@ namespace IATClient
         /// </summary>
         public IATBlockPanel(CIATBlock block)
         {
-            this.Name = "IATBlockPanel";
-            InitializeComponent();
+            this.Name = "IATBlockPanel"; 
+            this.Anchor = AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right | AnchorStyles.Top;
+            this.Dock = DockStyle.Fill;
             SuspendLayout();
+            InitializeComponent();
             if (CIAT.SaveFile.IAT.Is7Block)
                 ResponseKeyDrop.Enabled = false;
-            BlockUri = block.URI;            PreviewPanel = new ImageDisplay();
+            BlockUri = block.URI;
+            PreviewPanel = new ImageDisplay();
             PreviewPanel.BackColor = Color.Black;
             StimulusPanel = new StimulusDefinitionPanel(BlockUri);
             StimulusPanel.Size = new Size(StimulusPanelSize.Width, StimulusPanelSize.Height);
@@ -114,12 +247,14 @@ namespace IATClient
             PreviewGroup.Location = new Point(0, 0);
             PreviewGroup.Controls.Add(PreviewPanel);
             Controls.Add(PreviewGroup);
-            ScrollingPreview = new ScrollingPreviewPanel(new Size(this.ClientRectangle.Width, Images.ImageManager.ThumbnailSize.Height));
+            ScrollingPreview = new ScrollingPreviewPanel();
+            ScrollingPreview.Anchor = AnchorStyles.Left | AnchorStyles.Top | AnchorStyles.Right;
             ScrollingPreview.Orientation = ScrollingPreviewPanel.EOrientation.horizontal;
             ScrollingPreview.Location = new Point(ScrollingPreviewPos.X, ScrollingPreviewPos.Y);
-            ScrollingPreview.PreviewSize = Images.ImageManager.ThumbnailSize;
+            ScrollingPreview.Width = this.Width;
+            Controls.Add(ScrollingPreview);
+            
             ScrollingPreview.PreviewClickCallback = new Action<int>((newNdx) => { SelectedItemNdx = newNdx; });
-
             ScrollingPreview.OnMoveContainerItem = new Action<int, int>((startNdx, endNdx) =>
             {
                 CIATBlock b = CIAT.SaveFile.GetIATBlock(BlockUri);
@@ -149,15 +284,31 @@ namespace IATClient
             }
             Controls.Add(ScrollingPreview);
             CreateInstructionsEdit();
+            AddStimulus.Location = new Point(InstructionsEdit.Right + 10, InstructionsEdit.Top);
+            InsertStimulus.Location = new Point(AddStimulus.Left, AddStimulus.Bottom + (InsertStimulus.Height >> 2));
+            DeleteStimulus.Location = new Point(AddStimulus.Left, InsertStimulus.Bottom + (DeleteStimulus.Height >> 2));
+            Done.Location = new Point(AddStimulus.Left, DeleteStimulus.Bottom + (Done.Height >> 2));
             this.HandleCreated += (sender, args) =>
             {
                 PopulateResponseKeyDrop();
             };
-            AutoScaleMode = AutoScaleMode.Dpi;
-            AutoScaleDimensions = new SizeF(72F, 72F);
-            ResumeLayout(true);
             Controls.Remove(DynamicallyKeyedCheck);
+            ResumeLayout(true);
+
             this.Enabled = false;
+        }
+
+        public new Size Size
+        {
+            get
+            {
+                return base.Size;
+            }
+            set
+            {
+                ScrollingPreview.Width = value.Width;
+                base.Size = value;
+            }
         }
 
         private void PopulateResponseKeyDrop()
@@ -181,9 +332,8 @@ namespace IATClient
 
         private void CreateInstructionsEdit()
         {
-            InstructionsEdit = new TextEditControl(IATInstructionsPanelSize.Height, IATInstructionsPanelSize.Width, DIText.UsedAs.IatBlockInstructions, true);
-            InstructionsEdit.AutoScaleMode = AutoScaleMode.Dpi;
-            InstructionsEdit.Location = new Point(IATInstructionsPanelPosition.X, IATInstructionsPanelPosition.Y);
+            InstructionsEdit = new TextEditControl(InstructionsEditSize.Height, InstructionsEditSize.Width, DIText.UsedAs.IatBlockInstructions, true);
+            InstructionsEdit.Location = new Point(InstructionsEditPosition.X, InstructionsEditPosition.Y);
             CIATBlock b = CIAT.SaveFile.GetIATBlock(BlockUri);
             InstructionsEdit.TextDisplayItemUri = b.InstructionsUri;
             Controls.Add(InstructionsEdit);

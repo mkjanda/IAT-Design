@@ -66,6 +66,7 @@ namespace IATClient
         public MainPanel(IATConfigMainForm mainForm)
         {
             _MainForm = mainForm;
+            this.Anchor = AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right | AnchorStyles.Top;
             InitializeComponent();
             ContentsPanel.Dock = DockStyle.Fill;
             ContentsPanel.AutoScroll = true;
@@ -128,7 +129,7 @@ namespace IATClient
             KeyDynamicButton.Enabled = false;
 
             this.HandleCreated += (sender, args) => {
-                this.AutoScaleMode = AutoScaleMode.Inherit;
+     //           this.AutoScaleMode = AutoScaleMode.Inherit;
             };
         }
 
