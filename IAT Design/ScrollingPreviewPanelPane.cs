@@ -122,6 +122,9 @@ namespace IATClient
         */
         public ScrollingPreviewPanelPane()
         {
+            this.AutoScaleDimensions = new SizeF(72F, 72F);
+            this.AutoScaleMode = AutoScaleMode.Dpi;
+            SuspendLayout();
             this.BackColor = CIAT.SaveFile.Layout.BackColor;
             this.BackgroundImage = DINull.DINull.IImage.Img;
             this.BackgroundImageLayout = ImageLayout.Stretch;
@@ -138,10 +141,7 @@ namespace IATClient
             ImageBox.SizeMode = PictureBoxSizeMode.Zoom;
             ImageBox.BackColor = CIAT.SaveFile.Layout.BackColor;
             ImageBox.Dock = DockStyle.Fill;
-            this.HandleCreated += (sender, args) =>
-            {
-                this.AutoScaleMode = AutoScaleMode.Inherit;
-            };
+            ResumeLayout(true);
         }
 
         private void ScrollingPreviewPanelPane_DragLeave(object sender, EventArgs e)

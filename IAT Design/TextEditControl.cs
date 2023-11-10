@@ -210,16 +210,22 @@ namespace IATClient
             TextEdit.Location = new Point(0, FontToolStrip.Height);
             TextEdit.Size = new Size(SetWidth, TextEdit.Font.Height + TextEdit.Margin.Vertical);
             Controls.Add(TextEdit);
+            TextEdit.Anchor = AnchorStyles.Top | AnchorStyles.Left;
             TextEdit.TextChanged += new EventHandler(TextEdit_TextChanged);
             this.UsedFor = usedAs;
 
             FontToolStrip.SuspendLayout();
+            FontToolStrip.Width = SetWidth;
             FillFontFamilyDropList();
             FillFontSizeDropList();
             FillColorDropList();
             FontToolStrip.ResumeLayout();
             bSenderUpdates = senderUpdates;
             this.Size = new Size(SetWidth, TextEdit.Size.Height + TextEdit.Margin.Vertical + FontToolStrip.Height);
+            FontToolStrip.SizeChanged += (sender, args) =>
+            {
+                TextEdit.Top = FontToolStrip.Bottom;
+            };
         }
 
         public TextEditControl(int Height, int Width, DIText.UsedAs UsedAs, bool senderUpdates)
@@ -229,10 +235,11 @@ namespace IATClient
             InitializeComponent();
             TextEdit = new TextBox();
             TextEdit.Location = new Point(0, FontToolStrip.Height);
+            TextEdit.Anchor = AnchorStyles.Top | AnchorStyles.Left;
             if (Height < TextEdit.Font.Height + TextEdit.Margin.Vertical + FontToolStrip.Height)
                 Height = TextEdit.Font.Height + TextEdit.Margin.Vertical + FontToolStrip.Height;
-            TextEdit.Size = new Size(SetWidth, Height - FontToolStrip.Height - TextEdit.Margin.Vertical);
-            NumLines = (Height - TextEdit.Margin.Vertical - FontToolStrip.Height) / TextEdit.Font.Height;
+            TextEdit.Size = new Size(SetWidth, Height - FontToolStrip.Height);
+            NumLines = (Height - FontToolStrip.Height) / TextEdit.Font.Height;
             Controls.Add(TextEdit);
             if (NumLines > 1)
                 TextEdit.Multiline = true;
@@ -241,15 +248,16 @@ namespace IATClient
             TextEdit.TextChanged += new EventHandler(TextEdit_TextChanged);
             this.UsedFor = UsedAs;
 
-            FontToolStrip.SuspendLayout();
+            FontToolStrip.Width = Width;
             FillFontFamilyDropList();
             FillFontSizeDropList();
             FillColorDropList();
-            FontToolStrip.ResumeLayout();
             bSenderUpdates = senderUpdates;
             this.Size = new Size(SetWidth, TextEdit.Size.Height + TextEdit.Margin.Vertical + FontToolStrip.Height);
-            this.AutoScaleMode = AutoScaleMode.Dpi;
-            this.AutoScaleDimensions = new SizeF(96F, 96F);
+            FontToolStrip.SizeChanged += (sender, args) =>
+            {
+                TextEdit.Top = FontToolStrip.Bottom;
+            };
         }
 
         private bool bSenderUpdates = false;

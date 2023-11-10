@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Drawing;
 using System.IO;
+using System.Runtime.CompilerServices;
 using System.Windows.Forms;
 
 namespace IATClient
@@ -8,7 +9,7 @@ namespace IATClient
     partial class StimulusDefinitionPanel : UserControl
     {
         public static Size StimulusDefinitionPanelSize = new Size(412, 215);
-        private static int StimulusTextWidth = 392;
+
         private static int StimulusTextLines = 1;
         private static Point StimulusTextPos = new Point(5, 95);
         private bool IgnoreEvents { get; set; } = false;
@@ -106,11 +107,10 @@ namespace IATClient
         public StimulusDefinitionPanel(Uri parentBlockUri)
         {
             ParentBlockUri = parentBlockUri;
-            this.AutoScaleMode = AutoScaleMode.Inherit;
             InitializeComponent();
-            this.PerformLayout();
-            StimulusText = new TextEditControl(StimulusTextWidth, DIText.UsedAs.Stimulus, true);
-            StimulusText.Location = new Point(StimulusTextPos.X, StimulusTextPos.Y);
+            StimulusText = new TextEditControl(this.Width - 16, DIText.UsedAs.Stimulus, true);
+            StimulusText.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right; 
+            StimulusText.Location = new Point(8, KeyedGroup.Bottom + 16);
             StimulusGroup.Controls.Add(StimulusText);
         }
 

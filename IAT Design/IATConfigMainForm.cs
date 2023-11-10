@@ -549,14 +549,13 @@ namespace IATClient
             if (m_MainPanel == null)
             {
                 m_MainPanel = new MainPanel(this);
-                m_MainPanel.Location = new Point(0, HeaderMenu.Height >> 1);
                 if (!CFontFile.Loaded)
                     m_MainPanel.Enabled = false;
                 m_MainPanel.AutoScaleDimensions = new SizeF(72F, 72F);
                 m_MainPanel.AutoScaleMode = AutoScaleMode.Dpi;
+                m_MainPanel.Location = new Point(0, HeaderMenu.Height);
             }
             Controls.Add(m_MainPanel);
-            m_MainPanel.PerformAutoScale();
             this.PerformAutoScale();
         }
 
@@ -593,8 +592,11 @@ namespace IATClient
         private void ShowIATBlockPanel(IContentsItem Block)
         {
             m_IATBlockPanel = new IATBlockPanel(Block as CIATBlock);
-            m_IATBlockPanel.Location = new Point(0, HeaderMenu.Height >> 1);
+            m_IATBlockPanel.AutoScaleDimensions = new SizeF(72F, 72F);
+            m_IATBlockPanel.AutoScaleMode = AutoScaleMode.Dpi;
+            m_IATBlockPanel.Location = new Point(0, HeaderMenu.Height << 1);
             Controls.Add(m_IATBlockPanel);
+//            m_IATBlockPanel.Size = this.ClientSize - new Size(0, HeaderMenu.Height + MessageBar.Height);
             CIAT.SaveFile.ActivityLog.LogEvent(ActivityLog.EventType.Display, Block.URI);
         }
 
@@ -2183,9 +2185,9 @@ namespace IATClient
             // 
             // IATConfigMainForm
             // 
-this.AutoScaleDimensions = new SizeF(72F, 72F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.ClientSize = new System.Drawing.Size(1008, 694);
+            this.AutoScaleDimensions = new SizeF(72F, 72F);
+            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.Controls.Add(this.QuickPanel);
             this.Controls.Add(this.MessageBar);
             this.Controls.Add(this.HeaderMenu);

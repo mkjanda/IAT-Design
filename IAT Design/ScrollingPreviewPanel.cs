@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -10,7 +11,8 @@ namespace IATClient
     {
         private List<ScrollingPreviewPanelPane> PreviewPanels;
 
-        private int ScrollValue = 0, ScrollMin, ScrollMax;
+        private int ScrollValue = 0, ScrollMin;
+        private Panel PreviewPanel;
         private Panel PreviewPanelBackground;
         private Size _PreviewSize = Size.Empty;
         public enum EOrientation { horizontal, vertical, unset };
@@ -68,7 +70,7 @@ namespace IATClient
         {
             get
             {
-                return _PreviewSize;
+                return Images.ImageManager.ThumbnailSize;
             }
             set
             {
@@ -114,47 +116,57 @@ namespace IATClient
         }
 
 
-        public ScrollingPreviewPanel(Size sz)
+        public ScrollingPreviewPanel()
         {
-            this.Size = sz;
-            SuspendLayout();
+            this.Height = PreviewSize.Height + PreviewPadding.Vertical;
             this.BorderStyle = BorderStyle.Fixed3D;
             PreviewPanels = new List<ScrollingPreviewPanelPane>();
-            this.Load += new EventHandler(ScrollingPreviewPane_Load);
             _Orientation = EOrientation.horizontal;
             NextButton = new Button();
             PrevButton = new Button();
+            PreviewPanel = new Panel();
             PreviewPanelBackground = new Panel();
-            NextButton.AllowDrop = true;
-            NextButton.DragEnter += new DragEventHandler(NextButton_DragEnter);
-            NextButton.DragDrop += new DragEventHandler(NextButton_DragDrop);
-            NextButton.DragLeave += new EventHandler(NextButton_DragLeave);
+            SuspendLayout();
             NextButton.Size = new Size(Properties.Resources.RightButtonArrow.Width, this.ClientRectangle.Height - 4);
             NextButton.Image = Properties.Resources.RightButtonArrow;
             NextButton.ImageAlign = ContentAlignment.MiddleCenter;
-            PreviewPanelBackground.Location = new Point(PrevButton.Right, 0);
-            PrevButton.AllowDrop = true;
-            PrevButton.DragEnter += new DragEventHandler(PrevButton_DragEnter);
-            PrevButton.DragDrop += new DragEventHandler(PrevButton_DragDrop);
-            PrevButton.DragLeave += new EventHandler(PrevButton_DragLeave);
-            PreviewPanelBackground.AllowDrop = true;
-            PreviewPanelBackground.DragOver += new DragEventHandler(PreviewPanelBackground_DragOver);
-            PreviewPanelBackground.DragDrop += new DragEventHandler(PreviewPanelBackground_DragDrop);
-            PreviewPanelBackground.BackColor = System.Drawing.Color.Black;
+            NextButton.Anchor = AnchorStyles.Right;
+            NextButton.Location = new Point(0, ClientSize.Width - NextButton.Width);
             PrevButton.Size = new Size(Properties.Resources.LeftButtonArrow.Width, this.ClientRectangle.Height - 4);
             PrevButton.Image = Properties.Resources.LeftButtonArrow;
             PrevButton.ImageAlign = ContentAlignment.MiddleCenter;
             PrevButton.Location = new Point(0, 0);
-                PreviewPanelBackground.Location = new Point(PrevButton.Size.Width, 0);
-                PreviewPanelBackground.Size = new Size(Size.Width - NextButton.Width - PrevButton.Width, this.ClientRectangle.Height);
             NextButton.Location = new Point(PreviewPanelBackground.Right, 0);
             NextButton.Click += new EventHandler(NextButton_Click);
-                PrevButton.Click += new EventHandler(PrevButton_Click);
-            Controls.Add(PreviewPanelBackground);
+            PrevButton.Click += new EventHandler(PrevButton_Click);
+            PreviewPanelBackground.Location = new Point(0, 0);
+            PreviewPanelBackground.Size = new Size(0, 0);
+            PreviewPanel.Location = new Point(PrevButton.Right, 0);
+            PreviewPanel.Location = new Point(PrevButton.Right, 0);
+            PreviewPanel.Width = NextButton.Left - PrevButton.Right;
+            PreviewPanel.Top = 0;
+            PreviewPanel.Height = ClientSize.Height;
+            PreviewPanel.Anchor = AnchorStyles.Left | AnchorStyles.Bottom | AnchorStyles.Right;
+            PreviewPanelBackground.BackColor = System.Drawing.Color.Black;
+            PreviewPanel.Controls.Add(PreviewPanelBackground);
             Controls.Add(PrevButton);
             Controls.Add(NextButton);
-            this.AllowDrop = true;
+            Controls.Add(PreviewPanel);
             ResumeLayout(true);
+        }
+
+        public new int Width
+        {
+            get
+            {
+                return base.Width;
+            }
+            set
+            {
+                PreviewPanel.Size = new Size(value - NextButton.Width - PrevButton.Width, this.Height);
+                this.NextButton.Left = PreviewPanel.Right;
+                base.Width = value;
+            }
         }
 
         public int PreviewBarWidth
@@ -174,88 +186,7 @@ namespace IATClient
         }
 
 
-        void NextButton_DragLeave(object sender, EventArgs e)
-        {
-            lock (ScrollingLockObject)
-            {
-                HaltScroll = true;
-            }
-        }
 
-        void NextButton_DragDrop(object sender, DragEventArgs e)
-        {
-            lock (ScrollingLockObject)
-            {
-                HaltScroll = true;
-            }
-        }
-
-
-        void NextButton_DragEnter(object sender, DragEventArgs e)
-        {
-            ThreadStart proc = new ThreadStart(ScrollForward);
-            HaltScroll = false;
-            Thread scroller = new Thread(ScrollForward);
-            scroller.Start();
-            e.Effect = DragDropEffects.Scroll;
-        }
-
-        private void PrevButton_DragLeave(object sender, EventArgs e)
-        {
-            lock (ScrollingLockObject)
-            {
-                HaltScroll = true;
-            }
-        }
-
-        private void PrevButton_DragDrop(object sender, EventArgs e)
-        {
-            lock (ScrollingLockObject)
-            {
-                HaltScroll = true;
-            }
-        }
-
-        private void PrevButton_DragEnter(object sender, DragEventArgs e)
-        {
-            ThreadStart proc = new ThreadStart(ScrollBack);
-            HaltScroll = false;
-            Thread scroller = new Thread(proc);
-            scroller.Start();
-            e.Effect = DragDropEffects.Scroll;
-        }
-
-        void PreviewPanelBackground_DragDrop(object sender, DragEventArgs e)
-        {
-            int ctr = 0;
-            Point ptClient = PreviewPanelBackground.PointToClient(new Point(e.X, e.Y));
-            if ((ptClient.Y < PreviewPadding.Top) || (ptClient.Y > PreviewPanelBackground.Height - PreviewPadding.Bottom))
-                return;
-            while (ctr < PreviewPanels.Count)
-            {
-                if (ptClient.X < PreviewPanels[ctr].Location.X + ((PreviewSize.Width + PreviewPadding.Horizontal) >> 1))
-                    break;
-                ctr++;
-            }
-            if (ctr == PreviewPanels.Count)
-                ctr = PreviewPanels.Count - 1;
-            if ((ctr == nDraggingNdx) || (ctr == nDraggingNdx + 1))
-            {
-                nDraggingNdx = -1;
-                return;
-            }
-            MovePanel(nDraggingNdx, ctr);
-            nDraggingNdx = -1;
-        }
-
-        private void PreviewPanelBackground_DragOver(object sender, DragEventArgs e)
-        {
-            Point ptClient = PreviewPanelBackground.PointToClient(new Point(e.X, e.Y));
-            if ((ptClient.Y >= PreviewPadding.Top) && (ptClient.Y <= PreviewPanelBackground.Height - PreviewPadding.Bottom))
-                e.Effect = DragDropEffects.Move;
-            else
-                e.Effect = DragDropEffects.None;
-        }
 
         public void Clear()
         {
@@ -386,14 +317,14 @@ namespace IATClient
                     DateTime startTime = DateTime.Now;
                     if (Math.Abs(pixMoved) + ScrollDiff <= Math.Abs(numPixels))
                     {
-                        foreach (Control c in PreviewPanelBackground.Controls)
-                            c.BeginInvoke(new Action<int>((n) => { c.Location = new Point(c.Left + n, c.Top); }), -sign * ScrollDiff);
+                        PreviewPanelBackground.BeginInvoke(new Action<int>((n) => { PreviewPanelBackground.Location = new Point(PreviewPanelBackground.Left + n, 
+                            PreviewPanelBackground.Top); }), -sign * ScrollDiff);
                         pixMoved += ScrollDiff;
                     }
                     else
                     {
-                        foreach (Control c in PreviewPanelBackground.Controls)
-                            c.BeginInvoke(new Action<int>((n) => { c.Location = new Point(c.Left + n, c.Top); }), -sign * (Math.Abs(numPixels) - Math.Abs(pixMoved)));
+                        PreviewPanelBackground.BeginInvoke(new Action<int>((n) => { PreviewPanelBackground.Location = new Point(PreviewPanelBackground.Left + n, 
+                            PreviewPanelBackground.Top); }), -sign * (Math.Abs(numPixels) - Math.Abs(pixMoved)));
                         pixMoved = numPixels;
                     }
                     while ((DateTime.Now - startTime).Milliseconds < ScrollMaxRate)
@@ -408,7 +339,9 @@ namespace IATClient
             int ScrollVal = ScrollValue;
             if (ScrollVal < 0)
                 return;
-            int val = Math.Max(ScrollVal - PreviewSize.Width - PreviewPadding.Horizontal, 0);
+            int pWidth = PreviewPanels.Select(p => p.Width).Max();
+            pWidth += pWidth * PreviewPadding.Horizontal / PreviewSize.Width;
+            int val = Math.Max(ScrollVal - (ScrollVal % pWidth == 0 ? pWidth : ScrollVal % pWidth), 0);
             ScrollValue = val;
             new Thread(() =>
             {
@@ -416,24 +349,21 @@ namespace IATClient
                 {
                     Control c = (o as Tuple<Control, int>).Item1;
                     int scroll = (o as Tuple<Control, int>).Item2;
-                    c.Invoke(new Action(() => { c.Location = new Point(c.Left + scroll, c.Top); }));
+                    c.Invoke(new Action(() => { c.Location = new Point(c.Left + scroll, c.Top); c.Parent.Invalidate(); }));
                 };
                 if (PreviewPanelBackground.HorizontalScroll.Enabled)
                 {
                     while (ScrollVal > val)
                     {
                         DateTime startTime = DateTime.Now;
-                        foreach (Control c in PreviewPanelBackground.Controls)
-                        {
                             if (ScrollVal - ScrollDiff >= val)
                             {
-                                new Task(scrollAction, new Tuple<Control, int>(c, ScrollDiff)).Start();
+                                new Task(scrollAction, new Tuple<Control, int>(PreviewPanelBackground, ScrollDiff)).Start();
                             }
                             else
                             {
-                                new Task(scrollAction, new Tuple<Control, int>(c, ScrollVal - val)).Start();
+                                new Task(scrollAction, new Tuple<Control, int>(PreviewPanelBackground, ScrollVal - val)).Start();
                             }
-                        }
                         ScrollVal -= ScrollDiff;
                         while ((DateTime.Now - startTime).Milliseconds < ScrollMaxRate)
                             Thread.Yield();
@@ -443,87 +373,14 @@ namespace IATClient
         }
 
 
-        private void ScrollForward()
-        {
-            int ScrollVal = ScrollValue;
-            OffsetDelegate offset = new OffsetDelegate(OffsetControl);
-            PositionDelegate position = new PositionDelegate(PositionControl);
-            SetScrollDelegate setScroll;
-            if (Orientation == EOrientation.horizontal)
-                setScroll = new SetScrollDelegate(SetHScrollVal);
-            else
-                setScroll = new SetScrollDelegate(SetVScrollVal);
-            bool bHalt;
-            lock (ScrollingLockObject)
-            {
-                bHalt = HaltScroll;
-            }
-            while ((ScrollVal < ScrollMax) && (!HaltScroll))
-            {
-                DateTime startTime = DateTime.Now;
-                switch (Orientation)
-                {
-                    case EOrientation.horizontal:
-                        if (PreviewPanelBackground.HorizontalScroll.Enabled)
-                        {
-                            PreviewPanelBackground.SuspendLayout();
-                            foreach (Control c in PreviewPanelBackground.Controls)
-                            {
-                                if (ScrollValue + ScrollDiff < ScrollMax)
-                                    Invoke(offset, c, new Size(-ScrollDiff, 0));
-                                else
-                                    Invoke(position, c, new Point(c.Location.X + (ScrollValue - ScrollMax), c.Location.Y));
-                            }
-                            PreviewPanelBackground.ResumeLayout(true);
-                            if (ScrollValue + ScrollDiff < ScrollMax)
-                                Invoke(setScroll, ScrollValue + ScrollDiff);
-                            else
-                                Invoke(setScroll, ScrollMax);
-                        }
-                        break;
-
-                    case EOrientation.vertical:
-                        if (PreviewPanelBackground.VerticalScroll.Enabled)
-                        {
-                            PreviewPanelBackground.SuspendLayout();
-                            foreach (Control c in PreviewPanelBackground.Controls)
-                            {
-                                if (PreviewPanelBackground.VerticalScroll.Value + ScrollDiff < PreviewPanelBackground.VerticalScroll.Maximum)
-                                    Invoke(offset, c, new Size(0, -ScrollDiff));
-                                else
-                                    Invoke(position, c, new Point(c.Location.X, c.Location.Y + (PreviewPanelBackground.VerticalScroll.Value - PreviewPanelBackground.VerticalScroll.Maximum)));
-                                c.Invalidate();
-                                PreviewPanelBackground.ResumeLayout(true);
-                                if (PreviewPanelBackground.VerticalScroll.Value + ScrollDiff < PreviewPanelBackground.VerticalScroll.Maximum)
-                                    Invoke(setScroll, PreviewPanelBackground.VerticalScroll.Value + ScrollDiff);
-                                else
-                                    Invoke(setScroll, PreviewPanelBackground.VerticalScroll.Maximum);
-                            }
-                        }
-                        break;
-                }
-                lock (ScrollingLockObject)
-                {
-                    bHalt = HaltScroll;
-                }
-                ScrollVal = (Orientation == EOrientation.horizontal) ? ScrollValue : PreviewPanelBackground.VerticalScroll.Value;
-                while ((DateTime.Now - startTime).Milliseconds < ScrollMaxRate)
-                    Thread.Sleep(5);
-            }
-
-        }
-
-        public void ScrollForwardOne()
-        {
-
-        }
-
         void NextButton_Click(object sender, EventArgs e)
         {
             int ScrollVal = ScrollValue;
             if (ScrollVal >= ScrollMax)
                 return;
-            int val = Math.Min(ScrollVal + PreviewSize.Width + PreviewPadding.Horizontal, ScrollMax);
+            int pWidth = PreviewPanels.Select(p => p.Width).Max();
+            pWidth += pWidth * PreviewPadding.Horizontal / PreviewSize.Width;
+            int val = Math.Min(ScrollVal + pWidth - (PreviewPanel.Width - (pWidth - (ScrollVal % pWidth))) % pWidth, ScrollMax);
             ScrollValue = val;
             new Thread(() =>
             {
@@ -531,24 +388,21 @@ namespace IATClient
                 {
                     Control c = (o as Tuple<Control, int>).Item1;
                     int scroll = (o as Tuple<Control, int>).Item2;
-                    c.Invoke(new Action(() => { c.Location = new Point(c.Left - scroll, c.Top); }));
+                    c.Invoke(new Action(() => { c.Location = new Point(c.Left - scroll, c.Top); c.Parent.Invalidate(); }));
                 };
                 if (PreviewPanelBackground.HorizontalScroll.Enabled)
                 {
                     while (ScrollVal < val)
                     {
                         DateTime startTime = DateTime.Now;
-                        foreach (Control c in PreviewPanelBackground.Controls)
-                        {
                             if (ScrollVal + ScrollDiff <= val)
                             {
-                                new Task(scrollAction, new Tuple<Control, int>(c, ScrollDiff)).Start();
+                                new Task(scrollAction, new Tuple<Control, int>(PreviewPanelBackground, ScrollDiff)).Start();
                             }
                             else
                             {
-                                new Task(scrollAction, new Tuple<Control, int>(c, val - ScrollVal)).Start();
+                                new Task(scrollAction, new Tuple<Control, int>(PreviewPanelBackground, val - ScrollVal)).Start();
                             }
-                        }
                         ScrollVal += ScrollDiff;
                         while ((DateTime.Now - startTime).Milliseconds < ScrollMaxRate)
                             Thread.Yield();
@@ -556,54 +410,6 @@ namespace IATClient
                 }
             }).Start();
         }
-
-        private void ScrollingPreviewPane_Load(object sender, EventArgs e)
-        {
-            /*
-            if (Orientation == EOrientation.horizontal)
-            {
-                PrevButton.Size = new Size(Properties.Resources.LeftButtonArrow.Width, this.Height - 4);
-                PrevButton.Image = Properties.Resources.LeftButtonArrow;
-                PrevButton.ImageAlign = ContentAlignment.MiddleCenter;
-                PrevButton.Location = new Point(0, 0);
-                NextButton.Size = new Size(Properties.Resources.RightButtonArrow.Width, this.Height - 4);
-                NextButton.Image = Properties.Resources.RightButtonArrow;
-                NextButton.ImageAlign = ContentAlignment.MiddleCenter;
-                NextButton.Location = new Point(this.Width - NextButton.Width, 0);
-                PreviewPanelBackground.Size = new Size(this.Width - NextButton.Width - PrevButton.Width, this.Height);
-                PreviewPanelBackground.Location = new Point(PrevButton.Size.Width, 0);
-            }
-            else if (Orientation == EOrientation.vertical)
-            {
-                PrevButton.Size = new Size(this.Width - 4, Properties.Resources.UpButtonArrow.Height);
-                PrevButton.Image = Properties.Resources.UpButtonArrow;
-                PrevButton.ImageAlign = ContentAlignment.MiddleCenter;
-                PrevButton.Location = new Point(0, 0);
-                NextButton.Size = new Size(this.Width - 4, Properties.Resources.DownButtonArrow.Height);
-                NextButton.Image = Properties.Resources.DownButtonArrow;
-                NextButton.ImageAlign = ContentAlignment.MiddleCenter;
-                NextButton.Location = new Point(0, this.Height - Properties.Resources.DownButtonArrow.Height);
-                PreviewPanelBackground.Size = new Size(this.Width, this.Height - PrevButton.Height - NextButton.Height);
-                PreviewPanelBackground.Location = new Point(0, PrevButton.Size.Height);
-            }
-            else
-                throw new Exception("Must set orientation of a Scrolling Preview Pane before it loads");
-            PreviewPanelBackground.BackColor = System.Drawing.Color.Black;
-            Controls.Add(PrevButton);
-            Controls.Add(NextButton);
-            Controls.Add(PreviewPanelBackground);
-            
-             */
-            //            DoPreviewUpdates(null, null);
-        }
-        /*
-                public void SetPreview(int ndx, IIATImage img)
-                {
-                    if ((ndx < 0) || (ndx >= PreviewPanels.Count))
-                        throw new Exception("Index out of bounds");
-                    PreviewPanels[ndx].PreviewImage = img;
-                }
-        */
         private void RecalcLayout()
         {
             if (RecalcSuspended)
@@ -617,7 +423,6 @@ namespace IATClient
                 PreviewPanelBackground.HorizontalScroll.Enabled = true;
                 PreviewPanelBackground.HorizontalScroll.Visible = false;
                 ScrollMin = 0;
-                ScrollMax = PreviewPanels.Count * (PreviewSize.Width + PreviewPadding.Horizontal) - (this.Width - PrevButton.Width - NextButton.Width);
                 int maxScrollVal = PreviewPanels.Count * (PreviewSize.Width + PreviewPadding.Horizontal) - (this.Width - PrevButton.Width - NextButton.Width);
                 if (ScrollValue > maxScrollVal)
                 {
@@ -626,10 +431,17 @@ namespace IATClient
                         p.Location += new Size(scrollDiff, 0);
                     ScrollValue = maxScrollVal;
                 }
-                ScrollMax = maxScrollVal;
             }
             PreviewPanelBackground.ResumeLayout(true);
             Invalidate();
+        }
+
+        public int ScrollMax
+        {
+            get
+            {
+                return Math.Max(0, PreviewPanelBackground.Width - PreviewPanel.Width); 
+            }
         }
 
         private EOrientation GetOrientation()
@@ -666,19 +478,16 @@ namespace IATClient
             p.AutoScaleMode = AutoScaleMode.Dpi;
             p.Size = PreviewSize;
             p.ImageBox.Click += new EventHandler(Preview_Click);
-            p.OnDragStart += new ScrollingPreviewPanelPane.DragStartHandler(ScrollingPreviewPanel_DragStartHandler);
-            p.OnDragEnd += new ScrollingPreviewPanelPane.DragEndHandler(ScrollingPreviewPanel_DragEndHandler);
-            p.IsDragging += new ScrollingPreviewPanelPane.IsDraggingCallback(ScrollingPreviewPanel_IsDragging);
             p.ParentOrientation += new ScrollingPreviewPanelPane.ParentOrientationCallback(GetOrientation);
             p.BackColor = CIAT.SaveFile.Layout.BackColor;
             p.ForeColor = CIAT.SaveFile.Layout.BackColor;
             PreviewPanels.Insert(ndx, p);
             if (Orientation == EOrientation.horizontal)
             {
-                p.Location = new Point(PreviewPadding.Left + (ndx * (PreviewSize.Width + PreviewPadding.Horizontal)) - ScrollValue,
-                    PreviewPadding.Top);
+                p.Location = new Point(LogicalToDeviceUnits(PreviewPadding.Left + (ndx * (PreviewSize.Width + PreviewPadding.Horizontal))),
+                    LogicalToDeviceUnits(PreviewPadding.Top));
                 for (int ctr = ndx + 1; ctr < PreviewPanels.Count; ctr++)
-                    PreviewPanels[ctr].Location = PreviewPanels[ctr].Location + new Size(PreviewSize.Width + PreviewPadding.Horizontal, 0);
+                    PreviewPanels[ctr].Location = PreviewPanels[ctr].Location + LogicalToDeviceUnits(new Size(PreviewSize.Width + PreviewPadding.Horizontal, 0));
             }
             else if (Orientation == EOrientation.vertical)
             {
@@ -689,6 +498,8 @@ namespace IATClient
             }
             else
                 throw new Exception("Orientation of control not set.");
+            PreviewPanelBackground.Size = new Size(PreviewPanels.Select(p => p.ClientSize.Width).Aggregate((p1, p2) => p1 + p2) +
+                PreviewPanels.Count * LogicalToDeviceUnits(PreviewPadding.Horizontal), PreviewPanels.Select(p => p.ClientSize.Height).Max() + LogicalToDeviceUnits(PreviewPadding.Vertical));
             PreviewPanelBackground.Controls.Add(p);
             p.PreviewedItem = scrn;
         }
@@ -696,56 +507,6 @@ namespace IATClient
         public void Replace(int ndx, IThumbnailPreviewable item)
         {
             this[ndx].PreviewedItem = item;
-        }
-        /*
-    public void InsertIATItemPreview(int ndx, CIATItem item)
-    {
-        SuspendLayout();
-        if ((ndx < 0) || (ndx > PreviewPanels.Count))
-            throw new Exception("Index out of bounds");
-        ScrollingPreviewPanelPane p = new ScrollingPreviewPanelPane();
-        p.Size = PreviewSize;
-        p.Click += new EventHandler(Preview_Click);
-        p.OnDragStart += new ScrollingPreviewPanelPane.DragStartHandler(ScrollingPreviewPanel_DragStartHandler);
-        p.OnDragEnd += new ScrollingPreviewPanelPane.DragEndHandler(ScrollingPreviewPanel_DragEndHandler);
-        p.IsDragging += new ScrollingPreviewPanelPane.IsDraggingCallback(ScrollingPreviewPanel_IsDragging);
-        p.ParentOrientation += new ScrollingPreviewPanelPane.ParentOrientationCallback(GetOrientation);
-        PreviewPanels.Insert(ndx, p);
-        if (Orientation == EOrientation.horizontal)
-        {
-            p.Location = new Point(PreviewPadding.Left + (ndx * (PreviewSize.Width + PreviewPadding.Horizontal)) - ScrollValue,
-                PreviewPadding.Top);
-            for (int ctr = ndx + 1; ctr < PreviewPanels.Count; ctr++)
-                PreviewPanels[ctr].Location = PreviewPanels[ctr].Location + new Size(PreviewSize.Width + PreviewPadding.Horizontal, 0);
-        }
-        else if (Orientation == EOrientation.vertical)
-        {
-            p.Location = new Point(PreviewPadding.Left, PreviewPadding.Top + (ndx * (PreviewSize.Height + PreviewPadding.Vertical)) - PreviewPanelBackground.VerticalScroll.Value);
-            for (int ctr = ndx + 1; ctr < PreviewPanels.Count; ctr++)
-                PreviewPanels[ctr].Location = PreviewPanels[ctr].Location + new Size(0, PreviewSize.Height + PreviewPadding.Vertical);
-
-        }
-        else
-            throw new Exception("Orientation of control not set.");
-        PreviewPanelBackground.Controls.Add(p);
-        ResumeLayout(false);
-        p.PreviewedItem = item;
-        item.Stimulus.ThumbnailPreviewPanel = p;
-        RecalcLayout();
-    }
-    */
-        private void ScrollingPreviewPanel_DragStartHandler(ScrollingPreviewPanelPane sender)
-        {
-            nDraggingNdx = PreviewPanels.IndexOf(sender);
-            if (sender.PreviewedItem != null)
-                Clipboard.SetData("IATItemNdx", nDraggingNdx);
-            IsDragging = true;
-            DoDragDrop(sender, DragDropEffects.Move);
-        }
-
-        private bool ScrollingPreviewPanel_IsDragging()
-        {
-            return IsDragging;
         }
 
         private void MovePanel(int StartNdx, int DestNdx)
@@ -814,25 +575,6 @@ namespace IATClient
             PreviewPanelBackground.ResumeLayout(true);
         }
 
-        private void ScrollingPreviewPanel_DragEndHandler(ScrollingPreviewPanelPane sender, bool InsertBefore)
-        {
-            IsDragging = false;
-            int destNdx = PreviewPanels.IndexOf(sender);
-            if ((destNdx > nDraggingNdx) && InsertBefore)
-                destNdx--;
-            else if ((destNdx < nDraggingNdx) && !InsertBefore)
-                destNdx++;
-            if (destNdx == nDraggingNdx)
-            {
-                SelectedPreview = nDraggingNdx;
-                PreviewClickCallback(nDraggingNdx);
-                nDraggingNdx = -1;
-                return;
-            }
-            MovePanel(nDraggingNdx, destNdx);
-            nDraggingNdx = -1;
-            PreviewClickCallback(destNdx);
-        }
 
         public void DeletePreview(int ndx, bool selectNew = true)
         {
