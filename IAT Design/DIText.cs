@@ -212,7 +212,7 @@ namespace IATClient
         }
 
         private String phraseFontFamily;
-        public String PhraseFontFamily
+        public virtual String PhraseFontFamily
         {
             get
             {
@@ -699,6 +699,12 @@ namespace IATClient
                 }
             }
         }
+        public override string PhraseFontFamily { get => base.PhraseFontFamily; set
+            {
+                base.PhraseFontFamily = value;
+            }
+        }
+
         public void AddKeyOwner(IPackagePart pp)
         {
             if (CIAT.SaveFile.GetRelationshipsByType(this.URI, BaseType, pp.BaseType).Where(pr => pr.TargetUri.Equals(pp.URI)).Count() != 0)
