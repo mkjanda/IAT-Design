@@ -114,6 +114,7 @@ namespace IATClient
             this.PurchaseAdministrationsButton.UseVisualStyleBackColor = true;
             this.PurchaseAdministrationsButton.Click += new System.EventHandler(this.PackageIATButton_Click);
             this.PurchaseAdministrationsButton.MouseClick += new System.Windows.Forms.MouseEventHandler(this.PurchaseAdministrationsButton_MouseClick);
+            this.PurchaseAdministrationsButton.Enabled = false;
             // 
             // ServerInterfaceButton
             // 
