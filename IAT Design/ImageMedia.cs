@@ -36,7 +36,7 @@ namespace IATClient.Images
         {
             InitialSize = 10,
             IdealSize = 10,
-            MaxSize = 100,
+            MaxSize = 500,
             GrowRate = 20,
             ShrinkRate = 100,
             GetSize = () => CIAT.SaveFile.Layout.InteriorSize,
@@ -46,7 +46,7 @@ namespace IATClient.Images
         {
             InitialSize = 10,
             IdealSize = 0,
-            MaxSize = 30,
+            MaxSize = 500,
             GrowRate = 5,
             ShrinkRate = 50,
             GetSize = () => CIAT.SaveFile.Layout.KeyValueSize,
@@ -56,7 +56,7 @@ namespace IATClient.Images
         {
             InitialSize = 2,
             IdealSize = 2,
-            MaxSize = 10,
+            MaxSize = 50,
             GrowRate = 1,
             ShrinkRate = 1,
             GetSize = () => CIAT.SaveFile.Layout.LeftKeyValueOutlineRectangle.Size,
@@ -65,8 +65,8 @@ namespace IATClient.Images
         public static readonly ImageMediaType Stimulus = new ImageMediaType(4, "Stimulus")
         {
             InitialSize = 25,
-            IdealSize = 15,
-            MaxSize = 100,
+            IdealSize = 50,
+            MaxSize = 500,
             GrowRate = 20,
             ShrinkRate = 100,
             GetSize = () => CIAT.SaveFile.Layout.StimulusSize,
@@ -86,7 +86,7 @@ namespace IATClient.Images
         {
             InitialSize = 10,
             IdealSize = 10,
-            MaxSize = 25,
+            MaxSize = 50,
             GrowRate = 5,
             ShrinkRate = 50,
             GetSize = () => CIAT.SaveFile.Layout.InstructionsSize,
@@ -96,7 +96,7 @@ namespace IATClient.Images
         {
             InitialSize = 5,
             IdealSize = 5,
-            MaxSize = 25,
+            MaxSize = 50,
             GrowRate = 5,
             ShrinkRate = 50,
             GetSize = () => CIAT.SaveFile.Layout.InstructionScreenTextAreaRectangle.Size,
@@ -106,7 +106,7 @@ namespace IATClient.Images
         {
             InitialSize = 5,
             IdealSize = 5,
-            MaxSize = 25,
+            MaxSize = 50,
             GrowRate = 5,
             ShrinkRate = 50,
             GetSize = () => CIAT.SaveFile.Layout.KeyInstructionScreenTextAreaRectangle.Size,
@@ -116,7 +116,7 @@ namespace IATClient.Images
         {
             InitialSize = 5,
             IdealSize = 5,
-            MaxSize = 25,
+            MaxSize = 50,
             GrowRate = 5,
             ShrinkRate = 50,
             GetSize = () => CIAT.SaveFile.Layout.MockItemInstructionsRectangle.Size,
@@ -126,7 +126,7 @@ namespace IATClient.Images
         {
             InitialSize = 5,
             IdealSize = 5,
-            MaxSize = 25,
+            MaxSize = 75,
             GrowRate = 5,
             ShrinkRate = 50,
             GetSize = () => CIAT.SaveFile.Layout.ContinueInstructionsRectangle.Size,
@@ -146,7 +146,7 @@ namespace IATClient.Images
         {
             InitialSize = 25,
             IdealSize = 15,
-            MaxSize = 50,
+            MaxSize = 250,
             GrowRate = 5,
             ShrinkRate = 15,
             GetSize = () => ImageManager.ThumbnailSize,
@@ -166,7 +166,7 @@ namespace IATClient.Images
         {
             InitialSize = 10,
             IdealSize = 15,
-            MaxSize = 100,
+            MaxSize = 500,
             GrowRate = 20,
             ShrinkRate = 100,
             GetSize = () =>
