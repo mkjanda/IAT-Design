@@ -208,11 +208,12 @@ namespace IATClient
             this.Size = InstructionScreenPanelSize;
             PreviewGroup = new GroupBox();
             PreviewGroup.Location = new Point(0, 0);
+            PreviewGroup.Size = new Size(500, 500) + new Size(6, 12); 
             PreviewGroup.Text = "Instruction Screen Preview";
             ScreenPreview = new ImageDisplay();
             ScreenPreview.BackColor = CIAT.SaveFile.Layout.BackColor;
             ScreenPreview.BackgroundImage = null;
-            ScreenPreview.BackgroundImageLayout = ImageLayout.Stretch;
+            ScreenPreview.BackgroundImageLayout = ImageLayout.Zoom;
             double arPreview = (double)CIAT.SaveFile.Layout.InteriorSize.Width / (double)CIAT.SaveFile.Layout.InteriorSize.Height;
             ScreenPreview.Size = Images.ImageMediaType.FullPreview.ImageSize;
             ScreenPreview.Location = new Point(3, 12);
@@ -264,7 +265,6 @@ namespace IATClient
             MockItemRadio.Checked = false;
             KeyRadio.Checked = false;
             this.PerformLayout();
-            this.PerformAutoScale();
             CurrentInstructionScreenNdx = 0;
         }
 

@@ -633,6 +633,8 @@ namespace IATClient
             if (m_InstructionPanel != null)
                 m_InstructionPanel.Dispose();
             m_InstructionPanel = new InstructionScreenPanel(InstructionBlock as CInstructionBlock);
+            m_InstructionPanel.AutoScaleDimensions = new SizeF(72F, 72F);
+            m_InstructionPanel.AutoScaleMode = AutoScaleMode.Dpi;
             m_InstructionPanel.Location = new Point(0, HeaderMenu.Height);
             m_InstructionPanel.Size = InstructionScreenPanel.InstructionScreenPanelSize;
             Controls.Add(m_InstructionPanel);
