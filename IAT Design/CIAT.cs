@@ -55,7 +55,22 @@ namespace IATClient
                         });
                     }
                 }
-                return true;
+                CIAT.SaveFile.IAT.IsLoading = true;
+                if (!CIAT.SaveFile.Layout.LeftKeyValueOutlineRectangle.Equals(CIAT.SaveFile.Layout.LeftKeyValueOutline.BoundingSize))
+                    Task.Run(() =>
+                    {
+                        var layout = CIAT.SaveFile.Layout;
+                        CIAT.SaveFile.Layout = new CIATLayout();
+                        CIAT.SaveFile.Layout.Activate();
+                        CIAT.SaveFile.ResizeToNewLayout();
+                        CIAT.SaveFile.Layout = new CIATLayout(layout);
+                        CIAT.SaveFile.Layout.Activate();
+                        CIAT.SaveFile.ResizeToNewLayout();
+                    });
+                CIAT.SaveFile.IAT.IsLoading = false;
+
+
+                        return true;
             }
             catch (InvalidSaveFileException ex)
             {
@@ -67,6 +82,8 @@ namespace IATClient
                 return false;
             }
         }
+
+        public bool IsLoading { get; private set; } = false;
 
         public static void Recover()
         {

@@ -28,7 +28,7 @@ namespace IATClient
             get
             {
                 if (_DisplayFont == null)
-                    _DisplayFont = new Font(Format.FontFamily, Format.FontSizeAsPixels * CIATLayout.yDpi / 96F, Format.FontStyle, GraphicsUnit.Pixel);
+                    _DisplayFont = new Font(Format.FontFamily, LogicalToDeviceUnits(Format.FontSizeAsPixels), Format.FontStyle, GraphicsUnit.Pixel);
                 return _DisplayFont;
             }
             set
@@ -85,7 +85,7 @@ namespace IATClient
             set
             {
                 _Format = value;
-                DisplayFont = new Font(value.FontFamily, value.FontSizeAsPixels * CIATLayout.yDpi / 96F, value.FontStyle, GraphicsUnit.Pixel);
+                DisplayFont = new Font(value.FontFamily, LogicalToDeviceUnits(value.FontSizeAsPixels), value.FontStyle, GraphicsUnit.Pixel);
             }
         }
         public bool IsCollapsed
