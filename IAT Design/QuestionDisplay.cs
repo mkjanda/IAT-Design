@@ -106,7 +106,7 @@ namespace IATClient
                 lock (lockObj)
                 {
                     if (displayFont == null)
-                        displayFont = new Font(Format.FontFamily, Format.FontSizeAsPixels * CIATLayout.yDpi / 96F, Format.FontStyle, GraphicsUnit.Pixel);
+                        displayFont = new Font(Format.FontFamily, LogicalToDeviceUnits(Format.FontSizeAsPixels), Format.FontStyle, GraphicsUnit.Pixel);
                     return displayFont;
                 }
             }

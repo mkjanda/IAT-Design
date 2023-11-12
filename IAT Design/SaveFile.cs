@@ -1,4 +1,5 @@
-﻿using System;
+﻿using java.util;
+using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.IO;
@@ -1273,7 +1274,7 @@ namespace IATClient
                 {
                     if (di.IsGenerated)
                         di.ResumeLayout(false);
-                    di.ScheduleInvalidation();
+                    di.ScheduleInvalidationSync();
                 }
             }
             else
@@ -1285,6 +1286,8 @@ namespace IATClient
                     di.ScheduleInvalidation();
                 }
             }
+
+
             /*
             WaitHandle.WaitAll(responseKeyWaiters.Distinct().ToArray());
             foreach (var di in dis.Where(d => d.Type == DIType.DualKey).Cast<DIDualKey>())
@@ -1564,7 +1567,11 @@ namespace IATClient
             uris = DIs.Keys.ToList();
             foreach (Uri u in uris)
             {
-                GetDI(u)?.Save();
+                var di = GetDI(u);
+                if (di == null)
+                    continue;
+                if (di.Type != DIType.Preview)
+                    GetDI(u)?.Save();
             }
             uris = ObservableUris.Keys.ToList();
             foreach (Uri u in uris)

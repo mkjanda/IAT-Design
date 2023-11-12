@@ -64,31 +64,7 @@ namespace IATClient
             public const uint InstructionRectangle = 0x8;
         };
 
-        public static float xDpi { get; private set; }
-        public static float yDpi { get; private set; }
 
-        static CIATLayout()
-        {
-            if (Application.OpenForms[Properties.Resources.sMainFormName].IsHandleCreated)
-            {
-                using (Graphics g = Graphics.FromHwnd(Application.OpenForms[Properties.Resources.sMainFormName].Handle))
-                {
-                    xDpi = g.DpiX;
-                    yDpi = g.DpiY;
-                }
-            }
-            else
-            {
-                Application.OpenForms[Properties.Resources.sMainFormName].HandleCreated += (sender, args) =>
-                {
-                    using (Graphics g = Graphics.FromHwnd(Application.OpenForms[Properties.Resources.sMainFormName].Handle))
-                    {
-                        xDpi = g.DpiX;
-                        yDpi = g.DpiY;
-                    }
-                };
-            }
-        }
 
         // default values for rectangle sizes
         private static Size DefaultInteriorSize = new Size(600, 600);
@@ -1375,6 +1351,7 @@ namespace IATClient
             _BorderColor = Color.FromName(xDoc.Root.Element("BorderColor").Value);
             _BorderWidth = Convert.ToInt32(xDoc.Root.Element("BorderWidth").Value);
             _WebpageBackColor = Color.FromName(xDoc.Root.Element("WebpageBackground").Element("WebpageBackgroundColor").Value);
+            CalcAllRectangles();
         }
 
         public void Save()

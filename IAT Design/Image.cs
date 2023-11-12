@@ -452,7 +452,7 @@ namespace IATClient.Images
                 else if (ImageMediaType == ImageMediaType.VariableSize)
                     img = new Bitmap(szResize.Width, szResize.Height, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
                 Rectangle destRect = new Rectangle((img.Width - szResize.Width) >> 1, (img.Height - szResize.Height) >> 1, szResize.Width, szResize.Height);
-                if (destRect.Equals(AbsoluteBounds))
+                if (destRect.Equals(AbsoluteBounds) && !CIAT.SaveFile.IAT.IsLoading)
                 {
                     FireChanged(ImageEvent.ResizeNotNeeded, destRect);
                     origImage.Dispose();
