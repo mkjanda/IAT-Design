@@ -1272,9 +1272,11 @@ namespace IATClient
                 dualKeyUris.AddRange(keys.Where(k => k.KeyType != IATKeyType.DualKey).Select(k => k.LeftValueUri).ToList());
                 foreach (var di in dis.Where(di => !simpleKeyValueUris.Contains(di.URI) && !dualKeyUris.Contains(di.URI)).ToList())
                 {
-                    if (di.IsGenerated)
+                    if (di.IsComposite && di.IsGenerated)
                         di.ResumeLayout(false);
-                    di.ScheduleInvalidationSync();
+                    di.ScheduleInvalidation();
+                    if (di.IsComposite)
+                        di.ResumeLayout(false);
                 }
             }
             else
