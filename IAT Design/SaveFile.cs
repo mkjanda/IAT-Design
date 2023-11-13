@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Diagnostics.Eventing.Reader;
 using System.IO;
 using System.IO.Packaging;
 using System.Linq;
@@ -1282,8 +1283,12 @@ namespace IATClient
                 foreach (var di in dis)
                 {
                     if (di.IsGenerated && !di.IsComposite)
+                    {
                         (di as DIGenerated).ResumeLayout(false);
-                    di.ScheduleInvalidation();
+                        Task.Run(() => di.ScheduleInvalidation());
+                    }
+                    else if (di.IsComposite)
+                        di.ResumeLayout(false);
                 }
             }
 

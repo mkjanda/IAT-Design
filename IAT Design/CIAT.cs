@@ -59,13 +59,8 @@ namespace IATClient
                 if (!CIAT.SaveFile.Layout.LeftKeyValueOutlineRectangle.Equals(CIAT.SaveFile.Layout.LeftKeyValueOutline.BoundingSize))
                     Task.Run(() =>
                     {
-                        var layout = CIAT.SaveFile.Layout;
-                        CIAT.SaveFile.Layout = new CIATLayout();
+                        CIAT.SaveFile.Layout = new CIATLayout(CIAT.SaveFile.Layout);
                         CIAT.SaveFile.Layout.Activate();
-                        CIAT.SaveFile.ResizeToNewLayout();
-                        CIAT.SaveFile.Layout = new CIATLayout(layout);
-                        CIAT.SaveFile.Layout.Activate();
-                        CIAT.SaveFile.ResizeToNewLayout();
                     });
                 CIAT.SaveFile.IAT.IsLoading = false;
 
