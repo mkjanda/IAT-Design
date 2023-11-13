@@ -1,4 +1,5 @@
-﻿using System;
+﻿using org.apache.xerces.impl.xpath.regex;
+using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Drawing;
@@ -138,7 +139,10 @@ namespace IATClient.Images
                 int capacity = ideal ? t.IdealSize : t.MaxSize;
                 for (int ctr = 0; ctr < capacity; ctr++)
                 {
-                    BitmapBags[t].Add(new Bitmap(t.ImageSize.Width, t.ImageSize.Height, PixelFormat.Format32bppArgb) { Tag = t });
+
+                    var img = new Bitmap(t.ImageSize.Width, t.ImageSize.Height, PixelFormat.Format32bppArgb) { Tag = t };
+                    img.SetResolution(72F, 72F);
+                    BitmapBags[t].Add(img);
                     t.CurrentSize++;
                 }
                 t.IdealAt = DateTime.Now;
@@ -154,7 +158,12 @@ namespace IATClient.Images
             {
                 BitmapBags[t] = new ConcurrentBag<Bitmap>();
                 for (int ctr = 0; ctr < t.InitialSize; ctr++)
-                    BitmapBags[t].Add(new Bitmap(t.ImageSize.Width, t.ImageSize.Height, PixelFormat.Format32bppArgb) { Tag = t });
+                {
+                    var bmp = new Bitmap(t.ImageSize.Width, t.ImageSize.Height, PixelFormat.Format32bppArgb) { Tag = t };
+                    bmp.SetResolution(72F, 72F);
+                    BitmapBags[t].Add(bmp);
+                }
+                    
             }
             ThumbGenerationThread = new Timer(new TimerCallback(ThumbGenerationAction), this, 1000, 300);
             ResizerThread = new Timer(new TimerCallback(ResizerAction), this, 1500, 250);
@@ -192,7 +201,7 @@ namespace IATClient.Images
         public System.Drawing.Image FetchImageMedia(ImageMedia iMedia)
         {
             Stream s = CIAT.SaveFile.GetReadStream(iMedia);
-            System.Drawing.Image img = null;
+            Bitmap img = null;
             try
             {
                 lock (iMedia.lockObj)
@@ -200,7 +209,8 @@ namespace IATClient.Images
                     Stream memStream = new MemoryStream();
                     s.CopyTo(memStream);
                     memStream.Seek(0, SeekOrigin.Begin);
-                    img = System.Drawing.Image.FromStream(memStream);
+                    img = new Bitmap(System.Drawing.Image.FromStream(memStream));
+                    img.SetResolution(72F, 72F);
                 }
             }
             catch (Exception ex)
@@ -222,6 +232,7 @@ namespace IATClient.Images
                     return img;
                 }
                 Bitmap bmp = RequestBitmap(iMedia.ImageMediaType);
+                bmp.SetResolution(72F, 72F);
                 using (Graphics g = Graphics.FromImage(bmp))
                 {
                     Brush backBr = new SolidBrush(CIAT.SaveFile.Layout.BackColor);
@@ -272,12 +283,16 @@ namespace IATClient.Images
                 {
                     for (int ctr = 0; ctr < t.GrowRate - 1; ctr++)
                     {
-                        BitmapBags[t].Add(new Bitmap(t.ImageSize.Width, t.ImageSize.Height, System.Drawing.Imaging.PixelFormat.Format32bppArgb) { Tag = t });
+                        var bmp2 = new Bitmap(t.ImageSize.Width, t.ImageSize.Height, System.Drawing.Imaging.PixelFormat.Format32bppArgb) { Tag = t };
+                    bmp2.SetResolution(72F, 72F);
+                    BitmapBags[t].Add(bmp2);
                     }
                     if (BitmapBags[t].Count >= t.IdealSize)
                         t.IdealAt = DateTime.Now;
                 }
-                return new Bitmap(t.ImageSize.Width, t.ImageSize.Height, PixelFormat.Format32bppArgb) { Tag = t };
+                var bmp = new Bitmap(t.ImageSize.Width, t.ImageSize.Height, PixelFormat.Format32bppArgb) { Tag = t };
+                bmp.SetResolution(72F, 72F);
+                return bmp;
             }
         }
 

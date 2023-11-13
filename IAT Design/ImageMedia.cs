@@ -478,6 +478,7 @@ namespace IATClient.Images
                         img.Tag = ImageMediaType;
                         //       retVal = CreateCopy(image);
                     }
+                    (img as Bitmap).SetResolution(72F, 72F);
                     return img;
                 }
                 set
@@ -487,6 +488,7 @@ namespace IATClient.Images
                         value.Tag = ImageMediaType;
                         this.Size = value.Size;
                         WriteImage(value);
+                        (value as Bitmap).SetResolution(72F, 72F);
                         //                      this.Size = value.Size;
                         //                        CIAT.SaveFile.ImageManager.AddImageToCache(this);
                         //                    CacheEntryTime = DateTime.Now;
