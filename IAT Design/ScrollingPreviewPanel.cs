@@ -473,6 +473,8 @@ namespace IATClient
                 throw new Exception("Index out of bounds");
             ScrollingPreviewPanelPane p = new ScrollingPreviewPanelPane();
             p.Size = PreviewSize;
+            p.AutoScaleDimensions = new SizeF(72F, 72F);
+            p.AutoScaleMode = AutoScaleMode.Dpi;
             p.ImageBox.Click += new EventHandler(Preview_Click);
             p.ParentOrientation += new ScrollingPreviewPanelPane.ParentOrientationCallback(GetOrientation);
             p.BackColor = CIAT.SaveFile.Layout.BackColor;
@@ -480,7 +482,7 @@ namespace IATClient
             PreviewPanels.Insert(ndx, p);
             if (Orientation == EOrientation.horizontal)
             {
-                p.Location = new Point(LogicalToDeviceUnits(PreviewPadding.Left + (ndx * (PreviewSize.Width + PreviewPadding.Horizontal))),
+                p.Location = new Point(LogicalToDeviceUnits(PreviewPadding.Left + (ndx == 0 ? 0 : (PreviewPanels[ndx - 1].Right + PreviewPadding.Horizontal))),
                     LogicalToDeviceUnits(PreviewPadding.Top));
                 for (int ctr = ndx + 1; ctr < PreviewPanels.Count; ctr++)
                     PreviewPanels[ctr].Location = PreviewPanels[ctr].Location + LogicalToDeviceUnits(new Size(PreviewSize.Width + PreviewPadding.Horizontal, 0));
