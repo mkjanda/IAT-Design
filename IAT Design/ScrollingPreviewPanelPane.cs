@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Drawing;
 using System.Windows.Forms;
-using System.Windows.Forms.VisualStyles;
 
 namespace IATClient
 {
@@ -122,6 +121,8 @@ namespace IATClient
         */
         public ScrollingPreviewPanelPane()
         {
+            AutoScaleDimensions = new SizeF(72F, 72F);
+            AutoScaleMode = AutoScaleMode.Dpi;
             SuspendLayout();
             this.BackColor = CIAT.SaveFile.Layout.BackColor;
             ImageBox.BackgroundImage = DINull.DINull.IImage.Img;
@@ -195,7 +196,7 @@ namespace IATClient
             if (bSelected)
                 e.Graphics.DrawRectangle(Pens.LimeGreen, new Rectangle(new Point(0, 0), this.Size - new Size(1, 1)));
             else
-                    e.Graphics.DrawRectangle(Pens.Gray, new Rectangle(new Point(0, 0), this.Size - new Size(1, 1)));
+                e.Graphics.DrawRectangle(Pens.Gray, new Rectangle(new Point(0, 0), this.Size - new Size(1, 1)));
 
         }
 

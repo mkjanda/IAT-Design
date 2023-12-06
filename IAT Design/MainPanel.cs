@@ -327,7 +327,7 @@ namespace IATClient
                 else
                 {
                     PreviewPanel.Size = new Size((int)(MaxPreviewSize.Width * arPreview), MaxPreviewSize.Height);
-                    PreviewPanel.Location = new Point(1002 + (PreviewPanel.Width), 0);
+                    PreviewPanel.Location = new Point(1002, 0);
                 }
                 return PreviewPanel;
             }
@@ -342,7 +342,7 @@ namespace IATClient
                 else
                 {
                     PreviewPanel.Size = new Size((int)(MaxPreviewSize.Width * arPreview), MaxPreviewSize.Height);
-                    PreviewPanel.Location = new Point(1002 + (PreviewPanel.Width), 0);
+                    PreviewPanel.Location = new Point(1002, 0);
                 }
             }
             else
