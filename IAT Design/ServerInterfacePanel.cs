@@ -3,7 +3,6 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
-using System.Runtime.Remoting.Messaging;
 using System.Security.Cryptography;
 using System.Threading;
 using System.Threading.Tasks;
@@ -11,7 +10,7 @@ using System.Windows.Forms;
 
 namespace IATClient
 {
-    public class ResultsPanel : Control
+    public class ResultsPanel : UserControl
     {
         class ServerInterfacePanel : UserControl
         {
@@ -27,9 +26,9 @@ namespace IATClient
             private String[] ClientLabelNames = { "Registered to", "Organization", "# of IATs alotted", "Total administrations", "Administrations remaining", "Disk alottment(MB)",
                                                 "Disk space remaining(MB)" };
             private String[] TestLabelNames = { "IAT Name", "Author", "Author eMail", "Last data retrieval", "Test size(KB)", "Administrations", "# of result sets" };
-            private Padding PanelPadding = new Padding(20, 30, 20, 10);
+            private Padding PanelPadding = new Padding(20, 40, 20, 20);
             public readonly CIATManager IATManager;
-            private static int ControlWidth = 250;
+            public readonly static int ControlWidth = 320;
             public enum EControls { exportButton = 1, testLabels = 2, retrieveButton = 4, deleteButtons = 8 };
             public SynchronizationContext SyncCtx { get; private set; } = WindowsFormsSynchronizationContext.Current;
 
@@ -56,15 +55,42 @@ namespace IATClient
 
             public ServerInterfacePanel(CIATManager iatManager, ResultsPanel resultsPanel)
             {
-                this.AutoScaleMode = AutoScaleMode.Dpi;
+                this.AutoScaleDimensions = new SizeF(16F, 16F);
+                this.AutoScaleMode = AutoScaleMode.None;
                 IATManager = iatManager;
-                int fontHeight = (int)System.Drawing.SystemFonts.DialogFont.Height;
+                int fontHeight = System.Drawing.SystemFonts.DefaultFont.Height;
+                Size szLabel = Size.Empty;
+                /*                this.Resize += (sender, args) =>
+                                {
+                                    for (int ctr = 0; ctr < ClientLabelNames.Length; ctr++)
+                                    {
+                                        ClientLabels[ClientLabelNames[ctr]].Location = new Point(PanelPadding.Left, PanelPadding.Top + (ctr * (int)(fontHeight * 1.5)));
+                                    }
+                                    IATPanel.BackColor = Color.White;
+                                    IATPanel.Size = new Size(ControlWidth - PanelPadding.Horizontal, 5 * (int)(fontHeight * 1.5));
+                                    IATPanel.Location = new Point(PanelPadding.Left, ClientLabels[ClientLabelNames[ClientLabelNames.Length - 1]].Bottom + (int)fontHeight);
+                                    IATPanel.AutoScroll = true;
+                                    IATPanel.HorizontalScroll.Enabled = false;
+                                    IATPanel.BorderStyle = BorderStyle.Fixed3D;
+                                    for (int ctr = 0; ctr < TestLabelNames.Length; ctr++)
+                                    {
+                                        TestLabels[TestLabelNames[ctr]].Location = new Point(PanelPadding.Left, IATPanel.Bottom + (ctr * (int)(fontHeight * 1.5)) + (int)fontHeight);
+                                    }
+                                    PasswordBox.Location = new Point(szLabel.Width + (int)fontHeight, TestLabels[TestLabelNames[TestLabelNames.Length - 1]].Bottom + (int)(fontHeight * 1.5));
+                                    DeleteIATButton.Size = new Size((ControlWidth >> 1) - (PanelPadding.Horizontal >> 1), DeleteIATButton.Height);
+                                    DeleteIATButton.Text = "Delete IAT";
+                                    DeleteIATButton.Location = new Point(PanelPadding.Left, UploadIATButton.Bottom + fontHeight);
+                                    DeleteIATButton.Enabled = false;
+                                };*/
+
+
                 for (int ctr = 0; ctr < ClientLabelNames.Length; ctr++)
                 {
                     ClientLabels[ClientLabelNames[ctr]] = new Label();
                     ClientLabels[ClientLabelNames[ctr]].Size = new Size(ControlWidth - PanelPadding.Horizontal, (int)(fontHeight * 1.5));
                     ClientLabels[ClientLabelNames[ctr]].TextAlign = ContentAlignment.MiddleLeft;
                     ClientLabels[ClientLabelNames[ctr]].Location = new Point(PanelPadding.Left, PanelPadding.Top + (ctr * (int)(fontHeight * 1.5)));
+
                     Controls.Add(ClientLabels[ClientLabelNames[ctr]]);
                 }
                 IATPanel.BackColor = Color.White;
@@ -83,49 +109,57 @@ namespace IATClient
                     Controls.Add(TestLabels[TestLabelNames[ctr]]);
                 }
                 PasswordBoxLabel = new Label();
-                PasswordBoxLabel.Text = "Password:  ";
                 PasswordBox = new TextBox();
-                Size szLabel = TextRenderer.MeasureText(PasswordBoxLabel.Text, PasswordBoxLabel.Font);
+                PasswordBoxLabel.Text = "Password:  ";
+                PasswordBoxLabel.Location = new Point(PanelPadding.Left, PasswordBox.Bottom - PasswordBoxLabel.Height);
+                szLabel = TextRenderer.MeasureText(PasswordBoxLabel.Text, PasswordBoxLabel.Font);
                 PasswordBox.Size = new Size(ControlWidth - szLabel.Width - PanelPadding.Horizontal, PasswordBox.Height);
                 PasswordBox.Location = new Point(szLabel.Width + (int)fontHeight, TestLabels[TestLabelNames[TestLabelNames.Length - 1]].Bottom + (int)(fontHeight * 1.5));
                 PasswordBox.Enabled = false;
-                Controls.Add(PasswordBox);
                 PasswordBoxLabel.Size = new Size(szLabel.Width, PasswordBox.Height);
                 PasswordBoxLabel.TextAlign = ContentAlignment.MiddleLeft;
                 PasswordBoxLabel.Location = new Point(PanelPadding.Left, PasswordBox.Bottom - PasswordBoxLabel.Height);
+                Controls.Add(PasswordBox);
                 Controls.Add(PasswordBoxLabel);
+
                 UploadIATButton = new Button();
-                UploadIATButton.Size = new Size((ControlWidth >> 1) - (PanelPadding.Horizontal >> 1), UploadIATButton.Height);
+                UploadIATButton.Size = new Size((ControlWidth >> 1) - (PanelPadding.Horizontal >> 1), UploadIATButton.Height * 3 / 2);
                 UploadIATButton.Text = "Upload IAT";
                 UploadIATButton.Location = new Point(PanelPadding.Left, PasswordBox.Bottom + fontHeight);
                 UploadIATButton.Enabled = false;
                 Controls.Add(UploadIATButton);
+
                 RetrieveResultsButton = new Button();
-                RetrieveResultsButton.Size = new Size((ControlWidth >> 1) - (PanelPadding.Horizontal >> 1), RetrieveResultsButton.Height);
+                RetrieveResultsButton.Size = new Size((ControlWidth >> 1) - (PanelPadding.Horizontal >> 1), RetrieveResultsButton.Height * 3 / 2);
                 RetrieveResultsButton.Text = "Retrieve Data";
                 RetrieveResultsButton.Location = new Point(UploadIATButton.Right + (PanelPadding.Horizontal >> 2), PasswordBox.Bottom + fontHeight);
                 RetrieveResultsButton.Enabled = false;
                 Controls.Add(RetrieveResultsButton);
+
                 DeleteIATButton = new Button();
-                DeleteIATButton.Size = new Size((ControlWidth >> 1) - (PanelPadding.Horizontal >> 1), DeleteIATButton.Height);
+                DeleteIATButton.Size = new Size((ControlWidth >> 1) - (PanelPadding.Horizontal >> 1), DeleteIATButton.Height * 3 / 2);
                 DeleteIATButton.Text = "Delete IAT";
                 DeleteIATButton.Location = new Point(PanelPadding.Left, UploadIATButton.Bottom + fontHeight);
                 DeleteIATButton.Enabled = false;
                 Controls.Add(DeleteIATButton);
+
+
                 DeleteIATDataButton = new Button();
-                DeleteIATDataButton.Size = new Size((ControlWidth >> 1) - (PanelPadding.Horizontal >> 1), DeleteIATDataButton.Height);
+                DeleteIATDataButton.Size = new Size((ControlWidth >> 1) - (PanelPadding.Horizontal >> 1), DeleteIATDataButton.Height * 3 / 2);
                 DeleteIATDataButton.Text = "Delete Data";
                 DeleteIATDataButton.Location = new Point(DeleteIATButton.Right + (PanelPadding.Horizontal >> 2), RetrieveResultsButton.Bottom + fontHeight);
                 DeleteIATDataButton.Enabled = false;
                 Controls.Add(DeleteIATDataButton);
+
                 ExportDataButton = new Button();
-                ExportDataButton.Size = new Size((ControlWidth >> 1) - (PanelPadding.Horizontal >> 1), ExportDataButton.Height);
+                ExportDataButton.Size = new Size((ControlWidth >> 1) - (PanelPadding.Horizontal >> 1), ExportDataButton.Height * 3 / 2);
                 ExportDataButton.Text = "Export Data";
                 ExportDataButton.Location = new Point(PanelPadding.Left, DeleteIATButton.Bottom + fontHeight);
                 ExportDataButton.Enabled = false;
                 Controls.Add(ExportDataButton);
+
                 CloseButton = new Button();
-                CloseButton.Size = new Size((ControlWidth >> 1) - (PanelPadding.Horizontal >> 1), CloseButton.Height);
+                CloseButton.Size = new Size((ControlWidth >> 1) - (PanelPadding.Horizontal >> 1), CloseButton.Height * 3 / 2);
                 CloseButton.Text = "Close";
                 CloseButton.Enabled = true;
                 CloseButton.Location = new Point(ExportDataButton.Right + (PanelPadding.Horizontal >> 2), DeleteIATButton.Bottom + fontHeight);
@@ -345,7 +379,6 @@ namespace IATClient
 
         }
 
-        private static Size ResultsPanelSize = new Size(1010, 645);
         private ServerInterfacePanel m_ServerInterfacePanel;
         private ResultsGridPanel m_ResultsPanel = null;
         private ResultDetailsPanelContainer m_ResultDetailsContainer = null;
@@ -402,7 +435,10 @@ namespace IATClient
             m_ServerInterfacePanel.IATPanel.Click += new EventHandler(IATPanel_Click);
             m_ServerInterfacePanel.Location = new Point(0, 0);
             Controls.Add(m_ServerInterfacePanel);
-            this.Size = new Size(ResultsPanelSize.Width, ResultsPanelSize.Height);
+            Resize += (sender, args) =>
+            {
+                m_ServerInterfacePanel.Width = ServerInterfacePanel.ControlWidth;
+            };
         }
 
         public void ShowResultsPanel()
@@ -416,9 +452,9 @@ namespace IATClient
                 m_ResultDetailsContainer = new ResultDetailsPanelContainer(m_ResultsPanel);
                 m_ResultDetailsContainer.Location = new Point(m_ServerInterfacePanel.Right, 0);
                 m_ResultDetailsContainer.Size = new Size(this.ClientSize.Width - m_ServerInterfacePanel.Width, this.ClientSize.Height);
-                m_ResultsPanel.Initialize(IATManager.GetResultData(SelectedIAT));
                 m_ResultsPanel.Width = this.Width - m_ServerInterfacePanel.Width;
                 Controls.Add(m_ResultDetailsContainer);
+                m_ResultsPanel.Initialize(IATManager.GetResultData(SelectedIAT));
                 m_ResultsPanel.Invalidate();
                 m_ResultDetailsContainer.Invalidate();
             }
@@ -482,7 +518,6 @@ namespace IATClient
         {
             ResultDetailsPanel resultPanel = new ResultDetailsPanel(m_ResultDetailsContainer.Width, IATManager.GetResultData(m_ServerInterfacePanel.SelectedIATName), IATManager.GetItemSlides(iatName), nLabel, m_ResultDetailsContainer.PanelClose, m_ResultDetailsContainer.PanelSplit);
             resultPanel.Size = new Size(resultPanel.Width, this.ClientSize.Height);
-            m_ResultDetailsContainer.AutoScaleMode = AutoScaleMode.Dpi;
             m_ResultDetailsContainer.SetPanel(resultPanel, callingPanel);
             resultPanel.GeneratePreview();
         }
@@ -492,65 +527,65 @@ namespace IATClient
             try
             {
                 MainForm.SetStatusMessage(Properties.Resources.sCreatingPreUploadBackup);
-            MainForm.Invalidate();
-            OpenFileDialog dlg = new OpenFileDialog();
-            dlg.DefaultExt = Properties.Resources.sFileExt;
-            dlg.Title = Properties.Resources.sOpenFileDialogTitle;
-            dlg.Filter = String.Format(Properties.Resources.sFileDialogFilter);
-            dlg.FilterIndex = 0;
-            if (dlg.ShowDialog() != DialogResult.OK)
-                return;
-            CItemValidator.StartValidation();
-            foreach (CIATBlock block in CIAT.SaveFile.IAT.Blocks)
-                CItemValidator.ValidateItem(block);
-            foreach (CInstructionBlock iBlock in CIAT.SaveFile.IAT.InstructionBlocks)
-                CItemValidator.ValidateItem(iBlock);
-            if (CItemValidator.HasErrors)
-            {
-                CItemValidator.DisplayErrors(null);
-                return;
-            }
-            ActiveTestFilename = Properties.Resources.sTempIATSaveFile;
-            CIAT.SaveFile.Save(ActiveTestFilename);
-            if (SaveFile.SaveThread.IsAlive)
-                SaveFile.SaveThread.Join();
-            CIAT.SaveFile.Dispose();
-            File.SetAttributes(ActiveTestFilename, File.GetAttributes(ActiveTestFilename) | FileAttributes.Hidden);
-            if (!CIAT.Open(dlg.FileName, false, true))
-            {
+                MainForm.Invalidate();
+                OpenFileDialog dlg = new OpenFileDialog();
+                dlg.DefaultExt = Properties.Resources.sFileExt;
+                dlg.Title = Properties.Resources.sOpenFileDialogTitle;
+                dlg.Filter = String.Format(Properties.Resources.sFileDialogFilter);
+                dlg.FilterIndex = 0;
+                if (dlg.ShowDialog() != DialogResult.OK)
+                    return;
+                CItemValidator.StartValidation();
+                foreach (CIATBlock block in CIAT.SaveFile.IAT.Blocks)
+                    CItemValidator.ValidateItem(block);
+                foreach (CInstructionBlock iBlock in CIAT.SaveFile.IAT.InstructionBlocks)
+                    CItemValidator.ValidateItem(iBlock);
+                if (CItemValidator.HasErrors)
+                {
+                    CItemValidator.DisplayErrors(null);
+                    return;
+                }
+                ActiveTestFilename = Properties.Resources.sTempIATSaveFile;
+                CIAT.SaveFile.Save(ActiveTestFilename);
+                if (SaveFile.SaveThread.IsAlive)
+                    SaveFile.SaveThread.Join();
+                CIAT.SaveFile.Dispose();
+                File.SetAttributes(ActiveTestFilename, File.GetAttributes(ActiveTestFilename) | FileAttributes.Hidden);
+                if (!CIAT.Open(dlg.FileName, false, true))
+                {
+                    CIAT.SaveFile.Dispose();
+                    CIAT.Open(ActiveTestFilename, false, true);
+                    return;
+                }
+                CIAT.ImageManager.StartWorkers();
+                UploadForm upForm = new UploadForm(CIAT.SaveFile.IAT, true);
+                if (upForm.ShowDialog() != DialogResult.OK)
+                {
+                    CIAT.SaveFile.Dispose();
+                    CIAT.Open(ActiveTestFilename, false, true);
+                    File.Delete(ActiveTestFilename);
+                    return;
+                }
+                if (MessageBox.Show("Would you like to save this password to your computer's registry? Keep in mind that your password is not saved on the IATSoftware.net server " +
+                    "in order to ensure the privacy of your data. If you lose or forget your password, your data will be irretrievable. Storing your password to your registry will " +
+                    "allow you to retrieve your data form this computer even if you lose your password.", "Save password to registry?", MessageBoxButtons.YesNo) == DialogResult.Yes)
+                    StorePasswordToRegistry = true;
+                else
+                    StorePasswordToRegistry = false;
+                CIAT.SaveFile.IAT.Name = upForm.IATName;
+                IATUploader = new CWebSocketUploader(CIAT.SaveFile.IAT, MainForm);
+                Func<String, String, bool> del = new Func<String, String, bool>(IATUploader.Upload);
+                CurrentUploadingIAT = upForm.IATName;
+                CurrentUploadingIATPassword = "secret:" + BitConverter.ToString(MD5.Create().ComputeHash(System.Text.Encoding.UTF8.GetBytes(upForm.Password)));
+                m_ServerInterfacePanel.DisableControlsForServerTransaction();
+                var uploadResult = IATUploader.Upload(upForm.IATName, CurrentUploadingIATPassword);
+                if (uploadResult && StorePasswordToRegistry)
+                    LocalStorage.SetIATPassword(upForm.IATName, CurrentUploadingIATPassword);
+                String uploadedIatName = CIAT.SaveFile.IAT.Name;
                 CIAT.SaveFile.Dispose();
                 CIAT.Open(ActiveTestFilename, false, true);
-                return;
-            }
-            CIAT.ImageManager.StartWorkers();
-            UploadForm upForm = new UploadForm(CIAT.SaveFile.IAT, true);
-            if (upForm.ShowDialog() != DialogResult.OK)
-            {
-                CIAT.SaveFile.Dispose();
-                CIAT.Open(ActiveTestFilename, false, true);
+                CIAT.ImageManager.StartWorkers();
                 File.Delete(ActiveTestFilename);
-                return;
-            }
-            if (MessageBox.Show("Would you like to save this password to your computer's registry? Keep in mind that your password is not saved on the IATSoftware.net server " +
-                "in order to ensure the privacy of your data. If you lose or forget your password, your data will be irretrievable. Storing your password to your registry will " +
-                "allow you to retrieve your data form this computer even if you lose your password.", "Save password to registry?", MessageBoxButtons.YesNo) == DialogResult.Yes)
-                StorePasswordToRegistry = true;
-            else
-                StorePasswordToRegistry = false;
-            CIAT.SaveFile.IAT.Name = upForm.IATName;
-            IATUploader = new CWebSocketUploader(CIAT.SaveFile.IAT, MainForm);
-            Func<String, String, bool> del = new Func<String, String, bool>(IATUploader.Upload);
-            CurrentUploadingIAT = upForm.IATName;
-            CurrentUploadingIATPassword = "secret:" + BitConverter.ToString(MD5.Create().ComputeHash(System.Text.Encoding.UTF8.GetBytes(upForm.Password)));
-            m_ServerInterfacePanel.DisableControlsForServerTransaction();
-            var uploadResult = IATUploader.Upload(upForm.IATName, CurrentUploadingIATPassword);
-            if (uploadResult && StorePasswordToRegistry)
-                LocalStorage.SetIATPassword(upForm.IATName, CurrentUploadingIATPassword);
-            String uploadedIatName = CIAT.SaveFile.IAT.Name;
-            CIAT.SaveFile.Dispose();
-            CIAT.Open(ActiveTestFilename, false, true);
-            CIAT.ImageManager.StartWorkers();
-            File.Delete(ActiveTestFilename);
                 CIAT.SaveFile.Dispose();
                 CIAT.Open(ActiveTestFilename, false, true);
                 CIAT.ImageManager.StartWorkers();

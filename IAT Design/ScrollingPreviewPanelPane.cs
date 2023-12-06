@@ -122,26 +122,17 @@ namespace IATClient
         */
         public ScrollingPreviewPanelPane()
         {
-            this.AutoScaleDimensions = new SizeF(72F, 72F);
-            this.AutoScaleMode = AutoScaleMode.Dpi;
             SuspendLayout();
             this.BackColor = CIAT.SaveFile.Layout.BackColor;
-            this.BackgroundImage = DINull.DINull.IImage.Img;
-            this.BackgroundImageLayout = ImageLayout.Stretch;
+            ImageBox.BackgroundImage = DINull.DINull.IImage.Img;
             this.ParentChanged += new EventHandler(ScrollingPreviewPanelPane_ParentChanged);
             ImageBox.Paint += new PaintEventHandler(ScrollingPreviewPanelPane_Paint);
-            ImageBox.MouseDown += new MouseEventHandler(ScrollingPreviewPanelPane_MouseDown);
-            ImageBox.MouseMove += new MouseEventHandler(ScrollingPreviewPanelPane_MouseMove);
-            ImageBox.MouseUp += new MouseEventHandler(ScrollingPreviewPanelPane_MouseUp);
-            ImageBox.DragDrop += new DragEventHandler(ScrollingPreviewPanelPane_DragDrop);
-            ImageBox.DragOver += new DragEventHandler(ScrollingPreviewPanelPane_DragOver);
-            ImageBox.DragLeave += new EventHandler(ScrollingPreviewPanelPane_DragLeave);
-            this.AllowDrop = true;
             this.Controls.Add(ImageBox);
             ImageBox.SizeMode = PictureBoxSizeMode.Zoom;
             ImageBox.BackColor = CIAT.SaveFile.Layout.BackColor;
+            ImageBox.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
             ImageBox.Dock = DockStyle.Fill;
-            ResumeLayout(true);
+            ResumeLayout(false);
         }
 
         private void ScrollingPreviewPanelPane_DragLeave(object sender, EventArgs e)

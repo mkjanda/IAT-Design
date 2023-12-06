@@ -135,7 +135,8 @@ namespace IATClient
             set
             {
                 var dip = CIAT.SaveFile.GetDI(PreviewUri) as DIPreview;
-                dip.PreviewPanel = value;
+                if (dip != null)
+                    dip.PreviewPanel = value;
             }
         }
 

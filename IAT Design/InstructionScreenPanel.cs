@@ -1,25 +1,203 @@
 ﻿using System;
 using System.Drawing;
 using System.Windows.Forms;
-using System.Threading;
 
 namespace IATClient
 {
     public partial class InstructionScreenPanel : UserControl
     {
-        // the size of the control
-        public static Size InstructionScreenPanelSize = new Size(1010, 645);
         private int CurrentScreenNdx = -1;
-        private GroupBox PreviewGroup;
         private ImageDisplay ScreenPreview;
         private Size ChildPanelSize { get; set; } = Size.Empty;
         private Point ChildPanelLoc { get; set; }
         private ScrollingPreviewPanel ScrollingPreview;
+        private static Point ScrollingPreviewPos = new Point(0, 525);
         private CInstructionScreen ClipboardItem;
         private bool UpdatingInternally { get; set; }
         // the current block of instructions
         public int InstructionBlockNdx = -1;
         public Uri InstructionBlockUri { get; private set; }
+
+        private Point ButtonPos { get { return new Point(this.Width - 400, ScrollingPreviewPos.Y + 50 - 4 * (ButtonDistance.Height + 4)); } }
+        private Size ButtonSize { get { return new Size(120, 24); } }
+        private Size ButtonDistance { get { return new Size(150, 5 * 24 / 4 + 4); } }
+
+
+        private void InitializeComponent()
+        {
+            this.InstructionTypeLabel = new System.Windows.Forms.Label();
+            this.TextRadio = new System.Windows.Forms.RadioButton();
+            this.MockItemRadio = new System.Windows.Forms.RadioButton();
+            this.KeyRadio = new System.Windows.Forms.RadioButton();
+            this.InsertScreen = new System.Windows.Forms.Button();
+            this.AddScreen = new System.Windows.Forms.Button();
+            this.DeleteScreen = new System.Windows.Forms.Button();
+            this.Done = new System.Windows.Forms.Button();
+            this.SuspendLayout();
+            // 
+            // ContinueKeyLabel
+            // 
+            //            this.ContinueKeyLabel.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+            //                      | System.Windows.Forms.AnchorStyles.Left)
+            //                    | System.Windows.Forms.AnchorStyles.Right)));
+            //      this.ContinueKeyLabel.AutoSize = true;
+            //    this.ContinueKeyLabel.Location = new System.Drawing.Point(786, 530);
+            //  this.ContinueKeyLabel.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            //            this.ContinueKeyLabel.Name = "ContinueKeyLabel";
+            //          this.ContinueKeyLabel.Size = new System.Drawing.Size(304, 17);
+            //        this.ContinueKeyLabel.TabIndex = 1;
+            //      this.ContinueKeyLabel.Text = "Select the key the user must press to continue:";
+            //    this.ContinueKeyLabel.Click += new System.EventHandler(this.ContinueKeyLabel_Click);
+            // 
+            // ContinueKeyDrop
+            // 
+            //            this.ContinueKeyDrop.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            //           this.ContinueKeyDrop.FormattingEnabled = true;
+            //          this.ContinueKeyDrop.Location = new System.Drawing.Point(1098, 530);
+            //         this.ContinueKeyDrop.Margin = new System.Windows.Forms.Padding(4);
+            //        this.ContinueKeyDrop.Name = "ContinueKeyDrop";
+            //       this.ContinueKeyDrop.Size = new System.Drawing.Size(87, 24);
+            //      this.ContinueKeyDrop.TabIndex = 2;
+            //     this.ContinueKeyDrop.SelectedIndexChanged += new System.EventHandler(this.ContinueKeyDrop_SelectedIndexChanged);
+            // 
+            // InstructionTypeLabel
+            // 
+            //            this.InstructionTypeLabel.AutoSize = true;
+            //          this.InstructionTypeLabel.Location = new System.Drawing.Point(755, 15);
+            //        this.InstructionTypeLabel.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            //      this.InstructionTypeLabel.Name = "InstructionTypeLabel";
+            //    this.InstructionTypeLabel.Size = new System.Drawing.Size(155, 17);
+            //  this.InstructionTypeLabel.TabIndex = 5;
+            //this.InstructionTypeLabel.Text = "Instruction screen type:";
+            // 
+            // TextRadio
+            // 
+            this.TextRadio.AutoSize = true;
+            this.TextRadio.Location = new System.Drawing.Point(570, 12);
+            this.TextRadio.Margin = new System.Windows.Forms.Padding(4);
+            this.TextRadio.Name = "TextRadio";
+            this.TextRadio.Size = new System.Drawing.Size(56, 21);
+            this.TextRadio.TabIndex = 6;
+            this.TextRadio.TabStop = true;
+            this.TextRadio.Text = "Text";
+            this.TextRadio.UseVisualStyleBackColor = true;
+            this.TextRadio.CheckedChanged += new System.EventHandler(this.TextRadio_CheckedChanged);
+            // 
+            // MockItemRadio
+            // 
+            this.MockItemRadio.AutoSize = true;
+            this.MockItemRadio.Location = new System.Drawing.Point(680, 12);
+            this.MockItemRadio.Margin = new System.Windows.Forms.Padding(4);
+            this.MockItemRadio.Name = "MockItemRadio";
+            this.MockItemRadio.Size = new System.Drawing.Size(92, 21);
+            this.MockItemRadio.TabIndex = 8;
+            this.MockItemRadio.TabStop = true;
+            this.MockItemRadio.Text = "Mock Item";
+            this.MockItemRadio.UseVisualStyleBackColor = true;
+            this.MockItemRadio.CheckedChanged += new System.EventHandler(this.MockItemRadio_CheckedChanged);
+            // 
+            // KeyRadio
+            // 
+            this.KeyRadio.AutoSize = true;
+            this.KeyRadio.Location = new System.Drawing.Point(610, 12);
+            this.KeyRadio.Margin = new System.Windows.Forms.Padding(4);
+            this.KeyRadio.Name = "KeyRadio";
+            this.KeyRadio.Size = new System.Drawing.Size(165, 21);
+            this.KeyRadio.TabIndex = 14;
+            this.KeyRadio.TabStop = true;
+            this.KeyRadio.Text = "Response Key";
+            this.KeyRadio.UseVisualStyleBackColor = true;
+            this.KeyRadio.CheckedChanged += new System.EventHandler(this.KeyRadio_CheckedChanged);
+            // 
+            // InsertScreen
+            // 
+            InsertScreen.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            InsertScreen.Location = ButtonPos;
+            InsertScreen.Size = ButtonSize;
+            this.InsertScreen.Margin = new System.Windows.Forms.Padding(4);
+            this.InsertScreen.Name = "InsertScreen";
+            this.InsertScreen.TabIndex = 15;
+            this.InsertScreen.Text = "Insert Screen";
+            this.InsertScreen.UseVisualStyleBackColor = true;
+            this.InsertScreen.Click += new System.EventHandler(this.InsertScreen_Click);
+            // 
+            // AddScreen
+            // 
+            AddScreen.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            AddScreen.Location = new Point(ButtonPos.X + ButtonDistance.Width, ButtonPos.Y);
+            AddScreen.Size = ButtonSize;
+            this.AddScreen.Margin = new System.Windows.Forms.Padding(4);
+            this.AddScreen.Name = "AddScreen";
+            this.AddScreen.TabIndex = 16;
+            this.AddScreen.Text = "Add Screen";
+            this.AddScreen.UseVisualStyleBackColor = true;
+            this.AddScreen.Click += new System.EventHandler(this.AddScreen_Click);
+            // 
+            // DeleteScreen
+            // 
+            DeleteScreen.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            DeleteScreen.Location = new Point(ButtonPos.X, ButtonPos.Y + ButtonDistance.Height);
+            DeleteScreen.Size = ButtonSize;
+            this.DeleteScreen.Margin = new System.Windows.Forms.Padding(4);
+            this.DeleteScreen.Name = "DeleteScreen";
+            this.DeleteScreen.TabIndex = 17;
+            this.DeleteScreen.Text = "Delete Screen";
+            this.DeleteScreen.UseVisualStyleBackColor = true;
+            this.DeleteScreen.Click += new System.EventHandler(this.DeleteScreen_Click);
+            // 
+            // Done
+            // 
+            Done.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            Done.Location = ButtonPos + ButtonDistance;
+            Done.Size = ButtonSize;
+            this.Done.Margin = new System.Windows.Forms.Padding(4);
+            this.Done.Name = "Done";
+            this.Done.TabIndex = 18;
+            this.Done.Text = "Done";
+            this.Done.UseVisualStyleBackColor = true;
+            this.Done.Click += new System.EventHandler(this.Done_Click);
+            // 
+            // InstructionScreenPanel
+            // 
+            this.Controls.Add(this.Done);
+            this.Controls.Add(this.DeleteScreen);
+            this.Controls.Add(this.AddScreen);
+            this.Controls.Add(this.InsertScreen);
+            this.Controls.Add(this.KeyRadio);
+            this.Controls.Add(this.MockItemRadio);
+            this.Controls.Add(this.TextRadio);
+            this.Controls.Add(this.InstructionTypeLabel);
+            //            this.Controls.Add(this.ContinueKeyDrop);
+            //          this.Controls.Add(this.ContinueKeyLabel);
+            this.Margin = new System.Windows.Forms.Padding(4);
+            this.Name = "InstructionScreenPanel";
+            this.Load += new System.EventHandler(this.InstructionScreenPanel_Load);
+            this.ResumeLayout(false);
+
+
+        }
+
+
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing && (components != null))
+            {
+                components.Dispose();
+            }
+            base.Dispose(disposing);
+        }
+        private System.ComponentModel.IContainer components = null;
+
+        //      private System.Windows.Forms.Label ContinueKeyLabel;
+        //        private System.Windows.Forms.ComboBox ContinueKeyDrop;
+        private System.Windows.Forms.Label InstructionTypeLabel;
+        private System.Windows.Forms.RadioButton TextRadio;
+        private System.Windows.Forms.RadioButton MockItemRadio;
+        private System.Windows.Forms.RadioButton KeyRadio;
+        private System.Windows.Forms.Button InsertScreen;
+        private System.Windows.Forms.Button AddScreen;
+        private System.Windows.Forms.Button DeleteScreen;
+        private System.Windows.Forms.Button Done;
 
 
         public CInstructionBlock InstructionBlock
@@ -58,9 +236,9 @@ namespace IATClient
                     TextRadio.Checked = false;
                     KeyRadio.Checked = false;
                     MockItemRadio.Checked = false;
-                    HideTextInstructionsPanel();
-                    HideKeyInstructionsPanel();
-                    HideMockItemPanel();
+                    TextInstructions.Visible = false;
+                    KeyedInstructions.Visible = false;
+                    MockItem.Visible = false;
                     if (CurrentScreenNdx == -1)
                     {
                         ScreenPreview.ClearImage();
@@ -68,23 +246,24 @@ namespace IATClient
                     }
                     InstructionBlock[CurrentScreenNdx].PreviewPane = ScreenPreview;
                     CInstructionScreen scrn = InstructionBlock[CurrentScreenNdx];
-                    ContinueInstructions.TextDisplayItemUri = scrn.ContinueInstructionsUri;
-                    ContinueKeyDrop.SelectedIndex = ContinueKeyDrop.Items.IndexOf(scrn.ContinueKey);
+                    //                    ContinueInstructions.TextDisplayItemUri = scrn.ContinueInstructionsUri;
+                    //                  ContinueKeyDrop.SelectedIndex = ContinueKeyDrop.Items.IndexOf(scrn.ContinueKey);
                     if (scrn.Type == InstructionScreenType.Text)
                     {
-                        ShowTextInstructionsPanel(scrn);
                         TextInstructions.TextInstructionScreen = scrn as CTextInstructionScreen;
+                        TextInstructions.Visible = true;
                         TextRadio.Checked = true;
                     }
                     else if (scrn.Type == InstructionScreenType.ResponseKey)
                     {
-                        ShowKeyInstructionsPanel(scrn);
                         KeyedInstructions.KeyedInstructionScreen = scrn as CKeyInstructionScreen;
+                        KeyedInstructions.Visible = true;
                         KeyRadio.Checked = true;
                     }
                     else if (scrn.Type == InstructionScreenType.MockItem)
                     {
-                        ShowMockItemPanel(scrn);
+                        MockItem.MockItemScreen = scrn as CMockItemScreen;
+                        MockItem.Visible = true;
                         MockItemRadio.Checked = true;
                     }
                     ValidateInput();
@@ -100,33 +279,38 @@ namespace IATClient
 
         public void UpdateScreenDefPanel(CInstructionScreen scrn)
         {
-            ContinueInstructions.TextDisplayItemUri = scrn.ContinueInstructionsUri;
+            //        ContinueInstructions.TextDisplayItemUri = scrn.ContinueInstructionsUri;
             if (scrn.Type == InstructionScreenType.Text)
             {
-                HideKeyInstructionsPanel();
-                HideMockItemPanel();
-                ShowTextInstructionsPanel(scrn);
+                TextInstructions.TextInstructionScreen = scrn as CTextInstructionScreen;
+                TextInstructions.Visible = true;
+                KeyedInstructions.Visible = false;
+                MockItem.Visible = false;
+                TextRadio.Checked = true;
             }
             else if (scrn.Type == InstructionScreenType.ResponseKey)
             {
-                HideTextInstructionsPanel();
-                HideMockItemPanel();
-                ShowKeyInstructionsPanel(scrn);
+                TextInstructions.Visible = false;
+                KeyedInstructions.Visible = true;
+                MockItem.Visible = false;
+                KeyedInstructions.KeyedInstructionScreen = scrn as CKeyInstructionScreen;
                 KeyRadio.Checked = true;
             }
             else if (scrn.Type == InstructionScreenType.MockItem)
             {
-                HideTextInstructionsPanel();
-                HideKeyInstructionsPanel();
-                ShowMockItemPanel(scrn);
+                TextInstructions.Visible = false;
+                KeyedInstructions.Visible = false;
+                MockItem.Visible = true;
+                MockItem.MockItemScreen = scrn as CMockItemScreen;
                 MockItemRadio.Checked = true;
             }
             else
             {
-                HideTextInstructionsPanel();
-                HideKeyInstructionsPanel();
-                HideMockItemPanel();
+                TextInstructions.Visible = false;
+                KeyedInstructions.Visible = false;
+                MockItem.Visible = false;
             }
+            ScrollingPreview.SelectedPreview = InstructionBlock.GetIndexOf(scrn.URI);
         }
 
         public KeyedDirection GetVisibleKeyedDir()
@@ -147,8 +331,8 @@ namespace IATClient
         private static Size TextInstructionsSize = new Size(371, 306);
 
         // the continue instructions control variables
-        private TextEditControl ContinueInstructions;
-        private static int ContinueInstructionsWidth = 370;
+        //        private TextEditControl ContinueInstructions;
+        //      private static int ContinueInstructionsWidth = 370;
 
         // the mock item control
         private MockItemPanel MockItem;
@@ -202,36 +386,42 @@ namespace IATClient
 
         public InstructionScreenPanel(CInstructionBlock instrBlock)
         {
-            this.Enabled = false;
+            SuspendLayout();
             InstructionBlockUri = instrBlock.URI;
             InitializeComponent();
-            this.Size = InstructionScreenPanelSize;
-            PreviewGroup = new GroupBox();
-            PreviewGroup.Location = new Point(0, 0);
-            PreviewGroup.Size = new Size(500, 500) + new Size(6, 12); 
-            PreviewGroup.Text = "Instruction Screen Preview";
+
             ScreenPreview = new ImageDisplay();
             ScreenPreview.BackColor = CIAT.SaveFile.Layout.BackColor;
-            ScreenPreview.BackgroundImage = null;
-            ScreenPreview.BackgroundImageLayout = ImageLayout.Zoom;
-            double arPreview = (double)CIAT.SaveFile.Layout.InteriorSize.Width / (double)CIAT.SaveFile.Layout.InteriorSize.Height;
-            ScreenPreview.Size = Images.ImageMediaType.FullPreview.ImageSize;
+            ScreenPreview.SetImage(null);
+            //            ScreenPreview.Dock = DockStyle.Fill;
+            //            ScreenPreview.Size = Images.ImageMediaType.FullPreview.ImageSize;
             ScreenPreview.Location = new Point(3, 12);
+            double arPreview = (double)Images.ImageMediaType.FullPreview.ImageSize.Width / (double)Images.ImageMediaType.FullPreview.ImageSize.Height;
+            Size szPreview;
+            if (arPreview < 1)
+                szPreview = new Size(Images.ImageMediaType.FullPreview.ImageSize.Width * Images.ImageMediaType.FullPreview.ImageSize.Height / 500, 500);
+            else
+                szPreview = new Size(500, Images.ImageMediaType.FullPreview.ImageSize.Height * Images.ImageMediaType.FullPreview.ImageSize.Width / 500);
+            ScreenPreview.Size = szPreview;
+            ScreenPreview.Location += new Size((500 - szPreview.Width >> 1), 500 - szPreview.Height >> 1);
             Controls.Add(ScreenPreview);
 
-            ScrollingPreview = new ScrollingPreviewPanel();//new Size(this.ClientRectangle.Width, Images.ImageManager.ThumbnailSize.Height));
+
+
+            ScrollingPreview = new ScrollingPreviewPanel();
+            ScrollingPreview.Anchor = AnchorStyles.Left | AnchorStyles.Top | AnchorStyles.Right;
             ScrollingPreview.Orientation = ScrollingPreviewPanel.EOrientation.horizontal;
-            ScrollingPreview.Location = new Point(0, 525);
-            ScrollingPreview.PreviewSize = Images.ImageManager.ThumbnailSize;
-            ScrollingPreview.AutoScaleMode = AutoScaleMode.Font;
-            ScrollingPreview.PreviewClickCallback = new Action<int>((ndx) => { CurrentInstructionScreenNdx = ndx; });
-            ParentChanged += (sender, args) => { if (Parent != null) ValidateInput(); };
+            ScrollingPreview.Location = new Point(ScrollingPreviewPos.X, ScrollingPreviewPos.Y);
+            ScrollingPreview.Width = this.Width;
+            Controls.Add(ScrollingPreview);
+            ScrollingPreview.PreviewClickCallback = new Action<int>((newNdx) => { CurrentInstructionScreenNdx = newNdx; });
             ScrollingPreview.OnMoveContainerItem = new Action<int, int>((startNdx, endNdx) =>
             {
-                InstructionBlock.MoveScreen(startNdx, endNdx);
+                instrBlock.MoveScreen(startNdx, endNdx);
+                CurrentInstructionScreenNdx = endNdx;
                 ScrollingPreview.SelectedPreview = endNdx;
             });
-            ScrollingPreview.SuspendRecalcLayout();
+            ScrollingPreview.ResetScroll();
             for (int ctr = 0; ctr < InstructionBlock.NumScreens; ctr++)
             {
                 ScrollingPreview.InsertPreview(ctr, InstructionBlock[ctr]);
@@ -246,33 +436,49 @@ namespace IATClient
             {
                 ScrollingPreview.ResumeRecalcLayout();
             }));
-            Controls.Add(ScrollingPreview);
 
             // initialize continue instructions
-            ContinueInstructions = new TextEditControl(ContinueInstructionsWidth, DIText.UsedAs.ContinueInstructions, false);
-            ContinueInstructions.Size = ContinueInstructions.CalculatedSize;
-            ContinueInstructions.Location = new Point((((Done.Left + PreviewGroup.Right) >> 1) - (ContinueInstructionsWidth >> 1)), ContinueKeyDrop.Bottom + (ContinueKeyDrop.Height >> 1));
-            Controls.Add(ContinueInstructions);
+            //           ContinueInstructions = new TextEditControl(ContinueInstructionsWidth, DIText.UsedAs.ContinueInstructions, false);
+            //         ContinueInstructions.Size = ContinueInstructions.CalculatedSize;
+            //       ContinueInstructions.Location = new Point((((Done.Left + PreviewGroup.Right) >> 1) - (ContinueInstructionsWidth >> 1)), ContinueKeyDrop.Bottom + (ContinueKeyDrop.Height >> 1));
+            //     Controls.Add(ContinueInstructions);
 
 
-            ContinueKeyDrop.Left = 8 + ContinueKeyLabel.Right;
-            ContinueKeyDrop.Items.AddRange(AvailableContinueKeys);
-            ContinueKeyDrop.SelectedIndex = 0;
-            ChildPanelSize = new Size(MockItemRadio.Right - InstructionTypeLabel.Left, (AddScreen.Top - AddScreen.Height) - (MockItemRadio.Bottom + MockItemRadio.Height));
-            ChildPanelLoc = new Point(InstructionTypeLabel.Left - 40, MockItemRadio.Bottom + MockItemRadio.Height);
+            //            ContinueKeyDrop.Left = 8 + ContinueKeyLabel.Right;
+            //          ContinueKeyDrop.Items.AddRange(AvailableContinueKeys);
+            //        ContinueKeyDrop.SelectedIndex = 0;
+            ChildPanelLoc = new Point(this.ScreenPreview.Right + 50, 50);
+            ChildPanelSize = new Size(this.ScreenPreview.Width, (AddScreen.Top - AddScreen.Height) - (MockItemRadio.Bottom + MockItemRadio.Height));
+
+            TextInstructions = new TextInstructionsPanel(ChildPanelSize, InstructionBlock);
+            TextInstructions.Anchor = AnchorStyles.Left | AnchorStyles.Top | AnchorStyles.Bottom;
+            TextInstructions.Size = ChildPanelSize;
+            TextInstructions.Location = ChildPanelLoc;
+            TextInstructions.Visible = false;
+            Controls.Add(TextInstructions);
+
+            MockItem = new MockItemPanel(ChildPanelSize, InstructionBlock);
+            MockItem.Anchor = AnchorStyles.Top | AnchorStyles.Left;
+            MockItem.Size = ChildPanelSize;
+            MockItem.Location = ChildPanelLoc;
+            MockItem.Visible = false;
+            Controls.Add(MockItem);
+
+            KeyedInstructions = new KeyInstructionsPanel(ChildPanelSize, InstructionBlock);
+            KeyedInstructions.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right | AnchorStyles.Bottom;
+            KeyedInstructions.Size = ChildPanelSize;
+            KeyedInstructions.Location = ChildPanelLoc;
+            KeyedInstructions.Visible = false;
+            Controls.Add(KeyedInstructions);
+
 
             TextRadio.Checked = false;
             MockItemRadio.Checked = false;
             KeyRadio.Checked = false;
-            this.PerformLayout();
             CurrentInstructionScreenNdx = 0;
+            ResumeLayout(false);
         }
 
-        private void MoveContainerItem(int StartNdx, int EndNdx)
-        {
-            InstructionBlock.MoveScreen(StartNdx, EndNdx);
-            ScrollingPreview.SelectedPreview = EndNdx;
-        }
 
         public void SetActiveScreen(CInstructionScreen scrn)
         {
@@ -281,34 +487,6 @@ namespace IATClient
             UpdateScreenDefPanel(InstructionBlock[ScrollingPreview.SelectedPreview]);
         }
 
-        protected void HideTextInstructionsPanel()
-        {
-            if (TextInstructions == null)
-                return;
-            if (Controls.Contains(TextInstructions))
-            {
-                Controls.Remove(TextInstructions);
-                if (ScrollingPreview.SelectedPreview == InstructionBlock.GetIndexOf(TextInstructions.TextInstructionScreen.URI))
-                    TextInstructions.Dispose();
-                TextInstructions = null;
-            }
-        }
-
-        protected void ShowTextInstructionsPanel(CInstructionScreen scrn)
-        {
-            if (TextInstructions == null)
-            {
-                TextInstructions = new TextInstructionsPanel(ChildPanelSize, InstructionBlock);
-                TextInstructions.Location = ChildPanelLoc;
-            }
-            if (!Controls.Contains(TextInstructions))
-            {
-                TextInstructions.TextInstructionScreen = scrn as CTextInstructionScreen;
-                scrn.PreviewPane = ScreenPreview;
-                ScrollingPreview.SelectedPreview = InstructionBlock.GetIndexOf(scrn.URI);
-                Controls.Add(TextInstructions);
-            }
-        }
 
         protected void HideMockItemPanel()
         {
@@ -318,53 +496,11 @@ namespace IATClient
             {
                 MockItem.MockItemScreen = null;
                 Controls.Remove(MockItem);
-                MockItem.Dispose();
-                MockItem = null;
+                //                MockItem.Dispose();
+                //        MockItem = null;
             }
         }
 
-        protected void ShowMockItemPanel(CInstructionScreen scrn)
-        {
-            if (MockItem == null)
-            {
-                MockItem = new MockItemPanel(ChildPanelSize, InstructionBlock);
-                MockItem.Location = ChildPanelLoc;
-            }
-            if (!Controls.Contains(MockItem))
-            {
-                MockItem.MockItemScreen = scrn as CMockItemScreen;
-                scrn.PreviewPane = ScreenPreview;
-                Controls.Add(MockItem);
-            }
-        }
-
-        protected void HideKeyInstructionsPanel()
-        {
-            if (KeyedInstructions == null)
-                return;
-            if (Controls.Contains(KeyedInstructions))
-            {
-                KeyedInstructions.KeyedInstructionScreen = null;
-                Controls.Remove(KeyedInstructions);
-                KeyedInstructions.Dispose();
-                KeyedInstructions = null;
-            }
-        }
-
-        protected void ShowKeyInstructionsPanel(CInstructionScreen scrn)
-        {
-            if (KeyedInstructions == null)
-            {
-                KeyedInstructions = new KeyInstructionsPanel(ChildPanelSize, InstructionBlock);
-                KeyedInstructions.Location = ChildPanelLoc;
-            }
-            if (!Controls.Contains(KeyedInstructions))
-            {
-                KeyedInstructions.KeyedInstructionScreen = scrn as CKeyInstructionScreen;
-                scrn.PreviewPane = ScreenPreview;
-                Controls.Add(KeyedInstructions);
-            }
-        }
 
         private void InstructionScreenPanel_Load(object sender, EventArgs e)
         {
@@ -384,24 +520,17 @@ namespace IATClient
                     return;
                 CTextInstructionScreen newScrn = new CTextInstructionScreen(InstructionBlock);
                 var continueUri = (InstructionBlock[CurrentScreenNdx].ContinueInstructions.Clone() as DIContinueInstructions).URI;
-                ContinueInstructions.TextDisplayItemUri = continueUri;
+                //                ContinueInstructions.TextDisplayItemUri = continueUri;
                 ScrollingPreview.Replace(CurrentInstructionScreenNdx, newScrn);
                 InstructionBlock[CurrentInstructionScreenNdx].Dispose();
                 newScrn.DIPreview.PreviewPanel = ScreenPreview;
                 InstructionBlock.InsertScreen(newScrn, CurrentInstructionScreenNdx);
                 ValidateInput();
-                if (TextInstructions == null)
-                {
-                    TextInstructions = new TextInstructionsPanel(ChildPanelSize, InstructionBlock);
-                    TextInstructions.Location = ChildPanelLoc;
-                }
-                TextInstructions.TextInstructionScreen = newScrn;
-                ScrollingPreview.SelectedPreview = InstructionBlock.GetIndexOf(newScrn.URI);
-                Controls.Add(TextInstructions);
+                UpdateScreenDefPanel(newScrn);
             }
             else
             {
-                HideTextInstructionsPanel();
+                TextInstructions.Visible = false;
             }
         }
 
@@ -415,27 +544,23 @@ namespace IATClient
                 InstructionBlock[CurrentInstructionScreenNdx].Dispose();
                 var newScrn = new CMockItemScreen(InstructionBlock);
                 newScrn.DIPreview.PreviewPanel = ScreenPreview;
-                MainForm.SuspendLayout();
-                ContinueInstructions.TextDisplayItemUri = continueInstructions.URI;
+                //              ContinueInstructions.TextDisplayItemUri = continueInstructions.URI;
                 ScrollingPreview.Replace(CurrentInstructionScreenNdx, newScrn);
                 InstructionBlock.InsertScreen(newScrn, CurrentInstructionScreenNdx);
                 ValidateInput();
                 UpdateScreenDefPanel(newScrn);
-                ShowMockItemPanel(newScrn);
-                MainForm.ResumeLayout(false);
-                newScrn.DIPreview.ScheduleInvalidation();
             }
             else
             {
-                HideMockItemPanel();
+                MockItem.Visible = false;
             }
         }
 
 
         private void ContinueKeyDrop_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (ContinueKeyDrop.SelectedIndex != -1)
-                ContinueInstructions.TextValue = String.Format(Properties.Resources.sDefaultContinueInstructions, ContinueKeyDrop.SelectedItem.ToString());
+            //            if (ContinueKeyDrop.SelectedIndex != -1)
+            //              ContinueInstructions.TextValue = String.Format(Properties.Resources.sDefaultContinueInstructions, ContinueKeyDrop.SelectedItem.ToString());
             ValidateInput();
         }
 
@@ -444,9 +569,9 @@ namespace IATClient
             MainForm.Modified = true;
             CInstructionScreen deletedScrn = InstructionBlock[ScrollingPreview.SelectedPreview];
             SuspendLayout();
-            HideTextInstructionsPanel();
-            HideMockItemPanel();
-            HideKeyInstructionsPanel();
+            TextInstructions.Visible = false;
+            KeyedInstructions.Visible = false;
+            MockItem.Visible = false;
             deletedScrn.Dispose();
             if (InstructionBlock.NumScreens == 0)
             {
@@ -486,9 +611,6 @@ namespace IATClient
 
         private void ManageResponseKeys_Click(object sender, EventArgs e)
         {
-            HideMockItemPanel();
-            HideTextInstructionsPanel();
-            HideKeyInstructionsPanel();
             MainForm.ShowResponseKeyPanel();
         }
 
@@ -504,17 +626,16 @@ namespace IATClient
                 newScrn.DIPreview.PreviewPanel = ScreenPreview;
                 MainForm.SuspendLayout();
                 newScrn.DIPreview.PreviewPanel = ScreenPreview;
-                ContinueInstructions.TextDisplayItemUri = continueInstructions.URI;
+                //            ContinueInstructions.TextDisplayItemUri = continueInstructions.URI;
                 ScrollingPreview.Replace(CurrentInstructionScreenNdx, newScrn);
                 InstructionBlock.InsertScreen(newScrn, CurrentInstructionScreenNdx);
                 ValidateInput();
                 UpdateScreenDefPanel(newScrn);
-                ShowKeyInstructionsPanel(newScrn);
                 MainForm.ResumeLayout(false);
             }
             else
             {
-                HideKeyInstructionsPanel();
+                KeyedInstructions.Visible = false;
             }
         }
 
@@ -523,9 +644,9 @@ namespace IATClient
             InstructionBlock.AddScreen(new CInstructionScreen(InstructionBlock));
             ScrollingPreview.InsertPreview(InstructionBlock.NumScreens - 1, InstructionBlock[InstructionBlock.NumScreens - 1]);
             ScrollingPreview.SelectedPreview = InstructionBlock.NumScreens - 1;
-            HideTextInstructionsPanel();
-            HideMockItemPanel();
-            HideKeyInstructionsPanel();
+            TextInstructions.Visible = false;
+            KeyedInstructions.Visible = false;
+            MockItem.Visible = false;
         }
 
         private void Done_Click(object sender, EventArgs e)

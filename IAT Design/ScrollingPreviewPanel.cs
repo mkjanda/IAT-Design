@@ -118,6 +118,9 @@ namespace IATClient
 
         public ScrollingPreviewPanel()
         {
+            //            this.AutoScaleDimensions = new SizeF(72F, 72F);
+            //          this.AutoScaleMode = AutoScaleMode.Dpi;
+            //        this.Width = IATConfigMainForm.MainForm.Width;
             this.Height = PreviewSize.Height + PreviewPadding.Vertical;
             this.BorderStyle = BorderStyle.Fixed3D;
             PreviewPanels = new List<ScrollingPreviewPanelPane>();
@@ -130,8 +133,12 @@ namespace IATClient
             NextButton.Size = new Size(Properties.Resources.RightButtonArrow.Width, this.ClientRectangle.Height - 4);
             NextButton.Image = Properties.Resources.RightButtonArrow;
             NextButton.ImageAlign = ContentAlignment.MiddleCenter;
-            NextButton.Anchor = AnchorStyles.Right;
-            NextButton.Location = new Point(0, ClientSize.Width - NextButton.Width);
+            NextButton.Location = new Point(this.Width - NextButton.Width, 0);
+            this.Resize += (sender, evt) =>
+            {
+                NextButton.Location = new Point(IATConfigMainForm.MainForm.Width - (NextButton.Width << 1), 0);
+                PreviewPanel.Width = this.Width - (NextButton.Width << 1) - PrevButton.Width;
+            };
             PrevButton.Size = new Size(Properties.Resources.LeftButtonArrow.Width, this.ClientRectangle.Height - 4);
             PrevButton.Image = Properties.Resources.LeftButtonArrow;
             PrevButton.ImageAlign = ContentAlignment.MiddleCenter;
@@ -139,34 +146,19 @@ namespace IATClient
             NextButton.Location = new Point(PreviewPanelBackground.Right, 0);
             NextButton.Click += new EventHandler(NextButton_Click);
             PrevButton.Click += new EventHandler(PrevButton_Click);
+            //            PreviewPanel.Anchor = AnchorStyles.Right | AnchorStyles.Left;
             PreviewPanelBackground.Location = new Point(0, 0);
             PreviewPanelBackground.Size = new Size(0, 0);
-            PreviewPanel.Location = new Point(PrevButton.Right, 0);
             PreviewPanel.Location = new Point(PrevButton.Right, 0);
             PreviewPanel.Width = NextButton.Left - PrevButton.Right;
             PreviewPanel.Top = 0;
             PreviewPanel.Height = ClientSize.Height;
-            PreviewPanel.Anchor = AnchorStyles.Left | AnchorStyles.Bottom | AnchorStyles.Right;
             PreviewPanelBackground.BackColor = System.Drawing.Color.Black;
             PreviewPanel.Controls.Add(PreviewPanelBackground);
             Controls.Add(PrevButton);
             Controls.Add(NextButton);
             Controls.Add(PreviewPanel);
             ResumeLayout(true);
-        }
-
-        public new int Width
-        {
-            get
-            {
-                return base.Width;
-            }
-            set
-            {
-                PreviewPanel.Size = new Size(value - NextButton.Width - PrevButton.Width, this.Height);
-                this.NextButton.Left = PreviewPanel.Right;
-                base.Width = value;
-            }
         }
 
         public int PreviewBarWidth
@@ -317,14 +309,20 @@ namespace IATClient
                     DateTime startTime = DateTime.Now;
                     if (Math.Abs(pixMoved) + ScrollDiff <= Math.Abs(numPixels))
                     {
-                        PreviewPanelBackground.BeginInvoke(new Action<int>((n) => { PreviewPanelBackground.Location = new Point(PreviewPanelBackground.Left + n, 
-                            PreviewPanelBackground.Top); }), -sign * ScrollDiff);
+                        PreviewPanelBackground.BeginInvoke(new Action<int>((n) =>
+                        {
+                            PreviewPanelBackground.Location = new Point(PreviewPanelBackground.Left + n,
+                            PreviewPanelBackground.Top);
+                        }), -sign * ScrollDiff);
                         pixMoved += ScrollDiff;
                     }
                     else
                     {
-                        PreviewPanelBackground.BeginInvoke(new Action<int>((n) => { PreviewPanelBackground.Location = new Point(PreviewPanelBackground.Left + n, 
-                            PreviewPanelBackground.Top); }), -sign * (Math.Abs(numPixels) - Math.Abs(pixMoved)));
+                        PreviewPanelBackground.BeginInvoke(new Action<int>((n) =>
+                        {
+                            PreviewPanelBackground.Location = new Point(PreviewPanelBackground.Left + n,
+                            PreviewPanelBackground.Top);
+                        }), -sign * (Math.Abs(numPixels) - Math.Abs(pixMoved)));
                         pixMoved = numPixels;
                     }
                     while ((DateTime.Now - startTime).Milliseconds < ScrollMaxRate)
@@ -356,14 +354,14 @@ namespace IATClient
                     while (ScrollVal > val)
                     {
                         DateTime startTime = DateTime.Now;
-                            if (ScrollVal - ScrollDiff >= val)
-                            {
-                                new Task(scrollAction, new Tuple<Control, int>(PreviewPanelBackground, ScrollDiff)).Start();
-                            }
-                            else
-                            {
-                                new Task(scrollAction, new Tuple<Control, int>(PreviewPanelBackground, ScrollVal - val)).Start();
-                            }
+                        if (ScrollVal - ScrollDiff >= val)
+                        {
+                            new Task(scrollAction, new Tuple<Control, int>(PreviewPanelBackground, ScrollDiff)).Start();
+                        }
+                        else
+                        {
+                            new Task(scrollAction, new Tuple<Control, int>(PreviewPanelBackground, ScrollVal - val)).Start();
+                        }
                         ScrollVal -= ScrollDiff;
                         while ((DateTime.Now - startTime).Milliseconds < ScrollMaxRate)
                             Thread.Yield();
@@ -395,14 +393,14 @@ namespace IATClient
                     while (ScrollVal < val)
                     {
                         DateTime startTime = DateTime.Now;
-                            if (ScrollVal + ScrollDiff <= val)
-                            {
-                                new Task(scrollAction, new Tuple<Control, int>(PreviewPanelBackground, ScrollDiff)).Start();
-                            }
-                            else
-                            {
-                                new Task(scrollAction, new Tuple<Control, int>(PreviewPanelBackground, val - ScrollVal)).Start();
-                            }
+                        if (ScrollVal + ScrollDiff <= val)
+                        {
+                            new Task(scrollAction, new Tuple<Control, int>(PreviewPanelBackground, ScrollDiff)).Start();
+                        }
+                        else
+                        {
+                            new Task(scrollAction, new Tuple<Control, int>(PreviewPanelBackground, val - ScrollVal)).Start();
+                        }
                         ScrollVal += ScrollDiff;
                         while ((DateTime.Now - startTime).Milliseconds < ScrollMaxRate)
                             Thread.Yield();
@@ -440,7 +438,7 @@ namespace IATClient
         {
             get
             {
-                return Math.Max(0, PreviewPanelBackground.Width - PreviewPanel.Width); 
+                return Math.Max(0, PreviewPanelBackground.Width - PreviewPanel.Width);
             }
         }
 
@@ -474,8 +472,6 @@ namespace IATClient
             if ((ndx < 0) || (ndx > PreviewPanels.Count))
                 throw new Exception("Index out of bounds");
             ScrollingPreviewPanelPane p = new ScrollingPreviewPanelPane();
-            p.AutoScaleDimensions = new SizeF(72F, 72F);
-            p.AutoScaleMode = AutoScaleMode.Dpi;
             p.Size = PreviewSize;
             p.ImageBox.Click += new EventHandler(Preview_Click);
             p.ParentOrientation += new ScrollingPreviewPanelPane.ParentOrientationCallback(GetOrientation);

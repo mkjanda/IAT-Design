@@ -223,9 +223,8 @@ namespace IATClient
         /// </summary>
         public IATBlockPanel(CIATBlock block)
         {
-            this.Name = "IATBlockPanel"; 
+            this.Name = "IATBlockPanel";
             this.Anchor = AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right | AnchorStyles.Top;
-            this.Dock = DockStyle.Fill;
             SuspendLayout();
             InitializeComponent();
             if (CIAT.SaveFile.IAT.Is7Block)
@@ -253,7 +252,7 @@ namespace IATClient
             ScrollingPreview.Location = new Point(ScrollingPreviewPos.X, ScrollingPreviewPos.Y);
             ScrollingPreview.Width = this.Width;
             Controls.Add(ScrollingPreview);
-            
+
             ScrollingPreview.PreviewClickCallback = new Action<int>((newNdx) => { SelectedItemNdx = newNdx; });
             ScrollingPreview.OnMoveContainerItem = new Action<int, int>((startNdx, endNdx) =>
             {
@@ -306,7 +305,6 @@ namespace IATClient
             }
             set
             {
-                ScrollingPreview.Width = value.Width;
                 base.Size = value;
             }
         }

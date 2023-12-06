@@ -403,7 +403,6 @@
     <Compile Include="InstructionScreenPanel.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="InstructionScreenPanel.Designer.cs" />
     <Compile Include="InstructionScreenPreview.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -584,7 +583,7 @@
     </Compile>
     <Compile Include="SendConfirmationEMailForm.Designer.cs" />
     <Compile Include="ServerInterfacePanel.cs">
-      <SubType>Component</SubType>
+      <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="SimpleResponseKeyPanel.cs" />
     <Compile Include="SimpleResponseKeyPanel.Designer.cs" />
@@ -646,7 +645,6 @@
     <Compile Include="TextInstructionsPanel.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="TextInstructionsPanel.Designer.cs" />
     <Compile Include="TokenDefinition.cs" />
     <Compile Include="TokenDefinitionPanel.cs">
       <SubType>Component</SubType>

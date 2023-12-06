@@ -284,8 +284,8 @@ namespace IATClient.Images
                     for (int ctr = 0; ctr < t.GrowRate - 1; ctr++)
                     {
                         var bmp2 = new Bitmap(t.ImageSize.Width, t.ImageSize.Height, System.Drawing.Imaging.PixelFormat.Format32bppArgb) { Tag = t };
-                    bmp2.SetResolution(72F, 72F);
-                    BitmapBags[t].Add(bmp2);
+                        bmp2.SetResolution(72F, 72F);
+                        BitmapBags[t].Add(bmp2);
                     }
                     if (BitmapBags[t].Count >= t.IdealSize)
                         t.IdealAt = DateTime.Now;

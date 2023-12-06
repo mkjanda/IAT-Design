@@ -91,6 +91,8 @@ namespace IATClient
 
         public KeyInstructionsPanel(Size sz, CInstructionBlock b)
         {
+            this.AutoScaleDimensions = new SizeF(72F, 72F);
+            this.AutoScaleMode = AutoScaleMode.Dpi;
             InitializeComponent();
             InstructionBlock = b;
             TextInstructions = new TextEditControl(KeyInstructionsBox.Height - (KeyInstructionsBox.Height - LineSpacingDrop.Top) - (ResponseKeyDrop.Bottom + ResponseKeyDrop.Height), KeyInstructionsBox.ClientRectangle.Width,

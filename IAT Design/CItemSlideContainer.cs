@@ -5,7 +5,6 @@ using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.IO;
 using System.Linq;
-using System.Linq.Expressions;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -15,8 +14,20 @@ namespace IATClient
     {
         private static Size MaxThumbSize = new Size(112, 112), MaxDisplaySize = new Size(500, 500);
         public Dictionary<int, CItemSlide> SlideDictionary { get; private set; } = new Dictionary<int, CItemSlide>();
-        public Size DisplaySize { get ; private set; }  
-        public readonly Size ThumbnailSize = new Size(96, 96);
+        public Size DisplaySize { get; private set; }
+        public Size ThumbnailSize
+        {
+            get
+            {
+                double ar = (double)ResultData.IATConfiguration.Layout.InteriorWidth / ResultData.IATConfiguration.Layout.InteriorHeight;
+                if (ar >= 1)
+                    return new Size(256, (int)(256 / ar));
+                else
+                    return new Size((int)(256 * ar), 256);
+            }
+        }
+
+
         private readonly CancellationTokenSource CancellationSource = new CancellationTokenSource();
         private ResultData.ResultData ResultData;
         private List<byte[]> SlideData { get; set; }
@@ -98,11 +109,11 @@ namespace IATClient
             Size sz;
             if (arImg >= arDisplay)
             {
-                sz = new Size(imgSize.Width, (int)(imgSize.Width / arDisplay));
+                sz = new Size(imgSize.Width, (int)(imgSize.Height * arImg / arDisplay));
             }
             else
             {
-                sz = new Size((int)(imgSize.Height / arDisplay), imgSize.Height);
+                sz = new Size((int)(imgSize.Width * arImg / arDisplay), imgSize.Height);
             }
             Point pt = new Point(imgSize.Width - sz.Width >> 1, imgSize.Height - sz.Height >> 1);
             using (Graphics g = Graphics.FromImage(di))
@@ -149,7 +160,8 @@ namespace IATClient
 
         public void ProcessSlidesSync()
         {
-            try {
+            try
+            {
                 Rectangle thumbImageDestRect = Rectangle.Empty;
                 Rectangle displayImageDestRect = Rectangle.Empty;
                 var slideTuples = SlideDictionary.Values.Select(s => new { s.ReferenceIds, resourceId = s.ResourceId }).OrderBy(a => a.resourceId);
@@ -175,23 +187,14 @@ namespace IATClient
                             DisplaySize = new Size(MaxDisplaySize.Width, (int)(MaxDisplaySize.Width / fullAr));
                             displayImageDestRect = new Rectangle(new Point(0, 0), DisplaySize);
                         }
-                        if (fullAr > thumbAr)
-                        {
-                            Size thumbSize = new Size((int)(ThumbnailSize.Height * fullAr), ThumbnailSize.Height);
-                            thumbImageDestRect = new Rectangle(new Point((ThumbnailSize.Width - thumbSize.Width) >> 1, 0), thumbSize);
-                        }
-                        else
-                        {
-                            Size thumbSize = new Size(ThumbnailSize.Width, (int)(ThumbnailSize.Width / fullAr));
-                            thumbImageDestRect = new Rectangle(new Point(0, (ThumbnailSize.Height - thumbSize.Height) >> 1), thumbSize);
-                        }
                     }
                     SlideDictionary[entry.resourceId].FullSizedImage = fullSizedImage;
-                    SlideDictionary[entry.resourceId].DisplayImage = GetSizedImage(fullSizedImage, displayImageDestRect.Size); 
-                    SlideDictionary[entry.resourceId].ThumbnailImage = GetSizedImage(fullSizedImage, new Size(96, 96)); 
+                    SlideDictionary[entry.resourceId].DisplayImage = GetSizedImage(fullSizedImage, displayImageDestRect.Size);
+                    SlideDictionary[entry.resourceId].ThumbnailImage = GetSizedImage(fullSizedImage, ThumbnailSize);
                 }
             }
-            catch (Exception ex) {
+            catch (Exception ex)
+            {
                 throw ex;
             }
         }

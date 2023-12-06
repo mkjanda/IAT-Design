@@ -1,12 +1,11 @@
-﻿using javax.xml.transform;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
+using System.Linq;
 using System.Security.Cryptography;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Linq;
 using System.Windows.Forms;
 namespace IATClient
 {
@@ -553,7 +552,9 @@ namespace IATClient
                     m_MainPanel.Enabled = false;
                 m_MainPanel.AutoScaleDimensions = new SizeF(72F, 72F);
                 m_MainPanel.AutoScaleMode = AutoScaleMode.Dpi;
+                m_MainPanel.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
                 m_MainPanel.Location = new Point(0, HeaderMenu.Height);
+                m_MainPanel.Size = this.Size - new Size(0, HeaderMenu.Height + MessageBar.Height);
             }
             Controls.Add(m_MainPanel);
             this.PerformAutoScale();
@@ -594,9 +595,10 @@ namespace IATClient
             m_IATBlockPanel = new IATBlockPanel(Block as CIATBlock);
             m_IATBlockPanel.AutoScaleDimensions = new SizeF(72F, 72F);
             m_IATBlockPanel.AutoScaleMode = AutoScaleMode.Dpi;
-            m_IATBlockPanel.Location = new Point(0, HeaderMenu.Height << 1);
+            m_IATBlockPanel.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right | AnchorStyles.Bottom;
+            m_IATBlockPanel.Location = new Point(0, HeaderMenu.Height);
+            m_IATBlockPanel.Size = this.Size - new Size(0, HeaderMenu.Height + MessageBar.Height);
             Controls.Add(m_IATBlockPanel);
-//            m_IATBlockPanel.Size = this.ClientSize - new Size(0, HeaderMenu.Height + MessageBar.Height);
             CIAT.SaveFile.ActivityLog.LogEvent(ActivityLog.EventType.Display, Block.URI);
         }
 
@@ -635,17 +637,22 @@ namespace IATClient
             m_InstructionPanel = new InstructionScreenPanel(InstructionBlock as CInstructionBlock);
             m_InstructionPanel.AutoScaleDimensions = new SizeF(72F, 72F);
             m_InstructionPanel.AutoScaleMode = AutoScaleMode.Dpi;
+            m_InstructionPanel.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right | AnchorStyles.Bottom;
             m_InstructionPanel.Location = new Point(0, HeaderMenu.Height);
-            m_InstructionPanel.Size = InstructionScreenPanel.InstructionScreenPanelSize;
+            m_InstructionPanel.Size = this.Size - new Size(0, HeaderMenu.Height + MessageBar.Height);
             Controls.Add(m_InstructionPanel);
-           CIAT.SaveFile.ActivityLog.LogEvent(ActivityLog.EventType.Display, InstructionBlock.URI);
+            CIAT.SaveFile.ActivityLog.LogEvent(ActivityLog.EventType.Display, InstructionBlock.URI);
         }
 
         private void ShowResultsPanel()
         {
             m_ResultsPanel = new ResultsPanel();
-            Controls.Add(m_ResultsPanel);
+            m_ResultsPanel.AutoScaleDimensions = new SizeF(72F, 72F);
+            m_ResultsPanel.AutoScaleMode = AutoScaleMode.Dpi;
+            m_ResultsPanel.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
             m_ResultsPanel.Location = new Point(0, 0);
+            m_ResultsPanel.Size = this.Size - new Size(0, HeaderMenu.Height + MessageBar.Height);
+            Controls.Add(m_ResultsPanel);
             m_ResultsPanel.Initialize();
         }
 
@@ -1083,7 +1090,7 @@ namespace IATClient
             });
             this.HeaderMenu.Location = new System.Drawing.Point(0, 0);
             this.HeaderMenu.Name = sHeaderMenuName;
-   //         this.HeaderMenu.Size = new System.Drawing.Size(764, 24);
+            //         this.HeaderMenu.Size = new System.Drawing.Size(764, 24);
             this.HeaderMenu.TabIndex = 0;
             this.HeaderMenu.Text = "menuStrip1";
 
@@ -1965,7 +1972,8 @@ namespace IATClient
                 MessageBox.Show("Please enter a password of at least four characters.", "Invalid Password");
                 return;
             }
-            else { 
+            else
+            {
 
                 var bytes = MD5.Create().ComputeHash(System.Text.Encoding.UTF8.GetBytes(IATPasswordBox.Text));
                 byte[] des = new List<byte>(bytes).Where((b, ndx) => ndx < 8).ToArray();
@@ -2187,7 +2195,7 @@ namespace IATClient
             // 
             // IATConfigMainForm
             // 
-            this.ClientSize = new System.Drawing.Size(1008, 694);
+            //      this.ClientSize = new System.Drawing.Size(1008, 694);
             this.AutoScaleDimensions = new SizeF(72F, 72F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.Controls.Add(this.QuickPanel);

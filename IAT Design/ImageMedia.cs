@@ -423,6 +423,9 @@ namespace IATClient.Images
                         //WriteImage();
                         CIAT.ImageManager.ReleaseImage(Img);
                         CacheEntryTime = DateTime.MaxValue;
+                        if (URI != null)
+                            CIAT.SaveFile.DeletePart(URI);
+                        URI = null;
                     }
                 }
             }

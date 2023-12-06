@@ -139,12 +139,12 @@ namespace IATClient
             // 
             // PreviewGroup
             // 
-            this.PreviewGroup.Location = new System.Drawing.Point(501, 3);
-            this.PreviewGroup.Name = "PreviewGroup";
-            this.PreviewGroup.Size = new System.Drawing.Size(506, 518);
-            this.PreviewGroup.TabIndex = 11;
-            this.PreviewGroup.TabStop = false;
-            this.PreviewGroup.Text = "Preview";
+//            this.PreviewGroup.Location = new System.Drawing.Point(501, 3);
+  //          this.PreviewGroup.Name = "PreviewGroup";
+    //        this.PreviewGroup.Size = new System.Drawing.Size(506, 518);
+      //      this.PreviewGroup.TabIndex = 11;
+        //    this.PreviewGroup.TabStop = false;
+          //  this.PreviewGroup.Text = "Preview";
             // 
             // MessageBoxGroup
             // 
@@ -168,7 +168,7 @@ namespace IATClient
             // 
             this.Controls.Add(this.TestContentsGroup);
             this.Controls.Add(this.MessageBoxGroup);
-            this.Controls.Add(this.PreviewGroup);
+            this.Controls.Add(this.PreviewPanel);
             this.Controls.Add(this.ServerInterfaceButton);
             this.Controls.Add(this.PurchaseAdministrationsButton);
             this.Controls.Add(this.SpecifyAlternatingItemsButton);
@@ -179,7 +179,6 @@ namespace IATClient
             this.Controls.Add(this.AddPreSurveyButton);
             this.Controls.Add(this.KeyDynamicButton);
             this.Name = "MainPanel";
-            this.Size = new System.Drawing.Size(1010, 645);
             this.ParentChanged += new System.EventHandler(this.MainPanel_ParentChanged);
             this.ResumeLayout(false);
 
