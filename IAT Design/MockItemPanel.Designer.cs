@@ -28,7 +28,6 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.MockItemGroup = new System.Windows.Forms.GroupBox();
             this.MarkAsInvalid = new System.Windows.Forms.CheckBox();
             this.OutlineResponse = new System.Windows.Forms.CheckBox();
             this.InstructionsGroup = new System.Windows.Forms.GroupBox();
@@ -46,31 +45,24 @@
             this.ManageKeysButton = new System.Windows.Forms.Button();
             this.ResponseKeyDrop = new System.Windows.Forms.ComboBox();
             this.ResponseKeyLabel = new System.Windows.Forms.Label();
-            this.MockItemGroup.SuspendLayout();
             this.ImageStimulusGroup.SuspendLayout();
             this.SuspendLayout();
             // 
             // MockItemGroup
             // 
-            this.MockItemGroup.Controls.Add(this.MarkAsInvalid);
-            this.MockItemGroup.Controls.Add(this.OutlineResponse);
-            this.MockItemGroup.Controls.Add(this.InstructionsGroup);
-            this.MockItemGroup.Controls.Add(this.ImageStimulusGroup);
-            this.MockItemGroup.Controls.Add(this.TextStimulusGroup);
-            this.MockItemGroup.Controls.Add(this.KeyedDirLabel);
-            this.MockItemGroup.Controls.Add(this.KeyedDirDrop);
-            this.MockItemGroup.Controls.Add(this.ImageStimulusRadio);
-            this.MockItemGroup.Controls.Add(this.TextStimulusRadio);
-            this.MockItemGroup.Controls.Add(this.StimulusTypeLabel);
-            this.MockItemGroup.Controls.Add(this.ManageKeysButton);
-            this.MockItemGroup.Controls.Add(this.ResponseKeyDrop);
-            this.MockItemGroup.Controls.Add(this.ResponseKeyLabel);
-            this.MockItemGroup.Location = new System.Drawing.Point(3, 3);
-            this.MockItemGroup.Name = "MockItemGroup";
-            this.MockItemGroup.Size = new System.Drawing.Size(365, 369);
-            this.MockItemGroup.TabIndex = 0;
-            this.MockItemGroup.TabStop = false;
-            this.MockItemGroup.Text = "Mock Item";
+            Controls.Add(this.MarkAsInvalid);
+            this.Controls.Add(this.OutlineResponse);
+            this.Controls.Add(this.InstructionsGroup);
+            this.Controls.Add(this.ImageStimulusGroup);
+            this.Controls.Add(this.TextStimulusGroup);
+            this.Controls.Add(this.KeyedDirLabel);
+            this.Controls.Add(this.KeyedDirDrop);
+            this.Controls.Add(this.ImageStimulusRadio);
+            this.Controls.Add(this.TextStimulusRadio);
+            this.Controls.Add(this.StimulusTypeLabel);
+            this.Controls.Add(this.ManageKeysButton);
+            this.Controls.Add(this.ResponseKeyDrop);
+            this.Controls.Add(this.ResponseKeyLabel);
             // 
             // MarkAsInvalid
             // 
@@ -247,13 +239,7 @@
             // 
             // MockItemPanel
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.Controls.Add(this.MockItemGroup);
             this.Name = "MockItemPanel";
-            this.Size = new System.Drawing.Size(371, 375);
-            this.MockItemGroup.ResumeLayout(false);
-            this.MockItemGroup.PerformLayout();
             this.ImageStimulusGroup.ResumeLayout(false);
             this.ImageStimulusGroup.PerformLayout();
             this.ResumeLayout(false);
@@ -262,7 +248,6 @@
 
         #endregion
 
-        private System.Windows.Forms.GroupBox MockItemGroup;
         private System.Windows.Forms.RadioButton ImageStimulusRadio;
         private System.Windows.Forms.RadioButton TextStimulusRadio;
         private System.Windows.Forms.Label StimulusTypeLabel;

@@ -42,10 +42,10 @@ namespace IATClient
                 if (IImage == null)
                     return;
                 if (IImage.Thumbnail == null)
+                {
                     IImage.CreateThumbnail();
-                else
-                    this.IImage.Thumbnail.ClearChanged();
-                IImage.Thumbnail.Changed += new Action<Images.ImageEvent, Images.IImageMedia, object>(OnThumbnailUpdate);
+                    IImage.Thumbnail.Changed += new Action<Images.ImageEvent, Images.IImageMedia, object>(OnThumbnailUpdate);
+                }
                 ForceOneShot();
             }
         }
@@ -171,7 +171,7 @@ namespace IATClient
                         continue;
                     DIBase di = CIAT.SaveFile.GetDI(iUri.Value);
                     Image img = di.IImage?.Img;
-                    while (img == null)
+                    if (img == null)
                     {
                         di.ScheduleInvalidation();
                         return null;

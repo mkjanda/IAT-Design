@@ -486,7 +486,7 @@ namespace IATClient
                 }
                 offset += count;
             }
-            float lineHeight = PhraseFont.Height * LineSpacing;
+            float lineHeight = PhraseFont.GetHeight(g) * LineSpacing;
             for (int nLine = 0; nLine < lines.Count; nLine++)
             {
                 SizeF szLine = g.MeasureString(lines[nLine], PhraseFont);

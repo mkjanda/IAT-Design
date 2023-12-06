@@ -159,63 +159,66 @@ namespace IATClient
         private void CalcColumnWidths()
         {
             int fontHeight = (int)ResultFont.Height;
-            int answerWidth = 0, width, segmentWidth, labelWidth;
-            if (this.ResultData.Descriptor.TokenType != ETokenType.NONE)
+            int answerWidth, width, segmentWidth, labelWidth;
+            using (var g = Graphics.FromHwnd(this.Handle))
             {
-                ColumnWidths["Token"] = new List<int>();
-                int tokenWidth = 0;
-                for (int ctr = 0; ctr < this.ResultData.IATResults.NumResultSets; ctr++)
+                if (this.ResultData.Descriptor.TokenType != ETokenType.NONE)
                 {
-                    width = TextRenderer.MeasureText(ResultData.IATResults[ctr].Token, ResultFont).Width;
-                    if (width > tokenWidth)
-                        tokenWidth = width;
-                }
-                ColumnWidths["Token"].Add(tokenWidth + CellPadding.Horizontal);
-            }
-            for (int ctr = 0; ctr < ResultData.Descriptor.BeforeSurveys.Count; ctr++)
-            {
-                ColumnWidths[ResultData.Descriptor.BeforeSurveys[ctr].Name] = new List<int>();
-                segmentWidth = 0;
-                for (int ctr2 = 0; ctr2 < ResultData.Descriptor.BeforeSurveys[ctr].NumItems; ctr2++)
-                {
-                    answerWidth = 0;
-                    for (int ctr3 = 0; ctr3 < ResultData.IATResults.NumResultSets; ctr3++)
+                    ColumnWidths["Token"] = new List<int>();
+                    int tokenWidth = 0;
+                    for (int ctr = 0; ctr < this.ResultData.IATResults.NumResultSets; ctr++)
                     {
-                        width = TextRenderer.MeasureText(ResultData.IATResults[ctr3].BeforeSurveys[ctr][ctr2].Value, ResultFont).Width;
-                        if (width > answerWidth)
-                            answerWidth = width;
+                        width = (int)g.MeasureString(ResultData.IATResults[ctr].Token, ResultFont).Width;
+                        if (width > tokenWidth)
+                            tokenWidth = width;
                     }
-                    ColumnWidths[ResultData.Descriptor.BeforeSurveys[ctr].Name].Add(answerWidth + CellPadding.Horizontal);
-                    segmentWidth += answerWidth + CellPadding.Horizontal;
+                    ColumnWidths["Token"].Add(tokenWidth + CellPadding.Horizontal);
                 }
-                segmentWidth = 0;
-            }
-            answerWidth = 0;
-            ColumnWidths["IAT Score"] = new List<int>();
-            for (int ctr = 0; ctr < ResultData.IATResults.NumResultSets; ctr++)
-            {
-                width = TextRenderer.MeasureText(ResultData.IATResults[ctr].IATScore.ToString("F6"), ResultFont).Width;
-                if (answerWidth < width)
-                    answerWidth = width;
-            }
-            ColumnWidths["IAT Score"].Add(answerWidth + CellPadding.Horizontal);
-            for (int ctr = 0; ctr < ResultData.Descriptor.AfterSurveys.Count; ctr++)
-            {
-                ColumnWidths[ResultData.Descriptor.AfterSurveys[ctr].Name] = new List<int>();
-                segmentWidth = 0;
-                for (int ctr2 = 0; ctr2 < ResultData.Descriptor.AfterSurveys[ctr].NumItems; ctr2++)
+                for (int ctr = 0; ctr < ResultData.Descriptor.BeforeSurveys.Count; ctr++)
                 {
-                    answerWidth = 0;
-                    for (int ctr3 = 0; ctr3 < ResultData.IATResults.NumResultSets; ctr3++)
+                    ColumnWidths[ResultData.Descriptor.BeforeSurveys[ctr].Name] = new List<int>();
+                    segmentWidth = 0;
+                    for (int ctr2 = 0; ctr2 < ResultData.Descriptor.BeforeSurveys[ctr].NumItems; ctr2++)
                     {
-                        width = TextRenderer.MeasureText(ResultData.IATResults[ctr3].AfterSurveys[ctr][ctr2].Value, ResultFont).Width;
-                        if (width > answerWidth)
-                            answerWidth = width;
+                        answerWidth = 0;
+                        for (int ctr3 = 0; ctr3 < ResultData.IATResults.NumResultSets; ctr3++)
+                        {
+                            width = (int)g.MeasureString(ResultData.IATResults[ctr3].BeforeSurveys[ctr][ctr2].Value, ResultFont).Width;
+                            if (width > answerWidth)
+                                answerWidth = width;
+                        }
+                        ColumnWidths[ResultData.Descriptor.BeforeSurveys[ctr].Name].Add(answerWidth + CellPadding.Horizontal);
+                        segmentWidth += answerWidth + CellPadding.Horizontal;
                     }
-                    ColumnWidths[ResultData.Descriptor.AfterSurveys[ctr].Name].Add(answerWidth + CellPadding.Horizontal);
-                    segmentWidth += answerWidth + CellPadding.Horizontal;
+                    segmentWidth = 0;
                 }
-                segmentWidth = 0;
+                answerWidth = 0;
+                ColumnWidths["IAT Score"] = new List<int>();
+                for (int ctr = 0; ctr < ResultData.IATResults.NumResultSets; ctr++)
+                {
+                    width = (int)g.MeasureString(ResultData.IATResults[ctr].IATScore.ToString("F6"), ResultFont).Width;
+                    if (answerWidth < width)
+                        answerWidth = width;
+                }
+                ColumnWidths["IAT Score"].Add(answerWidth + CellPadding.Horizontal);
+                for (int ctr = 0; ctr < ResultData.Descriptor.AfterSurveys.Count; ctr++)
+                {
+                    ColumnWidths[ResultData.Descriptor.AfterSurveys[ctr].Name] = new List<int>();
+                    segmentWidth = 0;
+                    for (int ctr2 = 0; ctr2 < ResultData.Descriptor.AfterSurveys[ctr].NumItems; ctr2++)
+                    {
+                        answerWidth = 0;
+                        for (int ctr3 = 0; ctr3 < ResultData.IATResults.NumResultSets; ctr3++)
+                        {
+                            width = (int)g.MeasureString(ResultData.IATResults[ctr3].AfterSurveys[ctr][ctr2].Value, ResultFont).Width;
+                            if (width > answerWidth)
+                                answerWidth = width;
+                        }
+                        ColumnWidths[ResultData.Descriptor.AfterSurveys[ctr].Name].Add(answerWidth + CellPadding.Horizontal);
+                        segmentWidth += answerWidth + CellPadding.Horizontal;
+                    }
+                    segmentWidth = 0;
+                }
             }
         }
 
@@ -360,136 +363,125 @@ namespace IATClient
             foreach (String s in ColumnWidths.Keys)
                 nResultItems += ColumnWidths[s].Count;
             MaxColWidths = new int[nResultItems];
-            for (int ctr = 0; ctr < ResultData.IATResults.NumResultSets; ctr++)
+            var strFormat = new StringFormat();
+            strFormat.Trimming = StringTrimming.Word;
+            using (Graphics g = Graphics.FromHwnd(this.Handle))
             {
-                int xOffset = 0;
-                CellRects.Add(new List<Rectangle>());
-                Results.Add(new List<String>());
-                if (this.ResultData.Descriptor.TokenType != ETokenType.NONE)
+                for (int ctr = 0; ctr < ResultData.IATResults.NumResultSets; ctr++)
                 {
-                    xOffset += LabelColWidth + RowPadding.Left;
-                    Results[ctr].Add(ResultData.IATResults[ctr].Token);
-                    if ((trimAmount == 0) || (this.ResultData.Descriptor.TokenType != ETokenType.BASE64_UTF8))
+                    int xOffset = 0;
+                    CellRects.Add(new List<Rectangle>());
+                    Results.Add(new List<String>());
+                    if (this.ResultData.Descriptor.TokenType != ETokenType.NONE)
                     {
-                        CellRects[ctr].Add(new Rectangle(new Point(xOffset, 0), TextRenderer.MeasureText(this.ResultData.IATResults[ctr].Token, ResultFont) + new Size(CellPadding.Horizontal, CellPadding.Vertical)));
-                        if (ctr == 0)
-                            MaxColWidths[CellRects[ctr].Count - 1] = CellRects[ctr].Last().Width;
-                        else if (CellRects[ctr].Last().Width > MaxColWidths[CellRects[ctr].Count - 1])
-                            MaxColWidths[CellRects[ctr].Count - 1] = CellRects[ctr].Last().Width;
-                        xOffset += CellRects[ctr].Last().Width;
-                    }
-                    else if ((trimAmount != 0) && (this.ResultData.Descriptor.TokenType == ETokenType.BASE64_UTF8))
-                    {
-                        CellRects[ctr].Add(new Rectangle(new Point(xOffset, 0), TextRenderer.MeasureText(ResultData.IATResults[ctr].Token, ResultFont, new Size(this.Width >> 2, 0), TextFormatFlags.WordBreak | TextFormatFlags.TextBoxControl) + new Size(CellPadding.Horizontal, CellPadding.Vertical)));
-                        xOffset += CellRects[ctr].Last().Width;
-                        if (ctr == 0)
-                            MaxColWidths[CellRects[ctr].Count - 1] = CellRects[ctr].Last().Width;
-                        else if (CellRects[ctr].Last().Width > MaxColWidths[CellRects[ctr].Count - 1])
-                            MaxColWidths[CellRects[ctr].Count - 1] = CellRects[ctr].Last().Width;
-                    }
-                }
-                for (int ctr2 = 0; ctr2 < ResultData.Descriptor.BeforeSurveys.Count; ctr2++)
-                {
-                    if (ResultData.Descriptor.BeforeSurveys[ctr2].NumQuestions == 0)
-                        xOffset += LabelColWidth;
-                    else
                         xOffset += LabelColWidth + RowPadding.Left;
-                    for (int ctr3 = 0; ctr3 < ResultData.Descriptor.BeforeSurveys[ctr2].NumQuestions; ctr3++)
-                        Results[ctr].Add(ResultData.IATResults[ctr].BeforeSurveys[ctr2][ctr3].Value);
-                    if (trimAmount == 0)
+                        Results[ctr].Add(ResultData.IATResults[ctr].Token);
+                        if ((trimAmount == 0) || (this.ResultData.Descriptor.TokenType != ETokenType.BASE64_UTF8))
+                        {
+                            CellRects[ctr].Add(new Rectangle(new Point(xOffset, 0), new Size((int)g.MeasureString(this.ResultData.IATResults[ctr].Token, ResultFont).Width, (int)g.MeasureString(this.ResultData.IATResults[ctr].Token, ResultFont).Height) + new Size(CellPadding.Horizontal, CellPadding.Vertical)));
+                            if (ctr == 0)
+                                MaxColWidths[CellRects[ctr].Count - 1] = CellRects[ctr].Last().Width;
+                            else if (CellRects[ctr].Last().Width > MaxColWidths[CellRects[ctr].Count - 1])
+                                MaxColWidths[CellRects[ctr].Count - 1] = CellRects[ctr].Last().Width;
+                            xOffset += CellRects[ctr].Last().Width;
+                        }
+                        else if ((trimAmount != 0) && (this.ResultData.Descriptor.TokenType == ETokenType.BASE64_UTF8))
+                        {
+                            CellRects[ctr].Add(new Rectangle(new Point(xOffset, 0), new Size((int)g.MeasureString(ResultData.IATResults[ctr].Token, ResultFont, new SizeF(this.Width >> 2, 0), strFormat).Width + new Size(CellPadding.Horizontal, CellPadding.Vertical).Width + CellPadding.Horizontal, (int)g.MeasureString(ResultData.IATResults[ctr].Token, ResultFont, new SizeF(this.Width >> 2, 0), strFormat).Height + CellPadding.Vertical)));
+                            xOffset += CellRects[ctr].Last().Width;
+                            if (ctr == 0)
+                                MaxColWidths[CellRects[ctr].Count - 1] = CellRects[ctr].Last().Width;
+                            else if (CellRects[ctr].Last().Width > MaxColWidths[CellRects[ctr].Count - 1])
+                                MaxColWidths[CellRects[ctr].Count - 1] = CellRects[ctr].Last().Width;
+                        }
+                    }
+                    for (int ctr2 = 0; ctr2 < ResultData.Descriptor.BeforeSurveys.Count; ctr2++)
                     {
+                        if (ResultData.Descriptor.BeforeSurveys[ctr2].NumQuestions == 0)
+                            xOffset += LabelColWidth;
+                        else
+                            xOffset += LabelColWidth + RowPadding.Left;
                         for (int ctr3 = 0; ctr3 < ResultData.Descriptor.BeforeSurveys[ctr2].NumQuestions; ctr3++)
+                            Results[ctr].Add(ResultData.IATResults[ctr].BeforeSurveys[ctr2][ctr3].Value);
+                        if (trimAmount == 0)
                         {
-                            CellRects[ctr].Add(new Rectangle(new Point(xOffset, 0), TextRenderer.MeasureText(ResultData.IATResults[ctr].BeforeSurveys[ctr2][ctr3].Value, ResultFont) + new Size(CellPadding.Horizontal, CellPadding.Vertical)));
-                            if (ctr == 0)
-                                MaxColWidths[CellRects[ctr].Count - 1] = CellRects[ctr].Last().Width;
-                            else if (CellRects[ctr].Last().Width > MaxColWidths[CellRects[ctr].Count - 1])
-                                MaxColWidths[CellRects[ctr].Count - 1] = CellRects[ctr].Last().Width;
-                            xOffset += CellRects[ctr].Last().Width;
-                        }
-                    }
-                    else
-                    {
-                        String elemName = ResultData.Descriptor.BeforeSurveys[ctr2].Name;
-                        int boundedCtr = 0;
-                        if (boundedLengthItemNums[elemName].Count == 0)
-                        {
-                            for (int ctr3 = 0; ctr3 < ResultData.Descriptor.BeforeSurveys[ctr2].NumItems; ctr3++)
+                            for (int ctr3 = 0; ctr3 < ResultData.Descriptor.BeforeSurveys[ctr2].NumQuestions; ctr3++)
                             {
-                                CellRects[ctr].Add(new Rectangle(new Point(xOffset, 0), TextRenderer.MeasureText(ResultData.IATResults[ctr].BeforeSurveys[ctr2][ctr3].Value, ResultFont) + new Size(CellPadding.Horizontal, CellPadding.Vertical)));
-                                xOffset += CellRects[ctr].Last().Width;
+                                CellRects[ctr].Add(new Rectangle(new Point(xOffset, 0), new Size((int)g.MeasureString(ResultData.IATResults[ctr].BeforeSurveys[ctr2][ctr3].Value, ResultFont).Width + CellPadding.Horizontal, (int)g.MeasureString(ResultData.IATResults[ctr].BeforeSurveys[ctr2][ctr3].Value, ResultFont).Height + CellPadding.Vertical)));
                                 if (ctr == 0)
                                     MaxColWidths[CellRects[ctr].Count - 1] = CellRects[ctr].Last().Width;
                                 else if (CellRects[ctr].Last().Width > MaxColWidths[CellRects[ctr].Count - 1])
                                     MaxColWidths[CellRects[ctr].Count - 1] = CellRects[ctr].Last().Width;
+                                xOffset += CellRects[ctr].Last().Width;
+                            }
+                        }
+                        else
+                        {
+                            String elemName = ResultData.Descriptor.BeforeSurveys[ctr2].Name;
+                            int boundedCtr = 0;
+                            if (boundedLengthItemNums[elemName].Count == 0)
+                            {
+                                for (int ctr3 = 0; ctr3 < ResultData.Descriptor.BeforeSurveys[ctr2].NumItems; ctr3++)
+                                {
+                                    CellRects[ctr].Add(new Rectangle(new Point(xOffset, 0), new Size((int)g.MeasureString(ResultData.IATResults[ctr].BeforeSurveys[ctr2][ctr3].Value, ResultFont).Width + CellPadding.Horizontal, (int)g.MeasureString(ResultData.IATResults[ctr].BeforeSurveys[ctr2][ctr3].Value, ResultFont).Height + CellPadding.Vertical)));
+                                    xOffset += CellRects[ctr].Last().Width;
+                                    if (ctr == 0)
+                                        MaxColWidths[CellRects[ctr].Count - 1] = CellRects[ctr].Last().Width;
+                                    else if (CellRects[ctr].Last().Width > MaxColWidths[CellRects[ctr].Count - 1])
+                                        MaxColWidths[CellRects[ctr].Count - 1] = CellRects[ctr].Last().Width;
 
+                                }
                             }
-                        }
-                        else
-                        {
-                            for (int ctr3 = 0; ctr3 < ResultData.Descriptor.BeforeSurveys[ctr2].NumItems; ctr3++)
+                            else
                             {
-                                if (boundedLengthItemNums[elemName][boundedCtr] == ctr3)
-                                    CellRects[ctr].Add(new Rectangle(new Point(xOffset, 0), TextRenderer.MeasureText(ResultData.IATResults[ctr].BeforeSurveys[ctr2][ctr3].Value, ResultFont, new Size(this.Width >> 2, 0), TextFormatFlags.WordBreak | TextFormatFlags.TextBoxControl) + new Size(CellPadding.Horizontal, CellPadding.Vertical)));
-                                else
-                                    CellRects[ctr].Add(new Rectangle(new Point(xOffset, 0), TextRenderer.MeasureText(ResultData.IATResults[ctr].BeforeSurveys[ctr2][ctr3].Value, ResultFont) + new Size(CellPadding.Horizontal, CellPadding.Vertical)));
-                                xOffset += CellRects[ctr].Last().Width;
-                                if (ctr == 0)
-                                    MaxColWidths[CellRects[ctr].Count - 1] = CellRects[ctr].Last().Width;
-                                else if (CellRects[ctr].Last().Width > MaxColWidths[CellRects[ctr].Count - 1])
-                                    MaxColWidths[CellRects[ctr].Count - 1] = CellRects[ctr].Last().Width;
+                                for (int ctr3 = 0; ctr3 < ResultData.Descriptor.BeforeSurveys[ctr2].NumItems; ctr3++)
+                                {
+                                    if (boundedLengthItemNums[elemName][boundedCtr] == ctr3)
+                                        CellRects[ctr].Add(new Rectangle(new Point(xOffset, 0), new Size((int)g.MeasureString(ResultData.IATResults[ctr].BeforeSurveys[ctr2][ctr3].Value, ResultFont, new SizeF(this.Width >> 2, 0), strFormat).Width + CellPadding.Horizontal, (int)g.MeasureString(ResultData.IATResults[ctr].BeforeSurveys[ctr2][ctr3].Value, ResultFont, new SizeF(this.Width >> 2, 0), strFormat).Height + CellPadding.Vertical)));
+                                    else
+                                        CellRects[ctr].Add(new Rectangle(new Point(xOffset, 0), new Size((int)g.MeasureString(ResultData.IATResults[ctr].BeforeSurveys[ctr2][ctr3].Value, ResultFont).Width + CellPadding.Horizontal, (int)g.MeasureString(ResultData.IATResults[ctr].BeforeSurveys[ctr2][ctr3].Value, ResultFont).Height + CellPadding.Vertical)));
+                                    xOffset += CellRects[ctr].Last().Width;
+                                    if (ctr == 0)
+                                        MaxColWidths[CellRects[ctr].Count - 1] = CellRects[ctr].Last().Width;
+                                    else if (CellRects[ctr].Last().Width > MaxColWidths[CellRects[ctr].Count - 1])
+                                        MaxColWidths[CellRects[ctr].Count - 1] = CellRects[ctr].Last().Width;
+                                }
                             }
                         }
+                        if (ResultData.Descriptor.BeforeSurveys[ctr2].NumItems != 0)
+                            xOffset += RowPadding.Right;
                     }
-                    if (ResultData.Descriptor.BeforeSurveys[ctr2].NumItems != 0)
-                        xOffset += RowPadding.Right;
-                }
-                xOffset += LabelColWidth + RowPadding.Left;
-                if (double.IsNaN(ResultData.IATResults[ctr].IATScore))
-                {
-                    CellRects[ctr].Add(new Rectangle(new Point(xOffset, 0), TextRenderer.MeasureText("Unscored", ResultFont) + new Size(CellPadding.Horizontal, CellPadding.Vertical)));
-                    Results[ctr].Add("Unscored");
-                }
-                else
-                {
-                    CellRects[ctr].Add(new Rectangle(new Point(xOffset, 0), TextRenderer.MeasureText(ResultData.IATResults[ctr].IATScore.ToString("F6"), ResultFont) + new Size(CellPadding.Horizontal, CellPadding.Vertical)));
-                    Results[ctr].Add(ResultData.IATResults[ctr].IATScore.ToString("F6"));
-                }
-                xOffset += CellRects[ctr].Last().Width;
-                if (ctr == 0)
-                    MaxColWidths[CellRects[ctr].Count - 1] = CellRects[ctr].Last().Width;
-                else if (CellRects[ctr].Last().Width > MaxColWidths[CellRects[ctr].Count - 1])
-                    MaxColWidths[CellRects[ctr].Count - 1] = CellRects[ctr].Last().Width;
-                xOffset += RowPadding.Right;
-                for (int ctr2 = 0; ctr2 < ResultData.Descriptor.AfterSurveys.Count; ctr2++)
-                {
-                    if (ResultData.Descriptor.AfterSurveys[ctr2].NumItems == 0)
-                        xOffset += LabelColWidth;
-                    else
-                        xOffset += LabelColWidth + RowPadding.Left;
-                    for (int ctr3 = 0; ctr3 < ResultData.Descriptor.AfterSurveys[ctr2].NumItems; ctr3++)
-                        Results[ctr].Add(ResultData.IATResults[ctr].AfterSurveys[ctr2][ctr3].Value);
-                    if (trimAmount == 0)
+                    xOffset += LabelColWidth + RowPadding.Left;
+                    if (double.IsNaN(ResultData.IATResults[ctr].IATScore))
                     {
+                        CellRects[ctr].Add(new Rectangle(new Point(xOffset, 0), new Size((int)g.MeasureString("Unscored", ResultFont).Width + CellPadding.Horizontal, (int)g.MeasureString("Unscored", ResultFont).Height + CellPadding.Vertical)));
+                        Results[ctr].Add("Unscored");
+                    }
+                    else
+                    {
+                        CellRects[ctr].Add(new Rectangle(new Point(xOffset, 0), new Size((int)g.MeasureString(ResultData.IATResults[ctr].IATScore.ToString("F6"), ResultFont).Width + CellPadding.Horizontal, (int)g.MeasureString(ResultData.IATResults[ctr].IATScore.ToString("F6"), ResultFont).Height + CellPadding.Vertical)));
+                        Results[ctr].Add(ResultData.IATResults[ctr].IATScore.ToString("F6"));
+                    }
+                    xOffset += CellRects[ctr].Last().Width;
+                    if (ctr == 0)
+                        MaxColWidths[CellRects[ctr].Count - 1] = CellRects[ctr].Last().Width;
+                    else if (CellRects[ctr].Last().Width > MaxColWidths[CellRects[ctr].Count - 1])
+                        MaxColWidths[CellRects[ctr].Count - 1] = CellRects[ctr].Last().Width;
+                    xOffset += RowPadding.Right;
+                    for (int ctr2 = 0; ctr2 < ResultData.Descriptor.AfterSurveys.Count; ctr2++)
+                    {
+                        if (ResultData.Descriptor.AfterSurveys[ctr2].NumItems == 0)
+                            xOffset += LabelColWidth;
+                        else
+                            xOffset += LabelColWidth + RowPadding.Left;
                         for (int ctr3 = 0; ctr3 < ResultData.Descriptor.AfterSurveys[ctr2].NumItems; ctr3++)
-                        {
-                            CellRects[ctr].Add(new Rectangle(new Point(xOffset, 0), TextRenderer.MeasureText(ResultData.IATResults[ctr].AfterSurveys[ctr2][ctr3].Value, ResultFont) + new Size(CellPadding.Horizontal, CellPadding.Vertical)));
-                            xOffset += CellRects[ctr].Last().Width;
-                            if (ctr == 0)
-                                MaxColWidths[CellRects[ctr].Count - 1] = CellRects[ctr].Last().Width;
-                            else if (CellRects[ctr].Last().Width > MaxColWidths[CellRects[ctr].Count - 1])
-                                MaxColWidths[CellRects[ctr].Count - 1] = CellRects[ctr].Last().Width;
-                        }
-                    }
-                    else
-                    {
-                        String elemName = ResultData.Descriptor.AfterSurveys[ctr2].Name;
-                        int boundedCtr = 0;
-                        if (boundedLengthItemNums[elemName].Count == 0)
+                            Results[ctr].Add(ResultData.IATResults[ctr].AfterSurveys[ctr2][ctr3].Value);
+                        if (trimAmount == 0)
                         {
                             for (int ctr3 = 0; ctr3 < ResultData.Descriptor.AfterSurveys[ctr2].NumItems; ctr3++)
                             {
-                                CellRects[ctr].Add(new Rectangle(new Point(xOffset, 0), TextRenderer.MeasureText(ResultData.IATResults[ctr].AfterSurveys[ctr2][ctr3].Value, ResultFont) + new Size(CellPadding.Horizontal, CellPadding.Vertical)));
+                                CellRects[ctr].Add(new Rectangle(new Point(xOffset, 0), new Size((int)g.MeasureString(ResultData.IATResults[ctr].AfterSurveys[ctr2][ctr3].Value, ResultFont).Width + CellPadding.Horizontal,
+                                    (int)g.MeasureString(ResultData.IATResults[ctr].AfterSurveys[ctr2][ctr3].Value, ResultFont).Width + CellPadding.Vertical)));
                                 xOffset += CellRects[ctr].Last().Width;
                                 if (ctr == 0)
                                     MaxColWidths[CellRects[ctr].Count - 1] = CellRects[ctr].Last().Width;
@@ -499,27 +491,49 @@ namespace IATClient
                         }
                         else
                         {
-                            for (int ctr3 = 0; ctr3 < ResultData.Descriptor.AfterSurveys[ctr2].NumItems; ctr3++)
+                            String elemName = ResultData.Descriptor.AfterSurveys[ctr2].Name;
+                            int boundedCtr = 0;
+                            if (boundedLengthItemNums[elemName].Count == 0)
                             {
-                                if (boundedLengthItemNums[elemName][boundedCtr] == ctr3)
-                                    CellRects[ctr].Add(new Rectangle(new Point(xOffset, 0), TextRenderer.MeasureText(ResultData.IATResults[ctr].AfterSurveys[ctr2][ctr3].Value, ResultFont, new Size(this.Width >> 2, 0), TextFormatFlags.WordBreak | TextFormatFlags.TextBoxControl) + new Size(CellPadding.Horizontal, CellPadding.Vertical)));
-                                else
-                                    CellRects[ctr].Add(new Rectangle(new Point(xOffset, 0), TextRenderer.MeasureText(ResultData.IATResults[ctr].AfterSurveys[ctr2][ctr3].Value, ResultFont) + new Size(CellPadding.Horizontal, CellPadding.Vertical)));
-                                xOffset += CellRects[ctr].Last().Width;
-                                if (ctr == 0)
-                                    MaxColWidths[CellRects[ctr].Count - 1] = CellRects[ctr].Last().Width;
-                                else if (CellRects[ctr].Last().Width > MaxColWidths[CellRects[ctr].Count - 1])
-                                    MaxColWidths[CellRects[ctr].Count - 1] = CellRects[ctr].Last().Width;
+                                for (int ctr3 = 0; ctr3 < ResultData.Descriptor.AfterSurveys[ctr2].NumItems; ctr3++)
+                                {
+                                    CellRects[ctr].Add(new Rectangle(new Point(xOffset, 0), new Size((int)g.MeasureString(ResultData.IATResults[ctr].AfterSurveys[ctr2][ctr3].Value, ResultFont).Width + CellPadding.Horizontal,
+                                        (int)g.MeasureString(ResultData.IATResults[ctr].AfterSurveys[ctr2][ctr3].Value, ResultFont).Width + CellPadding.Vertical)));
+                                    xOffset += CellRects[ctr].Last().Width;
+                                    if (ctr == 0)
+                                        MaxColWidths[CellRects[ctr].Count - 1] = CellRects[ctr].Last().Width;
+                                    else if (CellRects[ctr].Last().Width > MaxColWidths[CellRects[ctr].Count - 1])
+                                        MaxColWidths[CellRects[ctr].Count - 1] = CellRects[ctr].Last().Width;
+                                }
+                            }
+                            else
+                            {
+                                for (int ctr3 = 0; ctr3 < ResultData.Descriptor.AfterSurveys[ctr2].NumItems; ctr3++)
+                                {
+                                    if (boundedLengthItemNums[elemName][boundedCtr] == ctr3)
+                                        CellRects[ctr].Add(new Rectangle(new Point(xOffset, 0), new Size((int)g.MeasureString(ResultData.IATResults[ctr].AfterSurveys[ctr2][ctr3].Value, ResultFont,
+                                            new SizeF(this.Width >> 2, 0), strFormat).Width + CellPadding.Horizontal,
+                                            (int)g.MeasureString(ResultData.IATResults[ctr].AfterSurveys[ctr2][ctr3].Value, ResultFont,
+                                            new SizeF(this.Width >> 2, 0), strFormat).Height + CellPadding.Vertical)));
+                                    else
+                                        CellRects[ctr].Add(new Rectangle(new Point(xOffset, 0), new Size((int)g.MeasureString(ResultData.IATResults[ctr].AfterSurveys[ctr2][ctr3].Value, ResultFont).Width + CellPadding.Horizontal,
+                                            (int)g.MeasureString(ResultData.IATResults[ctr].AfterSurveys[ctr2][ctr3].Value, ResultFont).Height + CellPadding.Vertical)));
+                                    xOffset += CellRects[ctr].Last().Width;
+                                    if (ctr == 0)
+                                        MaxColWidths[CellRects[ctr].Count - 1] = CellRects[ctr].Last().Width;
+                                    else if (CellRects[ctr].Last().Width > MaxColWidths[CellRects[ctr].Count - 1])
+                                        MaxColWidths[CellRects[ctr].Count - 1] = CellRects[ctr].Last().Width;
+                                }
                             }
                         }
+                        if (ResultData.Descriptor.AfterSurveys[ctr2].NumItems != 0)
+                            xOffset += RowPadding.Right;
                     }
-                    if (ResultData.Descriptor.AfterSurveys[ctr2].NumItems != 0)
-                        xOffset += RowPadding.Right;
+                    int maxHeight = 0;
+                    for (int ctr4 = 0; ctr4 < CellRects[ctr].Count; ctr4++)
+                        if (CellRects[ctr][ctr4].Height > maxHeight)
+                            maxHeight = CellRects[ctr][ctr4].Height;
                 }
-                int maxHeight = 0;
-                for (int ctr4 = 0; ctr4 < CellRects[ctr].Count; ctr4++)
-                    if (CellRects[ctr][ctr4].Height > maxHeight)
-                        maxHeight = CellRects[ctr][ctr4].Height;
             }
             for (int ctr = 0; ctr < MaxColWidths.Length; ctr++)
             {

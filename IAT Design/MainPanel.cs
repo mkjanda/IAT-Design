@@ -8,7 +8,7 @@ namespace IATClient
 {
     public partial class MainPanel : UserControl
     {
-               public static Size MainPanelSize = new Size(1010, 645);
+        public static Size MainPanelSize = new Size(1010, 645);
         private Panel ContentsPanel = new Panel();
         private Dictionary<IContentsItem, CollapsableTreeButton> ContentsDictionary = new Dictionary<IContentsItem, CollapsableTreeButton>();
         private ImageDisplay PreviewPanel = new ImageDisplay();
@@ -72,9 +72,13 @@ namespace IATClient
             ContentsPanel.AutoScroll = true;
             TestContentsGroup.Controls.Add(ContentsPanel);
 
-            PreviewPanel.BackgroundImageLayout = ImageLayout.Stretch;
-            PreviewGroup.Controls.Add(PreviewPanel);
-            MaxPreviewSize = new Size(PreviewGroup.Size.Width - 6, PreviewGroup.Size.Height - 18);
+            PreviewPanel.BackgroundImageLayout = ImageLayout.Zoom;
+            //            PreviewGroup.Controls.Add(PreviewPanel);
+            PreviewPanel.Size = new Size(500, 500);
+            PreviewPanel.Location = new Point(501, 0);
+            PreviewPanel.AutoScaleDimensions = new SizeF(72F, 72F);
+            PreviewPanel.AutoScaleMode = AutoScaleMode.Dpi;
+            MaxPreviewSize = new Size(PreviewPanel.Width, PreviewPanel.Height);
 
             MessagePanel.Dock = DockStyle.Fill;
             MessagePanel.AutoScroll = true;
@@ -124,12 +128,11 @@ namespace IATClient
             DeleteButton.BackColor = DeleteColor;
             DeleteButton.ForeColor = System.Drawing.Color.Red;
             DeletePanel.Controls.Add(DeleteButton);
-            PreviewPanel.Size = Images.ImageMediaType.FullWindow.ImageSize;
-            PreviewPanel.Location = new Point(3, 15);
             KeyDynamicButton.Enabled = false;
 
-            this.HandleCreated += (sender, args) => {
-     //           this.AutoScaleMode = AutoScaleMode.Inherit;
+            this.HandleCreated += (sender, args) =>
+            {
+                //           this.AutoScaleMode = AutoScaleMode.Inherit;
             };
         }
 
@@ -318,12 +321,13 @@ namespace IATClient
                 if (arPreview > 1)
                 {
                     PreviewPanel.Size = new Size(MaxPreviewSize.Width, (int)(MaxPreviewSize.Height / arPreview));
-                    PreviewPanel.Location = new Point(0, ((PreviewGroup.Height - PreviewPanel.Height) >> 1));
+                    PreviewPanel.Location = new Point(1002, 0);
+                    PreviewPanel.PerformAutoScale();
                 }
                 else
                 {
                     PreviewPanel.Size = new Size((int)(MaxPreviewSize.Width * arPreview), MaxPreviewSize.Height);
-                    PreviewPanel.Location = new Point((PreviewGroup.Width - PreviewPanel.Width) >> 1, 0);
+                    PreviewPanel.Location = new Point(1002 + (PreviewPanel.Width), 0);
                 }
                 return PreviewPanel;
             }
@@ -333,17 +337,19 @@ namespace IATClient
                 if (arPreview > 1)
                 {
                     PreviewPanel.Size = new Size(MaxPreviewSize.Width, (int)(MaxPreviewSize.Height / arPreview));
-                    PreviewPanel.Location = new Point(0, ((PreviewGroup.Height - PreviewPanel.Height) >> 1));
+                    PreviewPanel.Location = new Point(1002, ((0)));
                 }
                 else
                 {
                     PreviewPanel.Size = new Size((int)(MaxPreviewSize.Width * arPreview), MaxPreviewSize.Height);
-                    PreviewPanel.Location = new Point((PreviewGroup.Width - PreviewPanel.Width) >> 1, 0);
+                    PreviewPanel.Location = new Point(1002 + (PreviewPanel.Width), 0);
                 }
             }
             else
-                PreviewPanel.Dock = DockStyle.Fill;
-            PreviewPanel.Controls.Clear();
+            {
+                PreviewPanel.Size = Images.ImageMediaType.FullPreview.ImageSize;
+                PreviewPanel.Location = new Point(501, 0);
+            }
 
             EditPanel.Size = new Size(60, 26);
             EditPanel.Location = new Point((PreviewPanel.Width >> 1) + (EditPanel.Width), (PreviewPanel.Height >> 1) + (EditPanel.Height << 1));

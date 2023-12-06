@@ -105,17 +105,18 @@ namespace IATClient
 
         public MockItemPanel(Size sz, CInstructionBlock b)
         {
+            this.AutoScaleDimensions = new SizeF(72F, 72F);
             this.AutoScaleMode = AutoScaleMode.Dpi;
             InitializeComponent();
             InstructionBlock = b;
 
             // initialize mock item instructions
-            MockItemInstructions = new TextEditControl(InstructionsGroup.ClientRectangle.Height - 18, InstructionsGroup.ClientRectangle.Width - 6,
+            MockItemInstructions = new TextEditControl(InstructionsGroup.ClientRectangle.Height, InstructionsGroup.ClientRectangle.Width - 6,
                 DIText.UsedAs.IatBlockInstructions, false);
-            MockItemInstructions.AutoScaleMode = AutoScaleMode.Dpi;
             MockItemInstructions.Location = MockItemInstructionsLocation;
             MockItemInstructions.Size = MockItemInstructions.CalculatedSize;
             InstructionsGroup.Controls.Add(MockItemInstructions);
+
 
             // initialize text stimulus edit
             MockItemTextStimulus = new TextEditControl(TextStimulusGroup.ClientRectangle.Width - 6, DIText.UsedAs.Stimulus, false);

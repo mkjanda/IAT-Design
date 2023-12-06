@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Drawing;
-using System.Threading;
 using System.Windows.Forms;
 
 namespace IATClient
@@ -12,6 +11,8 @@ namespace IATClient
 
         public ItemSlideThumbnailPanel(EventHandler onClick, Size sz)
         {
+            AutoScaleDimensions = new SizeF(72F, 72F);
+            AutoScaleMode = AutoScaleMode.Dpi;
             Size = sz;
             this.BorderStyle = BorderStyle.FixedSingle;
             BackColor = System.Drawing.Color.White;
@@ -24,11 +25,6 @@ namespace IATClient
             ImageBox.BorderStyle = BorderStyle.None;
             Controls.Add(ImageBox);
             ImageBox.Click += (sender, args) => { onClick(this, args); };
-            this.HandleCreated += (sender, args) =>
-            {
-                this.AutoScaleDimensions = new SizeF(72F, 72F);
-                this.AutoScaleMode = AutoScaleMode.Dpi;
-            };
         }
 
         public void SetBackgroundImage(Image img)

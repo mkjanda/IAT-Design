@@ -20,6 +20,7 @@
             base.Dispose(disposing);
         }
 
+     
         #region Component Designer generated code
 
         /// <summary> 
@@ -121,11 +122,8 @@
             // 
             // KeyInstructionsPanel
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.KeyInstructionsBox);
             this.Name = "KeyInstructionsPanel";
-            this.Size = new System.Drawing.Size(371, 340);
             this.KeyInstructionsBox.ResumeLayout(false);
             this.KeyInstructionsBox.PerformLayout();
             this.ResumeLayout(false);
@@ -133,6 +131,8 @@
         }
 
         #endregion
+
+
 
         private System.Windows.Forms.GroupBox KeyInstructionsBox;
         private System.Windows.Forms.ComboBox ResponseKeyDrop;

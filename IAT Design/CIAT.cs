@@ -62,7 +62,7 @@ namespace IATClient
                         CIAT.SaveFile.Layout = new CIATLayout(CIAT.SaveFile.Layout);
                         CIAT.SaveFile.Layout.Activate();
                     });
-                CIAT.SaveFile.IAT.IsLoading = false;
+              CIAT.SaveFile.IAT.IsLoading = false;
 
 
                         return true;
