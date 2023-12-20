@@ -35,12 +35,15 @@ namespace IATClient
 
         public ResponseKeyDialog()
         {
-            this.AutoScaleMode = AutoScaleMode.Dpi;
             InitializeComponent();
+            this.AutoScaleDimensions = new SizeF(72F, 72F);
+            this.AutoScaleMode = AutoScaleMode.Dpi;
+            this.AutoSize = true;
             responseKeyPanel = new ResponseKeyPanel();
             responseKeyPanel.Location = new Point(0, 0);
+            responseKeyPanel.Size = this.ClientSize - new Size(0, MessageBar.Height);
+            responseKeyPanel.Anchor = AnchorStyles.Left | AnchorStyles.Right | AnchorStyles.Bottom | AnchorStyles.Top;
             Controls.Add(responseKeyPanel);
-            this.ClientSize = responseKeyPanel.Size + new Size(0, MessageBar.Height);
         }
     }
 }

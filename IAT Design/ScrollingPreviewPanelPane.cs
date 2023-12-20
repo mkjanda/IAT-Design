@@ -121,9 +121,8 @@ namespace IATClient
         */
         public ScrollingPreviewPanelPane()
         {
-            AutoScaleDimensions = new SizeF(72F, 72F);
-            AutoScaleMode = AutoScaleMode.Dpi;
             SuspendLayout();
+            //  this.AutoScaleMode = AutoScaleMode.None;
             this.BackColor = CIAT.SaveFile.Layout.BackColor;
             ImageBox.BackgroundImage = DINull.DINull.IImage.Img;
             this.ParentChanged += new EventHandler(ScrollingPreviewPanelPane_ParentChanged);
@@ -131,7 +130,7 @@ namespace IATClient
             this.Controls.Add(ImageBox);
             ImageBox.SizeMode = PictureBoxSizeMode.Zoom;
             ImageBox.BackColor = CIAT.SaveFile.Layout.BackColor;
-            ImageBox.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+            //            ImageBox.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
             ImageBox.Dock = DockStyle.Fill;
             ResumeLayout(false);
         }

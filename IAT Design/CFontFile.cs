@@ -355,8 +355,8 @@ namespace IATClient
             using (Graphics g = Graphics.FromImage(result))
             {
                 Brush br = new SolidBrush(backColor);
-                g.FillRectangle(br, new Rectangle(0, 0, result.Width, result.Height));
-                g.DrawImage(img, 0, 0, new Rectangle(left, top, left + right - left + 1, top + bottom - top + 1), GraphicsUnit.Pixel);
+                g.FillRectangle(br, new Rectangle(0, 0, result.Width + 4, result.Height + 4));
+                g.DrawImage(img, 2, 2, new Rectangle(left, top, left + right - left + 1, top + bottom - top + 1), GraphicsUnit.Pixel);
                 br.Dispose();
             }
             return result;

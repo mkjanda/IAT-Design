@@ -37,6 +37,20 @@ namespace IATClient
 
         private DIText.UsedAs UsedFor;
 
+        public new int Width
+        {
+            get
+            {
+                return base.Width;
+            }
+            set
+            {
+                base.Width = value;
+                TextEdit.Width = value;
+            }
+        }
+
+
         public void StartInternalUpdate()
         {
             bUpdatingInternally = true;
@@ -235,7 +249,7 @@ namespace IATClient
             InitializeComponent();
             TextEdit = new TextBox();
             TextEdit.Location = new Point(0, FontToolStrip.Height);
-            TextEdit.Anchor = AnchorStyles.Top | AnchorStyles.Left;
+            //            TextEdit.Anchor = AnchorStyles.Top | AnchorStyles.Left;
             if (Height < TextEdit.Font.Height + TextEdit.Margin.Vertical + FontToolStrip.Height)
                 Height = TextEdit.Font.Height + TextEdit.Margin.Vertical + FontToolStrip.Height;
             TextEdit.Size = new Size(SetWidth, Height - FontToolStrip.Height);
@@ -254,9 +268,10 @@ namespace IATClient
             FillColorDropList();
             bSenderUpdates = senderUpdates;
             this.Size = new Size(SetWidth, TextEdit.Size.Height + TextEdit.Margin.Vertical + FontToolStrip.Height);
-            FontToolStrip.SizeChanged += (sender, args) =>
+            FontToolStrip.Resize += (sender, args) =>
             {
                 TextEdit.Top = FontToolStrip.Bottom;
+                TextEdit.Width = FontToolStrip.Width;
             };
         }
 

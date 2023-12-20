@@ -143,10 +143,11 @@ namespace IATClient
             // ResponseKeyLabel
             // 
             this.ResponseKeyLabel.AutoSize = true;
-            this.ResponseKeyLabel.Location = new System.Drawing.Point(755, 36);
+            this.ResponseKeyLabel.Location = new System.Drawing.Point(600, 36);
             this.ResponseKeyLabel.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.ResponseKeyLabel.Name = "ResponseKeyLabel";
-            this.ResponseKeyLabel.Size = new System.Drawing.Size(104, 17);
+            this.ResponseKeyLabel.Size = TextRenderer.MeasureText("Response Key:", System.Drawing.SystemFonts.DialogFont);
+            this.ResponseKeyLabel.Anchor = AnchorStyles.Top;
             this.ResponseKeyLabel.TabIndex = 0;
             this.ResponseKeyLabel.Text = "Response Key:";
             // 
@@ -154,7 +155,7 @@ namespace IATClient
             // 
             this.ResponseKeyDrop.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.ResponseKeyDrop.FormattingEnabled = true;
-            this.ResponseKeyDrop.Location = new System.Drawing.Point(868, 32);
+            this.ResponseKeyDrop.Location = new System.Drawing.Point(ResponseKeyLabel.Right + 10, 32);
             this.ResponseKeyDrop.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.ResponseKeyDrop.Name = "ResponseKeyDrop";
             this.ResponseKeyDrop.Size = new System.Drawing.Size(204, 24);
@@ -163,7 +164,7 @@ namespace IATClient
             // 
             // ManageKeys
             // 
-            this.ManageKeys.Location = new System.Drawing.Point(1081, 32);
+            this.ManageKeys.Location = this.ResponseKeyDrop.Location + new Size(ResponseKeyDrop.Width + 10, 0);
             this.ManageKeys.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.ManageKeys.Name = "ManageKeys";
             this.ManageKeys.Size = new System.Drawing.Size(183, 28);
@@ -281,6 +282,13 @@ namespace IATClient
                 InsertStimulus.Enabled = false;
                 DeleteStimulus.Enabled = false;
             }
+            this.Resize += (sender, args) =>
+            {
+                int width = this.ResponseKeyLabel.Width + this.ResponseKeyDrop.Width + this.ManageKeys.Width + 20;
+                this.ResponseKeyLabel.Location = new Point((this.Width - PreviewGroup.Right - width >> 1) + PreviewGroup.Height, this.ResponseKeyLabel.Location.Y);
+                this.ResponseKeyDrop.Location = new Point(this.ResponseKeyLabel.Right + 10, this.ResponseKeyDrop.Top);
+                this.ManageKeys.Location = new Point(this.ResponseKeyDrop.Right + 10, this.ManageKeys.Top);
+            };
             Controls.Add(ScrollingPreview);
             CreateInstructionsEdit();
             AddStimulus.Location = new Point(InstructionsEdit.Right + 10, InstructionsEdit.Top);
@@ -293,7 +301,6 @@ namespace IATClient
             };
             Controls.Remove(DynamicallyKeyedCheck);
             ResumeLayout(true);
-
             this.Enabled = false;
         }
 

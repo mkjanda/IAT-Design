@@ -25,6 +25,19 @@ namespace IATClient
 
     public partial class SimpleResponseKeyPanel : UserControl
     {
+
+        private void InitializeComponent()
+        {
+            // 
+            // SimpleResponseKeyPanel
+            // 
+            this.Name = "SimpleResponseKeyPanel";
+            this.ParentChanged += new System.EventHandler(this.SimpleResponseKeyPanel_ParentChanged);
+            this.ResumeLayout(false);
+
+        }
+
+
         // the text and image response key panels
         private TextEditControl TextPanel;
         private ImageKeyPanel ImagePanel;
@@ -115,78 +128,6 @@ namespace IATClient
             }
         }
 
-        /// <summary>
-        /// Creates a child text panel
-        /// </summary>
-        private void ShowTextPanel()
-        {
-            if (TextPanel == null)
-            {
-                TextPanel = new TextEditControl(TextPanelWidth, DIText.UsedAs.ResponseKey, false)
-                {
-                    Location = TextPanelLocation
-                };
-                TextPanel.Size = TextPanel.CalculatedSize;
-                (CIAT.SaveFile.GetDI(TextPanel.TextDisplayItemUri) as DIResponseKeyText).PreviewPanel = KeyPreview;
-                if (ParentControl != null)
-                    (CIAT.SaveFile.GetDI(TextPanel.TextDisplayItemUri) as DIResponseKeyText).ValidateData = ParentControl.ValidateInput;
-                SimpleResponseKeyGroup.Controls.Add(TextPanel);
-            }
-        }
-
-        /// <summary>
-        /// Crreates a child image panel
-        /// </summary>
-        private void ShowImagePanel()
-        {
-            if (ImagePanel == null)
-            {
-                ImagePanel = new ImageKeyPanel()
-                {
-                    Location = ImagePanelLocation,
-                    Dock = DockStyle.Bottom,
-                    Preview = KeyPreview,
-                };
-                if (Parent != null)
-                    ImagePanel.ValidateData = ParentControl.ValidateInput;
-                SimpleResponseKeyGroup.Controls.Add(ImagePanel);
-            }
-        }
-
-        private void HideTextPanel()
-        {
-            if (TextPanel == null)
-                return;
-            if (SimpleResponseKeyGroup.Controls.Contains(TextPanel))
-            {
-                CIAT.SaveFile.GetDI(TextPanel.TextDisplayItemUri).Dispose();
-                _DisplayItemUri = DINull.DINull.URI;
-                SimpleResponseKeyGroup.Controls.Remove(TextPanel);
-                TextPanel.Dispose();
-                TextPanel = null;
-            }
-        }
-
-        private void HideImagePanel()
-        {
-            if (ImagePanel == null)
-                return;
-            if (SimpleResponseKeyGroup.Controls.Contains(ImagePanel))
-            {
-                CIAT.SaveFile.GetDI(ImagePanel.DisplayItemUri).Dispose();
-                _DisplayItemUri = DINull.DINull.URI;
-                SimpleResponseKeyGroup.Controls.Remove(ImagePanel);
-                ImagePanel.Dispose();
-                ImagePanel = null;
-            }
-        }
-
-
-        /// <summary>
-        /// Validates the data in the control and child controls, setting the error message in the main form
-        /// as appropriate.  Clears the error message in the main form if no errors are present
-        /// </summary>
-        /// <returns>"true" if no errors are present, otherwise "false"</returns>
         public bool ValidateInput()
         {
             if ((!TextRadio.Checked) && (!ImageRadio.Checked))
@@ -298,14 +239,38 @@ namespace IATClient
                         (CIAT.SaveFile.GetDI(TextPanel.TextDisplayItemUri) as DIResponseKeyText).ValidateData = ParentControl.ValidateInput;
                 }
             };
+            TextPanel = new TextEditControl(this.Width - (TextPanelLocation.X << 1), DIText.UsedAs.ResponseKey, false)
+            {
+                Visible = false,
+                Location = TextPanelLocation,
+                Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right | AnchorStyles.Bottom
+            };
+            this.Resize += (sender, args) =>
+            {
+                TextPanel.Width = this.Width;
+            };
+            ImagePanel = new ImageKeyPanel()
+            {
+                Location = TextPanelLocation,
+                Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right | AnchorStyles.Bottom,
+                Visible = false,
+                Size = new Size(SimpleResponseKeyGroup.Width, SimpleResponseKeyGroup.Height - 18),
+                Preview = KeyPreview
+            };
+            SimpleResponseKeyGroup.Controls.Add(ImagePanel);
+            SimpleResponseKeyGroup.Controls.Add(TextPanel);
         }
         private void TextRadio_CheckedChanged(object sender, EventArgs e)
         {
             if (TextRadio.Checked)
             {
-                HideImagePanel();
-                ShowTextPanel();
-                _DisplayItemUri = TextPanel.TextDisplayItemUri;
+                TextPanel.Visible = true;
+                ImagePanel.Visible = false;
+                DIBase di = CIAT.SaveFile.GetDI(DisplayItemUri);
+                if (di.Type == DIType.Null)
+                    KeyPreview.SetImage(di.IImage);
+                else
+                    di.PreviewPanel = KeyPreview;
             }
         }
 
@@ -313,11 +278,13 @@ namespace IATClient
         {
             if (ImageRadio.Checked)
             {
-                HideTextPanel();
-                ShowImagePanel();
-                ImagePanel.DisplayItemUri = _DisplayItemUri;
-                if ((Parent != null) && (_DisplayItemUri != DIBase.DINull.URI))
-                    (CIAT.SaveFile.GetDI(_DisplayItemUri) as DIResponseKeyImage).ValidateData = ParentControl.ValidateInput;
+                TextPanel.Visible = false;
+                ImagePanel.Visible = true;
+                DIBase di = CIAT.SaveFile.GetDI(DisplayItemUri);
+                if (di.Type == DIType.Null)
+                    KeyPreview.SetImage(di.IImage);
+                else
+                    di.PreviewPanel = KeyPreview;
             }
         }
 

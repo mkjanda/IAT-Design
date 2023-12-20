@@ -525,7 +525,6 @@
     <Compile Include="ResponseKeyPanel.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="ResponseKeyPanel.Designer.cs" />
     <Compile Include="ResultData\ResultSetDescriptor.cs" />
     <Compile Include="ResultData\Survey.cs" />
     <Compile Include="ResultData\SurveyItem.cs" />
@@ -586,7 +585,6 @@
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="SimpleResponseKeyPanel.cs" />
-    <Compile Include="SimpleResponseKeyPanel.Designer.cs" />
     <Compile Include="SpecifierPanel.cs" />
     <Compile Include="SpecifyAlterateBlocksDlg.cs">
       <SubType>Form</SubType>
@@ -712,7 +710,6 @@
       <DependentUpon>ActivationExceptionClientInfoForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="ResponseKeyDialog.resx" />
-    <EmbeddedResource Include="ResponseKeyPanel.resx" />
     <EmbeddedResource Include="ResultSaveForm.resx" />
     <EmbeddedResource Include="RetrieveItemSlidesForm.resx" />
     <EmbeddedResource Include="ReverseResponseKeyPanel.resx" />
