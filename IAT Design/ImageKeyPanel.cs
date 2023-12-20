@@ -90,6 +90,7 @@ namespace IATClient
             rki.Description = dialog.FileName;
             rki.LoadImageFromFile(dialog.FileName);
             ImageFileName = dialog.FileName;
+            rki.ScheduleInvalidation();
             ImageUri = rki.URI;
             ValidateData?.Invoke();
         }

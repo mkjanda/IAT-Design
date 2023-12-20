@@ -170,6 +170,8 @@ namespace IATClient
                 return All.Where((val) => val.Name == str).FirstOrDefault();
             }
         }
+
+
         private Font phraseFont = null;
         public Font PhraseFont
         {
@@ -699,7 +701,9 @@ namespace IATClient
                 }
             }
         }
-        public override string PhraseFontFamily { get => base.PhraseFontFamily; set
+        public override string PhraseFontFamily
+        {
+            get => base.PhraseFontFamily; set
             {
                 base.PhraseFontFamily = value;
             }

@@ -31,6 +31,7 @@ namespace IATClient
                 ImageBox.Image = null;
             this.BeginInvoke(new Action(() =>
             {
+
                 ImageBox.Image = image.Img;
                 if (ImageBox.Image == null)
                     return;
