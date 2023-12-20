@@ -766,7 +766,6 @@
     <Content Include="ExcelXslt\[Content Types].xslt">
       <SubType>Designer</SubType>
     </Content>
-    <Content Include="ExcelXslt\_Contents-bobby.xml" />
     <Content Include="ExcelXslt\_Contents.xml" />
     <Content Include="Resources\AddItem.bmp" />
     <Content Include="Resources\AlternateImage0.bmp" />
