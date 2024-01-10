@@ -831,6 +831,7 @@ namespace IATClient
             ApplyButton.Click += new EventHandler(ApplyButton_Click);
             CancelButton.Click += new EventHandler(CancelButton_Click);
             this.WebPageColorDrop.SelectedIndexChanged += new EventHandler(WebPageColorDrop_SelectedIndexChanged);
+            LayoutImagePanel.Anchor = AnchorStyles.Left | AnchorStyles.Right | AnchorStyles.Top | AnchorStyles.Bottom;
         }
 
         private void OKButton_Click(object sender, EventArgs e)

@@ -8,7 +8,7 @@ namespace IATClient
 {
     public abstract class DIImage : DIBase
     {
-        public static readonly int MaxFileSize = 125822912; 
+        public static readonly int MaxFileSize = 125822912;
         public String Description { get; set; } = String.Empty;
 
         private void IImageChanged(Images.ImageChangedEventArgs args)
@@ -53,6 +53,7 @@ namespace IATClient
                 this.IImage.Changed += (evt, img, args) => OnImageEvent(evt, img, args);
                 OnImageEvent(Images.ImageEvent.Updated, IImage, null);
                 ScheduleInvalidation();
+                PreviewPanel?.SetImage(IImage);
                 Description = System.IO.Path.GetFileName(path);
             }
             CIAT.SaveFile.ActivityLog.LogEvent(ActivityLog.EventType.ImageLoad, URI,

@@ -42,7 +42,7 @@ namespace IATClient
         private TextEditControl TextPanel;
         private ImageKeyPanel ImagePanel;
         private static Point TextPanelLocation = new Point(5, 50);
-        private static Point ImagePanelLocation = new Point(5, 40);
+        private static Point ImagePanelLocation = new Point(5, 50);
         private static Point TextRadioLocation = new Point(100, 10);
         private static Point ImageRadioLocation = new Point(155, 10);
         private Label StimulusTypeLabel = new Label();
@@ -100,6 +100,7 @@ namespace IATClient
                     TextRadio.Checked = false;
                     di.PreviewPanel = KeyPreview;
                 }
+                di.ScheduleInvalidation();
                 ResumeLayout(false);
             }
         }
@@ -217,11 +218,11 @@ namespace IATClient
             SimpleResponseKeyGroup.Dock = DockStyle.Fill;
             StimulusTypeLabel.Text = "Stimulus Type: ";
             StimulusTypeLabel.AutoSize = true;
-            StimulusTypeLabel.Location = new Point(20, 25);
-            TextRadio.Location = new Point(StimulusTypeLabel.Right + 20, 25);
+            StimulusTypeLabel.Location = new Point(20, 15);
+            TextRadio.Location = new Point(StimulusTypeLabel.Right + 20, 15);
             TextRadio.Text = "Text";
             TextRadio.AutoSize = true;
-            ImageRadio.Location = new Point(TextRadio.Right + 20, 25);
+            ImageRadio.Location = new Point(TextRadio.Right + 20, 15);
             ImageRadio.Text = "Image";
             ImageRadio.AutoSize = true;
             SimpleResponseKeyGroup.Controls.Add(StimulusTypeLabel);
@@ -239,7 +240,12 @@ namespace IATClient
                         (CIAT.SaveFile.GetDI(TextPanel.TextDisplayItemUri) as DIResponseKeyText).ValidateData = ParentControl.ValidateInput;
                 }
             };
-            TextPanel = new TextEditControl(this.Width - (TextPanelLocation.X << 1), DIText.UsedAs.ResponseKey, false)
+            this.VisibleChanged += (sender, args) =>
+            {
+                TextRadio.Checked = false;
+                ImageRadio.Checked = false;
+            };
+            TextPanel = new TextEditControl(SimpleResponseKeyGroup.Width - (TextPanelLocation.X << 4), DIText.UsedAs.ResponseKey, false)
             {
                 Visible = false,
                 Location = TextPanelLocation,
@@ -247,7 +253,8 @@ namespace IATClient
             };
             this.Resize += (sender, args) =>
             {
-                TextPanel.Width = this.Width;
+                TextPanel.Width = SimpleResponseKeyGroup.Width - (TextPanelLocation.X << 4);
+                ImagePanel.Width = SimpleResponseKeyGroup.Width - (ImagePanelLocation.X << 1);
             };
             ImagePanel = new ImageKeyPanel()
             {
@@ -260,17 +267,32 @@ namespace IATClient
             SimpleResponseKeyGroup.Controls.Add(ImagePanel);
             SimpleResponseKeyGroup.Controls.Add(TextPanel);
         }
+
+        public void Clear()
+        {
+            TextPanel.Visible = false;
+            CIAT.SaveFile.GetDI(TextPanel.TextDisplayItemUri).PreviewPanel = null;
+            TextPanel.TextDisplayItemUri = null;
+            ImagePanel.Visible = false;
+            ImagePanel.Clear();
+        }
+
         private void TextRadio_CheckedChanged(object sender, EventArgs e)
         {
             if (TextRadio.Checked)
             {
                 TextPanel.Visible = true;
-                ImagePanel.Visible = false;
                 DIBase di = CIAT.SaveFile.GetDI(DisplayItemUri);
                 if (di.Type == DIType.Null)
                     KeyPreview.SetImage(di.IImage);
                 else
                     di.PreviewPanel = KeyPreview;
+            }
+            else
+            {
+                TextPanel.Visible = false;
+                CIAT.SaveFile.GetDI(TextPanel.TextDisplayItemUri).PreviewPanel = null;
+                TextPanel.TextDisplayItemUri = null;
             }
         }
 
@@ -278,13 +300,17 @@ namespace IATClient
         {
             if (ImageRadio.Checked)
             {
-                TextPanel.Visible = false;
                 ImagePanel.Visible = true;
                 DIBase di = CIAT.SaveFile.GetDI(DisplayItemUri);
                 if (di.Type == DIType.Null)
                     KeyPreview.SetImage(di.IImage);
                 else
                     di.PreviewPanel = KeyPreview;
+            }
+            else
+            {
+                ImagePanel.Visible = false;
+                ImagePanel.Clear();
             }
         }
 

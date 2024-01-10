@@ -494,18 +494,20 @@
             this.LayoutPreviewGroup.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
                         | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
-            this.LayoutPreviewGroup.AutoSize = true;
+      //      this.LayoutPreviewGroup.AutoSize = true;
             this.LayoutPreviewGroup.Controls.Add(this.LayoutImagePanel);
             this.LayoutPreviewGroup.Location = new System.Drawing.Point(271, 0);
             this.LayoutPreviewGroup.Name = "LayoutPreviewGroup";
-            this.LayoutPreviewGroup.Size = new System.Drawing.Size(521, 506);
+                 this.LayoutPreviewGroup.Size = new System.Drawing.Size(521, 506);
+//            this.LayoutPreviewGroup.Dock = System.Windows.Forms.DockStyle.Fill;
             this.LayoutPreviewGroup.TabIndex = 1;
             this.LayoutPreviewGroup.TabStop = false;
             this.LayoutPreviewGroup.Text = "Click Layout Outline to View Mock Item in Full Size";
             // 
             // LayoutImagePanel
             // 
-            this.LayoutImagePanel.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.Anchor = System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right | System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Bottom;
+    //        this.LayoutImagePanel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.LayoutImagePanel.Location = new System.Drawing.Point(3, 16);
             this.LayoutImagePanel.Name = "LayoutImagePanel";
             this.LayoutImagePanel.Size = new System.Drawing.Size(515, 487);
@@ -514,8 +516,6 @@
             // 
             // LayoutPanel
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoSize = true;
             this.Controls.Add(this.LayoutPreviewGroup);
             this.Controls.Add(this.LayoutGroup);

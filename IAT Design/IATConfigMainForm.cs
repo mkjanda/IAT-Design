@@ -675,8 +675,11 @@ namespace IATClient
         private void ShowLayoutPanel()
         {
             m_LayoutPanel = new LayoutPanel();
-            m_LayoutPanel.Location = new Point(0, HeaderMenu.Height);
-            m_LayoutPanel.Size = this.ClientSize - new Size(0, HeaderMenu.Height + MessageBar.Height);
+            m_LayoutPanel.AutoScaleDimensions = new SizeF(72F, 72F);
+            m_LayoutPanel.AutoScaleMode = AutoScaleMode.Dpi;
+            m_LayoutPanel.Anchor = AnchorStyles.Left | AnchorStyles.Top | AnchorStyles.Right | AnchorStyles.Bottom;
+            m_LayoutPanel.Location = new Point(0, 0);
+            m_LayoutPanel.Size = this.Size - new Size(0, HeaderMenu.Height + MessageBar.Height);
             Controls.Add(m_LayoutPanel);
             CIAT.SaveFile.ActivityLog.LogEvent(ActivityLog.EventType.Open, CIAT.SaveFile.Layout.URI);
         }
@@ -2074,6 +2077,7 @@ namespace IATClient
 
         private void InitializeComponent()
         {
+            this.Font = new Font(SystemFonts.DefaultFont.FontFamily, 10F);
             this.HeaderMenu = new System.Windows.Forms.MenuStrip();
             this.MessageBar = new System.Windows.Forms.StatusStrip();
             this.StatusImage = new System.Windows.Forms.ToolStripStatusLabel();

@@ -49,6 +49,7 @@
             this.FirstCombinedKeyLabel.Size = new System.Drawing.Size(51, 13);
             this.FirstCombinedKeyLabel.TabIndex = 0;
             this.FirstCombinedKeyLabel.Text = "Combine:";
+            this.FirstCombinedKeyLabel.Anchor = System.Windows.Forms.AnchorStyles.Left;
             // 
             // FirstCombinedKey
             // 
@@ -59,6 +60,7 @@
             this.FirstCombinedKey.Size = new System.Drawing.Size(151, 21);
             this.FirstCombinedKey.TabIndex = 1;
             this.FirstCombinedKey.SelectedIndexChanged += new System.EventHandler(this.FirstCombinedKey_SelectedIndexChanged);
+            this.FirstCombinedKey.Anchor = System.Windows.Forms.AnchorStyles.Left;
             // 
             // SecondCombinedKeyLabel
             // 
@@ -68,6 +70,7 @@
             this.SecondCombinedKeyLabel.Size = new System.Drawing.Size(32, 13);
             this.SecondCombinedKeyLabel.TabIndex = 2;
             this.SecondCombinedKeyLabel.Text = "With:";
+            this.SecondCombinedKeyLabel.Anchor = System.Windows.Forms.AnchorStyles.Left;
             // 
             // SecondCombinedKey
             // 
@@ -78,6 +81,7 @@
             this.SecondCombinedKey.Size = new System.Drawing.Size(151, 21);
             this.SecondCombinedKey.TabIndex = 3;
             this.SecondCombinedKey.SelectedIndexChanged += new System.EventHandler(this.SecondCombinedKey_SelectedIndexChanged);
+            this.SecondCombinedKey.Anchor = System.Windows.Forms.AnchorStyles.Left;
             // 
             // ConjunctionGroup
             // 
@@ -87,6 +91,7 @@
             this.ConjunctionGroup.TabIndex = 4;
             this.ConjunctionGroup.TabStop = false;
             this.ConjunctionGroup.Text = "Conjunction";
+            this.ConjunctionGroup.Anchor = System.Windows.Forms.AnchorStyles.Left;
             // 
             // PaddingLabel
             // 
@@ -96,6 +101,7 @@
             this.PaddingLabel.Size = new System.Drawing.Size(152, 13);
             this.PaddingLabel.TabIndex = 6;
             this.PaddingLabel.Text = "Vertical space between stimuli:";
+            this.PaddingLabel.Anchor = System.Windows.Forms.AnchorStyles.Left;
             // 
             // PixelsLabel
             // 
@@ -105,6 +111,7 @@
             this.PixelsLabel.Size = new System.Drawing.Size(33, 13);
             this.PixelsLabel.TabIndex = 7;
             this.PixelsLabel.Text = "pixels";
+            this.PixelsLabel.Anchor = System.Windows.Forms.AnchorStyles.Left;
             // 
             // PaddingEdit
             // 
@@ -112,6 +119,7 @@
             this.PaddingEdit.Name = "PaddingEdit";
             this.PaddingEdit.Size = new System.Drawing.Size(49, 20);
             this.PaddingEdit.TabIndex = 8;
+            this.PaddingEdit.Anchor = System.Windows.Forms.AnchorStyles.Left;
             // 
             // CombinedKeyGroup
             // 

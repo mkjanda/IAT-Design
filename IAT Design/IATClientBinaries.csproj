@@ -564,7 +564,6 @@
     <Compile Include="ReverseResponseKeyPanel.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="ReverseResponseKeyPanel.Designer.cs" />
     <Compile Include="SaveFile.cs" />
     <Compile Include="SaveFileConverter.cs" />
     <Compile Include="SaveSplash.xaml.cs">
