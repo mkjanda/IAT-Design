@@ -323,10 +323,10 @@ namespace IATClient
                 {
                     Nullable<Rectangle> LV1Rect = null, LV2Rect = null, RV1Rect = null, RV2Rect = null;
                     Double arUL, arLL, arUR, arLR, arUpper, arLower, Proportion;
-                    arUL = (ULSize == Size.Empty) ? 0 : ((double)ULSize.Width / (double)ULSize.Height);
-                    arLL = (LLSize == Size.Empty) ? 0 : ((double)LLSize.Width / (double)LLSize.Height);
-                    arUR = (URSize == Size.Empty) ? 0 : ((double)URSize.Width / (double)URSize.Height);
-                    arLR = (LRSize == Size.Empty) ? 0 : ((double)LRSize.Width / (double)LRSize.Height);
+                    arUL = (ULSize == Size.Empty) ? 0 : (double)ULSize.Width / (double)ULSize.Height;
+                    arLL = (LLSize == Size.Empty) ? 0 : (double)LLSize.Width / (double)LLSize.Height;
+                    arUR = (URSize == Size.Empty) ? 0 : (double)URSize.Width / (double)URSize.Height;
+                    arLR = (LRSize == Size.Empty) ? 0 : (double)LRSize.Width / (double)LRSize.Height;
 
                     if ((arUL == 0) && (arUR == 0))
                         arUpper = Double.NaN;
@@ -337,12 +337,12 @@ namespace IATClient
                     else if (!URFixed)
                         arUpper = arUR;
                     else
-                        arUpper = (Math.Abs(arUL - 1) < Math.Abs(arUR - 1)) ? arUL : arUR;
+                        arUpper = (Math.Abs(arUL) < Math.Abs(arUR)) ? arUL : arUR;
 
                     if ((arLL == 0) && (arLR == 0))
                         arLower = Double.NaN;
                     else if (!LLFixed && !LRFixed)
-                        arLower = (Math.Abs(arLL - 1) < Math.Abs(arLR - 1)) ? arLL : arLR;
+                        arLower = (Math.Abs(arLL) < Math.Abs(arLR)) ? arLL : arLR;
                     else if (!LRFixed)
                         arLower = arLL;
                     else if (!LRFixed)
@@ -367,9 +367,80 @@ namespace IATClient
                         }
                         else
                         {
-                            Proportion = Math.Log(arUpper / arLower, bounds.Height * bounds.Width);
-                            int nOffset = (int)((bounds.Height >> 1) * Proportion);
-                            ptConjunction = new Point((bounds.Width - conjunction.AbsoluteBounds.Width) >> 1, ((bounds.Height - conjunction.AbsoluteBounds.Height) >> 1) + nOffset);
+                            Proportion = Math.Log((double)(arUL == arUpper ? arUR : arUL) / (double)(arLL == arLower ? arLR : arLL), (double)bounds.Width * (double)(bounds.Height));
+                            ptConjunction = new Point((bounds.Width - conjunction.AbsoluteBounds.Width) >> 1, (int)((1D + Proportion) * (double)(bounds.Height)));
+                            double arTop = (double)bounds.Width / (ptConjunction.Y - (VertPadding >> 1));
+                            ULSize = new Size((int)(ULSize.Width * (1D + Proportion)), (int)(ULSize.Height * (1D + Proportion)));
+                            URSize = new Size((int)(URSize.Width * (1D + Proportion)), (int)(URSize.Height * (1D + Proportion)));
+                            LLSize = new Size((int)(LLSize.Width * (1D - Proportion)), (int)(LLSize.Height * (1D - Proportion)));
+                            LRSize = new Size((int)(LRSize.Width + (1D - Proportion)), (int)(LRSize.Height * (1D - Proportion)));
+                            //                            if (arTop > (double)ULSize.Width / (double)ULSize.Height),
+
+                            //                              ULSize = new Size(ULSize.Width, )
+                            //                            ULSize.Height = (int)((double)ULSize.Height * (double)ULSize.Width / (double)bounds.Width);
+                            //                          ULSize.Width = bounds.Width;
+                            //                    }
+                            //                  else
+                            //                {
+                            //                  ULSize.Width = (int)((double)ULSize.Width * (double)(ptConjunction.Y - (VertPadding >> 1)) / (double)ULSize.Height);
+                            //                ULSize.Height = (ptConjunction.Y - (VertPadding << 1));
+                            //          }
+                            //                            if (arTop > (double)URSize.Width / (double)URSize.Height)
+                            //                          {
+                            //                            URSize.Height = (int)((double)(URSize.Width * (double)URSize.Height / (double)bounds.Width));
+                            //                          URSize.Width = bounds.Width;
+                            //                    }
+                            //                  else
+                            //                {
+                            //                  URSize.Width = (int)((double)URSize.Width * (double)(ptConjunction.Y - (VertPadding >> 1)) / (double)URSize.Height);
+                            //                URSize.Height = (ptConjunction.Y - (VertPadding >> 1));
+                            //          }
+                            int shortVOffset = Math.Abs(URSize.Height - ULSize.Height) >> 1;
+                            if (ULSize.Height > URSize.Height)
+                            {
+                                LV1Rect = new Rectangle(new Point((bounds.Width - ULSize.Width) >> 1, 0), ULSize);
+                                RV1Rect = new Rectangle(new Point((bounds.Width - URSize.Width) >> 1, shortVOffset), URSize);
+                            }
+                            else
+                            {
+                                LV1Rect = new Rectangle(new Point((bounds.Width - ULSize.Width) >> 1, shortVOffset), ULSize);
+                                RV1Rect = new Rectangle(new Point((bounds.Width - URSize.Width) >> 1, 0), URSize);
+                            }
+                            int btSpace = ptConjunction.Y + conjunction.AbsoluteBounds.Height;
+                            //                            double arBottom = (double)bounds.Width / btSpace;
+                            //                          if (arBottom > (double)LLSize.Width / LLSize.Height)
+                            //                        {
+                            //                          LLSize.Height *= (int)((double)LLSize.Width / (double)bounds.Width);
+                            //                        LLSize.Width = bounds.Width;
+                            //                  }
+                            //                else
+                            //              {
+                            //                LLSize.Width = (int)((double)LLSize.Width * (double)LLSize.Height / (double)btSpace);
+                            //              LLSize.Height = bounds.Height;
+                            //        }
+                            //      if (arBottom > (double)LRSize.Width / LRSize.Height)
+                            //    {
+                            //      LRSize.Height = (int)((double)LRSize.Height * (double)bounds.Width / (double)LRSize.Width);
+                            //    LRSize.Width = bounds.Width;
+                            ///  }
+                            //    else
+                            //  {
+                            ///    LRSize.Width = (int)((double)LRSize.Width * (double)LRSize.Height / (double)btSpace);
+                            //        LRSize.Height = bounds.Height;
+                            //  }
+                            shortVOffset = Math.Abs(LRSize.Height - LLSize.Height) >> 1;
+                            if (LLSize.Height > LRSize.Height)
+                            {
+                                LV2Rect = new Rectangle(new Point((bounds.Width - LLSize.Width) >> 1, btSpace), LLSize);
+                                RV2Rect = new Rectangle(new Point((bounds.Width - LRSize.Width) >> 1, shortVOffset + btSpace), LRSize);
+                            }
+                            else
+                            {
+                                LV2Rect = new Rectangle(new Point((bounds.Width - LLSize.Width) >> 1, shortVOffset + btSpace), LLSize);
+                                RV2Rect = new Rectangle(new Point((bounds.Width - LRSize.Width) >> 1, btSpace), LRSize);
+                            }
+
+
                         }
                     }
                     else if (!ULFixed && !LLFixed && !URFixed)
@@ -444,7 +515,7 @@ namespace IATClient
                         if (ptConjunction.Y - VertPadding < ULSize.Height)
                             ptConjunction.Y = ULSize.Height + VertPadding;
                     }
-                    else if (!ULFixed && !URFixed)
+                    else if (!ULFixed && !URFixed && LRFixed && LLFixed)
                     {
                         int bottomHeight = Math.Max(LLSize.Height, LRSize.Height);
                         ptConjunction = new Point((bounds.Width - conjunction.AbsoluteBounds.Width) >> 1, bounds.Height - (VertPadding + bottomHeight));
@@ -502,7 +573,7 @@ namespace IATClient
                         */
 
                     }
-                    else if (!LLFixed && !LRFixed)
+                    else if (!LLFixed && !LRFixed && URFixed && ULFixed)
                     {
                         ptConjunction = new Point((bounds.Width - conjunction.AbsoluteBounds.Width) >> 1, Math.Max(ULSize.Height + VertPadding, URSize.Height + VertPadding));
                         int llrHeight = bounds.Height - ptConjunction.Y - VertPadding - conjunction.AbsoluteBounds.Height;
@@ -735,6 +806,7 @@ namespace IATClient
                     if (Key2Uri != null)
                         RightValue[LR.URI] = RV2Rect;
                     RightValue[ConjunctionUri] = ConjunctionRect;
+                    /*
                     try
                     {
                         ValidationLock validationLock = new ValidationLock(new DIBase[] { UL as DIBase, UR as DIBase, LL as DIBase,
@@ -766,8 +838,9 @@ namespace IATClient
                     }
                     finally
                     {
-                        LayoutBusy.Set();
-                    }
+                      
+                    } */
+                    LayoutBusy.Set();
                 }
 
             }

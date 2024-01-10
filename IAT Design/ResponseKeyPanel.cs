@@ -9,6 +9,8 @@ namespace IATClient
 
         private void InitializeComponent()
         {
+            this.AutoScaleDimensions = new SizeF(72F, 72F);
+            this.AutoScaleMode = AutoScaleMode.Dpi;
             this.CreateResponseKeyButton = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
             this.ModifyResponseKeyCombo = new System.Windows.Forms.ComboBox();
@@ -82,6 +84,7 @@ namespace IATClient
             this.ReversedRadio.Text = "Reversed Response Key";
             this.ReversedRadio.UseVisualStyleBackColor = true;
             this.ReversedRadio.CheckedChanged += new System.EventHandler(this.ReversedRadio_CheckedChanged);
+            this.ReversedRadio.Enabled = true;
             // 
             // CombinedRadio
             // 
@@ -194,8 +197,6 @@ namespace IATClient
             // 
             // ResponseKeyPanel
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.RightKeyBox);
             this.Controls.Add(this.LeftKeyGroup);
             this.Controls.Add(this.InstructionsGroup);
@@ -205,8 +206,9 @@ namespace IATClient
             this.Controls.Add(this.ModifyResponseKeyCombo);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.CreateResponseKeyButton);
+            this.Font = new Font(SystemFonts.DefaultFont.FontFamily, 10F);
+            this.Dock = DockStyle.Fill;
             this.Name = "ResponseKeyPanel";
-            this.Size = new System.Drawing.Size(787, 505);
             this.Load += new System.EventHandler(this.ResponseKeyPanel_Load);
             this.ParentChanged += new System.EventHandler(this.ResponseKeyPanel_ParentChanged);
             this.ResponseKeyGroup.ResumeLayout(false);
@@ -238,13 +240,13 @@ namespace IATClient
 
         // size and location values for the control and child controls
         static public Size ResponseKeyPanelSize = new Size(794, 574);
-        static public Size SimpleResponseKeyPanelSize = new Size(615, 155);
-        static public Point LeftSimpleResponseKeyPanelLocation = new Point(75, 260);
-        static public Point RightSimpleResponseKeyPanelLocation = new Point(75, 425);
-        static public Size ReverseResponseKeyPanelSize = new Size(415, 61);
-        static public Point ReverseResponseKeyPanelLocation = new Point(85, 220);
-        static public Size CombinedResponseKeyPanelSize = new Size(420, 158);
-        static public Point CombinedResponseKeyPanelLocation = new Point(60, 220);
+        static public Size SimpleResponseKeyPanelSize = new Size(415, 135);
+        static public Point LeftSimpleResponseKeyPanelLocation = new Point(75, 240);
+        static public Point RightSimpleResponseKeyPanelLocation = new Point(75, 395);
+        static public Size ReverseResponseKeyPanelSize = new Size(615, 81);
+        static public Point ReverseResponseKeyPanelLocation = new Point(85, 260);
+        static public Size CombinedResponseKeyPanelSize = new Size(615, 260);
+        static public Point CombinedResponseKeyPanelLocation = new Point(95, 260);
 
         // child panels
         protected SimpleResponseKeyPanel LeftSimplePanel, RightSimplePanel;
@@ -401,7 +403,8 @@ namespace IATClient
             {
                 Location = new Point(2, 15),
                 Margin = new Padding(2, 2, 2, 2),
-                Size = Images.ImageMediaType.ResponseKeyPreview.ImageSize,
+                //                Size = Images.ImageMediaType.ResponseKeyPreview.ImageSize,
+                Dock = DockStyle.Fill,
                 TabIndex = 0,
                 TabStop = false,
                 BackColor = CIAT.SaveFile.Layout.BackColor,
@@ -412,7 +415,8 @@ namespace IATClient
             {
                 Location = new Point(2, 15),
                 Margin = new Padding(2, 2, 2, 2),
-                Size = Images.ImageMediaType.ResponseKeyPreview.ImageSize,
+                //                Size = Images.ImageMediaType.ResponseKeyPreview.ImageSize,
+                Dock = DockStyle.Fill,
                 TabIndex = 0,
                 TabStop = false,
                 BackColor = CIAT.SaveFile.Layout.BackColor,
@@ -427,7 +431,7 @@ namespace IATClient
                 Size = SimpleResponseKeyPanelSize,
                 DisplayItemUri = DIBase.DINull.URI,
                 Visible = false,
-                Anchor = AnchorStyles.Left | AnchorStyles.Bottom
+                Anchor = AnchorStyles.Left | AnchorStyles.Top
             };
             Controls.Add(LeftSimplePanel);
             RightSimplePanel = new SimpleResponseKeyPanel(ResponseKeySide.Right, RightPreviewPane)
@@ -436,7 +440,7 @@ namespace IATClient
                 Size = SimpleResponseKeyPanelSize,
                 DisplayItemUri = DIBase.DINull.URI,
                 Visible = false,
-                Anchor = AnchorStyles.Left | AnchorStyles.Bottom
+                Anchor = AnchorStyles.Left | AnchorStyles.Top
             };
             Controls.Add(RightSimplePanel);
             ReversePanel = new ReverseResponseKeyPanel(LeftPreviewPane, RightPreviewPane)
@@ -444,7 +448,7 @@ namespace IATClient
                 Size = ReverseResponseKeyPanelSize,
                 Location = ReverseResponseKeyPanelLocation,
                 Visible = false,
-                Anchor = AnchorStyles.Left | AnchorStyles.Bottom
+                Anchor = AnchorStyles.Left | AnchorStyles.Top
             };
             Controls.Add(ReversePanel);
             CombinedPanel = new CombinedResponseKeyPanel(LeftPreviewPane, RightPreviewPane)
@@ -453,25 +457,12 @@ namespace IATClient
                 Location = CombinedResponseKeyPanelLocation,
                 ConjunctionUri = (ModifyResponseKeyCombo.SelectedItem == null) ? new DIConjunction().URI : (ModifyResponseKeyCombo.SelectedItem as CIATDualKey).ConjunctionUri,
                 Visible = false,
-                Anchor = AnchorStyles.Left | AnchorStyles.Bottom
+                Anchor = AnchorStyles.Left
             };
-            CombinedRadio.Enabled = false;
-            ReversedRadio.Enabled = false;
             Controls.Add(CombinedPanel);
             PerformLayout();
         }
 
-        protected void HideKeyPanels()
-        {
-            if (Controls.Contains(LeftSimplePanel))
-                Controls.Remove(LeftSimplePanel);
-            if (Controls.Contains(RightSimplePanel))
-                Controls.Remove(RightSimplePanel);
-            if (Controls.Contains(ReversePanel))
-                Controls.Remove(ReversePanel);
-            if (Controls.Contains(CombinedPanel))
-                Controls.Remove(CombinedPanel);
-        }
 
         /// <summary>
         /// populates the list of response keys that can be modified
@@ -490,7 +481,7 @@ namespace IATClient
             if (Parent != null)
             {
                 // perform initialization prior to displaying the panel
-                ResponseKeyName.Enabled = false;
+                ResponseKeyName.Enabled = true;
                 PopulateResponseKeyList();
                 ResponseKeyGroup.Enabled = false;
             }
@@ -508,9 +499,9 @@ namespace IATClient
             if (SimpleRadio.Checked)
             {
                 LeftSimplePanel.DisplayItemUri = (ModifyResponseKeyCombo.SelectedIndex == -1) ? DIBase.DINull.URI :
-                    ((ModifyResponseKeyCombo.SelectedItem as CIATKey).LeftValue.Clone() as DIBase).URI;
+                    ((ModifyResponseKeyCombo.SelectedItem as CIATKey).LeftValue as DIBase).URI;
                 RightSimplePanel.DisplayItemUri = (ModifyResponseKeyCombo.SelectedIndex == -1) ? DIBase.DINull.URI :
-                    ((ModifyResponseKeyCombo.SelectedItem as CIATKey).RightValue.Clone() as DIBase).URI;
+                    ((ModifyResponseKeyCombo.SelectedItem as CIATKey).RightValue as DIBase).URI;
                 if (CIAT.SaveFile.GetDI(LeftSimplePanel.DisplayItemUri).Type == DIType.ResponseKeyText)
                     (CIAT.SaveFile.GetDI(LeftSimplePanel.DisplayItemUri) as DIResponseKeyText).ResumeLayout(true);
                 if (CIAT.SaveFile.GetDI(RightSimplePanel.DisplayItemUri).Type == DIType.ResponseKeyText)
@@ -528,6 +519,8 @@ namespace IATClient
             {
                 LeftSimplePanel.Visible = false;
                 RightSimplePanel.Visible = false;
+                LeftSimplePanel.Clear();
+                RightSimplePanel.Clear();
                 ResponseKeyName.Text = String.Empty;
             }
         }
@@ -544,6 +537,7 @@ namespace IATClient
             else
             {
                 ReversePanel.Visible = false;
+                ReversePanel.Clear();
             }
         }
 
@@ -564,20 +558,20 @@ namespace IATClient
             else
             {
                 CombinedPanel.Visible = false;
+                CombinedPanel.Clear();
             }
         }
 
         private void CreateResponseKeyButton_Click(object sender, EventArgs e)
         {
-            ResponseKeyName.Enabled = true;
+            ResponseKeyGroup.Enabled = true;
             ResponseKeyName.Text = String.Empty;
             ModifyResponseKeyCombo.SelectedIndex = -1;
-            SimpleRadio.Enabled = true;
-            CombinedRadio.Enabled = true;
-            ReversedRadio.Enabled = true;
-            SimpleRadio.Checked = false;
+            SimpleRadio.Checked = true;
             CombinedRadio.Checked = false;
+            CombinedRadio.Enabled = false;
             ReversedRadio.Checked = false;
+            ReversedRadio.Enabled = false;
             ResponseKeyGroup.Enabled = true;
             LeftPreviewPane.SetImage(DINull.DINull.IImage);
             RightPreviewPane.SetImage(DINull.DINull.IImage);
@@ -589,19 +583,28 @@ namespace IATClient
             if (ModifyResponseKeyCombo.SelectedIndex == -1)
                 return;
             SuspendLayout();
-            ResponseKeyName.Enabled = false;
-            ResponseKeyGroup.Enabled = true;
+            ResponseKeyGroup.Enabled = false;
             SimpleRadio.Checked = false;
             ReversedRadio.Checked = false;
             CombinedRadio.Checked = false;
             CIATKey key = (ModifyResponseKeyCombo.SelectedItem) as CIATKey;
             ResponseKeyName.Text = key.Name;
             if (key.KeyType == IATKeyType.SimpleKey)
+            {
                 SimpleRadio.Checked = true;
+            }
             if (key.KeyType == IATKeyType.ReversedKey)
+            {
                 ReversedRadio.Checked = true;
+                ReversePanel.BaseKeyUri = key.URI;
+            }
             if (key.KeyType == IATKeyType.DualKey)
+            {
                 CombinedRadio.Checked = true;
+                CombinedPanel.BaseKey1Uri = (key as CIATDualKey).BaseKey1Uri;
+                CombinedPanel.BaseKey2Uri = (key as CIATDualKey).BaseKey2Uri;
+                CombinedPanel.ConjunctionUri = (key as CIATDualKey).ConjunctionUri;
+            }
             SimpleRadio.Enabled = false;
             ReversedRadio.Enabled = false;
             CombinedRadio.Enabled = false;
@@ -637,12 +640,12 @@ namespace IATClient
                 {
                     simpleKey.LeftValueUri = (CIAT.SaveFile.GetDI(LeftSimplePanel.DisplayItemUri).Clone() as DIBase).URI;
                     simpleKey.RightValueUri = (CIAT.SaveFile.GetDI(RightSimplePanel.DisplayItemUri).Clone() as DIBase).URI;
-                    simpleKey.LeftValue.PreviewPanel = null;
-                    simpleKey.RightValue.PreviewPanel = null;
                     simpleKey.InvalidateBlockPreviews();
                     simpleKey.ValueChanged();
                 }
                 simpleKey.Save();
+                simpleKey.LeftValue.PreviewPanel = null;
+                simpleKey.RightValue.PreviewPanel = null;
                 if (simpleKey.LeftValue.Type == DIType.ResponseKeyText)
                     (simpleKey.LeftValue as DIResponseKeyText).SuspendLayout();
                 if (simpleKey.RightValue.Type == DIType.ResponseKeyText)
@@ -692,6 +695,8 @@ namespace IATClient
             ResponseKeyName.Enabled = true;
             ResponseKeyName.Text = String.Empty;
             ModifyResponseKeyCombo.SelectedIndex = -1;
+            LeftPreviewPane.SetImage(DINull.DINull.IImage);
+            RightPreviewPane.SetImage(DINull.DINull.IImage);
             SimpleRadio.Checked = false;
             ReversedRadio.Checked = false;
             CombinedRadio.Checked = false;

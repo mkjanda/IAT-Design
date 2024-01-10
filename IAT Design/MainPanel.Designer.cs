@@ -30,6 +30,7 @@ namespace IATClient
         /// </summary>
         private void InitializeComponent()
         {
+            this.Font = new Font(SystemFonts.DefaultFont.FontFamily, 10F);
             this.AddIATBlockButton = new System.Windows.Forms.Button();
             this.AddInstructionBlockButton = new System.Windows.Forms.Button();
             this.AddPreSurveyButton = new System.Windows.Forms.Button();
@@ -52,6 +53,7 @@ namespace IATClient
             this.AddIATBlockButton.TabIndex = 2;
             this.AddIATBlockButton.Text = "Add IAT Block";
             this.AddIATBlockButton.UseVisualStyleBackColor = true;
+//            this.AddIATBlockButton.Font = new Font(System.Drawing.SystemFonts.DefaultFont.FontFamily, 10F); 
             this.AddIATBlockButton.Click += new System.EventHandler(this.AddIATBlockButton_Click);
             // 
             // AddInstructionBlockButton

@@ -190,9 +190,9 @@ namespace IATClient.Images
             {
                 double arPreview = (double)CIAT.SaveFile.Layout.KeyValueSize.Width / (double)CIAT.SaveFile.Layout.KeyValueSize.Height;
                 if (arPreview > 1)
-                    return new Size(150, (int)(150 / arPreview));
+                    return new Size(200, (int)(200 / arPreview));
                 else
-                    return new Size((int)(100 * arPreview), 100);
+                    return new Size((int)(200 * arPreview), 200);
 
             },
             DITypes = new DIType[] { }

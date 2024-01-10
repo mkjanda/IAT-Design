@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Threading;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace IATClient
@@ -23,80 +25,45 @@ namespace IATClient
                 this.BeginInvoke(new Action(() => ImageBox.Image = DINull.DINull.IImage.Img));
         }
 
+        private readonly ManualResetEvent queued = new ManualResetEvent(true), release = new ManualResetEvent(true);
+        private readonly object Queued = new object(), Ready = new object(), Empty = new object();
+        private object QueueState;
         public virtual void SetImage(Images.IImageMedia image)
         {
             if (!IsHandleCreated)
                 return;
             if (image == null)
                 ImageBox.Image = null;
-            this.BeginInvoke(new Action(() =>
+            Task.Run(() =>
             {
+                if (QueueState == Queued)
+                    release.Set();
+                var t = new Task(() =>
+                {
+                    if (IsHandleCreated)
+                        ImageBox.BeginInvoke(new Action(() =>
+                        {
+                            var i = ImageBox.Image;
+                            if (i != null)
+                                CIAT.ImageManager.ReleaseImage(i);
+                            ImageBox.BackColor = CIAT.SaveFile.Layout.BackColor;
+                            ImageBox.Image = image.Img;
+                            queued.Set();
+                        }));
+                    else
+                        this.HandleCreated += (sender, args) => ImageBox.BeginInvoke(new Action(() =>
+                        {
+                            var i = ImageBox.Image;
+                            if (i != null)
+                                CIAT.ImageManager.ReleaseImage(i);
+                            ImageBox.BackColor = CIAT.SaveFile.Layout.BackColor;
+                            ImageBox.Image = image.Img;
+                            queued.Set();
+                        }));
+                });
 
-                ImageBox.Image = image.Img;
-                if (ImageBox.Image == null)
-                    return;
-                /*                                double arIS = (double)CIAT.SaveFile.Layout.InteriorSize.Width / CIAT.SaveFile.Layout.InteriorSize.Height;
-                                                double arImg = (double)ImageBox.Image.Width / ImageBox.Image.Height;
-                                                int w, h;
-                                                Point pt;
-                                                if (arImg < arIS)
-                                                {
-                                                    w = ImageBox.Image.Width;
-                                                    h = ImageBox.Image.Height / (int)arImg;
-                                                    pt = new Point(0, ImageBox.Image.Height - h >> 1);
-                                                }
-                                                else
-                                                {
-                                                    w = ImageBox.Image.Width * (int)arImg;
-                                                    h = ImageBox.Image.Height;
-                                                    pt = new Point(ImageBox.Image.Width - w >> 1, 0);
-                                                }
-                                                this.Width = w;
-                                                this.Height = h;
-                                                this.Location = pt;*/
-            }));
-            /*                        System.Drawing.Image img = null;
-                                    if (image != null) 
-                                         img = ScalePreview(image.Img);
-                                    //img = image.Img;
-                                    EventHandler setImage;
-                                    if (img == null)
-                                        setIm
-                                    {
-                                        ImageBox.SuspendLayout();
-                                        Image i = ImageBox.Image;
-                                        ImageBox.BackColor = CIAT.SaveFile.Layout.BackColor;
-                                        if (i != null)
-                                        {
-                                            ImageBox.Image = null;
-                                            CIAT.ImageManager.ReleaseImage(i);
-                                        }
-                                        ImageBox.ResumeLayout(false);
-                                        return;
-                                    }*/
-            EventHandler setImage = new EventHandler((sender, args) =>
-            {
-                try
-                {
-                    var i = ImageBox.Image;
-                    SuspendLayout();
-                    ImageBox.BackColor = CIAT.SaveFile.Layout.BackColor;
-                    if (i != null)
-                    {
-                        CIAT.ImageManager.ReleaseImage(i);
-                    }
-                    ImageBox.Image = image.Img;
-                    ResumeLayout(true);
-                }
-                catch (Exception ex)
-                {
-                    ErrorReporter.ReportError(new CReportableException("Error updating preview", ex));
-                }
+                t.RunSynchronously();
             });
-            if (!IsHandleCreated)
-                this.HandleCreated += (s, a) => setImage(s, a);
-            else
-                this.BeginInvoke(setImage);
         }
 
         public ImageDisplay()
@@ -104,6 +71,7 @@ namespace IATClient
             ImageBox.SizeMode = PictureBoxSizeMode.Zoom;
             ImageBox.BackColor = CIAT.SaveFile.Layout.BackColor;
             ImageBox.Dock = DockStyle.Fill;
+            QueueState = Empty;
             base.Controls.Add(ImageBox);
         }
 

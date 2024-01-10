@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Drawing;
 using System.IO;
-using System.Runtime.CompilerServices;
 using System.Windows.Forms;
 
 namespace IATClient
@@ -109,7 +108,7 @@ namespace IATClient
             ParentBlockUri = parentBlockUri;
             InitializeComponent();
             StimulusText = new TextEditControl(this.Width - 16, DIText.UsedAs.Stimulus, true);
-            StimulusText.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right; 
+            StimulusText.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
             StimulusText.Location = new Point(8, KeyedGroup.Bottom + 16);
             StimulusGroup.Controls.Add(StimulusText);
         }
@@ -173,7 +172,6 @@ namespace IATClient
                 DefinedItem.GetPreview(ParentBlockUri).ScheduleInvalidation();
             }
         }
-
 
         private void StimulusDefinitionPanel_Load(object sender, EventArgs e)
         {

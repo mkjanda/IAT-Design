@@ -12,7 +12,7 @@ namespace IATClient
         private Uri RightKeyValueUri { get; set; } = null;
         private CDualKeyLayout KeyLayout;
         private const int ConjunctionEditWidth = 375;
-        private static Point ConjunctionEditLocation = new Point(3, 16);
+        private static Point ConjunctionEditLocation = new Point(3, 18);
 
         private ResponseKeyDialog MainForm
         {
@@ -138,14 +138,8 @@ namespace IATClient
             }
         }
 
-        static public void LayoutDisplayItems(DIDualKey diLeftKey, DIDualKey diRightKey, Uri key1Uri, Uri key2Uri)
-        {
-        }
-
-
         public CombinedResponseKeyPanel(IImageDisplay leftPreview, IImageDisplay rightPreview)
         {
-            this.AutoScaleMode = AutoScaleMode.Dpi;
             InitializeComponent();
             ConjunctionEdit = new TextEditControl(ConjunctionEditWidth, DIText.UsedAs.Conjunction, true)
             {
@@ -168,12 +162,19 @@ namespace IATClient
             RightKeyValueUri = new DIDualKey().URI;
             LeftValue.PreviewPanel = leftPreview;
             RightValue.PreviewPanel = rightPreview;
-            PopulateKeyDrops();
-            if (CIAT.SaveFile.IAT.Is7Block)
+            this.FirstCombinedKey.DropDown += (sender, args) => PopulateKeyDrop1();
+            SecondCombinedKey.DropDown += (sender, args) => PopulateKeyDrop2();
+            //            if (CIAT.SaveFile.IAT.Is7Block)
+            ///          {
+            //           FirstCombinedKey.Enabled = false;
+            //         SecondCombinedKey.Enabled = false;
+            //   }
+            ConjunctionGroup.Resize += (sender, args) =>
             {
-                FirstCombinedKey.Enabled = false;
-                SecondCombinedKey.Enabled = false;
-            }
+                ConjunctionEdit.Width = (int)(ConjunctionEdit.Width * 1.4);
+            };
+            PopulateKeyDrop1();
+            PopulateKeyDrop2();
         }
 
         /// <summary>
@@ -225,10 +226,9 @@ namespace IATClient
         /// <summary>
         /// populates the drop-down lists of keys that can be combined into a conjoined response key
         /// </summary>
-        private void PopulateKeyDrops()
+        private void PopulateKeyDrop1()
         {
             FirstCombinedKey.Items.Clear();
-            SecondCombinedKey.Items.Clear();
             IEnumerable<Uri> keyUris = CIAT.SaveFile.GetAllIATKeyUris();
             foreach (Uri u in keyUris)
             {
@@ -236,21 +236,42 @@ namespace IATClient
                 if ((key.KeyType == IATKeyType.SimpleKey) || (key.KeyType == IATKeyType.ReversedKey))
                 {
                     FirstCombinedKey.Items.Add(key);
+                }
+            }
+        }
+
+        public void Clear()
+        {
+            FirstCombinedKey.SelectedItem = null;
+            SecondCombinedKey.SelectedItem = null;
+            ConjunctionEdit.TextDisplayItemUri = null;
+        }
+
+        private void PopulateKeyDrop2()
+        {
+            SecondCombinedKey.Items.Clear();
+            IEnumerable<Uri> keyUris = CIAT.SaveFile.GetAllIATKeyUris();
+            foreach (Uri u in keyUris)
+            {
+                CIATKey key = CIAT.SaveFile.GetIATKey(u);
+                if ((key.KeyType == IATKeyType.SimpleKey) || (key.KeyType == IATKeyType.ReversedKey))
+                {
                     SecondCombinedKey.Items.Add(key);
                 }
             }
+
         }
 
 
         private void FirstCombinedKey_SelectedIndexChanged(object sender, EventArgs e)
         {
-            BaseKey1Uri = (FirstCombinedKey.SelectedItem as CIATKey).URI;
+            BaseKey1Uri = (FirstCombinedKey.SelectedItem as CIATKey)?.URI;
             ValidateInput();
         }
 
         private void SecondCombinedKey_SelectedIndexChanged(object sender, EventArgs e)
         {
-            BaseKey2Uri = (SecondCombinedKey.SelectedItem as CIATKey).URI;
+            BaseKey2Uri = (SecondCombinedKey.SelectedItem as CIATKey)?.URI;
             ValidateInput();
         }
 
