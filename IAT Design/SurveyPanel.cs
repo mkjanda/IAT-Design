@@ -264,20 +264,16 @@ namespace IATClient
             SuspendLayout();
             foreach (Control c in SurveyControls)
                 Controls.Remove(c);
-            if (TextFormatPanel == null)
-            {
-                TextFormatPanel = new SurveyTextFormatPanel(e.Display.ItemType);
-            }
-            else
-            {
-                TextFormatPanel.ItemType = e.Display.ItemType;
-            }
+            TextFormatPanel = new SurveyTextFormatPanel(e.Display.ItemType);
+            TextFormatPanel.AutoScaleDimensions = new SizeF(72F, 72F);
+            TextFormatPanel.AutoScaleMode = AutoScaleMode.Dpi;
             if (QuestionBeingFormatted != null)
                 QuestionBeingFormatted.EndSurveyItemTextFormat();
             QuestionBeingFormatted = e.Display;
             TextFormatPanel.OnDone += (s, args) =>
             {
                 Controls.Remove(TextFormatPanel);
+                TextFormatPanel.Dispose();
                 Controls.AddRange(SurveyControls);
                 QuestionBeingFormatted.EndSurveyItemTextFormat();
                 this.Invalidate();

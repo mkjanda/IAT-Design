@@ -1,17 +1,16 @@
-﻿using System;
+﻿using Saxon.Api;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Xml;
 using System.Xml.Linq;
-using System.Net;
-using Saxon.Api;
-using IATClient.IATConfig;
 
 namespace IATClient
 {
@@ -275,7 +274,7 @@ namespace IATClient
             }
             else
                 Index = Convert.ToInt32(xDoc.Root.Attribute("Index").Value);
-//            _IndexInContents = Convert.ToInt32(xDoc.Root.Attribute("IndexInContents").Value);
+            //            _IndexInContents = Convert.ToInt32(xDoc.Root.Attribute("IndexInContents").Value);
             Ordinality = (CSurvey.EOrdinality)Enum.Parse(typeof(CSurvey.EOrdinality), xDoc.Root.Attribute("Ordinality").Value);
             Timeout = Convert.ToDecimal(xDoc.Root.Attribute("Timeout").Value.ToString());
             if (CVersion.Compare(CIAT.SaveFile.Version, new CVersion("1.1.0.14")) >= 0)
@@ -449,10 +448,6 @@ namespace IATClient
             {
                 SurveyPreview.Size = new Size((SurveyPreview.Document.Body.ScrollRectangle.Height > preview.Height) ? (preview.Width - scrollWidth) : preview.Width,
                     (SurveyPreview.Document.Body.ScrollRectangle.Height < preview.Height) ? preview.Height : (SurveyPreview.Document.Body.ScrollRectangle.Height));
-                preview.AutoScroll = true;
-                preview.HorizontalScroll.Enabled = false;
-                preview.HorizontalScroll.Visible = false;
-                SurveyPreview.ScrollBarsEnabled = false;
             };
             SurveyPreview.DocumentText = SurveyPreviewHTML;
         }

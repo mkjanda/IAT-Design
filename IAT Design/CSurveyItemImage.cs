@@ -64,7 +64,10 @@ namespace IATClient
         {
             SurveyImageDisplay p = new SurveyImageDisplay();
             double ar = (double)SurveyImage.IImage.Size.Width / (double)SurveyImage.IImage.Size.Height;
-            p.Size = new Size(width - new Padding(25).Horizontal, (int)((width - new Padding(25).Horizontal)/ ar));
+            if (ar < 1)
+                p.Size = new Size(width - new Padding(25).Horizontal, (int)((width - new Padding(25).Horizontal) / ar));
+            else
+                p.Size = new Size((int)((width - new Padding(25).Horizontal)), (int)((width - new Padding(25).Horizontal) / ar));
             p.BackColor = backColor;
             p.ForeColor = foreColor;
             p.Tag = this;

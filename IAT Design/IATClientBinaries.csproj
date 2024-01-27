@@ -626,7 +626,7 @@
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="SurveyTextFormatPanel.cs">
-      <SubType>Component</SubType>
+      <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="TextDefinition.cs" />
     <Compile Include="TextEditControl.cs">

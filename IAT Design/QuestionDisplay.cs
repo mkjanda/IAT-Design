@@ -54,14 +54,14 @@ namespace IATClient
                 if (_Format == null)
                 {
                     _Format = new SurveyItemFormat(SurveyItemFormat.EFor.Item);
-                    DisplayFont = new Font(_Format.FontFamily, _Format.FontSizeAsPixels, _Format.FontStyle);
+                    DisplayFont = _Format.Font;
                 }
                 return _Format;
             }
             protected set
             {
                 _Format = value;
-                DisplayFont = new Font(_Format.FontFamily, _Format.FontSizeAsPixels, _Format.FontStyle);
+                DisplayFont = _Format.Font;
             }
         }
 
@@ -106,7 +106,7 @@ namespace IATClient
                 lock (lockObj)
                 {
                     if (displayFont == null)
-                        displayFont = new Font(Format.FontFamily, LogicalToDeviceUnits(Format.FontSizeAsPixels), Format.FontStyle, GraphicsUnit.Pixel);
+                        displayFont = new Font(Format.FontFamily, LogicalToDeviceUnits(Format.FontSizeAsPixels), Format.FontStyle, GraphicsUnit.Point);
                     return displayFont;
                 }
             }
@@ -118,19 +118,23 @@ namespace IATClient
                 {
                     var f = displayFont;
                     displayFont = value;
-                    if (IsHandleCreated)
+                    Action<object, EventArgs> func = (sender, args) =>
+                    {
                         this.Invoke(new Action(() =>
                         {
+                            var f2 = displayFont;
+                            displayFont = new Font(displayFont.FontFamily, displayFont.GetHeight(72F));
                             QuestionEdit.Font = displayFont;
-                            SizeQuestionEdit(true);
+                            f2.Dispose();
+                            SizeQuestionEdit();
                             RecalcSize(false);
                             f?.Dispose();
                             Invalidate();
                         }));
-                    else
-                    {
-                        f?.Dispose();
-                    }
+                    };
+                    if (IsHandleCreated)
+                        func(null, null);
+                    else HandleCreated += new EventHandler(func);
                 }
             }
         }
@@ -181,14 +185,14 @@ namespace IATClient
                 _ItemType = _SurveyItem.Response.ResponseType;
                 SuspendLayoutCalculations();
                 Format = value.Format;
-                
+
                 if (value.Text == String.Empty)
                     QuestionEdit.Text = DefaultQuestionEditText;
                 else
                     QuestionEdit.Text = value.Text;
                 QuestionEdit.ForeColor = value.Format.Color;
                 InitializeResponseEdit();
-                SizeQuestionEdit(true);
+                SizeQuestionEdit();
                 RecalcSize(true);
                 ResumeLayoutCalculations();
                 ResponseEdit.Format = value.Response.Format;
@@ -218,7 +222,7 @@ namespace IATClient
                     if (_SurveyItem != null)
                         _SurveyItem.Format = e.SurveyItemFormat;
                     QuestionEdit.ForeColor = Format.Color;
-                    SizeQuestionEdit(true);
+                    SizeQuestionEdit();
                     ResumeLayout();
                 }
                 else
@@ -386,7 +390,10 @@ namespace IATClient
             Size szFormat = TextRenderer.MeasureText("Text Format", System.Drawing.SystemFonts.DialogFont) + new Size(10, 4);
             _FormatRect = new Rectangle(OptionalRect.Left - szFormat.Width - 10, 0, szFormat.Width, szFormat.Height);
             Format = new SurveyItemFormat(SurveyItemFormat.EFor.Item);
-            this.HandleCreated += (sender, args) => RecalcSize(true);
+            this.ParentChanged += (sender, args) =>
+            {
+                DisplayFont = DisplayFont.Clone() as Font;
+            };
         }
 
         public void EndSurveyItemTextFormat()
@@ -465,7 +472,7 @@ namespace IATClient
             IsInitialized = true;
         }
 
-        protected void SizeQuestionEdit(bool bForce = true)
+        protected void SizeQuestionEdit()
         {
             if (QuestionEdit == null)
                 return;
@@ -523,7 +530,7 @@ namespace IATClient
                     }
                     else if (!Controls.Contains(ResponseEdit) && (!ResponseEdit.IsCollapsed))
                         Controls.Add(ResponseEdit);
-                    SizeQuestionEdit(false);
+                    SizeQuestionEdit();
                     if (RecalcChildren.Equals(doRecalcChildren))
                     {
                         ResponseEdit.Width = this.Width - ResponseEditMargin.Horizontal;

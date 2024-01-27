@@ -76,6 +76,15 @@ namespace IATClient
             Bold = false;
         }
 
+        public Font Font
+        {
+            get
+            {
+                return new Font(FontFamily, FontSizeAsPixels, GraphicsUnit.Point);
+            }
+        }
+
+
         public SurveyItemFormat(EFor f, CResponse.EResponseType respType)
         {
             if ((f == EFor.Item) && (respType == CResponse.EResponseType.Instruction))

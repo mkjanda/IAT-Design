@@ -40,7 +40,7 @@ namespace IATClient
                 else
                     QuestionEdit.Text = value.Text;
                 QuestionEdit.ForeColor = value.Format.Color;
-                SizeQuestionEdit(true);
+                SizeQuestionEdit();
                 RecalcSize(false);
                 ResumeLayoutCalculations();
             }
@@ -77,7 +77,7 @@ namespace IATClient
                 this.Invoke(new Action(() =>
                 {
                     this.Width = Parent.Width - QuestionEditMargin.Horizontal;
-                    SizeQuestionEdit(true);
+                    SizeQuestionEdit();
                     this.Height = Padding.Vertical + QuestionEdit.Height + QuestionEditMargin.Vertical + ResponseEditMargin.Vertical;
                     Size szFormat = TextRenderer.MeasureText("Format Text", System.Drawing.SystemFonts.DialogFont) + new Size(10, 4);
                     _FormatRect = new Rectangle(this.Width - szFormat.Width * 3 / 2, Padding.Top, szFormat.Width, szFormat.Height);

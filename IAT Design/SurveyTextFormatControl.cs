@@ -66,9 +66,7 @@ namespace IATClient
         public SurveyTextFormatControl(SurveyItemFormat.EFor f)
         {
             this.For = f;
-            this.Dock = DockStyle.Fill;
             this.Load += new EventHandler(SurveyTextFormatControl_Load);
-
 
             int maxFontSizeWidth = FontSizes.Select(fSizes => TextRenderer.MeasureText(fSizes, System.Drawing.SystemFonts.DialogFont).Width).Max();
             FontSize = new ComboBox();
@@ -95,6 +93,7 @@ namespace IATClient
             BoldBox.Appearance = Appearance.Button;
             BoldBox.Location = new Point(FontSize.Right + 10, FontSize.Top);
             BoldBox.AutoSize = true;
+            BoldBox.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right | AnchorStyles.Bottom;
             Controls.Add(BoldBox);
 
             ItalicBox.Text = "I";
@@ -102,6 +101,7 @@ namespace IATClient
             ItalicBox.Appearance = Appearance.Button;
             ItalicBox.Location = new Point(BoldBox.Right + 5, FontSize.Top);
             ItalicBox.AutoSize = true;
+            ItalicBox.Anchor = AnchorStyles.Left | AnchorStyles.Top | AnchorStyles.Right | AnchorStyles.Bottom;
             Controls.Add(ItalicBox);
 
             FontColorBox = new CheckBox();
@@ -110,6 +110,7 @@ namespace IATClient
             FontColorBox.TextAlign = ContentAlignment.MiddleCenter;
             FontColorBox.AutoSize = true;
             FontColorBox.Location = new Point(ComponentPadding.Left, FontName.Bottom + ComponentPadding.Vertical);
+            FontColorBox.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right | AnchorStyles.Bottom;
             Controls.Add(FontColorBox);
             this.Size = new Size(this.Width - ComponentPadding.Horizontal, FontColorBox.Bottom + ComponentPadding.Bottom);
             FadeTimer.Interval = 10;

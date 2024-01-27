@@ -145,6 +145,8 @@ namespace IATClient
                         else
                         {
                             qd = new QuestionDisplay();
+                            qd.AutoScaleMode = AutoScaleMode.Dpi;
+                            qd.AutoScaleDimensions = new SizeF(72F, 72F);
                             Controls.Add(qd);
                             qd.BackColor = this.BackColor;
                             qd.SurveyItem = _Survey.Items[ctr].Clone() as CSurveyItem;
@@ -484,6 +486,8 @@ namespace IATClient
             else
             {
                 qEdit = new QuestionDisplay();
+                qEdit.AutoScaleMode = AutoScaleMode.Dpi;
+                qEdit.AutoScaleDimensions = new SizeF(72F, 72F);
                 Controls.Add(qEdit);
                 qEdit.Size = new Size(QuestionDisplayWidth - QuestionDisplayMargin.Horizontal - InteriorPadding.Horizontal, 1);
                 qEdit.BackColor = this.BackColor;
@@ -630,6 +634,8 @@ namespace IATClient
                 else
                 {
                     QuestionDisplay qEdit = new QuestionDisplay();
+                    qEdit.AutoScaleMode = AutoScaleMode.Dpi;
+                    qEdit.AutoScaleDimensions = new SizeF(72F, 72F);
                     qEdit.SurveyItem = Clipboard[ctr];
                     Controls.Add(qEdit);
                     qEdit.Size = new Size(QuestionDisplayWidth - QuestionDisplayMargin.Horizontal - InteriorPadding.Horizontal, 1);
@@ -686,6 +692,8 @@ namespace IATClient
                 else
                 {
                     QuestionDisplay qEdit = new QuestionDisplay();
+                    qEdit.AutoScaleMode = AutoScaleMode.Dpi;
+                    qEdit.AutoScaleDimensions = new SizeF(72F, 72F);
                     qEdit.SurveyItem = Clipboard[ctr];
                     Controls.Add(qEdit);
                     QuestionEdits.Add(qEdit);

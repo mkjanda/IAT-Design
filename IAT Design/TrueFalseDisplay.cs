@@ -72,7 +72,7 @@ namespace IATClient
                 LayoutEvent.Reset();
                 Monitor.Exit(lockObj);
                 LayoutChoices();
-                this.BeginInvoke(new Action(() =>
+                this.Invoke(new Action(() =>
                 {
                     SuspendLayout();
                     this.Size = new Size(ClientSize.Width, ChoicesSize.Height + InteriorPadding.Vertical);

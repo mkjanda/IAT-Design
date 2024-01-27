@@ -572,12 +572,13 @@ namespace IATClient
                 surveyNdx = CIAT.SaveFile.IAT.AfterSurvey.IndexOf((CSurvey)SurveyItem);
             if (m_SurveyPanel == null)
             {
-                m_SurveyPanel = new SurveyPanel(Ordinality)
-                {
-                    Location = new Point(0, HeaderMenu.Height),
-                    Size = new Size(this.ClientSize.Width, this.ClientSize.Height - HeaderMenu.Height - MessageBar.Height),
-                    Survey = ActiveItem as CSurvey
-                };
+                m_SurveyPanel = new SurveyPanel(Ordinality);
+                m_SurveyPanel.AutoScaleDimensions = new SizeF(72F, 72F);
+                m_SurveyPanel.AutoScaleMode = AutoScaleMode.Dpi;
+                m_SurveyPanel.Anchor = AnchorStyles.Left | AnchorStyles.Right | AnchorStyles.Bottom | AnchorStyles.Top;
+                m_SurveyPanel.Location = new Point(0, HeaderMenu.Height);
+                m_SurveyPanel.Size = new Size(this.ClientSize.Width, this.ClientSize.Height - HeaderMenu.Height - MessageBar.Height);
+                m_SurveyPanel.Survey = ActiveItem as CSurvey;
             }
             m_SurveyPanel.Ordinality = Ordinality;
             Controls.Add(m_SurveyPanel);

@@ -4,7 +4,7 @@ using System.Windows.Forms;
 
 namespace IATClient
 {
-    class SurveyTextFormatPanel : Panel
+    class SurveyTextFormatPanel : UserControl
     {
         public event EventHandler OnDone = null;
 
@@ -82,64 +82,70 @@ namespace IATClient
                 ItemGroup.Text = "Text format";
             else
                 ItemGroup.Text = "Question format";
-            ItemGroup.Location = new Point(0, 0);
             ItemPanel = new SurveyTextFormatControl(SurveyItemFormat.EFor.Item);
             ItemPanel.ItemFormat = new SurveyItemFormat(SurveyItemFormat.EFor.Item);
             ItemPanel.OnColorSelectionEnd += (sender, args) => { ActiveColorSelect = null; };
             ItemPanel.OnColorSelectionStart += (sender, args) => { if ((ActiveColorSelect == ResponsePanel) && (ResponsePanel != null)) ResponsePanel.HaltColorSelection(); ActiveColorSelect = ItemPanel; };
-            ItemGroup.Controls.Add(ItemPanel);
-            ItemGroup.Height = ItemPanel.Height + 20;
-            this.Controls.Add(ItemGroup);
+            ItemPanel.Location = new Point(3, 18);
+            ItemPanel.Anchor = AnchorStyles.Top | AnchorStyles.Left;
+            Controls.Add(ItemPanel);
 
-
-            ResponseGroup = new GroupBox();
-            ResponseGroup.Text = "Response format";
-            ResponseGroup.Location = new Point(0, ItemPanel.Bottom);
             ResponsePanel = new SurveyTextFormatControl(SurveyItemFormat.EFor.Response);
+            ResponsePanel.Location = new Point(0, ItemPanel.Bottom);
             ResponsePanel.ItemFormat = new SurveyItemFormat(SurveyItemFormat.EFor.Response);
             ResponsePanel.OnColorSelectionEnd += (sender, args) => { ActiveColorSelect = null; };
             ResponsePanel.OnColorSelectionStart += (sender, args) => { if (ActiveColorSelect == ItemPanel) ItemPanel.HaltColorSelection(); ActiveColorSelect = ResponsePanel; };
-            ResponseGroup.Controls.Add(ResponsePanel);
-            ResponseGroup.Height = ResponsePanel.Height + 20;
+            ResponsePanel.Anchor = AnchorStyles.Left | AnchorStyles.Top;
             if (respType != CResponse.EResponseType.Instruction)
-                this.Controls.Add(ResponseGroup);
-
+                Controls.Add(ResponsePanel);
             DoneButton.Text = "Done";
             DoneButton.Location = new Point(((this.Width - DoneButton.Width) >> 1), this.Height - (DoneButton.Height + 5));
             DoneButton.Click += (s, args) => { if (OnDone != null) OnDone(this, args); };
+            DoneButton.Anchor = AnchorStyles.Bottom;
             this.Controls.Add(DoneButton);
-
-            this.PickerPanel = new Panel();
-            this.PickerPanel.AutoScroll = true;
-            this.PickerPanel.Location = new Point(5, (respType == CResponse.EResponseType.Instruction) ? ItemGroup.Bottom + 10 : ResponseGroup.Bottom + 10);
-            this.PickerPanel.Size = new Size(this.Width - 10, (DoneButton.Top - 5) - this.PickerPanel.Top);
-            Picker = new ColorPicker(Color.Black);
-            Picker.SelectionMade += (s, args) =>
+            this.HandleCreated += (sender, args) =>
             {
-                if (ActiveColorSelect == ItemPanel)
-                    ItemPanel.TextColor = args.Color;
-                else if ((ActiveColorSelect == ResponsePanel) && (ResponsePanel != null))
-                    ResponsePanel.TextColor = args.Color;
-            };
-            PickerPanel.Controls.Add(Picker);
-            this.Controls.Add(PickerPanel);
-
-            this.SizeChanged += (sender, args) =>
-            {
-                SuspendLayout();
-                this.DoneButton.Location = new Point(((this.Width - DoneButton.Width) >> 1), this.Height - (DoneButton.Height + 5));
-                PickerPanel.Size = new Size(this.Width - 10, (DoneButton.Top - 10) - this.PickerPanel.Top);
-                ResponseGroup.Size = new Size(this.Width - 10, ResponsePanel.Height + 40);
-                ResponseGroup.Location = new Point(ResponseGroup.Left, ItemGroup.Bottom + 5);
-                ItemGroup.Size = new Size(this.Width - 10, ItemPanel.Height + 40);
+                this.PickerPanel = new Panel();
+                this.PickerPanel.AutoScroll = true;
+                this.PickerPanel.Location = new Point(5, (respType == CResponse.EResponseType.Instruction) ? ItemPanel.Bottom + 10 : ResponsePanel.Bottom + 10);
+                this.PickerPanel.Size = new Size(this.Width - 10, (DoneButton.Top - 5) - this.PickerPanel.Top);
+                this.PickerPanel.Anchor = AnchorStyles.Bottom;
+                Picker = new ColorPicker(Color.Black);
+                Picker.SelectionMade += (s, args) =>
+                {
+                    if (ActiveColorSelect == ItemPanel)
+                        ItemPanel.TextColor = args.Color;
+                    else if ((ActiveColorSelect == ResponsePanel) && (ResponsePanel != null))
+                        ResponsePanel.TextColor = args.Color;
+                };
                 if (ItemType != CResponse.EResponseType.Instruction)
                 {
-                    this.PickerPanel.Location = new Point(this.Picker.Left, ResponseGroup.Bottom + 5);
+                    this.PickerPanel.Location = new Point(this.Picker.Left, ResponsePanel.Bottom + 5);
                     this.PickerPanel.Size = new Size(this.PickerPanel.Width, DoneButton.Top - 10 - this.PickerPanel.Top);
                 }
+                else
+                {
+                    this.PickerPanel.Location = new Point(this.Picker.Left, ItemPanel.Bottom + 5);
+                    this.PickerPanel.Size = new Size(this.PickerPanel.Width, DoneButton.Top - 10 - this.PickerPanel.Top);
 
-                ResumeLayout(false);
+                }
+                PickerPanel.Controls.Add(Picker);
+                this.Controls.Add(PickerPanel);
             };
+
+            /*
+                        this.SizeChanged += (sender, args) =>
+                        {
+                            SuspendLayout();
+                            this.DoneButton.Location = new Point(((this.Width - DoneButton.Width) >> 1), this.Height - (DoneButton.Height + 5));
+                            PickerPanel.Size = new Size(this.Width - 10, (DoneButton.Top - 10) - this.PickerPanel.Top);
+                            ResponseGroup.Size = new Size(this.Width - 10, ResponsePanel.Height + 40);
+                            ResponseGroup.Location = new Point(ResponseGroup.Left, ItemGroup.Bottom + 5);
+                            ItemGroup.Size = new Size(this.Width - 10, ItemPanel.Height + 40);
+
+                            ResumeLayout(false);
+                        };*/
+            PerformLayout();
         }
     }
 }

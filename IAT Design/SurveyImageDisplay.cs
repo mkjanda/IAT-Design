@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Drawing;
 using System.Threading.Tasks;
-using System.Windows.Forms;
 
 namespace IATClient
 {
@@ -90,7 +89,7 @@ namespace IATClient
 
         public SurveyImageDisplay()
         {
-            ImageBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            ImageBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             ImageBox.Dock = System.Windows.Forms.DockStyle.Fill;
             ImageBox.BorderStyle = System.Windows.Forms.BorderStyle.None;
             ImageBox.BackColor = System.Drawing.Color.White;

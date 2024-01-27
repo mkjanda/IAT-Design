@@ -70,7 +70,7 @@
             this.SurveyDisplayPanel.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.SurveyDisplayPanel.Location = new System.Drawing.Point(0, 0);
             this.SurveyDisplayPanel.Name = "SurveyDisplayPanel";
-            this.SurveyDisplayPanel.Size = new System.Drawing.Size(715, 583);
+            this.SurveyDisplayPanel.Size = new System.Drawing.Size(735, 583);
             this.SurveyDisplayPanel.TabIndex = 0;
             // 
             // ItemsPanel
@@ -89,7 +89,7 @@
             this.ItemsPanel.Controls.Add(this.AddMultiChoiceItem);
             this.ItemsPanel.Controls.Add(this.AddLikertItem);
             this.ItemsPanel.Controls.Add(this.AddTrueFalseItem);
-            this.ItemsPanel.Location = new System.Drawing.Point(734, 36);
+            this.ItemsPanel.Location = new System.Drawing.Point(736, 36);
             this.ItemsPanel.Name = "ItemsPanel";
             this.ItemsPanel.Size = new System.Drawing.Size(128, 279);
             this.ItemsPanel.TabIndex = 1;
@@ -379,8 +379,6 @@
             // 
             // SurveyPanel
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoSize = true;
             this.Controls.Add(this.MinLabel);
             this.Controls.Add(this.TimeoutText);

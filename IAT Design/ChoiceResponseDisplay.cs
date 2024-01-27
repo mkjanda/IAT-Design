@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 namespace IATClient
 {
@@ -19,7 +18,7 @@ namespace IATClient
         {
             get
             {
-                return Size.Width - InteriorPadding.Horizontal - ChoiceEditPadding.Horizontal;
+                return Size.Width - InteriorPadding.Horizontal - (ChoiceEditPadding.Horizontal << 1);
             }
         }
 
@@ -168,7 +167,7 @@ namespace IATClient
 
         private void Choice_TextChanged(object sender, EventArgs e)
         {
-            
+
             TextBox box = (TextBox)sender;
             UpdateChoiceText(ChoiceEdits.IndexOf(box), box.Text);
             if (!SizeChoiceEdit(box, false))
@@ -178,15 +177,31 @@ namespace IATClient
         private void CreateDeleteButton()
         {
             Button button = new Button();
-            button.Image = DeleteButtonImage;
+            var bmp = new Bitmap((int)(DeleteButtonImage.Width / DisplayFont.GetHeight(72F) * (int)DisplayFont.Height), (int)(DeleteButtonImage.Width / DisplayFont.GetHeight(72F) * DisplayFont.Height));
+            using (Graphics g = Graphics.FromImage(bmp))
+            {
+                Brush br = new SolidBrush(Color.FromArgb(0, 0, 0, 0));
+                g.FillRectangle(br, new Rectangle(new Point(0, 0), bmp.Size));
+                g.DrawImage(DeleteButtonImage, new Rectangle(new Point(2, 2), bmp.Size - new Size(4, 4)), new Rectangle(new Point(0, 0), DeleteButtonImage.Size), GraphicsUnit.Pixel);
+            }
+            button.Image = bmp;
             button.BackColor = this.BackColor;
             button.ForeColor = System.Drawing.Color.Red;
             button.Click += new EventHandler(DeleteChoiceButton_Click);
             button.Size = button.Image.Size + new Size(2, 2);
-            button.Location = new Point(this.Size.Width - button.Size.Width, ChoiceEdits[ChoiceEdits.Count - 1].Location.Y);
+            var choiceEdit = ChoiceEdits[ChoiceEdits.Count - 1];
+            button.Location = new Point(this.Size.Width - (button.Size.Width >> 1), choiceEdit.Location.Y);
             ChoiceDeleteButtons.Add(button);
             Controls.Add(button);
             button.MouseClick += new MouseEventHandler(ResponseDisplay_MouseClick);
+            button.MouseLeave += (sender, args) =>
+            {
+                button.BackColor = this.BackColor;
+            };
+            button.MouseMove += (sender, args) =>
+            {
+                button.BackColor = Color.Blue;
+            };
             if (Parent != null)
                 button.Visible = ((QuestionDisplay)Parent).Active;
         }
@@ -232,44 +247,44 @@ namespace IATClient
 
         protected void LayoutChoices()
         {
-                this.BeginInvoke(new Action(() =>
+            this.BeginInvoke(new Action(() =>
+            {
+                AddChoiceButton.Size = System.Windows.Forms.TextRenderer.MeasureText("Add Choice", AddChoiceButton.Font)
+                    + new Size(16, 8);
+                int minChoiceHeight = int.MaxValue;
+                int height = 0;
+                for (int ctr = 0; ctr < ChoiceEdits.Count; ctr++)
                 {
-                    AddChoiceButton.Size = System.Windows.Forms.TextRenderer.MeasureText("Add Choice", AddChoiceButton.Font)
-                        + new Size(16, 8);
-                    int minChoiceHeight = int.MaxValue;
-                    int height = 0;
-                    for (int ctr = 0; ctr < ChoiceEdits.Count; ctr++)
+                    ChoiceEdits[ctr].Location = new Point(InteriorPadding.Left + ChoiceEditPadding.Left,
+                        height + ChoiceEditPadding.Vertical);
+                    SizeChoiceEdit(ChoiceEdits[ctr], false);
+                    height += ChoiceEdits[ctr].Height + ChoiceEditPadding.Vertical;
+                    if (CanAddChoices)
                     {
-                        ChoiceEdits[ctr].Location = new Point(InteriorPadding.Left + ChoiceEditPadding.Left,
-                            height + ChoiceEditPadding.Vertical);
-                        SizeChoiceEdit(ChoiceEdits[ctr], false);
-                        height += ChoiceEdits[ctr].Height + ChoiceEditPadding.Vertical;
-                        if (CanAddChoices)
-                        {
-                            ChoiceDeleteButtons[ctr].Location = new Point(Size.Width - InteriorPadding.Right - ChoiceDeleteButtons[ctr].Width,
-                                ChoiceEdits[ctr].Top + ((ChoiceEdits[ctr].Size.Height - ChoiceDeleteButtons[ctr].Height) >> 1));
-                            ChoiceEdits[ctr].TabIndex = ctr;
-                        }
+                        ChoiceDeleteButtons[ctr].Location = new Point(Size.Width - InteriorPadding.Right - ChoiceDeleteButtons[ctr].Width,
+                            ChoiceEdits[ctr].Top + ((ChoiceEdits[ctr].Size.Height - ChoiceDeleteButtons[ctr].Height) >> 1));
+                        ChoiceEdits[ctr].TabIndex = ctr;
+                    }
 
-                        if (ChoiceEdits[ctr].Height < minChoiceHeight)
-                            minChoiceHeight = ChoiceEdits[ctr].Height;
-                    }
-                    if (minChoiceHeight < DeleteButtonImage.Height)
-                    {
-                        DeleteButtonImage.Dispose();
-                        DeleteButtonImage = new Bitmap(Properties.Resources.DeleteItem, new Size(minChoiceHeight, minChoiceHeight));
-                        ChoiceDeleteButtons.ForEach((b) => { b.Size = DeleteButtonImage.Size + new Size(2, 2); b.Image = DeleteButtonImage; });
-                    }
-                    height += AddChoiceButton.Height + ChoiceEditPadding.Vertical;
-                    if (ChoiceEdits.Count > 0)
-                        AddChoiceButton.Location = new Point(this.Size.Width - AddChoiceButton.Size.Width - this.Padding.Right,
-                            ChoiceEdits[ChoiceEdits.Count - 1].Bottom + ChoiceEditPadding.Vertical);
-                    else
-                        AddChoiceButton.Location = new Point(this.Width - AddChoiceButton.Width - Padding.Right, ChoiceEditPadding.Vertical + Padding.Top);
-                    ChoicesSize = new Size(this.Width, height);
-                    Parent.Size = ChoicesSize;
-                }));
-            
+                    if (ChoiceEdits[ctr].Height < minChoiceHeight)
+                        minChoiceHeight = ChoiceEdits[ctr].Height;
+                }
+                if (minChoiceHeight < DeleteButtonImage.Height)
+                {
+                    DeleteButtonImage.Dispose();
+                    DeleteButtonImage = new Bitmap(Properties.Resources.DeleteItem, new Size(minChoiceHeight, minChoiceHeight));
+                    ChoiceDeleteButtons.ForEach((b) => { b.Size = DeleteButtonImage.Size + new Size(2, 2); b.Image = DeleteButtonImage; });
+                }
+                height += AddChoiceButton.Height + ChoiceEditPadding.Vertical;
+                if (ChoiceEdits.Count > 0)
+                    AddChoiceButton.Location = new Point(this.Size.Width - AddChoiceButton.Size.Width - this.Padding.Right,
+                        ChoiceEdits[ChoiceEdits.Count - 1].Bottom + ChoiceEditPadding.Vertical);
+                else
+                    AddChoiceButton.Location = new Point(this.Width - AddChoiceButton.Width - Padding.Right, ChoiceEditPadding.Vertical + Padding.Top);
+                ChoicesSize = new Size(this.Width, height);
+                Parent.Size = ChoicesSize;
+            }));
+
         }
 
 

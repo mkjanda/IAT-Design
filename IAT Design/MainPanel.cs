@@ -321,13 +321,13 @@ namespace IATClient
                 if (arPreview > 1)
                 {
                     PreviewPanel.Size = new Size(MaxPreviewSize.Width, (int)(MaxPreviewSize.Height / arPreview));
-                    PreviewPanel.Location = new Point(1002, 0);
+                    PreviewPanel.Location = new Point(TestContentsGroup.Right, 0);
                     PreviewPanel.PerformAutoScale();
                 }
                 else
                 {
                     PreviewPanel.Size = new Size((int)(MaxPreviewSize.Width * arPreview), MaxPreviewSize.Height);
-                    PreviewPanel.Location = new Point(1002, 0);
+                    PreviewPanel.Location = new Point(TestContentsGroup.Right, 0);
                 }
                 return PreviewPanel;
             }
@@ -337,18 +337,20 @@ namespace IATClient
                 if (arPreview > 1)
                 {
                     PreviewPanel.Size = new Size(MaxPreviewSize.Width, (int)(MaxPreviewSize.Height / arPreview));
-                    PreviewPanel.Location = new Point(1002, ((0)));
+                    PreviewPanel.Location = new Point(TestContentsGroup.Right, 0);
                 }
                 else
                 {
                     PreviewPanel.Size = new Size((int)(MaxPreviewSize.Width * arPreview), MaxPreviewSize.Height);
-                    PreviewPanel.Location = new Point(1002, 0);
+                    PreviewPanel.Location = new Point(TestContentsGroup.Right, 0);
                 }
             }
             else
             {
-                PreviewPanel.Size = Images.ImageMediaType.FullPreview.ImageSize;
-                PreviewPanel.Location = new Point(501, 0);
+                PreviewPanel.Size = new Size(MaxPreviewSize.Width, TestContentsGroup.Height);
+                //                PreviewPanel.AutoScaleDimensions = new SizeF(72F, 72F);
+                //              PreviewPanel.AutoScaleMode = AutoScaleMode.Dpi;
+                PreviewPanel.Location = new Point(TestContentsGroup.Right, 0);
             }
 
             EditPanel.Size = new Size(60, 26);
