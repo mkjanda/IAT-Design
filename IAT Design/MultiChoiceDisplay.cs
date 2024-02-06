@@ -40,6 +40,7 @@ namespace IATClient
         public MultiChoiceDisplay()
             : base(true)
         {
+            Invalidate();
         }
 
 
@@ -53,13 +54,13 @@ namespace IATClient
                 LayoutEvent.Reset();
                 Monitor.Exit(lockObj);
                 LayoutChoices();
-                this.BeginInvoke(new Action(() =>
+                this.Invoke(new Action(() =>
                 {
                     SuspendLayout();
                     Size ControlSize = this.Size;
                     int height = ChoicesSize.Height + InteriorPadding.Bottom + InteriorPadding.Top;
                     this.Size = new Size(this.Width, height);
-                    ResumeLayout();
+                    ResumeLayout(true);
                     Invalidate();
                 }));
                 LayoutEvent.Set();

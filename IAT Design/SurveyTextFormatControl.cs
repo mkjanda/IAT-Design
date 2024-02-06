@@ -11,7 +11,7 @@ namespace IATClient
         public event EventHandler OnColorSelectionEnd;
         private CheckBox BoldBox = new CheckBox(), ItalicBox = new CheckBox();
         private ComboBox FontName, FontSize;
-        private Padding ComponentPadding = new Padding(5, 5, 5, 5);
+        private Padding ComponentPadding = new Padding(0, 0, 0, 0);
         private int ColorAlpha = 255;
         private int ColorBrightness = 255;
         private Color FontColor;
@@ -68,28 +68,28 @@ namespace IATClient
             this.For = f;
             this.Load += new EventHandler(SurveyTextFormatControl_Load);
 
-            int maxFontSizeWidth = FontSizes.Select(fSizes => TextRenderer.MeasureText(fSizes, System.Drawing.SystemFonts.DialogFont).Width).Max();
+            int maxFontSizeWidth = FontSizes.Select(fSizes => TextRenderer.MeasureText(fSizes, IATConfigMainForm.MainForm.Font).Width).Max();
             FontSize = new ComboBox();
             FontSize.Items.AddRange(FontSizes);
             FontSize.DropDownStyle = ComboBoxStyle.DropDownList;
-            FontSize.Size = new Size(maxFontSizeWidth + 25, FontSize.Font.Height + 4);
+            FontSize.Width = maxFontSizeWidth + 25;
             FontSize.Location = new Point(ComponentPadding.Left, ComponentPadding.Top);
             Controls.Add(FontSize);
 
             FontName = new ComboBox();
             FontName.Items.AddRange(PrivateFont.Fonts.Select(f => f.DisplayName).ToArray());
             FontName.DropDownStyle = ComboBoxStyle.DropDownList;
-            FontName.Size = new Size(TextRenderer.MeasureText("sans-serif", System.Drawing.SystemFonts.DialogFont).Width + 25, FontName.Font.Height + 4);
+            FontName.Width = TextRenderer.MeasureText("sans-serif", IATConfigMainForm.MainForm.Font).Width + 25;
             int maxWidth = PrivateFont.Fonts.Select(f => f.DisplayName).Aggregate(0, (max, val) =>
-                (max < TextRenderer.MeasureText(val, System.Drawing.SystemFonts.DialogFont).Width ?
-                TextRenderer.MeasureText(val, System.Drawing.SystemFonts.DialogFont).Width : max));
+                (max < TextRenderer.MeasureText(val, IATConfigMainForm.MainForm.Font).Width ?
+                TextRenderer.MeasureText(val, IATConfigMainForm.MainForm.Font).Width : max));
             FontName.Location = new Point(ComponentPadding.Left, FontSize.Bottom + ComponentPadding.Vertical);
             FontName.SelectedIndex = 0;
             FontName.DropDownWidth = maxWidth + 4;
             Controls.Add(FontName);
-
+            /*
             BoldBox.Text = "B";
-            BoldBox.Font = new Font(BoldBox.Font, FontStyle.Regular);
+            BoldBox.Font = IATConfigMainForm.MainForm.Font;
             BoldBox.Appearance = Appearance.Button;
             BoldBox.Location = new Point(FontSize.Right + 10, FontSize.Top);
             BoldBox.AutoSize = true;
@@ -97,13 +97,13 @@ namespace IATClient
             Controls.Add(BoldBox);
 
             ItalicBox.Text = "I";
-            ItalicBox.Font = new Font(ItalicBox.Font, FontStyle.Regular);
+            ItalicBox.Font = IATConfigMainForm.MainForm.Font;
             ItalicBox.Appearance = Appearance.Button;
             ItalicBox.Location = new Point(BoldBox.Right + 5, FontSize.Top);
             ItalicBox.AutoSize = true;
             ItalicBox.Anchor = AnchorStyles.Left | AnchorStyles.Top | AnchorStyles.Right | AnchorStyles.Bottom;
             Controls.Add(ItalicBox);
-
+            */
             FontColorBox = new CheckBox();
             FontColorBox.Appearance = Appearance.Button;
             FontColorBox.Text = "Font Color\r\nClick to change";
@@ -140,6 +140,7 @@ namespace IATClient
             ItalicBox.CheckedChanged += (sender, args) => { if (DispatchEvents) CIAT.Dispatcher.Dispatch<ISurveyItemFormatChanged>(new CSurveyItemFormatChanged(ItemFormat)); };
             BoldBox.CheckedChanged += (sender, args) => { if (DispatchEvents) CIAT.Dispatcher.Dispatch<ISurveyItemFormatChanged>(new CSurveyItemFormatChanged(ItemFormat)); };
             FontSize.SelectedIndexChanged += (s, args) => { if (DispatchEvents) CIAT.Dispatcher.Dispatch<ISurveyItemFormatChanged>(new CSurveyItemFormatChanged(ItemFormat)); };
+            this.Width = FontName.Width + 4;
         }
 
 

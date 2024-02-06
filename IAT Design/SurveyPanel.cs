@@ -248,9 +248,23 @@ namespace IATClient
                 this.ReturnButton, this.UniqueResponseButton, this.EditUniqueResponseButton };
             CIAT.Dispatcher.AddListener<IFormatSurveyItemText>(BeginFormatSurveyItemText);
             SurveyDisplayPanel.BackColor = Color.White;
-            SurveyDisplayPanel.HorizontalScroll.Enabled = false;
-            SurveyDisplayPanel.HorizontalScroll.Visible = false;
             SurveyDisplayPanel.AutoScroll = false;
+            TextFormatPanel = new SurveyTextFormatPanel();
+            TextFormatPanel.AutoScaleMode = AutoScaleMode.None;
+            TextFormatPanel.Location = new Point(SurveyDisplayPanel.Right, 0);
+            TextFormatPanel.Height = this.Height;
+            TextFormatPanel.Anchor = AnchorStyles.Right | AnchorStyles.Top | AnchorStyles.Bottom;
+            TextFormatPanel.OnDone += (s, args) =>
+            {
+                TextFormatPanel.Visible = false;
+                foreach (var c in SurveyControls)
+                    c.Visible = true;
+                QuestionBeingFormatted.EndSurveyItemTextFormat();
+                this.Invalidate();
+            };
+            TextFormatPanel.AutoScroll = true;
+            Controls.Add(TextFormatPanel);
+            TextFormatPanel.Visible = false;
             ResumeLayout(false);
         }
 
@@ -263,27 +277,18 @@ namespace IATClient
         {
             SuspendLayout();
             foreach (Control c in SurveyControls)
-                Controls.Remove(c);
-            TextFormatPanel = new SurveyTextFormatPanel(e.Display.ItemType);
-            TextFormatPanel.AutoScaleDimensions = new SizeF(72F, 72F);
-            TextFormatPanel.AutoScaleMode = AutoScaleMode.Dpi;
+                c.Visible = false;
+            if (TextFormatPanel != null)
+                TextFormatPanel.Visible = true;
+            else
+            {
+            }
             if (QuestionBeingFormatted != null)
                 QuestionBeingFormatted.EndSurveyItemTextFormat();
             QuestionBeingFormatted = e.Display;
-            TextFormatPanel.OnDone += (s, args) =>
-            {
-                Controls.Remove(TextFormatPanel);
-                TextFormatPanel.Dispose();
-                Controls.AddRange(SurveyControls);
-                QuestionBeingFormatted.EndSurveyItemTextFormat();
-                this.Invalidate();
-            };
             TextFormatPanel.ItemFormat = e.Display.Format;
             if (e.Display.ItemType != CResponse.EResponseType.Instruction)
                 TextFormatPanel.ResponseFormat = e.Display.ResponseFormat;
-            TextFormatPanel.Location = new Point(this.SurveyDisplayPanel.Right + 10, 0);
-            TextFormatPanel.Size = new Size(this.Width - this.SurveyDisplayPanel.Right - 5, this.Height);
-            Controls.Add(TextFormatPanel);
             ResumeLayout(false);
         }
 

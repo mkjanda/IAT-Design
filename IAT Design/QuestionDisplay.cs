@@ -10,7 +10,7 @@ namespace IATClient
     class QuestionDisplay : SurveyItemDisplay
     {
         private Font displayFont = null;
-        protected static readonly Padding QuestionEditMargin = new Padding(10, 16, 30, 6), QuestionEditPadding = new Padding(5, 5, 10, 5);
+        protected static readonly Padding QuestionEditMargin = new Padding(10, 30, 30, 6), QuestionEditPadding = new Padding(5, 5, 10, 5);
         protected static readonly Padding ResponseEditMargin = new Padding(10, 5, 10, 5);
         protected TextBox QuestionEdit;
         protected bool _IsSelected;
@@ -19,9 +19,9 @@ namespace IATClient
         protected CResponse.EResponseType _ItemType;
         protected bool IsInitialized;
         protected int QuestionLines = 1;
-        protected Rectangle OptionalRect = Rectangle.Empty;
-        private Rectangle _FormatRect;
-        protected virtual Rectangle FormatRect { get { return _FormatRect; } }
+        protected Rectangle OptionalRect { get; private set; }
+        protected virtual Rectangle FormatRect { get; private set; }
+        private static readonly Font RectFont = new Font(SystemFonts.DialogFont.FontFamily, (int)(SystemFonts.DialogFont.GetHeight(72F) / 16 * SystemFonts.DialogFont.Height));
         protected bool bOptional, bFormatHover = false;
         protected Button CollapseButton, ExpandButton;
         protected bool bFormatting = false;
@@ -385,15 +385,11 @@ namespace IATClient
             };
             CollapseButton.Enabled = true;
             Controls.Add(CollapseButton);
-            Size szOptional = TextRenderer.MeasureText("Optional", System.Drawing.SystemFonts.DialogFont) + new Size(10, 4);
+            Size szOptional = TextRenderer.MeasureText("Optional", RectFont) + new Size(10, 4);
             OptionalRect = new Rectangle(CollapseButton.Location.X - szOptional.Width - 10, 0, szOptional.Width, szOptional.Height);
-            Size szFormat = TextRenderer.MeasureText("Text Format", System.Drawing.SystemFonts.DialogFont) + new Size(10, 4);
-            _FormatRect = new Rectangle(OptionalRect.Left - szFormat.Width - 10, 0, szFormat.Width, szFormat.Height);
+            Size szFormat = TextRenderer.MeasureText("Text Format", RectFont) + new Size(10, 4);
+            FormatRect = new Rectangle(OptionalRect.Left - szFormat.Width - 10, 0, szFormat.Width, szFormat.Height);
             Format = new SurveyItemFormat(SurveyItemFormat.EFor.Item);
-            this.ParentChanged += (sender, args) =>
-            {
-                DisplayFont = DisplayFont.Clone() as Font;
-            };
         }
 
         public void EndSurveyItemTextFormat()
@@ -547,10 +543,10 @@ namespace IATClient
                     RecalcChildren = recalcProcessed;
                     ExpandButton.Location = new Point(this.Size.Width - ExpandButton.Size.Width - QuestionEditMargin.Right, Padding.Top);
                     CollapseButton.Location = new Point(ExpandButton.Location.X - CollapseButton.Size.Width - 10, Padding.Top);
-                    Size szOptional = TextRenderer.MeasureText("Optional", System.Drawing.SystemFonts.DialogFont) + new Size(10, 4);
+                    Size szOptional = TextRenderer.MeasureText("Optional", RectFont) + new Size(10, 4);
                     OptionalRect = new Rectangle(CollapseButton.Location.X - szOptional.Width - 10, 0, szOptional.Width, szOptional.Height);
-                    Size szFormat = TextRenderer.MeasureText("Format Text", System.Drawing.SystemFonts.DialogFont) + new Size(10, 4);
-                    _FormatRect = new Rectangle(OptionalRect.Left - szFormat.Width - 10, 0, szFormat.Width, szFormat.Height);
+                    Size szFormat = TextRenderer.MeasureText("Format Text", RectFont) + new Size(10, 4);
+                    FormatRect = new Rectangle(OptionalRect.Left - szFormat.Width - 10, 0, szFormat.Width, szFormat.Height);
                 }));
                 return Height;
             };
@@ -561,7 +557,7 @@ namespace IATClient
         {
             Brush br;
             Pen pen;
-            System.Drawing.Color rectColor, outlineColor;
+            System.Drawing.Color outlineColor;
             outlineColor = Color.Chartreuse;
             Brush backBr = new SolidBrush(this.BackColor);
             br = new SolidBrush(outlineColor);
@@ -570,19 +566,19 @@ namespace IATClient
             if (bFormatHover || bFormatting)
                 e.Graphics.FillRectangle(Brushes.CornflowerBlue, FormatRect);
             else
-                e.Graphics.FillRectangle(Brushes.White, FormatRect);
+                e.Graphics.FillRectangle(backBr, FormatRect);
             e.Graphics.DrawRectangle(pen, FormatRect);
-            e.Graphics.DrawString("Format Text", System.Drawing.SystemFonts.DialogFont, Brushes.Black, new PointF(FormatRect.Left + 5, FormatRect.Top + 2));
+            e.Graphics.DrawString("Format Text", RectFont, Brushes.Black, new PointF(FormatRect.Left + 5, FormatRect.Top + 2));
             if (!bOptional)
                 e.Graphics.FillRectangle(backBr, OptionalRect);
             else
                 e.Graphics.FillRectangle(Brushes.CornflowerBlue, OptionalRect);
             e.Graphics.DrawRectangle(pen, OptionalRect);
-            e.Graphics.DrawString("Optional", System.Drawing.SystemFonts.DialogFont, Brushes.Black, new PointF(OptionalRect.Left + 5, OptionalRect.Top + 2));
+            e.Graphics.DrawString("Optional", RectFont, Brushes.Black, new PointF(OptionalRect.Left + 5, OptionalRect.Top + 2));
             if (bOptional)
             {
                 e.Graphics.FillRectangle(Brushes.CornflowerBlue, OptionalRect);
-                e.Graphics.DrawString("Optional", System.Drawing.SystemFonts.DialogFont, Brushes.Black, new PointF(OptionalRect.Left + 5, OptionalRect.Top + 2));
+                e.Graphics.DrawString("Optional", RectFont, Brushes.Black, new PointF(OptionalRect.Left + 5, OptionalRect.Top + 2));
             }
             backBr.Dispose();
             br.Dispose();
