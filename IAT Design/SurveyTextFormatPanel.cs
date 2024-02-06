@@ -109,12 +109,11 @@ namespace IATClient
                     ResponsePanel.TextColor = args.Color;
             };
             Controls.Add(Picker);
-            this.Height = ResponsePanel.Bottom + Picker.Height + (DoneButton.Height << 1) >> 1;
             DoneButton.Text = "Done";
-            DoneButton.Location = new Point(((this.Width - DoneButton.Width) >> 1), this.Height - (DoneButton.Height << 1));
+            DoneButton.Location = new Point(((this.Width - DoneButton.Width) >> 1), this.Picker.Bottom + DoneButton.Height);
             DoneButton.Anchor = AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
             DoneButton.Click += (s, args) => { if (OnDone != null) OnDone(this, args); };
-            DoneButton.Anchor = AnchorStyles.Bottom;
+            this.Height = DoneButton.Bottom + DoneButton.Height;
             this.Controls.Add(DoneButton);
 
             /*

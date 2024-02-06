@@ -146,7 +146,7 @@ namespace IATClient
             this.ResponseKeyLabel.Location = new System.Drawing.Point(600, 36);
             this.ResponseKeyLabel.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.ResponseKeyLabel.Name = "ResponseKeyLabel";
-            this.ResponseKeyLabel.Size = TextRenderer.MeasureText("Response Key:", Parent.Font);
+            this.ResponseKeyLabel.Size = TextRenderer.MeasureText("Response Key:", IATConfigMainForm.MainForm.Font);
             this.ResponseKeyLabel.Anchor = AnchorStyles.Top;
             this.ResponseKeyLabel.TabIndex = 0;
             this.ResponseKeyLabel.Text = "Response Key:";
